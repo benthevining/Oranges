@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Xcode generator doesn't include the compiler as the first argument, Ninja and Makefiles do. Handle both cases.
+if [ "$1" = "${CCACHE_COMPILER_BEING_CONFIGURED}" ] ; then
+	shift
+fi
+
+${CCCACHE_EXPORTS}
+
+exec "${CCACHE_PROGRAM}" "${CCACHE_COMPILER_BEING_CONFIGURED}" "$@"
