@@ -7,6 +7,7 @@
 # Order is important. The last matching pattern has the most precedence.
 # These owners will be the default owners for everything in the repo.
 # This file is also being managed automatically by the gitown tool.
+.github/CODEOWNERS benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
@@ -16,6 +17,7 @@ modules/general/LemonsStaticLibraryHelpers.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
 modules/integrations/LemonsCcache.cmake benthevining
 modules/integrations/LemonsClangTidy.cmake benthevining
+modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
