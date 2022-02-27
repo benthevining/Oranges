@@ -162,8 +162,16 @@ if(APPLE)
 	else()
 		option (LEMONS_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 
-		if(LEMONS_MAC_UNIVERSAL_BINARY)
-			set_target_properties (LemonsDefaultTarget PROPERTIES OSX_ARCHITECTURES "x86_64;arm64")
+		if(LEMONS_MAC_UNIVERSAL_BINARY AND XCODE)
+
+			execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
+							 OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+			if("${osx_native_arch}" STREQUAL "arm64")
+				set_target_properties (LemonsDefaultTarget PROPERTIES OSX_ARCHITECTURES
+																	  "x86_64;arm64")
+				message (VERBOSE "Enabling universal binary")
+			endif()
 		endif()
 	endif()
 else()
