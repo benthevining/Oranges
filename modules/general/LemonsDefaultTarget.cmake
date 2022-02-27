@@ -172,8 +172,6 @@ endif()
 #
 # Integrations
 
-include (LemonsCcache)
-
 include (LemonsClangTidy)
 
 lemons_use_clang_tidy_for_target (LemonsDefaultTarget)

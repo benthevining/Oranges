@@ -16,7 +16,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsDefaultPlatformSettings)
 
-option (LEMONS_ENABLE_INTEGRATIONS "Enable all available integrations by default" ON)
+option (LEMONS_ENABLE_INTEGRATIONS "Enable all available integrations by default" OFF)
 
 if(LEMONS_ENABLE_INTEGRATIONS)
 	include (LemonsAllIntegrations)

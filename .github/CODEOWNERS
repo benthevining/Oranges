@@ -11,6 +11,7 @@
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
+modules/general/LemonsDefaultProjectSettings.cmake benthevining
 modules/general/LemonsDefaultTarget.cmake benthevining
 modules/general/LemonsDeprecations.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
