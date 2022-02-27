@@ -174,8 +174,6 @@ endif()
 
 include (LemonsCcache)
 
-lemons_use_ccache_for_target (LemonsDefaultTarget)
-
 include (LemonsClangTidy)
 
 lemons_use_clang_tidy_for_target (LemonsDefaultTarget)

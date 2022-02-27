@@ -90,23 +90,3 @@ set (LEMONS_C_COMPILER_LAUNCHER "${c_script}" CACHE INTERNAL "")
 set (LEMONS_CXX_COMPILER_LAUNCHER "${cxx_script}" CACHE INTERNAL "")
 
 message (STATUS " -- Using ccache! -- ")
-
-function(lemons_use_ccache_for_target target)
-
-	if(NOT TARGET "${target}")
-		message (
-			FATAL_ERROR
-				"Function ${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
-
-	if(LEMONS_C_COMPILER_LAUNCHER AND LEMONS_CXX_COMPILER_LAUNCHER)
-		set_target_properties (
-			"${target}"
-			PROPERTIES C_COMPILER_LAUNCHER "${LEMONS_C_COMPILER_LAUNCHER}"
-					   CXX_COMPILER_LAUNCHER "${LEMONS_CXX_COMPILER_LAUNCHER}"
-					   XCODE_ATTRIBUTE_CC "${LEMONS_C_COMPILER_LAUNCHER}"
-					   XCODE_ATTRIBUTE_CXX "${LEMONS_CXX_COMPILER_LAUNCHER}"
-					   XCODE_ATTRIBUTE_LD "${LEMONS_C_COMPILER_LAUNCHER}"
-					   XCODE_ATTRIBUTE_LDPLUSPLUS "${LEMONS_CXX_COMPILER_LAUNCHER}")
-	endif()
-endfunction()
