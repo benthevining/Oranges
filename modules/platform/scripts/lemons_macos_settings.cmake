@@ -28,10 +28,3 @@ if(IS_DIRECTORY ${MAC_SDK_DIR})
 else()
 	message (DEBUG "Mac SDK dir ${MAC_SDK_DIR} doesn't exist!")
 endif()
-
-option (LEMONS_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
-
-if(LEMONS_MAC_UNIVERSAL_BINARY)
-	set (ENV{CMAKE_OSX_ARCHITECTURES} "x86_64;arm64")
-	set (CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")
-endif()

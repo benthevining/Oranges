@@ -22,6 +22,7 @@ modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
+modules/platform/scripts/lemons_macos_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining

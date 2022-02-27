@@ -109,7 +109,8 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 		target_compile_options (LemonsDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
 		target_link_libraries (LemonsDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
 	endif()
-
+else()
+	message (WARNING "Unknown compiler!")
 endif()
 
 #
