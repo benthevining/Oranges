@@ -11,6 +11,7 @@
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
+modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
 modules/general/LemonsDefaultTarget.cmake benthevining
 modules/general/LemonsDeprecations.cmake benthevining
@@ -21,8 +22,11 @@ modules/integrations/LemonsClangTidy.cmake benthevining
 modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
+modules/juce/LemonsJuceModuleUtilities.cmake benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
+modules/platform/scripts/lemons_ios_settings.cmake benthevining
 modules/platform/scripts/lemons_macos_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
+modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
