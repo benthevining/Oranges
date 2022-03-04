@@ -14,6 +14,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesDefaultWarnings)
+
 add_library (OrangesDefaultTarget INTERFACE)
 
 set_target_properties (
@@ -34,9 +36,6 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "MSVC") OR (CMAKE_CXX_COMPILER_FRONTEND_VARIAN
 		OrangesDefaultTarget INTERFACE $<IF:$<CONFIG:Debug>,/Od /Zi,/Ox>
 									   $<$<STREQUAL:"${CMAKE_CXX_COMPILER_ID}","MSVC">:/MP> /EHsc)
 
-	# warnings
-	target_compile_options (OrangesDefaultTarget INTERFACE "/W4")
-
 	# LTO
 	target_compile_options (
 		OrangesDefaultTarget
@@ -55,53 +54,6 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 	# config flags
 	target_compile_options (OrangesDefaultTarget INTERFACE $<$<CONFIG:Debug>:-g -O0>
 														   $<$<CONFIG:Release>:-O3>)
-
-	# warnings
-	target_compile_options (
-		OrangesDefaultTarget
-		INTERFACE -Wall
-				  -Wcast-align
-				  -Wno-ignored-qualifiers
-				  -Wno-missing-field-initializers
-				  -Wpedantic
-				  -Wuninitialized
-				  -Wunreachable-code
-				  -Wunused-parameter
-				  -Wreorder
-				  -Wsign-conversion
-				  -Wstrict-aliasing
-				  -Wsign-compare)
-
-	if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-		target_compile_options (
-			OrangesDefaultTarget
-			INTERFACE -Wextra
-					  -Wno-implicit-fallthrough
-					  -Wno-maybe-uninitialized
-					  -Wno-strict-overflow
-					  -Wredundant-decls
-					  -Wshadow
-					  $<$<COMPILE_LANGUAGE:CXX>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>
-			)
-	else()
-		target_compile_options (
-			OrangesDefaultTarget
-			INTERFACE -Wbool-conversion
-					  -Wconditional-uninitialized
-					  -Wconversion
-					  -Wconstant-conversion
-					  -Wextra-semi
-					  -Wint-conversion
-					  -Wnullable-to-nonnull-conversion
-					  -Wshadow-all
-					  -Wshift-sign-overflow
-					  -Wshorten-64-to-32
-					  $<$<OR:$<COMPILE_LANGUAGE:CXX>,$<COMPILE_LANGUAGE:OBJCXX>>:
-					  -Wzero-as-null-pointer-constant
-					  -Wunused-private-field
-					  -Woverloaded-virtual
-					  -Winconsistent-missing-destructor-override>)
-	endif()
 
 	# LTO
 	if(NOT MINGW)
@@ -212,8 +164,12 @@ lemons_use_iwyu_for_target (OrangesDefaultTarget)
 
 #
 
-add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
+if(PROJECT_IS_TOP_LEVEL)
+	target_link_libraries (OrangesDefaultTarget Oranges::OrangesDefaultWarnings)
+endif()
 
-include (GNUInstallDirs)
+#
+
+add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 
 install (TARGETS OrangesDefaultTarget EXPORT OrangesTargets OPTIONAL)

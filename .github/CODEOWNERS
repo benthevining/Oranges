@@ -8,7 +8,11 @@
 # These owners will be the default owners for everything in the repo.
 # This file is also being managed automatically by the gitown tool.
 .cmake-format.json benthevining
+.editorconfig benthevining
 .github/CODEOWNERS benthevining
+.github/ISSUE_TEMPLATE/bug_report.md benthevining
+.github/workflows/release.yml benthevining
+.gitlint benthevining
 .markdownlint.json benthevining
 .pre-commit-config.yaml benthevining
 .style.yapf benthevining
@@ -47,4 +51,5 @@ modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
+scripts/alphabetize_codeowners.py benthevining
 util/oranges_header.txt benthevining
