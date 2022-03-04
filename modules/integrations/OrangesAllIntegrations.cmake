@@ -12,25 +12,14 @@
 
 include_guard (GLOBAL)
 
-find_program (lemonsClangTidyProgram NAMES clang-tidy)
+add_library (OrangesAllIntegrations INTERFACE)
 
-if(lemonsClangTidyProgram)
-	set (CMAKE_CXX_CLANG_TIDY "${lemonsClangTidyProgram}" CACHE INTERNAL "")
-	set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE CACHE INTERNAL "")
+include (OrangesCcache)
+include (OrangesClangTidy)
+include (OrangesCppCheck)
+include (OrangesCppLint)
+include (OrangesIncludeWhatYouUse)
 
-	message (STATUS "Using clang-tidy")
-endif()
+add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)
 
-function(lemons_use_clang_tidy_for_target target)
-
-	if(NOT TARGET "${target}")
-		message (
-			FATAL_ERROR
-				"Function ${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
-
-	if(lemonsClangTidyProgram)
-		set_target_properties ("${target}" PROPERTIES EXPORT_COMPILE_COMMANDS ON
-													  CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
-	endif()
-endfunction()
+install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets OPTIONAL)

@@ -12,25 +12,26 @@
 
 include_guard (GLOBAL)
 
-find_program (lemonsCppCheckProgram NAMES cppcheck)
+include (OrangesAllIntegrations)
 
-if(lemonsCppCheckProgram)
-	set (CMAKE_CXX_CPPCHECK "${lemonsCppCheckProgram};--suppress=preprocessorErrorDirective"
-		 CACHE INTERNAL "")
-	set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE CACHE INTERNAL "")
+find_program (lemonsCppLintProgram NAMES cpplint)
 
-	message (STATUS "Using cppcheck")
+if(NOT lemonsCppLintProgram)
+	return ()
 endif()
 
-function(lemons_use_cppcheck_for_target target)
-	if(NOT TARGET "${target}")
-		message (
-			FATAL_ERROR
-				"Function ${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
+message (VERBOSE "Using cpplint!")
 
-	if(lemonsCppCheckProgram)
-		set_target_properties ("${target}" PROPERTIES EXPORT_COMPILE_COMMANDS ON
-													  CXX_CPPCHECK "${lemonsCppCheckProgram}")
-	endif()
-endfunction()
+set (CMAKE_CXX_CPPLINT "${lemonsCppLintProgram}")
+set (CMAKE_C_CPPLINT "${lemonsCppLintProgram}")
+
+add_library (OrangesCppLint INTERFACE)
+
+set_target_properties (OrangesCppLint PROPERTIES CXX_CPPLINT "${lemonsCppLintProgram}"
+												 C_CPPLINT "${lemonsCppLintProgram}")
+
+target_link_libraries (OrangesAllIntegrations INTERFACE OrangesCppLint)
+
+add_library (Oranges::OrangesCppLint ALIAS OrangesCppLint)
+
+install (TARGETS OrangesCppLint EXPORT OrangesTargets OPTIONAL)

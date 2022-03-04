@@ -9,6 +9,11 @@ project (
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)
 
+if(PROJECT_IS_TOP_LEVEL)
+	enable_language (CXX)
+	enable_language (C)
+endif()
+
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 
 #
@@ -93,4 +98,6 @@ configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" "OrangesConfig.cmake"
 	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS "" INSTALL_PREFIX "")
 
-include (CPack)
+if(PROJECT_IS_TOP_LEVEL)
+	include (CPack)
+endif()

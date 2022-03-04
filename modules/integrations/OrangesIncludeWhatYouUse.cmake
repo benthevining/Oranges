@@ -12,25 +12,25 @@
 
 include_guard (GLOBAL)
 
-find_program (lemonsCppLintProgram NAMES cpplint)
+include (OrangesAllIntegrations)
 
-if(lemonsCppLintProgram)
-	set (CMAKE_CXX_CPPLINT "${lemonsCppLintProgram}" CACHE INTERNAL "")
-	set (CMAKE_C_CPPLINT "${lemonsCppLintProgram}" CACHE INTERNAL "")
+find_program (lemons_iwyu_path NAMES include-what-you-use iwyu)
 
-	message (STATUS "Using cpplint")
+if(NOT lemons_iwyu_path)
+	return ()
 endif()
 
-function(lemons_use_cpplint_for_target target)
+message (VERBOSE "Using include-what-you-use!")
 
-	if(NOT TARGET "${target}")
-		message (
-			FATAL_ERROR
-				"Function ${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
+set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${lemons_iwyu_path}")
 
-	if(lemonsCppLintProgram)
-		set_target_properties ("${target}" PROPERTIES CXX_CPPLINT "${lemonsCppLintProgram}"
-													  C_CPPLINT "${lemonsCppLintProgram}")
-	endif()
-endfunction()
+add_library (OrangesIncludeWhatYouUse INTERFACE)
+
+set_target_properties (OrangesIncludeWhatYouUse PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+														   "${lemons_iwyu_path}")
+
+target_link_libraries (OrangesAllIntegrations INTERFACE OrangesIncludeWhatYouUse)
+
+add_library (Oranges::OrangesIncludeWhatYouUse ALIAS OrangesIncludeWhatYouUse)
+
+install (TARGETS OrangesIncludeWhatYouUse EXPORT OrangesTargets OPTIONAL)

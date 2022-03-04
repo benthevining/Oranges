@@ -12,24 +12,26 @@
 
 include_guard (GLOBAL)
 
-find_program (lemons_iwyu_path NAMES include-what-you-use iwyu)
+include (OrangesAllIntegrations)
 
-if(lemons_iwyu_path)
-	set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${lemons_iwyu_path}" CACHE INTERNAL "")
+find_program (lemonsClangTidyProgram NAMES clang-tidy)
 
-	message (STATUS "Enabled include-what-you-use")
+if(NOT lemonsClangTidyProgram)
+	return ()
 endif()
 
-function(lemons_use_iwyu_for_target target)
+message (VERBOSE "Using clang-tidy!")
 
-	if(NOT TARGET "${target}")
-		message (
-			FATAL_ERROR
-				"Function ${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
+set (CMAKE_CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
+set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-	if(lemons_iwyu_path)
-		set_target_properties ("${target}" PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-													  "${lemons_iwyu_path}")
-	endif()
-endfunction()
+add_library (OrangesClangTidy INTERFACE)
+
+set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
+												   CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
+
+target_link_libraries (OrangesAllIntegrations INTERFACE OrangesClangTidy)
+
+add_library (Oranges::OrangesClangTidy ALIAS OrangesClangTidy)
+
+install (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)

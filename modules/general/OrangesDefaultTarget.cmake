@@ -144,26 +144,23 @@ endif()
 #
 # Integrations
 
-include (LemonsClangTidy)
+include (OrangesAllIntegrations)
 
-lemons_use_clang_tidy_for_target (OrangesDefaultTarget)
+option (ORANGES_IGNORE_CCACHE "Never use ccache" OFF)
 
-include (LemonsCppCheck)
-
-lemons_use_cppcheck_for_target (OrangesDefaultTarget)
-
-include (LemonsCppLint)
-
-lemons_use_cpplint_for_target (OrangesDefaultTarget)
-
-include (LemonsIncludeWhatYouUse)
-
-lemons_use_iwyu_for_target (OrangesDefaultTarget)
-
-#
+if(NOT ORANGES_IGNORE_CCACHE)
+	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCcache)
+endif()
 
 if(PROJECT_IS_TOP_LEVEL)
-	target_link_libraries (OrangesDefaultTarget Oranges::OrangesDefaultWarnings)
+	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
+endif()
+
+#
+# Warnings
+
+if(PROJECT_IS_TOP_LEVEL)
+	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesDefaultWarnings)
 endif()
 
 #

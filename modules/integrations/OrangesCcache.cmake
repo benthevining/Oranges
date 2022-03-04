@@ -30,24 +30,17 @@ find_program (CCACHE_PROGRAM ccache)
 
 if(NOT CCACHE_PROGRAM)
 	message (VERBOSE "ccache could not be found.")
-
-	function(lemons_use_ccache_for_target)
-
-	endfunction()
-
 	return ()
 endif()
 
-if(Lemons_SOURCE_DIR)
-	set (ccache_options "CCACHE_BASEDIR=${Lemons_SOURCE_DIR}")
-else()
-	set (ccache_options "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
-endif()
+message (STATUS " -- Using ccache! -- ")
+
+set (ccache_options "CCACHE_BASEDIR=${PROJECT_SOURCE_DIR}")
 
 if(DEFINED ENV{CPM_SOURCE_CACHE})
 	list (APPEND ccache_options "CCACHE_DIR=$ENV{CPM_SOURCE_CACHE}/ccache/cache")
 else()
-	list (APPEND ccache_options "CCACHE_DIR=${CCACHE_BASEDIR}/Cache/ccache/cache")
+	list (APPEND ccache_options "CCACHE_DIR=${PROJECT_SOURCE_DIR}/Cache/ccache/cache")
 endif()
 
 list (APPEND ccache_options "CCACHE_COMPRESS=true" "CCACHE_COMPRESSLEVEL=6" "CCACHE_MAXSIZE=800M")
@@ -76,17 +69,28 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 #
 
+add_library (OrangesCcache INTERFACE)
+
 if(XCODE)
-	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}" CACHE INTERNAL "")
-	set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}" CACHE INTERNAL "")
-	set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}" CACHE INTERNAL "")
-	set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}" CACHE INTERNAL "")
+	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
+	set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}")
+	set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}")
+	set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+
+	set_target_properties (
+		OrangesCcache
+		PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
+				   XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 else()
-	set (CMAKE_C_COMPILER_LAUNCHER "${c_script}" CACHE INTERNAL "")
-	set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}" CACHE INTERNAL "")
+	set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
+	set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
+
+	set_target_properties (OrangesCcache PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+													CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif()
 
-set (LEMONS_C_COMPILER_LAUNCHER "${c_script}" CACHE INTERNAL "")
-set (LEMONS_CXX_COMPILER_LAUNCHER "${cxx_script}" CACHE INTERNAL "")
+target_link_libraries (OrangesAllIntegrations INTERFACE OrangesCcache)
 
-message (STATUS " -- Using ccache! -- ")
+add_library (Oranges::OrangesCcache ALIAS OrangesCcache)
+
+install (TARGETS OrangesCcache EXPORT OrangesTargets OPTIONAL)
