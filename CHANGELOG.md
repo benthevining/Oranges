@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.3.0](http://github.com/benthevining/Oranges/compare/v1.2.0...v1.3.0) (2022-03-04)
+
+
+### Features
+
+* added iOS toolchains ([e06dbf5](http://github.com/benthevining/Oranges/commit/e06dbf5390601abce23ddb07a20cf33989da082e))
+
 ## [1.2.0](http://github.com/benthevining/Oranges/compare/v1.1.0...v1.2.0) (2022-03-04)
 
 
