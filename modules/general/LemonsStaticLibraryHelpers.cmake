@@ -15,13 +15,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsDefaultProjectSettings)
-include (LemonsDefaultTarget)
-
-add_library (LemonsDefaultStaticLibrary INTERFACE)
-
-target_link_libraries (LemonsDefaultStaticLibrary INTERFACE LemonsDefaultTarget)
-
-set_target_properties (LemonsDefaultStaticLibrary PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
+include (OrangesDefaultTarget)
 
 #
 
@@ -31,8 +25,9 @@ function(lemons_configure_static_library target)
 		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!")
 	endif()
 
-	target_link_libraries (${target} PUBLIC LemonsDefaultStaticLibrary)
+	target_link_libraries (${target} PUBLIC Oranges::OrangesDefaultTarget)
 
-	set_target_properties (${target} PROPERTIES VERSION "${PROJECT_VERSION}")
+	set_target_properties (${target} PROPERTIES VERSION "${PROJECT_VERSION}" UNITY_BUILD_MODE BATCH
+												UNITY_BUILD ON)
 
 endfunction()

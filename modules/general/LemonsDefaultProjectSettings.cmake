@@ -38,7 +38,7 @@ endif()
 
 #
 
-include (LemonsDefaultTarget)
+include (OrangesDefaultTarget)
 
 #
 
