@@ -88,27 +88,14 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 	set (baseName "${ipp${IPP_COMPONENT_LOWER}${IPP_LIBNAME_SUFFIX}}")
 
 	find_library (
-		libName
+		IPP_LIB_${IPP_COMPONENT}
 		NAMES "${baseName}" "${IPP_LIBTYPE_PREFIX}${baseName}"
 			  "${IPP_LIBTYPE_PREFIX}${baseName}${IPP_LIBTYPE_SUFFIX}"
 			  "${baseName}${IPP_LIBTYPE_SUFFIX}"
 		PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
 		DOC "Intel IPP ${IPP_COMPONENT} library")
 
-	if(NOT libName)
-		if(IPP_FIND_REQUIRED)
-			message (FATAL_ERROR "IPP could not be located!")
-		else()
-			if(NOT IPP_FIND_QUIETLY)
-				message (WARNING "IPP component library ${IPP_COMPONENT} could not be located!")
-			endif()
-
-			set (IPP_FOUND FALSE)
-			return ()
-		endif()
-	endif()
-
-	target_link_libraries (IntelIPP INTERFACE "${libName}")
+	target_link_libraries (IntelIPP INTERFACE "${IPP_LIB_${IPP_COMPONENT}}")
 endmacro()
 
 _oranges_find_ipp_library (CORE) # Core

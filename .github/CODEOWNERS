@@ -18,6 +18,8 @@ modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
 modules/cpack/scripts/deb/deb_settings.cmake benthevining
 modules/cpack/scripts/rpm/rpmPostInstall.sh benthevining
 modules/finders/FindIPP.cmake benthevining
+modules/finders/FindJUCE.cmake benthevining
+modules/finders/FindMIPP.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining

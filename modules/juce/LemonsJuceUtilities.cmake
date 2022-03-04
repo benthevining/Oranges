@@ -52,21 +52,7 @@ include (GNUInstallDirs)
 
 #
 
-set (LEMONS_JUCE_BRANCH "develop" CACHE STRING "The branch of the JUCE GitHub repository to use")
-set_property (CACHE LEMONS_JUCE_BRANCH PROPERTY STRINGS "develop;master")
-mark_as_advanced (LEMONS_JUCE_BRANCH)
-
-cpmaddpackage (
-	NAME
-	JUCE
-	GITHUB_REPOSITORY
-	juce-framework/JUCE
-	GIT_TAG
-	origin/${LEMONS_JUCE_BRANCH}
-	OPTIONS
-	"JUCE_ENABLE_MODULE_SOURCE_GROUPS ON"
-	"JUCE_BUILD_EXAMPLES OFF"
-	"JUCE_BUILD_EXTRAS OFF")
+find_package (JUCE MODULE REQUIRED)
 
 include (LemonsAssetsHelpers)
 

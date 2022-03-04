@@ -33,6 +33,8 @@ set (LEMONS_JUCE_BRANCH "develop" CACHE STRING "The branch of the JUCE GitHub re
 set_property (CACHE LEMONS_JUCE_BRANCH PROPERTY STRINGS "develop;master")
 mark_as_advanced (LEMONS_JUCE_BRANCH)
 
+include (LemonsGetCPM)
+
 CPMAddPackage (
 	NAME
 	JUCE

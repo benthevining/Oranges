@@ -35,7 +35,17 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-set (MTS_ESP_ROOT_DIR "")
+include (LemonsGetCPM)
+
+CPMAddPackage (
+	NAME
+	MTS-ESP
+	GITHUB_REPOSITORY
+	ODDSound/MTS-ESP
+	GIT_TAG
+	origin/master
+	DOWNLOAD_ONLY
+	YES)
 
 # Client
 
@@ -44,7 +54,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
    OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
 	# editorconfig-checker-enable
 
-	find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS_ESP_ROOT_DIR}/Client"
+	find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
 			   DOC "MTS-ESP client sources directory")
 
 	if(MTS_ESP_CLIENT_DIR AND IS_DIRECTORY "${MTS_ESP_CLIENT_DIR}")
@@ -71,7 +81,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
    OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
 	# editorconfig-checker-enable
 
-	find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS_ESP_ROOT_DIR}/Master"
+	find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
 			   DOC "MTS-ESP master sources directory")
 
 	if(MTS_ESP_MASTER_DIR AND IS_DIRECTORY "${MTS_ESP_MASTER_DIR}")
@@ -81,12 +91,12 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 			if(CMAKE_SIZEOF_VOID_P EQUAL 4) # 32-bit
 				find_library (
 					libMTS NAMES LIBMTS.dll PATHS "Program Files (x86)\\Common Files\\MTS-ESP"
-												  "${MTS_ESP_ROOT_DIR}/libMTS/Win/32bit"
+												  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/32bit"
 					DOC "MTS-ESP master dynamic library")
 			elseif(CMAKE_SIZEOF_VOID_P EQUAL 8) # 64-bit
 				find_library (
 					libMTS NAMES LIBMTS.dll PATHS "Program Files\\Common Files\\MTS-ESP"
-												  "${MTS_ESP_ROOT_DIR}/libMTS/Win/64bit"
+												  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit"
 					DOC "MTS-ESP master dynamic library")
 			else()
 				if(NOT MTS-ESP_FIND_QUIETLY)
@@ -98,13 +108,13 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 				libMTS
 				NAMES libMTS.dylib
 				PATHS "/Library/Application Support/MTS-ESP"
-					  "${MTS_ESP_ROOT_DIR}/libMTS/Mac/i386_x86_64"
-					  "${MTS_ESP_ROOT_DIR}/libMTS/Mac/x86_64_ARM"
+					  "${MTS-ESP_SOURCE_DIR}/libMTS/Mac/i386_x86_64"
+					  "${MTS-ESP_SOURCE_DIR}/libMTS/Mac/x86_64_ARM"
 				DOC "MTS-ESP master dynamic library")
 		else() # Linux
 			find_library (
 				libMTS NAMES libMTS.so PATHS "/usr/local/lib"
-											 "${MTS_ESP_ROOT_DIR}/libMTS/Linux/x86_64"
+											 "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64"
 				DOC "MTS-ESP master dynamic library")
 		endif()
 

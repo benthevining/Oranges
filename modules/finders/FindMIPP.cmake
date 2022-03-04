@@ -26,6 +26,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsGetCPM)
+
 CPMAddPackage (
 	NAME
 	MIPP
