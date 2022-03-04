@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.2.0](http://github.com/benthevining/Oranges/compare/v1.1.0...v1.2.0) (2022-03-04)
+
+
+### Features
+
+* added find modules for MTS-ESP, MIPP, and JUCE ([91fff70](http://github.com/benthevining/Oranges/commit/91fff70f7a321e400de3f9905c34870a3cb77e09))
+
 ## [1.1.0](http://github.com/benthevining/Oranges/compare/v1.0.2...v1.1.0) (2022-03-04)
 
 
