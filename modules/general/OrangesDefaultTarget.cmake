@@ -108,10 +108,7 @@ if(APPLE)
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 
 		if(LEMONS_IOS_SIMULATOR)
-			set_target_properties (
-				OrangesDefaultTarget
-				PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\""
-						   OSX_ARCHITECTURES "i386;x86_64")
+			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
 		else()
 			if(NOT LEMONS_IOS_DEV_TEAM_ID)
 				message (
@@ -123,6 +120,7 @@ if(APPLE)
 			set_target_properties (
 				OrangesDefaultTarget
 				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${LEMONS_IOS_DEV_TEAM_ID}"
+						   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\""
 						   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
 		endif()
 	else()

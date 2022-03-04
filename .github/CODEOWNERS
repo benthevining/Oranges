@@ -13,8 +13,10 @@
 .github/ISSUE_TEMPLATE/bug_report.md benthevining
 .github/workflows/release.yml benthevining
 .gitlint benthevining
+.gitownrc benthevining
 .markdownlint.json benthevining
 .pre-commit-config.yaml benthevining
+.pylintrc benthevining
 .style.yapf benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
@@ -33,10 +35,12 @@ modules/general/LemonsDeprecations.cmake benthevining
 modules/general/LemonsFileUtils.cmake benthevining
 modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
+modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
 modules/integrations/LemonsCcache.cmake benthevining
 modules/integrations/LemonsClangTidy.cmake benthevining
+modules/integrations/LemonsCppCheck.cmake benthevining
 modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
@@ -51,5 +55,6 @@ modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
+scripts/OrangesConfig.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 util/oranges_header.txt benthevining
