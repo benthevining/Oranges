@@ -33,6 +33,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 find_path (IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
 									   /opt/intel/oneapi/ipp/include DOC "Intel IPP root directory")
 
+mark_as_advanced (FORCE IPP_INCLUDE_DIR)
+
 if(NOT IPP_INCLUDE_DIR OR NOT IS_DIRECTORY "${IPP_INCLUDE_DIR}")
 	if(IPP_FIND_REQUIRED)
 		message (FATAL_ERROR "IPP could not be located!")
@@ -94,6 +96,8 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 			  "${baseName}${IPP_LIBTYPE_SUFFIX}"
 		PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
 		DOC "Intel IPP ${IPP_COMPONENT} library")
+
+	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 
 	target_link_libraries (IntelIPP INTERFACE "${IPP_LIB_${IPP_COMPONENT}}")
 endmacro()

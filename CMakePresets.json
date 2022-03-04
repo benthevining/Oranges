@@ -1,0 +1,102 @@
+{
+  "buildPresets": [
+    {
+      "cleanFirst": true,
+      "configuration": "${presetName}",
+      "hidden": true,
+      "jobs": 4,
+      "name": "base",
+      "verbose": true
+    },
+    {
+      "configurePreset": "${presetName}",
+      "inherits": "base",
+      "name": "Debug"
+    },
+    {
+      "configurePreset": "${presetName}",
+      "inherits": "base",
+      "name": "Release"
+    },
+    {
+      "hidden": true,
+      "inherits": "base",
+      "name": "ios_base",
+      "nativeToolOptions": [
+        "-allowProvisioningUpdates"
+      ]
+    },
+    {
+      "configurePreset": "${presetName}",
+      "inherits": "ios_base",
+      "name": "ios_simulator",
+      "nativeToolOptions": [
+        "-sdk",
+        "iphonesimulator"
+      ]
+    },
+    {
+      "configurePreset": "${presetName}",
+      "inherits": "ios_base",
+      "name": "ios"
+    }
+  ],
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "binaryDir": "${sourceDir}/Builds/${presetName}",
+      "debug": {
+        "output": true
+      },
+      "hidden": true,
+      "name": "base",
+      "warnings": {
+        "uninitialized": true,
+        "unusedCli": false
+      }
+    },
+    {
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "${presetName}"
+      },
+      "hidden": true,
+      "inherits": "base",
+      "name": "config_base"
+    },
+    {
+      "inherits": "config_base",
+      "name": "Debug"
+    },
+    {
+      "inherits": "config_base",
+      "name": "Release"
+    },
+    {
+      "cacheVariables": {
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "9.3",
+        "CMAKE_SYSTEM_NAME": "iOS"
+      },
+      "hidden": true,
+      "inherits": "base",
+      "name": "ios_base"
+    },
+    {
+      "inherits": "ios_base",
+      "name": "ios_simulator",
+      "toolchainFile": "${sourceDir}/toolchains/ios_simulator.cmake"
+    },
+    {
+      "cacheVariables": {
+        "CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY": "\"iPhone Developer\""
+      },
+      "inherits": "ios_base",
+      "name": "ios",
+      "toolchainFile": "${sourceDir}/toolchains/ios.cmake"
+    }
+  ],
+  "version": 3
+}

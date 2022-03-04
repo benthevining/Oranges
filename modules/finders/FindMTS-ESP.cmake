@@ -57,6 +57,8 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 	find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
 			   DOC "MTS-ESP client sources directory")
 
+	mark_as_advanced (FORCE MTS_ESP_CLIENT_DIR)
+
 	if(MTS_ESP_CLIENT_DIR AND IS_DIRECTORY "${MTS_ESP_CLIENT_DIR}")
 
 		add_library (MTS-ESP_Client STATIC)
@@ -83,6 +85,8 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 	find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
 			   DOC "MTS-ESP master sources directory")
+
+	mark_as_advanced (FORCE MTS_ESP_MASTER_DIR)
 
 	if(MTS_ESP_MASTER_DIR AND IS_DIRECTORY "${MTS_ESP_MASTER_DIR}")
 
@@ -117,6 +121,8 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 											 "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64"
 				DOC "MTS-ESP master dynamic library")
 		endif()
+
+		mark_as_advanced (FORCE libMTS)
 
 		if(libMTS)
 

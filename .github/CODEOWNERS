@@ -8,11 +8,13 @@
 # These owners will be the default owners for everything in the repo.
 # This file is also being managed automatically by the gitown tool.
 .cmake-format.json benthevining
+.ecrc benthevining
 .editorconfig benthevining
 .github/CODEOWNERS benthevining
 .github/ISSUE_TEMPLATE/bug_report.md benthevining
 .github/ISSUE_TEMPLATE/config.yml benthevining
 .github/workflows/release.yml benthevining
+.gitignore benthevining
 .gitlint benthevining
 .gitownrc benthevining
 .markdownlint.json benthevining
@@ -26,6 +28,7 @@ modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
 modules/cpack/scripts/deb/deb_settings.cmake benthevining
 modules/cpack/scripts/deb/postinst benthevining
 modules/cpack/scripts/rpm/rpmPostInstall.sh benthevining
+modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
 modules/finders/FindJUCE.cmake benthevining
 modules/finders/FindMIPP.cmake benthevining
@@ -66,4 +69,5 @@ package.json benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 toolchains/android.cmake benthevining
+toolchains/ios_common.cmake benthevining
 util/oranges_header.txt benthevining
