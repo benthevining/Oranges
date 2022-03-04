@@ -40,6 +40,7 @@ modules/general/LemonsDeprecations.cmake benthevining
 modules/general/LemonsFileUtils.cmake benthevining
 modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
+modules/general/OrangesCoverageFlags.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
@@ -69,6 +70,7 @@ modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
 package.json benthevining
 scripts/OrangesConfig.cmake benthevining
+scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 toolchains/android.cmake benthevining
 toolchains/ios_common.cmake benthevining

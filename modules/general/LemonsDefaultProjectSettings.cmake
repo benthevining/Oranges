@@ -19,20 +19,22 @@ include (LemonsDefaultPlatformSettings)
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
 							  "${PROJECT_SOURCE_DIR}/logs/undefined_properties.log")
 
-set (CMAKE_CXX_VISIBILITY_PRESET hidden)
-
 set_property (GLOBAL PROPERTY USE_FOLDERS YES)
 set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
 
 set (CMAKE_SUPPRESS_REGENERATION TRUE)
 
-if(NOT DEFINED ENV{CMAKE_INSTALL_MODE})
-	set (ENV{CMAKE_INSTALL_MODE} ABS_SYMLINK_OR_COPY)
-endif()
-
 #
 
 include (OrangesDefaultTarget)
+
+#
+
+add_library (OrangesUnityBuild INTERFACE)
+
+set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
+
+add_library (Oranges::OrangesUnityBuild INTERFACE OrangesUnityBuild)
 
 #
 
@@ -64,32 +66,5 @@ function(lemons_sort_target_sources target root_dir)
 	endif()
 
 	source_group (TREE "${root_dir}" FILES "${target_sources}")
-
-endfunction()
-
-#
-
-function(lemons_enable_coverage_flags target)
-
-	if(NOT TARGET "${target}")
-		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
-	endif()
-
-	if(NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-		message (
-			WARNING
-				"Coverage flags are not supported with your current compiler: ${CMAKE_CXX_COMPILER_ID}"
-			)
-		return ()
-	endif()
-
-	target_compile_options (
-		${target}
-		PUBLIC -O0 # no optimization
-			   -g # generate debug info
-			   --coverage # sets all required flags
-		)
-
-	target_link_options (${target} PUBLIC --coverage)
 
 endfunction()

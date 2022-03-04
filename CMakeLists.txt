@@ -20,9 +20,9 @@ set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-#
+install (FILES ${ORANGES_CMAKE_MODULE_SOURCES} DESTINATION /modules)
 
-set (CMAKE_DEBUG_POSTFIX -d)
+#
 
 add_library (Oranges INTERFACE)
 
@@ -36,7 +36,7 @@ install (
 	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
 	INCLUDES
-	DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+	DESTINATION include)
 
 include (OrangesDefaultTarget)
 

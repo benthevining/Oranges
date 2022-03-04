@@ -30,8 +30,12 @@ define_property (
 	)
 
 set_target_properties (
-	OrangesDefaultTarget PROPERTIES $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
-									$<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
+	OrangesDefaultTarget
+	PROPERTIES DEBUG_POSTFIX -d
+			   CXX_VISIBILITY_PRESET hidden
+			   VISIBILITY_INLINES_HIDDEN TRUE
+			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
+			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
 define_property (
 	TARGET INHERITED
@@ -277,6 +281,22 @@ if(PROJECT_IS_TOP_LEVEL)
 
 	if(NOT ORANGES_IGNORE_WARNINGS)
 		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesDefaultWarnings)
+	endif()
+endif()
+
+#
+# Coverage flags
+
+option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
+
+mark_as_advanced (FORCE ORANGES_COVERAGE_FLAGS)
+
+if(ORANGES_COVERAGE_FLAGS)
+	include (OrangesCoverageFlags)
+
+	if(TARGET Oranges::OrangesCoverageFlags)
+		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCoverageFlags)
+		message (VERBOSE "Enabling coverage flags for default target")
 	endif()
 endif()
 

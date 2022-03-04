@@ -14,20 +14,22 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (LemonsDefaultProjectSettings)
-include (OrangesDefaultTarget)
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+	message (
+		AUTHOR_WARNING
+			"Coverage flags are not supported with your current compiler: ${CMAKE_CXX_COMPILER_ID}")
+	return ()
+endif()
 
-#
+add_library (OrangesCoverageFlags INTERFACE)
 
-function(lemons_configure_static_library target)
+target_compile_options (
+	OrangesCoverageFlags
+	PUBLIC -O0 # no optimization
+		   -g # generate debug info
+		   --coverage # sets all required flags
+	)
 
-	if(NOT TARGET "${target}")
-		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!")
-	endif()
+target_link_options (OrangesCoverageFlags PUBLIC --coverage)
 
-	target_link_libraries (${target} PUBLIC Oranges::OrangesDefaultTarget)
-
-	set_target_properties (${target} PROPERTIES VERSION "${PROJECT_VERSION}" UNITY_BUILD_MODE BATCH
-												UNITY_BUILD ON)
-
-endfunction()
+add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)
