@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.1.0](http://github.com/benthevining/Oranges/compare/v1.0.2...v1.1.0) (2022-03-04)
+
+
+### Features
+
+* added a find module for Intel IPP ([91ae13a](http://github.com/benthevining/Oranges/commit/91ae13a9bdb8846b4f61a3d2a9de7e11519f570d))
+
 ### [1.0.2](http://github.com/benthevining/Oranges/compare/v1.0.1...v1.0.2) (2022-02-27)
 
 
