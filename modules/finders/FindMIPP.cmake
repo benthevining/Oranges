@@ -19,6 +19,7 @@ Targets:
 
 Output variables:
 - MIPP_FOUND
+- MIPP_DIR
 
 ]]
 
@@ -45,3 +46,4 @@ target_include_directories (MIPP INTERFACE "${MIPP_SOURCE_DIR}/src")
 add_library (aff3ct::MIPP ALIAS MIPP)
 
 set (MIPP_FOUND TRUE)
+set (MIPP_DIR "${MIPP_SOURCE_DIR}")

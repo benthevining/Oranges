@@ -18,6 +18,39 @@ include (OrangesDefaultWarnings)
 
 add_library (OrangesDefaultTarget INTERFACE)
 
+#
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_USING_INSTALLED_PACKAGE
+	BRIEF_DOCS
+		"TRUE if this target has been linked to from outside the original build tree; otherwise FALSE"
+	FULL_DOCS
+		"Boolean indicator of whether this target is being consumed downstream as an installed version"
+	)
+
+set_target_properties (
+	OrangesDefaultTarget PROPERTIES $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
+									$<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_PROJECT_IS_TOP_LEVEL
+	BRIEF_DOCS
+		"Boolean indicating whether the project that created this target is the top-level CMake project"
+	FULL_DOCS
+		"Boolean indicating whether the project that created this target is the top-level CMake project"
+		INITIALIZE_FROM_VARIABLE
+		PROJECT_IS_TOP_LEVEL)
+
+if(PROJECT_IS_TOP_LEVEL)
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL TRUE)
+else()
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL FALSE)
+endif()
+
+#
+
 set_target_properties (
 	OrangesDefaultTarget
 	PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON EXPORT_COMPILE_COMMANDS ON
@@ -62,20 +95,26 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 	endif()
 
 else()
-	message (WARNING "Unknown compiler!")
+	message (DEBUG "Unknown compiler!")
 endif()
 
 #
 # IPO
 
-include (CheckIPOSupported)
+option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
 
-check_ipo_supported (RESULT ipo_supported OUTPUT output)
+mark_as_advanced (ORANGES_IGNORE_IPO FORCE)
 
-if(ipo_supported)
-	set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
+if(NOT ORANGES_IGNORE_IPO)
+	include (CheckIPOSupported)
 
-	message (VERBOSE "Enabling IPO")
+	check_ipo_supported (RESULT ipo_supported OUTPUT output)
+
+	if(ipo_supported)
+		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
+
+		message (VERBOSE "Enabling IPO")
+	endif()
 endif()
 
 #
@@ -83,22 +122,26 @@ endif()
 
 if(APPLE)
 	if(IOS)
-		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3")
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE STRING "Minimum iOS deployment target")
 	else()
-		set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum MacOS deployment target")
 	endif()
 
 	set_target_properties (
 		OrangesDefaultTarget
 		PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
 				   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
+
 	target_compile_definitions (OrangesDefaultTarget INTERFACE JUCE_USE_VDSP_FRAMEWORK=1)
+
 	target_compile_options (OrangesDefaultTarget
 							INTERFACE "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
+
 	target_link_options (OrangesDefaultTarget INTERFACE
 						 "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
 	if(IOS)
+
 		set_target_properties (
 			OrangesDefaultTarget
 			PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./" XCODE_ATTRIBUTE_INSTALL_PATH
@@ -107,34 +150,79 @@ if(APPLE)
 
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 
+		define_property (
+			TARGET INHERITED
+			PROPERTY ORANGES_IOS_SIMULATOR
+			BRIEF_DOCS
+				"TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
+			FULL_DOCS "TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
+					  INITIALIZE_FROM_VARIABLE LEMONS_IOS_SIMULATOR)
+
 		if(LEMONS_IOS_SIMULATOR)
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
+			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64"
+																   ORANGES_IOS_SIMULATOR TRUE)
 		else()
-			if(NOT LEMONS_IOS_DEV_TEAM_ID)
+
+			set (ORANGES_IOS_DEV_TEAM_ID "" CACHE STRING "10-character Apple Developer ID")
+
+			if(NOT ORANGES_IOS_DEV_TEAM_ID)
 				message (
 					SEND_ERROR
-						"LEMONS_IOS_DEV_TEAM_ID must be defined in order to build for a real iOS device."
+						"ORANGES_IOS_DEV_TEAM_ID must be defined in order to build for a real iOS device."
 					)
 			endif()
 
 			set_target_properties (
 				OrangesDefaultTarget
-				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${LEMONS_IOS_DEV_TEAM_ID}"
+				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${ORANGES_IOS_DEV_TEAM_ID}"
 						   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\""
-						   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
+						   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64"
+						   ORANGES_IOS_SIMULATOR FALSE)
 		endif()
-	else()
+
+	else() # if (IOS)
+
 		option (LEMONS_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 
 		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+		set (osx_native_arch "${osx_native_arch}" CACHE INTERNAL "")
+
+		define_property (
+			TARGET INHERITED
+			PROPERTY ORANGES_MAC_UNIVERSAL_BINARY
+			BRIEF_DOCS "TRUE if building a universal binary; otherwise FALSE"
+			FULL_DOCS
+				"When TRUE, the OSX architectures have been set to x86_64 and arm64; when false, it has been set to only this Mac's native architecture, ${osx_native_arch}"
+				INITIALIZE_FROM_VARIABLE
+				LEMONS_MAC_UNIVERSAL_BINARY)
+
+		define_property (
+			TARGET INHERITED
+			PROPERTY ORANGES_MAC_NATIVE_ARCH
+			BRIEF_DOCS
+				"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
+			FULL_DOCS
+				"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
+				INITIALIZE_FROM_VARIABLE
+				osx_native_arch)
+
+		message (DEBUG "Mac native arch: ${osx_native_arch}")
+
+		set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_NATIVE_ARCH
+															   "${osx_native_arch}")
+
 		if(("${osx_native_arch}" STREQUAL "arm64") AND LEMONS_MAC_UNIVERSAL_BINARY AND XCODE)
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "x86_64;arm64")
+			set_target_properties (
+				OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "x86_64;arm64"
+												ORANGES_MAC_UNIVERSAL_BINARY TRUE)
+
 			message (VERBOSE "Enabling universal binary")
 		else()
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
-																   "${osx_native_arch}")
+			set_target_properties (
+				OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "${osx_native_arch}"
+												ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 		endif()
 	endif()
 else()
@@ -148,19 +236,48 @@ include (OrangesAllIntegrations)
 
 option (ORANGES_IGNORE_CCACHE "Never use ccache" OFF)
 
-if(NOT ORANGES_IGNORE_CCACHE)
+mark_as_advanced (ORANGES_IGNORE_CCACHE FORCE)
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_USING_CCACHE
+	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
+	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
+			  INITIALIZE_FROM_VARIABLE ORANGES_IGNORE_CCACHE)
+
+if((TARGET Oranges::OrangesCcache) AND (NOT ORANGES_IGNORE_CCACHE))
+
 	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCcache)
+
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE TRUE)
+
+else()
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE FALSE)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
-	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
+
+	option (ORANGES_IGNORE_INTEGRATIONS "Ignore all static analysis integrations by default" OFF)
+
+	mark_as_advanced (ORANGES_IGNORE_INTEGRATIONS FORCE)
+
+	if(NOT ORANGES_IGNORE_INTEGRATIONS)
+		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
+	endif()
 endif()
 
 #
 # Warnings
 
 if(PROJECT_IS_TOP_LEVEL)
-	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesDefaultWarnings)
+
+	option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
+
+	mark_as_advanced (ORANGES_IGNORE_WARNINGS FORCE)
+
+	if(NOT ORANGES_IGNORE_WARNINGS)
+		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesDefaultWarnings)
+	endif()
 endif()
 
 #

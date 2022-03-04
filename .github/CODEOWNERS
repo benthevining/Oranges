@@ -51,6 +51,7 @@ modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
 modules/integrations/OrangesClangTidy.cmake benthevining
 modules/integrations/OrangesCppCheck.cmake benthevining
 modules/integrations/OrangesCppLint.cmake benthevining
+modules/integrations/OrangesIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
@@ -63,6 +64,7 @@ modules/platform/scripts/lemons_linux_settings.cmake benthevining
 modules/platform/scripts/lemons_macos_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
+modules/plugins/AAX/LemonsCreateAAXSDKTarget.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
 package.json benthevining

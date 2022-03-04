@@ -45,10 +45,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsGetCPM)
 include (LemonsDefaultProjectSettings)
 include (LemonsCmakeDevTools)
-include (GNUInstallDirs)
 
 #
 
@@ -78,7 +76,7 @@ endfunction()
 
 function(lemons_configure_juce_target)
 
-	set (options BROWSER PLUGIN_HOST CAMERA MICROPHONE TRANSLATIONS INSTALL)
+	set (options BROWSER PLUGIN_HOST CAMERA MICROPHONE TRANSLATIONS NO_MODULES)
 	set (oneValueArgs TARGET ASSET_FOLDER)
 
 	cmake_parse_arguments (LEMONS_TARGETCONFIG "${options}" "${oneValueArgs}" "" ${ARGN})
@@ -103,11 +101,15 @@ function(lemons_configure_juce_target)
 
 	target_link_libraries (${LEMONS_TARGETCONFIG_TARGET} PRIVATE LemonsDefaultTarget)
 
-	if(TARGET Lemons::LemonsCommonModules)
-		target_link_libraries (${LEMONS_TARGETCONFIG_TARGET} PRIVATE Lemons::LemonsCommonModules)
-	else()
-		message (DEBUG
-				 "No target Lemons::LemonsCommonModules in call to ${CMAKE_CURRENT_FUNCTION}...")
+	if(NOT LEMONS_TARGETCONFIG_NO_MODULES)
+		if(TARGET Lemons::LemonsCommonModules)
+			target_link_libraries (${LEMONS_TARGETCONFIG_TARGET}
+								   PRIVATE Lemons::LemonsCommonModules)
+		else()
+			message (
+				DEBUG
+				"No target Lemons::LemonsCommonModules in call to ${CMAKE_CURRENT_FUNCTION}...")
+		endif()
 	endif()
 
 	if(LEMONS_TARGETCONFIG_ASSET_FOLDER)
@@ -148,18 +150,5 @@ function(lemons_configure_juce_target)
 	if(LEMONS_TARGETCONFIG_MICROPHONE)
 		target_compile_definitions (${LEMONS_TARGETCONFIG_TARGET}
 									PRIVATE JUCE_MICROPHONE_PERMISSION_ENABLED=1)
-	endif()
-
-	if(LEMONS_TARGETCONFIG_INSTALL)
-		message (DEBUG "Configuring target install: ${LEMONS_TARGETCONFIG_TARGET}...")
-
-		install (
-			TARGETS ${LEMONS_TARGETCONFIG_TARGET}
-			COMPONENT ${PROJECT_NAME}
-			LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-			ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-			RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-			INCLUDES
-			DESTINATION include)
 	endif()
 endfunction()

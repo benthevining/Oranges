@@ -28,6 +28,7 @@ Targets:
 
 Output variables:
 - MTS-ESP_FOUND
+- MTS-ESP_DIR (points to the downloaded sources)
 
 ]]
 
@@ -46,6 +47,8 @@ CPMAddPackage (
 	origin/master
 	DOWNLOAD_ONLY
 	YES)
+
+set (MTS-ESP_DIR "${MTS-ESP_SOURCE_DIR}")
 
 # Client
 

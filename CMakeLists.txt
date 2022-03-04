@@ -15,48 +15,10 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
+set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
+set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-#
-
-function(_lemons_add_cmake_module_dir directory parent)
-	set (full_path "${parent}/${directory}")
-
-	if(IS_DIRECTORY "${full_path}")
-		if("${full_path}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
-			return ()
-		endif()
-
-		file (REAL_PATH "${full_path}" _abs_path EXPAND_TILDE)
-		list (APPEND lemonsModulePaths "${_abs_path}")
-
-		file (GLOB dirChildren RELATIVE ${_abs_path} ${_abs_path}/*)
-
-		list (REMOVE_ITEM dirChildren scripts)
-
-		foreach(child ${dirChildren})
-			_lemons_add_cmake_module_dir ("${child}" "${_abs_path}")
-		endforeach()
-	endif()
-
-	set (lemonsModulePaths "${lemonsModulePaths}" PARENT_SCOPE)
-endfunction()
-
-file (GLOB children RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_LIST_DIR}/modules/*)
-
-foreach(child ${children})
-	_lemons_add_cmake_module_dir ("${child}" "${CMAKE_CURRENT_LIST_DIR}")
-endforeach()
-
-#
-
-list (APPEND CMAKE_MODULE_PATH "${lemonsModulePaths}")
-list (APPEND LEMONS_CMAKE_MODULE_PATH "${lemonsModulePaths}")
-
-list (REMOVE_DUPLICATES LEMONS_CMAKE_MODULE_PATH)
-list (REMOVE_DUPLICATES CMAKE_MODULE_PATH)
-
-set (LEMONS_CMAKE_MODULE_PATH "${LEMONS_CMAKE_MODULE_PATH}" CACHE INTERNAL "")
-set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")
+include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
 #
 
@@ -84,6 +46,7 @@ add_library (Oranges::Oranges ALIAS Oranges)
 
 install (EXPORT OrangesTargets FILE OrangesTargets.cmake NAMESPACE Oranges::
 		 DESTINATION lib/cmake/Oranges)
+
 export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/OrangesTargets.cmake"
 		NAMESPACE Oranges::)
 
@@ -95,9 +58,10 @@ write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJEC
 								  COMPATIBILITY SameMajorVersion)
 
 configure_package_config_file (
-	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" "OrangesConfig.cmake"
-	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS "" INSTALL_PREFIX "")
+	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
+	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
-if(PROJECT_IS_TOP_LEVEL)
-	include (CPack)
-endif()
+install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake" OrangesTargets.cmake
+			   OrangesConfigVersion.cmake DESTINATION /)
+
+include (LemonsDefaultCPackSettings)

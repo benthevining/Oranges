@@ -16,21 +16,15 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsDefaultPlatformSettings)
 
-option (LEMONS_ENABLE_INTEGRATIONS "Enable all available integrations by default" OFF)
-
-if(LEMONS_ENABLE_INTEGRATIONS)
-	include (LemonsAllIntegrations)
-endif()
-
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
 							  "${PROJECT_SOURCE_DIR}/logs/undefined_properties.log")
 
-set (CMAKE_CXX_VISIBILITY_PRESET hidden CACHE INTERNAL "")
+set (CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 set_property (GLOBAL PROPERTY USE_FOLDERS YES)
 set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
 
-set (CMAKE_SUPPRESS_REGENERATION TRUE CACHE INTERNAL "")
+set (CMAKE_SUPPRESS_REGENERATION TRUE)
 
 if(NOT DEFINED ENV{CMAKE_INSTALL_MODE})
 	set (ENV{CMAKE_INSTALL_MODE} ABS_SYMLINK_OR_COPY)

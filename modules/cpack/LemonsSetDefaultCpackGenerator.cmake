@@ -30,6 +30,10 @@ endif()
 
 if(NOT CPACK_GENERATOR)
 	include ("${CMAKE_CURRENT_LIST_DIR}/scripts/set_default_generator.cmake")
+
+	if(MARK_ALL_CPACK_OPTIONS_ADVANCED)
+		mark_as_advanced (FORCE CPACK_GENERATOR)
+	endif()
 endif()
 
-message (STATUS "Using CPack generator: ${CPACK_GENERATOR}")
+message (VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")

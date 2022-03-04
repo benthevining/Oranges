@@ -139,7 +139,7 @@ function(lemons_configure_juce_plugin)
 	# my lemons_plugin module, so add it to those targets here...
 	function(_lemons_add_extra_pluginformat_modules formatTarget)
 		if(TARGET ${formatTarget})
-			target_link_libraries (${formatTarget} PRIVATE juce_audio_devices)
+			target_link_libraries (${formatTarget} PRIVATE juce::juce_audio_devices)
 		endif()
 	endfunction()
 

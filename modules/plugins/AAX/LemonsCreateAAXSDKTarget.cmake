@@ -41,7 +41,6 @@ if(NOT IS_DIRECTORY "${LEMONS_AAX_SDK_PATH}")
 endif()
 
 # Mac (xcodebuild)
-
 if(APPLE)
 
 	if(NOT "x86_64" IN_LIST CMAKE_OSX_ARCHITECTURES)
@@ -54,6 +53,8 @@ if(APPLE)
 
 	find_program (XCODE_BUILD xcodebuild)
 
+	mark_as_advanced (FORCE XCODE_BUILD)
+
 	if(NOT XCODE_BUILD)
 		message (WARNING "xcodebuild is required to build the AAXSDK, but could not be found!")
 		return ()
@@ -62,6 +63,7 @@ if(APPLE)
 	set (macBuildDir "${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild")
 
 	set (xcode_proj_file "${macBuildDir}/AAXLibrary.xcodeproj")
+
 	if(NOT EXISTS "${xcode_proj_file}")
 		message (AUTHOR_WARNING "${xcode_proj_file} could not be found, AAX SDK cannot be built!")
 		return ()
@@ -79,7 +81,6 @@ if(APPLE)
 	set_target_properties (AAXSDK PROPERTIES OSX_ARCHITECTURES x86_64)
 
 	# Windows (MSVC)
-
 elseif(WIN32)
 
 	set (msvc_proj_file "${LEMONS_AAX_SDK_PATH}/msvc/AAX_SDK.sln")
@@ -94,7 +95,9 @@ elseif(WIN32)
 endif()
 
 if(TARGET AAXSDK)
-	message (DEBUG "Configured AAXSDK target!")
+	message (VERBOSE "Configured AAXSDK target!")
+
+	add_library (Lemons::AAXSDK ALIAS AAXSDK)
 else()
 	message (WARNING "Error configuring the AAXSDK target!")
 endif()

@@ -12,8 +12,9 @@
 
 include_guard (GLOBAL)
 
-set (ENV{MACOSX_DEPLOYMENT_TARGET} 9.3)
-set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE INTERNAL "")
+set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE INTERNAL "Minimum iOS deployment target")
+
+mark_as_advanced (CMAKE_OSX_DEPLOYMENT_TARGET FORCE)
 
 enable_language (OBJCXX)
 enable_language (OBJC)
@@ -21,9 +22,9 @@ enable_language (OBJC)
 option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 
 if(LEMONS_IOS_SIMULATOR)
-	set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform" CACHE INTERNAL "")
-	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator" CACHE INTERNAL "")
+	set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")
+	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
 else()
-	set (IOS_PLATFORM_LOCATION "iPhoneOS.platform" CACHE INTERNAL "")
-	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos" CACHE INTERNAL "")
+	set (IOS_PLATFORM_LOCATION "iPhoneOS.platform")
+	set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
 endif()

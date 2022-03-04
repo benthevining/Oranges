@@ -23,14 +23,18 @@ This module is included by Lemons by default, when Lemons is added as a subdirec
 
 include_guard (GLOBAL)
 
-set (LSB_DISTRIBUTOR_ID "unknown" CACHE INTERNAL "")
-set (LSB_RELEASE "unknown" CACHE INTERNAL "")
-set (LSB_CODENAME "unknown" CACHE INTERNAL "")
-
 find_program (LSB_RELEASE_EXECUTABLE lsb_release)
 
+mark_as_advanced (FORCE LSB_RELEASE_EXECUTABLE)
+
 if(NOT LSB_RELEASE_EXECUTABLE)
+
 	message (AUTHOR_WARNING "Unable to detect LSB info for your Linux distro")
+
+	set (LSB_DISTRIBUTOR_ID "unknown" CACHE STRING "LSB distributor ID for your Linux distribution")
+	set (LSB_RELEASE "unknown" CACHE STRING "LSB executable for your Linux distribution")
+	set (LSB_CODENAME "unknown" CACHE STRING "LSB codename for your Linux distribution")
+
 	return ()
 endif()
 
@@ -43,6 +47,9 @@ execute_process (COMMAND ${LSB_RELEASE_EXECUTABLE} -sr OUTPUT_VARIABLE LSB_RELEA
 execute_process (COMMAND ${LSB_RELEASE_EXECUTABLE} -si OUTPUT_VARIABLE LSB_DISTRIBUTOR_ID
 				 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-set (LSB_DISTRIBUTOR_ID "${LSB_DISTRIBUTOR_ID}" CACHE INTERNAL "")
-set (LSB_RELEASE "${LSB_RELEASE}" CACHE INTERNAL "")
-set (LSB_CODENAME "${LSB_CODENAME}" CACHE INTERNAL "")
+set (LSB_DISTRIBUTOR_ID "${LSB_DISTRIBUTOR_ID}"
+	 CACHE STRING "LSB distributor ID for your Linux distribution")
+set (LSB_RELEASE "${LSB_RELEASE}" CACHE STRING "LSB executable for your Linux distribution")
+set (LSB_CODENAME "${LSB_CODENAME}" CACHE STRING "LSB codename for your Linux distribution")
+
+mark_as_advanced (FORCE LSB_DISTRIBUTOR_ID LSB_RELEASE LSB_CODENAME)

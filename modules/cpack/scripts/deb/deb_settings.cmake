@@ -16,64 +16,51 @@
 # part of any standard and could be omitted.
 include_guard (GLOBAL)
 
-if(NOT CPACK_DEBIAN_PACKAGE_VERSION)
-	if(${LSB_CODENAME} MATCHES "bionic")
-		set (CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}" CACHE INTERNAL "")
-	else()
-		set (CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}~${LSB_CODENAME}" CACHE INTERNAL
-																						   "")
-	endif()
+if(${LSB_CODENAME} MATCHES "bionic")
+	set (CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}" CACHE STRING "Deb package version")
+else()
+	set (CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION}~${LSB_CODENAME}"
+		 CACHE STRING "Deb package version")
+endif()
+
+if(MARK_ALL_CPACK_OPTIONS_ADVANCED)
+	mark_as_advanced (FORCE CPACK_DEBIAN_PACKAGE_VERSION)
 endif()
 
 if(NOT CPACK_PACKAGE_FILE_NAME)
 	find_program (DPKG dpkg)
 
+	mark_as_advanced (FORCE DPKG)
+
 	if(DPKG)
 		execute_process (COMMAND "${DPKG}" --print-architecture OUTPUT_VARIABLE deb_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 		set (CPACK_PACKAGE_FILE_NAME
-			 "${CPACK_PACKAGE_NAME}_${CPACK_DEBIAN_PACKAGE_VERSION}_${deb_arch}" CACHE INTERNAL "")
+			 "${CPACK_PACKAGE_NAME}_${CPACK_DEBIAN_PACKAGE_VERSION}_${deb_arch}"
+			 CACHE STRING "CPack package file name")
+
+		if(MARK_ALL_CPACK_OPTIONS_ADVANCED)
+			mark_as_advanced (FORCE CPACK_PACKAGE_FILE_NAME)
+		endif()
 	else()
 		message (
 			AUTHOR_WARNING "Cannot locate dpkg, please manually specify CPACK_PACKAGE_FILE_NAME")
 	endif()
 endif()
 
-if(NOT CPACK_DEBIAN_BUILD_DEPENDS)
-	# attempt to parse project's config file
-	set (depfile_path ${PROJECT_SOURCE_DIR}/${LOWER_PROJECT_NAME}_config.json)
+# CPACK_DEBIAN_BUILD_DEPENDS CPACK_DEBIAN_PACKAGE_CONFLICTS CPACK_DEBIAN_PACKAGE_REPLACES
 
-	if(EXISTS ${depfile_path})
+set (CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_LIST_DIR}/postinst;"
+	 CACHE PATH "Deb post-install script")
 
-		include (LemonsInstallDeps)
+set (CPACK_DEBIAN_PACKAGE_DEPENDS "${${UPPER_PROJECT_NAME}_PACKAGE_DEB_DEPENDS}"
+	 CACHE STRING "Deb package dependencies")
 
-		lemons_get_list_of_deps_to_install (OUTPUT deps_list FILE ${depfile_path})
+set (CPACK_DEBIAN_PACKAGE_HOMEPAGE "${${UPPER_PROJECT_NAME}_URL}" CACHE STRING
+																		"Deb package homepage URL")
 
-		if(deps_list)
-			set (CPACK_DEBIAN_BUILD_DEPENDS ${deps_list} CACHE INTERNAL "")
-		endif()
-	else()
-		message (AUTHOR_WARNING "Depsfile not found, please specify CPACK_DEBIAN_BUILD_DEPENDS")
-	endif()
+if(MARK_ALL_CPACK_OPTIONS_ADVANCED)
+	mark_as_advanced (FORCE CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA CPACK_DEBIAN_PACKAGE_DEPENDS
+					  CPACK_DEBIAN_PACKAGE_HOMEPAGE)
 endif()
-
-# if (NOT CPACK_DEBIAN_PACKAGE_CONFLICTS) set (CPACK_DEBIAN_PACKAGE_CONFLICTS ${_package_conflicts})
-# endif()
-
-if(NOT DEFINED CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA)
-	# script name must be 'postinst' to avoid lintian W: "unknown-control-file"
-	set (_ldconfig_script "${CMAKE_CURRENT_LIST_DIR}/postinst")
-	set (CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${_ldconfig_script};" CACHE INTERNAL "")
-endif()
-
-if(NOT CPACK_DEBIAN_PACKAGE_DEPENDS)
-	set (CPACK_DEBIAN_PACKAGE_DEPENDS ${${UPPER_PROJECT_NAME}_PACKAGE_DEB_DEPENDS} CACHE INTERNAL
-																						 "")
-endif()
-
-if(NOT CPACK_DEBIAN_PACKAGE_HOMEPAGE)
-	set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${${UPPER_PROJECT_NAME}_URL} CACHE INTERNAL "")
-endif()
-
-# if (NOT CPACK_DEBIAN_PACKAGE_REPLACES) set (CPACK_DEBIAN_PACKAGE_REPLACES ${_package_replaces})
-# endif()

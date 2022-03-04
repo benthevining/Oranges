@@ -23,6 +23,7 @@ Targets:
 
 Output variables:
 - IPP_FOUND
+- IPP_DIR
 
 ]]
 
@@ -111,3 +112,4 @@ target_include_directories (IntelIPP INTERFACE "${IPP_INCLUDE_DIR}")
 add_library (Intel::IPP ALIAS IntelIPP)
 
 set (IPP_FOUND TRUE)
+set (IPP_DIR "${IPP_ROOT}")

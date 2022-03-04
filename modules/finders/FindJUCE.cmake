@@ -22,6 +22,7 @@ Targets:
 
 Output variables:
 - JUCE_FOUND
+- JUCE_DIR
 
 ]]
 
@@ -48,3 +49,4 @@ CPMAddPackage (
 	"JUCE_BUILD_EXTRAS OFF")
 
 set (JUCE_FOUND TRUE)
+set (JUCE_DIR "${JUCE_SOURCE_DIR}")

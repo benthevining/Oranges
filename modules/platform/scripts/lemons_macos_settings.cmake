@@ -12,19 +12,21 @@
 
 include_guard (GLOBAL)
 
-set (ENV{MACOSX_DEPLOYMENT_TARGET} 10.11)
-set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE INTERNAL "")
+set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum MacOS deployment target")
 
-set (LEMONS_MAC_SDK_VERSION "10.13" CACHE STRING "")
-mark_as_advanced (LEMONS_MAC_SDK_VERSION)
+set (LEMONS_MAC_SDK_VERSION "10.13" CACHE STRING "Mac SDK version")
 
-set (
-	MAC_SDK_DIR
-	"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${LEMONS_MAC_SDK_VERSION}.sdk"
-	)
+mark_as_advanced (FORCE CMAKE_OSX_DEPLOYMENT_TARGET LEMONS_MAC_SDK_VERSION)
 
-if(IS_DIRECTORY ${MAC_SDK_DIR})
-	set (CMAKE_OSX_SYSROOT ${MAC_SDK_DIR} CACHE INTERNAL "")
+find_path (
+	MAC_SDK_DIR "MacOSX${LEMONS_MAC_SDK_VERSION}.sdk"
+	PATHS "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
+	DOC "Path to the MacOS SDK")
+
+mark_as_advanced (FORCE MAC_SDK_DIR)
+
+if(MAC_SDK_DIR AND IS_DIRECTORY ${MAC_SDK_DIR})
+	set (CMAKE_OSX_SYSROOT ${MAC_SDK_DIR})
 else()
 	message (DEBUG "Mac SDK dir ${MAC_SDK_DIR} doesn't exist!")
 endif()
