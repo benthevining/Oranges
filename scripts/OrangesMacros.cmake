@@ -29,7 +29,7 @@ function(_oranges_add_cmake_module_dir directory parent)
 	endif()
 
 	file (REAL_PATH "${full_path}" _abs_path EXPAND_TILDE)
-	list (APPEND lemonsModulePaths "${_abs_path}")
+	list (APPEND orangesModulePaths "${_abs_path}")
 
 	file (GLOB dirChildren RELATIVE "${_abs_path}" "${_abs_path}/*")
 
@@ -39,24 +39,29 @@ function(_oranges_add_cmake_module_dir directory parent)
 		_oranges_add_cmake_module_dir ("${child}" "${_abs_path}")
 	endforeach()
 
-	set (lemonsModulePaths "${lemonsModulePaths}" PARENT_SCOPE)
+	set (orangesModulePaths "${orangesModulePaths}" PARENT_SCOPE)
 endfunction()
 
 #
 
+set (orangesModulePaths "")
+
 file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
 
+# TO DO build this up using directory properties instead...?
 foreach(child ${children})
 	_oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
 endforeach()
 
 #
 
-list (APPEND CMAKE_MODULE_PATH "${lemonsModulePaths}")
-list (APPEND LEMONS_CMAKE_MODULE_PATH "${lemonsModulePaths}")
+list (REMOVE_DUPLICATES orangesModulePaths)
+list (REMOVE_ITEM orangesModulePaths "")
 
-list (REMOVE_DUPLICATES LEMONS_CMAKE_MODULE_PATH)
+set (ORANGES_CMAKE_MODULE_PATH "${orangesModulePaths}" CACHE INTERNAL "")
+
+list (APPEND CMAKE_MODULE_PATH "${orangesModulePaths}")
+
 list (REMOVE_DUPLICATES CMAKE_MODULE_PATH)
 
-set (LEMONS_CMAKE_MODULE_PATH "${LEMONS_CMAKE_MODULE_PATH}" CACHE INTERNAL "")
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")

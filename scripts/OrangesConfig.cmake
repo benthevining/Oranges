@@ -23,6 +23,9 @@ include (CMakeFindDependencyMacro)
 set (ORANGES_ROOT_DIR "@PACKAGE_ORANGES_ROOT_DIR@")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesMacros.cmake")
+
+list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
+
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 
 #
