@@ -23,6 +23,10 @@ set_target_properties (
 
 target_compile_features (LemonsDefaultTarget INTERFACE cxx_std_20)
 
+if(WIN32)
+	target_compile_definitions (LemonsDefaultTarget INTERFACE NOMINMAX UNICODE STRICT)
+endif()
+
 if((CMAKE_CXX_COMPILER_ID MATCHES "MSVC") OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT MATCHES "MSVC"))
 
 	# config flags
@@ -46,9 +50,6 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "MSVC") OR (CMAKE_CXX_COMPILER_FRONTEND_VARIAN
 	set_target_properties (LemonsDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
 														  "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-	# string (REGEX REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}) string (REGEX REPLACE "-W3"
-	# "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 
 	# config flags
@@ -59,16 +60,17 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 	target_compile_options (
 		LemonsDefaultTarget
 		INTERFACE -Wall
-				  -Wuninitialized
-				  -Wsign-conversion
-				  -Wunreachable-code
-				  -Wstrict-aliasing
-				  -Wunused-parameter
-				  -Wsign-compare
-				  -Wno-ignored-qualifiers
 				  -Wcast-align
+				  -Wno-ignored-qualifiers
 				  -Wno-missing-field-initializers
-				  -Wpedantic)
+				  -Wpedantic
+				  -Wuninitialized
+				  -Wunreachable-code
+				  -Wunused-parameter
+				  -Wreorder
+				  -Wsign-conversion
+				  -Wstrict-aliasing
+				  -Wsign-compare)
 
 	if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 		target_compile_options (
@@ -76,31 +78,28 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 			INTERFACE -Wextra
 					  -Wno-implicit-fallthrough
 					  -Wno-maybe-uninitialized
-					  -Wredundant-decls
 					  -Wno-strict-overflow
+					  -Wredundant-decls
 					  -Wshadow
-					  $<$<COMPILE_LANGUAGE:CXX>:
-					  -Woverloaded-virtual
-					  -Wreorder
-					  -Wzero-as-null-pointer-constant>)
+					  $<$<COMPILE_LANGUAGE:CXX>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>
+			)
 	else()
 		target_compile_options (
 			LemonsDefaultTarget
-			INTERFACE -Wshadow-all
-					  -Wshorten-64-to-32
-					  -Wconversion
-					  -Wint-conversion
+			INTERFACE -Wbool-conversion
 					  -Wconditional-uninitialized
+					  -Wconversion
 					  -Wconstant-conversion
-					  -Wbool-conversion
 					  -Wextra-semi
-					  -Wshift-sign-overflow
+					  -Wint-conversion
 					  -Wnullable-to-nonnull-conversion
+					  -Wshadow-all
+					  -Wshift-sign-overflow
+					  -Wshorten-64-to-32
 					  $<$<OR:$<COMPILE_LANGUAGE:CXX>,$<COMPILE_LANGUAGE:OBJCXX>>:
 					  -Wzero-as-null-pointer-constant
 					  -Wunused-private-field
 					  -Woverloaded-virtual
-					  -Wreorder
 					  -Winconsistent-missing-destructor-override>)
 	endif()
 
@@ -109,6 +108,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
 		target_compile_options (LemonsDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
 		target_link_libraries (LemonsDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
 	endif()
+
 else()
 	message (WARNING "Unknown compiler!")
 endif()
@@ -130,6 +130,12 @@ endif()
 # MacOS options
 
 if(APPLE)
+	if(IOS)
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3")
+	else()
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11")
+	endif()
+
 	set_target_properties (
 		LemonsDefaultTarget
 		PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
@@ -154,24 +160,31 @@ if(APPLE)
 				LemonsDefaultTarget
 				PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\""
 						   OSX_ARCHITECTURES "i386;x86_64")
-		else() # Options for building for a real device
+		else()
+			if(NOT LEMONS_IOS_DEV_TEAM_ID)
+				message (
+					SEND_ERROR
+						"LEMONS_IOS_DEV_TEAM_ID must be defined in order to build for a real iOS device."
+					)
+			endif()
+
 			set_target_properties (
-				LemonsDefaultTarget PROPERTIES # XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ""
-											   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
+				LemonsDefaultTarget
+				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${LEMONS_IOS_DEV_TEAM_ID}"
+						   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
 		endif()
 	else()
 		option (LEMONS_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 
-		if(LEMONS_MAC_UNIVERSAL_BINARY AND XCODE)
+		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
+						 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-			execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
-							 OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-			if("${osx_native_arch}" STREQUAL "arm64")
-				set_target_properties (LemonsDefaultTarget PROPERTIES OSX_ARCHITECTURES
-																	  "x86_64;arm64")
-				message (VERBOSE "Enabling universal binary")
-			endif()
+		if(("${osx_native_arch}" STREQUAL "arm64") AND LEMONS_MAC_UNIVERSAL_BINARY AND XCODE)
+			set_target_properties (LemonsDefaultTarget PROPERTIES OSX_ARCHITECTURES "x86_64;arm64")
+			message (VERBOSE "Enabling universal binary")
+		else()
+			set_target_properties (LemonsDefaultTarget PROPERTIES OSX_ARCHITECTURES
+																  "${osx_native_arch}")
 		endif()
 	endif()
 else()
