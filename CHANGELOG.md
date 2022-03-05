@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.3.3](http://github.com/benthevining/Oranges/compare/v1.3.2...v1.3.3) (2022-03-05)
+
+
+### Bug Fixes
+
+* fixing another install bug ([61e4b2e](http://github.com/benthevining/Oranges/commit/61e4b2eee89a43f5d9b6e8dbf682ed26e3269bc7))
+
 ### [1.3.2](http://github.com/benthevining/Oranges/compare/v1.3.1...v1.3.2) (2022-03-05)
 
 
