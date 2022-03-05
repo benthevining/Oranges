@@ -31,7 +31,14 @@ add_library (Oranges INTERFACE)
 
 include (LemonsCmakeDevTools)
 
-oranges_install_targets (TARGETS Oranges EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (
+	TARGETS
+	Oranges
+	EXPORT
+	OrangesTargets
+	REL_PATH
+	"${ORANGES_INSTALL_DEST}"
+	OPTIONAL)
 
 include (OrangesDefaultTarget)
 

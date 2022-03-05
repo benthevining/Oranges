@@ -52,19 +52,29 @@ endmacro()
 
 function(oranges_install_targets)
 
-	set (multiValueArgs "")
+	set (oneValueArgs EXPORT REL_PATH)
 
-	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "EXPORT" "TARGETS" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "${oneValueArgs}" "TARGETS" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG EXPORT TARGETS)
 
 	include (GNUInstallDirs)
 
-	set (
-		install_command
-		TARGETS "${ORANGES_ARG_TARGETS}" EXPORT "${ORANGES_ARG_EXPORT}" LIBRARY DESTINATION
-		"${CMAKE_INSTALL_LIBDIR}" ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION
-		"${CMAKE_INSTALL_BINDIR}" INCLUDES DESTINATION include)
+	set (install_command TARGETS "${ORANGES_ARG_TARGETS}" EXPORT "${ORANGES_ARG_EXPORT}")
+
+	if(ORANGES_ARG_REL_PATH)
+		set (
+			install_command
+			${install_command} LIBRARY DESTINATION "${ORANGES_ARG_REL_PATH}" ARCHIVE DESTINATION
+			"${ORANGES_ARG_REL_PATH}" RUNTIME DESTINATION "${ORANGES_ARG_REL_PATH}" INCLUDES
+			DESTINATION include)
+	else()
+		set (
+			install_command
+			${install_command} LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" ARCHIVE DESTINATION
+			"${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" INCLUDES
+			DESTINATION include)
+	endif()
 
 	if(ORANGES_ARG_OPTIONAL)
 		set (install_command ${install_command} OPTIONAL)
