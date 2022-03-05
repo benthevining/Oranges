@@ -50,6 +50,32 @@ endmacro()
 
 #
 
+function(oranges_install_targets)
+
+	set (multiValueArgs "")
+
+	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "EXPORT" "TARGETS" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG EXPORT TARGETS)
+
+	include (GNUInstallDirs)
+
+	set (
+		install_command
+		TARGETS "${ORANGES_ARG_TARGETS}" EXPORT "${ORANGES_ARG_EXPORT}" LIBRARY DESTINATION
+		"${CMAKE_INSTALL_LIBDIR}" ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION
+		"${CMAKE_INSTALL_BINDIR}" INCLUDES DESTINATION include)
+
+	if(ORANGES_ARG_OPTIONAL)
+		set (install_command ${install_command} OPTIONAL)
+	endif()
+
+	install (${install_command})
+
+endfunction()
+
+#
+
 macro(lemons_warn_if_not_processing_project)
 	# if (NOT CMAKE_ROLE STREQUAL "PROJECT") message (AUTHOR_WARNING "This module
 	# (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some

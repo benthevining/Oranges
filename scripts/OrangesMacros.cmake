@@ -72,14 +72,13 @@ set (orangesModuleSources "")
 
 foreach(module_path ${ORANGES_CMAKE_MODULE_PATH})
 
-	if(NOT IS_DIRECTORY "${module_path}")
-		list (REMOVE_ITEM ORANGES_CMAKE_MODULE_PATH "${module_path}")
-		continue ()
-	endif()
-
-	file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
+	file (GLOB children RELATIVE "${module_path}" "${module_path}/*")
 
 	foreach(child_file ${children})
+
+		if("${child_file}" MATCHES ".DS_Store")
+			continue ()
+		endif()
 
 		set (full_path "${module_path}/${child_file}")
 

@@ -9,6 +9,11 @@ project (
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)
 
+set (ORANGES_INSTALL_DEST lib/cmake/Oranges
+	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
+
+mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
+
 if(PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 	enable_language (C)
@@ -20,25 +25,18 @@ set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-install (FILES ${ORANGES_CMAKE_MODULE_SOURCES} DESTINATION /modules)
+install (FILES ${ORANGES_CMAKE_MODULE_SOURCES} DESTINATION "${ORANGES_INSTALL_DEST}/modules")
 
-install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake" DESTINATION .)
+install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
+		 DESTINATION "${ORANGES_INSTALL_DEST}")
 
 #
 
 add_library (Oranges INTERFACE)
 
-include (GNUInstallDirs)
+include (LemonsCmakeDevTools)
 
-install (
-	TARGETS Oranges
-	EXPORT OrangesTargets
-	OPTIONAL
-	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-	INCLUDES
-	DESTINATION include)
+oranges_install_targets (TARGETS Oranges EXPORT OrangesTargets OPTIONAL)
 
 include (OrangesDefaultTarget)
 
@@ -47,7 +45,7 @@ target_link_libraries (Oranges INTERFACE OrangesDefaultTarget)
 add_library (Oranges::Oranges ALIAS Oranges)
 
 install (EXPORT OrangesTargets NAMESPACE Oranges:: EXPORT_LINK_INTERFACE_LIBRARIES
-		 DESTINATION lib/cmake/Oranges)
+		 DESTINATION "${ORANGES_INSTALL_DEST}")
 
 #
 
@@ -61,7 +59,8 @@ configure_package_config_file (
 	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
 install (FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
-			   "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake" DESTINATION .)
+			   "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
+		 DESTINATION "${ORANGES_INSTALL_DEST}")
 
 include (LemonsDefaultCPackSettings)
 
