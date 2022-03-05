@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.3.2](http://github.com/benthevining/Oranges/compare/v1.3.1...v1.3.2) (2022-03-05)
+
+
+### Bug Fixes
+
+* fixed cmake install ([4317cdc](http://github.com/benthevining/Oranges/commit/4317cdc0468528b29d3ebe8c31969ed65fceee6d))
+
 ### [1.3.1](http://github.com/benthevining/Oranges/compare/v1.3.0...v1.3.1) (2022-03-05)
 
 
