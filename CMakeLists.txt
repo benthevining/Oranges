@@ -25,11 +25,6 @@ set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-install (FILES ${ORANGES_CMAKE_MODULE_SOURCES} DESTINATION "${ORANGES_INSTALL_DEST}/modules")
-
-install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
-		 DESTINATION "${ORANGES_INSTALL_DEST}")
-
 #
 
 add_library (Oranges INTERFACE)
@@ -44,9 +39,6 @@ target_link_libraries (Oranges INTERFACE OrangesDefaultTarget)
 
 add_library (Oranges::Oranges ALIAS Oranges)
 
-install (EXPORT OrangesTargets NAMESPACE Oranges:: EXPORT_LINK_INTERFACE_LIBRARIES
-		 DESTINATION "${ORANGES_INSTALL_DEST}")
-
 #
 
 include (CMakePackageConfigHelpers)
@@ -58,9 +50,17 @@ configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
 	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
-			   "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
+install (EXPORT OrangesTargets NAMESPACE Oranges:: EXPORT_LINK_INTERFACE_LIBRARIES
 		 DESTINATION "${ORANGES_INSTALL_DEST}")
+
+install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" PATTERN .DS_Store
+																					EXCLUDE)
+
+install (
+	FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
+		  "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
+		  "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
+	DESTINATION "${ORANGES_INSTALL_DEST}")
 
 include (LemonsDefaultCPackSettings)
 

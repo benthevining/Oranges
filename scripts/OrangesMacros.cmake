@@ -65,36 +65,3 @@ list (APPEND CMAKE_MODULE_PATH "${orangesModulePaths}")
 list (REMOVE_DUPLICATES CMAKE_MODULE_PATH)
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")
-
-#
-
-set (orangesModuleSources "")
-
-foreach(module_path ${ORANGES_CMAKE_MODULE_PATH})
-
-	file (GLOB children RELATIVE "${module_path}" "${module_path}/*")
-
-	foreach(child_file ${children})
-
-		if("${child_file}" MATCHES ".DS_Store")
-			continue ()
-		endif()
-
-		set (full_path "${module_path}/${child_file}")
-
-		if(IS_DIRECTORY "${full_path}" OR (NOT EXISTS "${full_path}"))
-			continue ()
-		endif()
-
-		file (REAL_PATH "${full_path}" _abs_path EXPAND_TILDE)
-
-		list (APPEND orangesModuleSources "${_abs_path}")
-	endforeach()
-endforeach()
-
-list (REMOVE_DUPLICATES orangesModuleSources)
-list (REMOVE_ITEM orangesModuleSources "")
-
-set (ORANGES_CMAKE_MODULE_SOURCES "${orangesModuleSources}" CACHE INTERNAL "")
-
-list (APPEND CMAKE_CONFIGURE_DEPENDS "${ORANGES_CMAKE_MODULE_SOURCES}")

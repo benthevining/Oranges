@@ -15,6 +15,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsDefaultPlatformSettings)
+include (LemonsCmakeDevTools)
 
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
 							  "${PROJECT_SOURCE_DIR}/logs/undefined_properties.log")
