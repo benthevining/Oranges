@@ -34,7 +34,9 @@ add_library (OrangesUnityBuild INTERFACE)
 
 set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
 
-add_library (Oranges::OrangesUnityBuild INTERFACE OrangesUnityBuild)
+add_library (Oranges::OrangesUnityBuild ALIAS OrangesUnityBuild)
+
+install (TARGETS OrangesUnityBuild EXPORT OrangesTargets OPTIONAL)
 
 #
 

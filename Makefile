@@ -40,7 +40,7 @@ build: config ## runs CMake build
 	@cd $(ORANGES_ROOT) && $(CMAKE) --build Builds --config ""
 
 install: build ## runs CMake install
-	@cd $(ORANGES_ROOT) && $(CMAKE) --install Builds --config Release --strip --verbose
+	@cd $(ORANGES_ROOT) && sudo $(CMAKE) --install Builds --config Release --strip --verbose
 
 pack: install ## Creates a CPack installer
 	@cd $(ORANGES_ROOT) && $(CPACK) -G "" -C Release --verbose

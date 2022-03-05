@@ -22,6 +22,8 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
 install (FILES ${ORANGES_CMAKE_MODULE_SOURCES} DESTINATION /modules)
 
+install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake" DESTINATION .)
+
 #
 
 add_library (Oranges INTERFACE)
@@ -47,8 +49,9 @@ add_library (Oranges::Oranges ALIAS Oranges)
 install (EXPORT OrangesTargets FILE OrangesTargets.cmake NAMESPACE Oranges::
 		 DESTINATION lib/cmake/Oranges)
 
-export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/OrangesTargets.cmake"
-		NAMESPACE Oranges::)
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake")
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake" DESTINATION .)
+endif()
 
 #
 
@@ -61,7 +64,9 @@ configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
 	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
-install (FILES "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake" OrangesTargets.cmake
-			   OrangesConfigVersion.cmake DESTINATION /)
+install (FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
+			   "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake" DESTINATION .)
 
 include (LemonsDefaultCPackSettings)
+
+export (PACKAGE Oranges)

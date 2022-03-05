@@ -21,6 +21,7 @@
 .pre-commit-config.yaml benthevining
 .pylintrc benthevining
 .style.yapf benthevining
+CMakeLists.txt benthevining
 Makefile benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
