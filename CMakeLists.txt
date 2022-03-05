@@ -46,12 +46,8 @@ target_link_libraries (Oranges INTERFACE OrangesDefaultTarget)
 
 add_library (Oranges::Oranges ALIAS Oranges)
 
-install (EXPORT OrangesTargets FILE OrangesTargets.cmake NAMESPACE Oranges::
+install (EXPORT OrangesTargets NAMESPACE Oranges:: EXPORT_LINK_INTERFACE_LIBRARIES
 		 DESTINATION lib/cmake/Oranges)
-
-if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake")
-	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake" DESTINATION .)
-endif()
 
 #
 
