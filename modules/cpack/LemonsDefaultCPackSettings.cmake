@@ -29,6 +29,10 @@ Sets up some default configuration settings for CPack.
 
 ]]
 
+# NO include_guard here, by design!!
+
+cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+
 include (InstallRequiredSystemLibraries)
 
 # CPACK_PACKAGE_INSTALL_DIRECTORY CPACK_PACKAGE_INSTALL_REGISTRY_KEY

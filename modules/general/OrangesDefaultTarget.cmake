@@ -72,64 +72,46 @@ set_target_properties (
 			   CXX_STANDARD 20
 			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON
+			   ORANGES_PROJECT_IS_TOP_LEVEL "${PROJECT_IS_TOP_LEVEL}"
+			   MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
 target_compile_features (OrangesDefaultTarget INTERFACE cxx_std_20)
 
-if(PROJECT_IS_TOP_LEVEL)
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL TRUE)
-else()
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL FALSE)
-endif()
+target_compile_definitions (OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windows>:NOMINMAX
+														   UNICODE STRICT>)
 
-if(NOT IOS)
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
-endif()
+target_compile_options (OrangesDefaultTarget
+						INTERFACE $<$<CXX_COMPILER_ID:MSVC>:$<IF:$<CONFIG:Debug>,/Od /Zi,/Ox>>)
 
-if(IOS OR NOT APPLE)
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY FALSE)
-endif()
+target_compile_options (
+	OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>>,/MP>,
+								   /EHsc>)
 
-if(WIN32)
-	target_compile_definitions (OrangesDefaultTarget INTERFACE NOMINMAX UNICODE STRICT)
-endif()
+target_compile_options (OrangesDefaultTarget
+						INTERFACE $<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:MSVC>,-GL>)
 
-if((CMAKE_CXX_COMPILER_ID MATCHES "MSVC") OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT MATCHES "MSVC"))
+target_compile_options (
+	OrangesDefaultTarget INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:$<$<CONFIG:Debug>:-g
+								   -O0> $<$<CONFIG:Release>:-O3> $<NOT:$<PLATFORM_ID:MINGW>>:-flto>)
 
-	# config flags
-	target_compile_options (
-		OrangesDefaultTarget INTERFACE $<IF:$<CONFIG:Debug>,/Od /Zi,/Ox>
-									   $<$<STREQUAL:"${CMAKE_CXX_COMPILER_ID}","MSVC">:/MP> /EHsc)
+target_link_libraries (OrangesDefaultTarget
+					   INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-flto>)
 
-	# LTO
-	target_compile_options (
-		OrangesDefaultTarget
-		INTERFACE $<$<CONFIG:Release>:$<IF:$<STREQUAL:"${CMAKE_CXX_COMPILER_ID}","MSVC">,-GL,-flto>>
-		)
+target_link_libraries (OrangesDefaultTarget
+					   INTERFACE $<$<CONFIG:Release>:$<$<CXX_COMPILER_ID:MSVC>:-LTCG>>)
 
-	target_link_libraries (
-		OrangesDefaultTarget
-		INTERFACE $<$<CONFIG:Release>:$<$<STREQUAL:"${CMAKE_CXX_COMPILER_ID}","MSVC">:-LTCG>>)
+set_target_properties (OrangesDefaultTarget PROPERTIES $<NOT:$<PLATFORM_ID:Darwin>:INSTALL_RPATH
+													   $ORIGIN>)
 
-	set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
-														   "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_target_properties (OrangesDefaultTarget
+					   PROPERTIES $<NOT:$<PLATFORM_ID:IOS>,ORANGES_IOS_SIMULATOR FALSE>)
 
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
-
-	# config flags
-	target_compile_options (OrangesDefaultTarget INTERFACE $<$<CONFIG:Debug>:-g -O0>
-														   $<$<CONFIG:Release>:-O3>)
-
-	# LTO
-	if(NOT MINGW)
-		target_compile_options (OrangesDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
-		target_link_libraries (OrangesDefaultTarget INTERFACE $<$<CONFIG:Release>:-flto>)
-	endif()
-
-else()
-	message (DEBUG "Unknown compiler!")
-endif()
+set_target_properties (
+	OrangesDefaultTarget
+	PROPERTIES $<OR:$<PLATFORM_ID:IOS>,$<NOT:$<PLATFORM_ID:Darwin>>,ORANGES_MAC_UNIVERSAL_BINARY
+			   FALSE>)
 
 #
 # IPO
@@ -138,7 +120,9 @@ option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
 
 mark_as_advanced (ORANGES_IGNORE_IPO FORCE)
 
-if(NOT ORANGES_IGNORE_IPO)
+if(ORANGES_IGNORE_IPO)
+	set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+else()
 	include (CheckIPOSupported)
 
 	check_ipo_supported (RESULT ipo_supported OUTPUT output)
@@ -147,39 +131,47 @@ if(NOT ORANGES_IGNORE_IPO)
 		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
 
 		message (VERBOSE "Enabling IPO")
+	else()
+		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 	endif()
 endif()
 
 #
 # MacOS options
 
+set_target_properties (
+	OrangesDefaultTarget
+	PROPERTIES $<$<PLATFORM_ID:IOS>:ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH
+																$(LOCAL_APPS_DIR)
+			   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>)
+
+target_compile_definitions (OrangesDefaultTarget
+							INTERFACE $<$<PLATFORM_ID:Darwin>:JUCE_USE_VDSP_FRAMEWORK=1>)
+
+set (ios_min_deployment_target 9.3)
+set (macos_min_deployment_target 10.11)
+
+set_target_properties (
+	OrangesDefaultTarget
+	PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
+			   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET
+			   $<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>)
+
+target_compile_options (
+	OrangesDefaultTarget
+	INTERFACE
+		-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
+	)
+
+target_link_options (
+	OrangesDefaultTarget
+	INTERFACE
+	-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
+	)
+
 if(APPLE)
-	if(IOS)
-		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE STRING "Minimum iOS deployment target")
-	else()
-		set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum MacOS deployment target")
-	endif()
-
-	set_target_properties (
-		OrangesDefaultTarget
-		PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
-				   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
-
-	target_compile_definitions (OrangesDefaultTarget INTERFACE JUCE_USE_VDSP_FRAMEWORK=1)
-
-	target_compile_options (OrangesDefaultTarget
-							INTERFACE "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-
-	target_link_options (OrangesDefaultTarget INTERFACE
-						 "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
 	if(IOS)
-
-		set_target_properties (
-			OrangesDefaultTarget
-			PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./" XCODE_ATTRIBUTE_INSTALL_PATH
-													 "$(LOCAL_APPS_DIR)"
-					   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
 
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 
@@ -231,8 +223,6 @@ if(APPLE)
 												ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 		endif()
 	endif()
-else()
-	set_target_properties (OrangesDefaultTarget PROPERTIES INSTALL_RPATH $ORIGIN)
 endif()
 
 #
@@ -244,20 +234,24 @@ option (ORANGES_IGNORE_CCACHE "Never use ccache" OFF)
 
 mark_as_advanced (ORANGES_IGNORE_CCACHE FORCE)
 
-if((TARGET Oranges::OrangesCcache) AND (NOT ORANGES_IGNORE_CCACHE))
-	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCcache)
-else()
+if(ORANGES_IGNORE_CCACHE)
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE FALSE)
+else()
+	set_target_properties (
+		OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE
+										$<$<TARGET_EXISTS:Oranges::OrangesCcache>>)
+	target_link_libraries (OrangesDefaultTarget
+						   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesCcache>)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
-
 	option (ORANGES_IGNORE_INTEGRATIONS "Ignore all static analysis integrations by default" OFF)
 
 	mark_as_advanced (ORANGES_IGNORE_INTEGRATIONS FORCE)
 
 	if(NOT ORANGES_IGNORE_INTEGRATIONS)
-		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
+		target_link_libraries (OrangesDefaultTarget
+							   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesAllIntegrations>)
 	endif()
 endif()
 
@@ -265,13 +259,13 @@ endif()
 # Warnings
 
 if(PROJECT_IS_TOP_LEVEL)
-
 	option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
 
 	mark_as_advanced (ORANGES_IGNORE_WARNINGS FORCE)
 
 	if(NOT ORANGES_IGNORE_WARNINGS)
-		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesDefaultWarnings)
+		target_link_libraries (OrangesDefaultTarget
+							   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesDefaultWarnings>)
 	endif()
 endif()
 
@@ -283,10 +277,10 @@ option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
 if(ORANGES_COVERAGE_FLAGS)
 	include (OrangesCoverageFlags)
 
-	if(TARGET Oranges::OrangesCoverageFlags)
-		target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCoverageFlags)
-		message (VERBOSE "Enabling coverage flags for default target")
-	endif()
+	target_link_libraries (OrangesDefaultTarget
+						   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesCoverageFlags>)
+
+	message (VERBOSE "Enabling coverage flags for default target")
 endif()
 
 #

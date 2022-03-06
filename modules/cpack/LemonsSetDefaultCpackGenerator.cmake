@@ -10,22 +10,61 @@
 #
 # ======================================================================================
 
-#[[
-
-## Include-time actions:
-Sets a default CPACK_GENERATOR for your system, unless one has already been explicitly specified.
-
-Also configures some default settings for the selected generator.
-
-## Includes:
-- LinuxLSBInfo
-
-]]
-
 include_guard (GLOBAL)
 
-if(NOT CPACK_GENERATOR)
-	include ("${CMAKE_CURRENT_LIST_DIR}/scripts/set_default_generator.cmake")
+cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+
+cmake_language (DEFER CALL message VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")
+
+if(CPACK_GENERATOR)
+	return ()
 endif()
 
-message (VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")
+if(MSVC OR WIN32)
+	set (CPACK_GENERATOR "NSIS" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+if(APPLE)
+	set (CPACK_GENERATOR "PackageMaker" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+if(NOT UNIX)
+	set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+# Linux
+
+include (LinuxLSBInfo)
+
+if(LSB_DISTRIBUTOR_ID MATCHES "Ubuntu")
+	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+if(LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
+	set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+find_program (ORANGES_DEB_EXE debuild)
+
+mark_as_advanced (FORCE ORANGES_DEB_EXE)
+
+if(ORANGES_DEB_EXE)
+	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+find_program (ORANGES_RPM_EXE rpmbuild)
+
+mark_as_advanced (FORCE ORANGES_RPM_EXE)
+
+if(ORANGES_RPM_EXE)
+	set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
+	return ()
+endif()
+
+set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")

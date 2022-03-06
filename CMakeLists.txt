@@ -14,6 +14,9 @@ set (ORANGES_INSTALL_DEST lib/cmake/Oranges
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
+set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME Oranges)
+set (CMAKE_FOLDER Oranges)
+
 if(PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 	enable_language (C)
@@ -43,7 +46,7 @@ oranges_install_targets (
 
 include (OrangesDefaultTarget)
 
-target_link_libraries (Oranges INTERFACE OrangesDefaultTarget)
+target_link_libraries (Oranges INTERFACE Oranges::OrangesDefaultTarget)
 
 oranges_export_alias_target (Oranges Oranges)
 

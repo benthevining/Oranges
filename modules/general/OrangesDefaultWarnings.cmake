@@ -16,62 +16,50 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 add_library (OrangesDefaultWarnings INTERFACE)
 
-if((CMAKE_CXX_COMPILER_ID MATCHES "MSVC") OR (CMAKE_CXX_COMPILER_FRONTEND_VARIANT MATCHES "MSVC"))
+target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 
-	target_compile_options (OrangesDefaultWarnings INTERFACE "/W4")
+target_compile_options (
+	OrangesDefaultWarnings
+	INTERFACE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall
+			  -Wcast-align
+			  -Wno-ignored-qualifiers
+			  -Wno-missing-field-initializers
+			  -Wpedantic
+			  -Wuninitialized
+			  -Wunreachable-code
+			  -Wunused-parameter
+			  -Wreorder
+			  -Wsign-conversion
+			  -Wstrict-aliasing
+			  -Wsign-compare>)
 
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
+target_compile_options (
+	OrangesDefaultWarnings
+	INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wextra
+			  -Wno-implicit-fallthrough
+			  -Wno-maybe-uninitialized
+			  -Wno-strict-overflow
+			  -Wredundant-decls
+			  -Wshadow
+			  $<$<COMPILE_LANGUAGE:CXX>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>>)
 
-	# warnings
-	target_compile_options (
-		OrangesDefaultWarnings
-		INTERFACE -Wall
-				  -Wcast-align
-				  -Wno-ignored-qualifiers
-				  -Wno-missing-field-initializers
-				  -Wpedantic
-				  -Wuninitialized
-				  -Wunreachable-code
-				  -Wunused-parameter
-				  -Wreorder
-				  -Wsign-conversion
-				  -Wstrict-aliasing
-				  -Wsign-compare)
-
-	if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-		target_compile_options (
-			OrangesDefaultWarnings
-			INTERFACE -Wextra
-					  -Wno-implicit-fallthrough
-					  -Wno-maybe-uninitialized
-					  -Wno-strict-overflow
-					  -Wredundant-decls
-					  -Wshadow
-					  $<$<COMPILE_LANGUAGE:CXX>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>
-			)
-	else()
-		target_compile_options (
-			OrangesDefaultWarnings
-			INTERFACE -Wbool-conversion
-					  -Wconditional-uninitialized
-					  -Wconversion
-					  -Wconstant-conversion
-					  -Wextra-semi
-					  -Wint-conversion
-					  -Wnullable-to-nonnull-conversion
-					  -Wshadow-all
-					  -Wshift-sign-overflow
-					  -Wshorten-64-to-32
-					  $<$<OR:$<COMPILE_LANGUAGE:CXX>,$<COMPILE_LANGUAGE:OBJCXX>>:
-					  -Wzero-as-null-pointer-constant
-					  -Wunused-private-field
-					  -Woverloaded-virtual
-					  -Winconsistent-missing-destructor-override>)
-	endif()
-
-else()
-	message (WARNING "Unknown compiler!")
-endif()
+target_compile_options (
+	OrangesDefaultWarnings
+	INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wbool-conversion
+			  -Wconditional-uninitialized
+			  -Wconversion
+			  -Wconstant-conversion
+			  -Wextra-semi
+			  -Wint-conversion
+			  -Wnullable-to-nonnull-conversion
+			  -Wshadow-all
+			  -Wshift-sign-overflow
+			  -Wshorten-64-to-32
+			  $<$<OR:$<COMPILE_LANGUAGE:CXX>,$<COMPILE_LANGUAGE:OBJCXX>>:
+			  -Wzero-as-null-pointer-constant
+			  -Wunused-private-field
+			  -Woverloaded-virtual
+			  -Winconsistent-missing-destructor-override>>)
 
 oranges_export_alias_target (OrangesDefaultWarnings Oranges)
 

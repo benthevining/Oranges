@@ -24,16 +24,16 @@ function(lemons_set_aax_signing_settings)
 
 	lemons_check_for_unparsed_args (LEMONS_AAX)
 
-	function(_lemons_aax_sign_config_check_for_option option description)
+	if(LEMONS_AAX_FORCE)
+		set (aax_force FORCE)
+	endif()
+
+	macro(_lemons_aax_sign_config_check_for_option option description)
 		if(LEMONS_AAX_${option})
-			if(LEMONS_AAX_FORCE)
-				set (LEMONS_AAX_${option} "${LEMONS_AAX_${option}}" CACHE STRING "${description}"
-																		  FORCE)
-			else()
-				set (LEMONS_AAX_${option} "${LEMONS_AAX_${option}}" CACHE STRING "${description}")
-			endif()
+			set (LEMONS_AAX_${option} "${LEMONS_AAX_${option}}" CACHE STRING "${description}"
+																	  ${aax_force})
 		endif()
-	endfunction()
+	endmacro()
 
 	_lemons_aax_sign_config_check_for_option (ACCOUNT "Account ID for AAX plugin signing")
 	_lemons_aax_sign_config_check_for_option (SIGNID "SignID for AAX signing on Mac")

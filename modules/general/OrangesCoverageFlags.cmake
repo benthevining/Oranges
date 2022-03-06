@@ -16,23 +16,14 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 
-if(NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	message (
-		AUTHOR_WARNING
-			"Coverage flags are not supported with your current compiler: ${CMAKE_CXX_COMPILER_ID}")
-	return ()
-endif()
-
 add_library (OrangesCoverageFlags INTERFACE)
 
 target_compile_options (
-	OrangesCoverageFlags
-	PUBLIC -O0 # no optimization
-		   -g # generate debug info
-		   --coverage # sets all required flags
-	)
+	OrangesCoverageFlags INTERFACE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:$<$<CONFIG:Debug>:-O0
+								   -g --coverage>>)
 
-target_link_options (OrangesCoverageFlags PUBLIC --coverage)
+target_link_options (OrangesCoverageFlags INTERFACE
+					 $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:$<$<CONFIG:Debug>:--coverage>>)
 
 oranges_export_alias_target (OrangesCoverageFlags Oranges)
 

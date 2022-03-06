@@ -177,13 +177,8 @@ if(TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster)
 
 	add_library (MTS-ESP INTERFACE)
 
-	if(TARGET ODDSound::MTSClient)
-		target_link_libraries (MTS-ESP INTERFACE ODDSound::MTSClient)
-	endif()
-
-	if(TARGET ODDSound::MTSMaster)
-		target_link_libraries (MTS-ESP INTERFACE ODDSound::MTSMaster)
-	endif()
+	target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSClient>
+											 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
 
 	oranges_export_alias_target (MTS-ESP ODDSound)
 

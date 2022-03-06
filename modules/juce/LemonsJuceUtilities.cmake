@@ -46,6 +46,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsDefaultProjectSettings)
+include (OrangesDefaultTarget)
 include (LemonsCmakeDevTools)
 
 #
@@ -88,8 +89,8 @@ function(lemons_configure_juce_target)
 		${LEMONS_TARGETCONFIG_TARGET}
 		PRIVATE
 			JUCE_VST3_CAN_REPLACE_VST2=0
-			JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:${LEMONS_TARGETCONFIG_TARGET},JUCE_PRODUCT_NAME>"
-			JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:${LEMONS_TARGETCONFIG_TARGET},JUCE_VERSION>"
+			JUCE_APPLICATION_NAME_STRING=$<TARGET_PROPERTY:${LEMONS_TARGETCONFIG_TARGET},JUCE_PRODUCT_NAME>
+			JUCE_APPLICATION_VERSION_STRING=$<TARGET_PROPERTY:${LEMONS_TARGETCONFIG_TARGET},JUCE_VERSION>
 			JUCE_COREGRAPHICS_DRAW_ASYNC=1
 			JUCE_STRICT_REFCOUNTEDPTR=1
 			JUCE_MODAL_LOOPS_PERMITTED=0
@@ -99,7 +100,7 @@ function(lemons_configure_juce_target)
 			JUCE_DISPLAY_SPLASH_SCREEN=0
 			_CRT_SECURE_NO_WARNINGS=1)
 
-	target_link_libraries (${LEMONS_TARGETCONFIG_TARGET} PRIVATE LemonsDefaultTarget)
+	target_link_libraries (${LEMONS_TARGETCONFIG_TARGET} PRIVATE Oranges::OrangesDefaultTarget)
 
 	if(NOT LEMONS_TARGETCONFIG_NO_MODULES)
 		if(TARGET Lemons::LemonsCommonModules)
@@ -128,11 +129,11 @@ function(lemons_configure_juce_target)
 			"${LEMONS_TARGETCONFIG_TARGET}" PRIVATE JUCE_WEB_BROWSER=1 JUCE_USE_CURL=1
 													JUCE_LOAD_CURL_SYMBOLS_LAZILY=1)
 
-		# Linux
-		if(NOT (APPLE OR WIN32))
-			target_link_libraries ("${LEMONS_TARGETCONFIG_TARGET}"
-								   PRIVATE juce::pkgconfig_JUCE_CURL_LINUX_DEPS)
-		endif()
+		target_link_libraries (
+			"${LEMONS_TARGETCONFIG_TARGET}"
+			PRIVATE
+				$<NOT:$<OR:$<$<PLATFORM_ID:Windows>>,$<$<PLATFORM_ID:Darwin>>>,juce::pkgconfig_JUCE_CURL_LINUX_DEPS>
+			)
 	else()
 		target_compile_definitions ("${LEMONS_TARGETCONFIG_TARGET}" PRIVATE JUCE_WEB_BROWSER=0
 																			JUCE_USE_CURL=0)

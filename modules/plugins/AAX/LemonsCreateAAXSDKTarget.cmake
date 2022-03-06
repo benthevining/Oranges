@@ -71,8 +71,8 @@ if(APPLE)
 
 	add_custom_target (
 		AAXSDK
-		COMMAND ${XCODE_BUILD} -scheme AAXLibrary_libcpp ONLY_ACTIVE_ARCH=NO ARCHS=x86_64
-				-configuration "$<COMMAND_CONFIG:$<CONFIG>>" build
+		COMMAND "${XCODE_BUILD}" -scheme AAXLibrary_libcpp ONLY_ACTIVE_ARCH=NO ARCHS=x86_64
+				-configuration $<COMMAND_CONFIG:$<CONFIG>> build
 		COMMAND_EXPAND_LISTS VERBATIM
 		WORKING_DIRECTORY "${macBuildDir}"
 		COMMENT "Building AAX SDK..."
@@ -80,7 +80,6 @@ if(APPLE)
 
 	set_target_properties (AAXSDK PROPERTIES OSX_ARCHITECTURES x86_64)
 
-	# Windows (MSVC)
 elseif(WIN32)
 
 	set (msvc_proj_file "${LEMONS_AAX_SDK_PATH}/msvc/AAX_SDK.sln")
