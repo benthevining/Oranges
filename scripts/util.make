@@ -50,4 +50,4 @@ override cmake_default_build = $(CMAKE) --build $(BUILDS) --config $(CONFIG)
 
 override cmake_install = $(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG) --strip --verbose
 
-override cpack_create_installer = $(CPACK) -G "$(CPACK_GENERATOR)" -C $(CONFIG) --verbose
+override cpack_create_installer = $(CMAKE) --build $(BUILDS) --target package

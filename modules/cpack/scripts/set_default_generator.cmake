@@ -14,17 +14,22 @@ include_guard (GLOBAL)
 
 if(MSVC OR WIN32)
 	set (CPACK_GENERATOR "NSIS" CACHE STRING "CPack generator")
-	set (CPACK_NSIS_MODIFY_PATH ON)
 	return ()
 endif()
 
 if(APPLE)
 	set (CPACK_GENERATOR "PackageMaker" CACHE STRING "CPack generator")
-	set (CPACK_OSX_PACKAGE_VERSION "${${UPPER_PROJECT_NAME}_OSX_VERSION}")
+	return ()
+endif()
+
+if(NOT UNIX)
+	set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")
 	return ()
 endif()
 
 # Linux
+
+include (LinuxLSBInfo)
 
 if(LSB_DISTRIBUTOR_ID MATCHES "Ubuntu")
 	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")

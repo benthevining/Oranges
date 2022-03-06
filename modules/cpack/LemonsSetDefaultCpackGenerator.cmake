@@ -24,16 +24,8 @@ Also configures some default settings for the selected generator.
 
 include_guard (GLOBAL)
 
-if(NOT APPLE AND NOT WIN32)
-	include (LinuxLSBInfo)
-endif()
-
 if(NOT CPACK_GENERATOR)
 	include ("${CMAKE_CURRENT_LIST_DIR}/scripts/set_default_generator.cmake")
-
-	if(ORANGES_MARK_ALL_CPACK_OPTIONS_ADVANCED)
-		mark_as_advanced (FORCE CPACK_GENERATOR)
-	endif()
 endif()
 
 message (VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")

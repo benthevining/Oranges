@@ -29,7 +29,7 @@ build: config ## runs CMake build
 install: build ## runs CMake install
 	@cd $(ORANGES_ROOT) && $(call cmake_install)
 
-pack: install ## Creates a CPack installer
+pack: build ## Creates a CPack installer
 	@cd $(ORANGES_ROOT) && $(call cpack_create_installer)
 
 #
