@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.3.4](http://github.com/benthevining/Oranges/compare/v1.3.3...v1.3.4) (2022-03-06)
+
+
+### Bug Fixes
+
+* fixed inclusion of target export file from OrangesConfig.cmake ([c30c00a](http://github.com/benthevining/Oranges/commit/c30c00a17309515e0e7f609d7a6aab8fbf75e551))
+
 ### [1.3.3](http://github.com/benthevining/Oranges/compare/v1.3.2...v1.3.3) (2022-03-05)
 
 
