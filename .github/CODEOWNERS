@@ -42,6 +42,7 @@ modules/general/LemonsDefaultProjectSettings.cmake benthevining
 modules/general/LemonsDefaultTarget.cmake benthevining
 modules/general/LemonsDeprecations.cmake benthevining
 modules/general/LemonsFileUtils.cmake benthevining
+modules/general/LemonsGetCPM.cmake benthevining
 modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
 modules/general/OrangesCoverageFlags.cmake benthevining
@@ -61,6 +62,7 @@ modules/integrations/OrangesCppCheck.cmake benthevining
 modules/integrations/OrangesCppLint.cmake benthevining
 modules/integrations/OrangesIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
+modules/internal/BVBrandFlags.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
 modules/juce/LemonsJuceModuleUtilities.cmake benthevining

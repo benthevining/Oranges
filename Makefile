@@ -1,4 +1,4 @@
-SHELL = /bin/sh
+SHELL := /bin/sh
 .ONESHELL:
 .SHELLFLAGS: -euo
 .DEFAULT_GOAL: help
@@ -7,70 +7,49 @@ SHELL = /bin/sh
 
 #
 
-CONFIG = Release
-BUILDS = Builds
+override ORANGES_ROOT = $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
 
-CMAKE = cmake
-CPACK = cpack
-PRECOMMIT = pre-commit
-RM = $(CMAKE) -E rm -rf
-GIT = git
+override THIS_MAKEFILE = $(ORANGES_ROOT)/Makefile
 
-override ORANGES_ROOT := $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
-
-override THIS_MAKEFILE := $(ORANGES_ROOT)/Makefile
-
-ifeq ($(OS),Windows_NT)
-	CMAKE_GENERATOR = Visual Studio 17 2022
-else ifeq ($(shell uname -s),Darwin)
-	CMAKE_GENERATOR = Xcode
-	SUDO = sudo
-else
-	CMAKE_GENERATOR = Ninja
-	export CC=gcc-10
-	export CXX=g++-10
-	SUDO = sudo
-endif
-
-# TO DO: CPACK_GENERATOR
+include $(ORANGES_ROOT)/scripts/util.make
 
 #
 
 help:  ## Print this message
-	@grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(THIS_MAKEFILE) | sort | awk 'BEGIN {FS = ":.*?\#\# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@$(call print_help)
 
 #
 
-config: clean ## configure CMake
-	@cd $(ORANGES_ROOT) && $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG)
+config: ## configure CMake
+	@cd $(ORANGES_ROOT) && $(call cmake_default_configure)
 
 build: config ## runs CMake build
-	@cd $(ORANGES_ROOT) && $(CMAKE) --build $(BUILDS) --config $(CONFIG)
+	@cd $(ORANGES_ROOT) && $(call cmake_default_build)
 
 install: build ## runs CMake install
-	@cd $(ORANGES_ROOT) && $(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG) --strip --verbose
+	@cd $(ORANGES_ROOT) && $(call cmake_install)
 
 pack: install ## Creates a CPack installer
-	@cd $(ORANGES_ROOT) && $(CPACK) -G "$(CPACK_GENERATOR)" -C $(CONFIG) --verbose
+	@cd $(ORANGES_ROOT) && $(call cpack_create_installer)
 
 #
 
-init:  ## Initializes the Lemons workspace and installs all dependencies
+init:  ## Initializes the workspace and installs all dependencies
 	@chmod +x $(ORANGES_ROOT)/scripts/alphabetize_codeowners.py
-	@cd $(ORANGES_ROOT) && $(PRECOMMIT) install --install-hooks --overwrite
-	@cd $(ORANGES_ROOT) && $(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg
+	@cd $(ORANGES_ROOT) && $(call precommit_init)
 
 
 pc:  ## Runs all pre-commit hooks over all files
-	@cd $(ORANGES_ROOT) && $(GIT) add . && $(PRECOMMIT) run --all-files
+	@cd $(ORANGES_ROOT) && $(call run_precommit)
 
 #
 
 uninstall: ## Runs uninstall script [only works if project has been installed and was top-level project in configure]
-	$(CMAKE) -P $(BUILDS)/uninstall.cmake
+	@$(call run_uninstall)
 
-clean: ## Removes the builds directory
-	$(RM) $(ORANGES_ROOT)/$(BUILDS)
+clean: ## Cleans the source tree
+	@echo "Cleaning..."
+	@cd $(ORANGES_ROOT) && $(call run_clean)
 
 #
 
