@@ -41,6 +41,7 @@ modules/cpack/xd.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
 modules/finders/FindJUCE.cmake benthevining
 modules/finders/FindMIPP.cmake benthevining
+modules/finders/FindMTS-ESP.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
