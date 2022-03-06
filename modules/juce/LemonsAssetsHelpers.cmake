@@ -101,7 +101,7 @@ function(lemons_add_resources_folder)
 				)
 		endif()
 
-		add_library (${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget} ALIAS ${resourcesTarget})
+		oranges_export_alias_target ("${resourcesTarget}" "${LEMONS_RSRC_FLDR_TARGET}")
 	endif()
 
 	if(NOT TARGET ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})

@@ -20,6 +20,6 @@ include (OrangesCppCheck)
 include (OrangesCppLint)
 include (OrangesIncludeWhatYouUse)
 
-add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)
+oranges_export_alias_target (OrangesAllIntegrations Oranges)
 
 install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets OPTIONAL)

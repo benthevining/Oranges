@@ -32,7 +32,7 @@ add_library (OrangesIncludeWhatYouUse INTERFACE)
 set_target_properties (OrangesIncludeWhatYouUse PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
 														   "${lemons_iwyu_path}")
 
-add_library (Oranges::OrangesIncludeWhatYouUse ALIAS OrangesIncludeWhatYouUse)
+oranges_export_alias_target (OrangesIncludeWhatYouUse Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesIncludeWhatYouUse)
 

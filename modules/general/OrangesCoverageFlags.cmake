@@ -14,6 +14,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	message (
 		AUTHOR_WARNING
@@ -32,6 +34,6 @@ target_compile_options (
 
 target_link_options (OrangesCoverageFlags PUBLIC --coverage)
 
-add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)
+oranges_export_alias_target (OrangesCoverageFlags Oranges)
 
 oranges_install_targets (TARGETS OrangesCoverageFlags EXPORT OrangesTargets OPTIONAL)

@@ -74,7 +74,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 			MTS-ESP_Client PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
 								  $<INSTALL_INTERFACE:include/MTS-ESP_Client>)
 
-		add_library (ODDSound::MTSClient ALIAS MTS-ESP_Client)
+		oranges_export_alias_target (MTS-ESP_Client ODDSound)
 
 		oranges_install_targets (TARGETS MTS-ESP_Client EXPORT OrangesTargets)
 	else()
@@ -149,7 +149,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 				MTS-ESP_Master PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
 									  $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
 
-			add_library (ODDSound::MTSMaster ALIAS MTS-ESP_Master)
+			oranges_export_alias_target (MTS-ESP_Master ODDSound)
 
 			oranges_install_targets (TARGETS MTS-ESP_Master EXPORT OrangesTargets)
 
@@ -179,7 +179,7 @@ if(TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster)
 		target_link_libraries (MTS_ESP INTERFACE ODDSound::MTSMaster)
 	endif()
 
-	add_library (ODDSound::MTS_ESP ALIAS MTS_ESP)
+	oranges_export_alias_target (MTS_ESP ODDSound)
 
 	oranges_install_targets (TARGETS MTS_ESP EXPORT OrangesTargets OPTIONAL)
 

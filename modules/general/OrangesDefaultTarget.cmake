@@ -302,6 +302,6 @@ endif()
 
 #
 
-add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
+oranges_export_alias_target (OrangesDefaultTarget Oranges)
 
 oranges_install_targets (TARGETS OrangesDefaultTarget EXPORT OrangesTargets)

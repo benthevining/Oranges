@@ -28,7 +28,7 @@ list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")
 
-include ("@ORANGES_INSTALL_DEST@/OrangesTargets.cmake")
+include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 
 #
 

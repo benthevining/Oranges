@@ -89,6 +89,14 @@ endfunction()
 
 #
 
+function(oranges_export_alias_target origTarget namespace)
+	if(NOT TARGET "${namespace}::${origTarget}")
+		add_library ("${namespace}::${origTarget}" ALIAS "${origTarget}")
+	endif()
+endfunction()
+
+#
+
 macro(lemons_warn_if_not_processing_project)
 	# if (NOT CMAKE_ROLE STREQUAL "PROJECT") message (AUTHOR_WARNING "This module
 	# (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some

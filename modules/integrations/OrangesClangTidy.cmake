@@ -33,7 +33,7 @@ add_library (OrangesClangTidy INTERFACE)
 set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
 												   CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
 
-add_library (Oranges::OrangesClangTidy ALIAS OrangesClangTidy)
+oranges_export_alias_target (OrangesClangTidy Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesClangTidy)
 

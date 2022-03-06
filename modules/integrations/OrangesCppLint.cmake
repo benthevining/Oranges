@@ -33,7 +33,7 @@ add_library (OrangesCppLint INTERFACE)
 set_target_properties (OrangesCppLint PROPERTIES CXX_CPPLINT "${lemonsCppLintProgram}"
 												 C_CPPLINT "${lemonsCppLintProgram}")
 
-add_library (Oranges::OrangesCppLint ALIAS OrangesCppLint)
+oranges_export_alias_target (OrangesCppLint Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppLint)
 

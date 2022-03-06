@@ -45,7 +45,7 @@ include (OrangesDefaultTarget)
 
 target_link_libraries (Oranges INTERFACE OrangesDefaultTarget)
 
-add_library (Oranges::Oranges ALIAS Oranges)
+oranges_export_alias_target (Oranges Oranges)
 
 #
 

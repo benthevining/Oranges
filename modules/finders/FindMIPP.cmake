@@ -45,7 +45,7 @@ add_library (MIPP INTERFACE)
 target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
 										   $<INSTALL_INTERFACE:include/MIPP>)
 
-add_library (aff3ct::MIPP ALIAS MIPP)
+oranges_export_alias_target (MIPP aff3ct)
 
 oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets OPTIONAL)
 

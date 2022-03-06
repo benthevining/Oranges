@@ -94,7 +94,7 @@ else()
 													CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif()
 
-add_library (Oranges::OrangesCcache ALIAS OrangesCcache)
+oranges_export_alias_target (OrangesCcache Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCcache)
 

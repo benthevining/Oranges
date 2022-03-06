@@ -33,7 +33,7 @@ add_library (OrangesCppCheck INTERFACE)
 set_target_properties (OrangesCppCheck PROPERTIES EXPORT_COMPILE_COMMANDS ON
 												  CXX_CPPCHECK "${lemonsCppCheckProgram}")
 
-add_library (Oranges::OrangesCppCheck ALIAS OrangesCppCheck)
+oranges_export_alias_target (OrangesCppCheck Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppCheck)
 

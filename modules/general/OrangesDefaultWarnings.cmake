@@ -73,6 +73,6 @@ else()
 	message (WARNING "Unknown compiler!")
 endif()
 
-add_library (Oranges::OrangesDefaultWarnings ALIAS OrangesDefaultWarnings)
+oranges_export_alias_target (OrangesDefaultWarnings Oranges)
 
 oranges_install_targets (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets OPTIONAL)

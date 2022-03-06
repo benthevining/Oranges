@@ -32,11 +32,13 @@ if(NOT LEMONS_CREATE_AGGREGATE_TARGETS)
 	return ()
 endif()
 
+include (LemonsCmakeDevTools)
+
 add_custom_target (LEMONS_ALL_APPS COMMENT "Building all apps...")
 add_custom_target (LEMONS_ALL_PLUGINS COMMENT "Building all plugins...")
 
-add_library (Lemons::LEMONS_ALL_APPS ALIAS LEMONS_ALL_APPS)
-add_library (Lemons::LEMONS_ALL_PLUGINS ALIAS LEMONS_ALL_PLUGINS)
+oranges_export_alias_target (LEMONS_ALL_APPS Lemons)
+oranges_export_alias_target (LEMONS_ALL_PLUGINS Lemons)
 
 oranges_install_targets (TARGETS LEMONS_ALL_APPS LEMONS_ALL_PLUGINS EXPORT OrangesTargets OPTIONAL)
 

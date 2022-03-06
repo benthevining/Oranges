@@ -119,7 +119,9 @@ _oranges_find_ipp_library (VM) # Vector Math
 target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
-add_library (Intel::IPP ALIAS IntelIPP)
+if(NOT TARGET Intel::IPP)
+	add_library (Intel::IPP ALIAS IntelIPP)
+endif()
 
 oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets)
 
