@@ -16,7 +16,6 @@ CACHE ?= Cache
 
 ifeq ($(OS),Windows_NT)
 	CMAKE_GENERATOR ?= Visual Studio 17 2022
-	SUDO ?= ""
 else ifeq ($(shell uname -s),Darwin)
 	CMAKE_GENERATOR ?= Xcode
 	SUDO ?= sudo

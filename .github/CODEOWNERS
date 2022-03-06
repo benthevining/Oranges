@@ -82,6 +82,7 @@ package.json benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
+scripts/util.make benthevining
 toolchains/android.cmake benthevining
 toolchains/ios_common.cmake benthevining
 util/oranges_header.txt benthevining
