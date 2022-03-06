@@ -27,5 +27,6 @@ endif()
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/uninstall.cmake"
 				"${CMAKE_BINARY_DIR}/uninstall.cmake" @ONLY)
 
-add_custom_target (uninstall
-				   COMMAND "${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake")
+add_custom_target (
+	uninstall COMMAND "${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+	COMMENT "Running uninstall..." VERBATIM USES_TERMINAL)

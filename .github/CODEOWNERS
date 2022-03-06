@@ -29,7 +29,9 @@ modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
 modules/cpack/scripts/deb/deb_settings.cmake benthevining
 modules/cpack/scripts/deb/postinst benthevining
 modules/cpack/scripts/rpm/rpmPostInstall.sh benthevining
+modules/cpack/scripts/rpm/rpm_settings.cmake benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
+modules/cpack/xd.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
 modules/finders/FindJUCE.cmake benthevining
 modules/finders/FindMIPP.cmake benthevining
