@@ -21,6 +21,7 @@ endif()
 
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
+
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
@@ -57,8 +58,8 @@ configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
 	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
-install (EXPORT OrangesTargets NAMESPACE Oranges:: EXPORT_LINK_INTERFACE_LIBRARIES
-		 DESTINATION "${ORANGES_INSTALL_DEST}")
+install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
+		 EXPORT_LINK_INTERFACE_LIBRARIES)
 
 install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" PATTERN .DS_Store
 																					EXCLUDE)
