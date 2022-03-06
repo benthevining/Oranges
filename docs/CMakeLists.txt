@@ -15,9 +15,8 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 find_package (Python3 COMPONENTS Interpreter)
-find_package (Doxygen REQUIRED dot)
 
-if(NOT TARGET Python3::Interpreter OR NOT TARGET Doxygen::doxygen)
+if(NOT TARGET Python3::Interpreter)
 	message (WARNING "Doxygen dependencies missing!")
 	return ()
 endif()
@@ -28,25 +27,6 @@ endif()
 
 #
 
-add_custom_target (
-	OrangesDoxygen
-	COMMAND "${CMAKE_COMMAND}" -E make_directory "${PROJECT_SOURCE_DIR}/doc"
-	COMMAND Doxygen::doxygen
-	VERBATIM
-	DEPENDS "${PROJECT_SOURCE_DIR}/Doxyfile"
-	BYPRODUCTS "doc/html/index.html"
-	WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-	COMMENT "Building Oranges documentation...")
+include (OrangesCreateDefaultDocsTarget)
 
-add_custom_command (TARGET OrangesDoxygen PRE_BUILD COMMAND Doxygen::doxygen --version
-					COMMENT "Doxygen version:")
-
-set (docs_output_dir "${PROJECT_SOURCE_DIR}/doc")
-
-set_target_properties (OrangesDoxygen PROPERTIES ADDITIONAL_CLEAN_FILES "${docs_output_dir}")
-
-install (DIRECTORY "${docs_output_dir}/man3" TYPE MAN COMPONENT Oranges_Documentation
-		 EXCLUDE_FROM_ALL OPTIONAL)
-
-install (DIRECTORY "${docs_output_dir}/html" TYPE INFO COMPONENT Oranges_Documentation
-		 EXCLUDE_FROM_ALL OPTIONAL)
+oranges_create_default_docs_target (TARGET OrangesDoxygen PROJECT Oranges)

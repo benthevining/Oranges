@@ -166,7 +166,7 @@ SKIP_FUNCTION_MACROS   = YES
 
 TAGFILES			   =
 
-GENERATE_TAGFILE	   = doc/limes.tag
+GENERATE_TAGFILE	   = doc/oranges.tag
 
 EXTERNAL_GROUPS		= NO
 
