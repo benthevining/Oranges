@@ -14,7 +14,6 @@ CMAKE = cmake
 CPACK = cpack
 PRECOMMIT = pre-commit
 RM = $(CMAKE) -E rm -rf
-SUDO = sudo
 GIT = git
 
 override ORANGES_ROOT := $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
@@ -25,10 +24,12 @@ ifeq ($(OS),Windows_NT)
 	CMAKE_GENERATOR = Visual Studio 17 2022
 else ifeq ($(shell uname -s),Darwin)
 	CMAKE_GENERATOR = Xcode
+	SUDO = sudo
 else
 	CMAKE_GENERATOR = Ninja
 	export CC=gcc-10
 	export CXX=g++-10
+	SUDO = sudo
 endif
 
 # TO DO: CPACK_GENERATOR
