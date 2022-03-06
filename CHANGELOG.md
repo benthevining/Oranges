@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.8.0](http://github.com/benthevining/Oranges/compare/v1.7.0...v1.8.0) (2022-03-06)
+
+
+### Features
+
+* added graphviz dependency graph integration ([d38efd2](http://github.com/benthevining/Oranges/commit/d38efd289b71a7414e70844826d9b53be69e5dea))
+
 ## [1.7.0](http://github.com/benthevining/Oranges/compare/v1.6.0...v1.7.0) (2022-03-06)
 
 
