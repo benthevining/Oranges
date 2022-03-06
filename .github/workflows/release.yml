@@ -13,10 +13,43 @@ defaults:
 
 jobs:
 
+  Build:
+
+    name: ${{ matrix.os }} build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up cache
+        uses: actions/cache@v2
+        with:
+          path: Cache
+          key: ${{ runner.os }}.tests.${{ hashFiles('**/') }}
+          restore-keys: ${{ runner.os }}.tests.
+
+      - name: Install dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install ninja-build
+
+      - name: Build and install
+        run: make install
+
   Release:
 
     name: Create release
     runs-on: ubuntu-latest
+    needs: Build
 
     steps:
 

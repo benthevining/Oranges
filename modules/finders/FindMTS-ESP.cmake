@@ -24,7 +24,7 @@ If no component(s) are specified, this module will default to creating both the 
 Targets:
 - ODDSound::MTSClient : static library build of the MTS-ESP client library
 - ODDSound::MTSMaster : static library build of the MTS-ESP master library
-- ODDSound::MTS_ESP   : interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
+- ODDSound::MTS-ESP   : interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
 
 Output variables:
 - MTS-ESP_FOUND
@@ -67,8 +67,11 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 		add_library (MTS-ESP_Client STATIC)
 
-		target_sources (MTS-ESP_Client PRIVATE "${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp"
-											   "${MTS_ESP_CLIENT_DIR}/libMTSClient.h")
+		target_sources (
+			MTS-ESP_Client
+			PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
+					$<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
+					$<INSTALL_INTERFACE:include/MTS-ESP_Client/libMTSClient.h>)
 
 		target_include_directories (
 			MTS-ESP_Client PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
@@ -142,8 +145,11 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 			target_link_libraries (MTS-ESP_Master PRIVATE lib_mts)
 
-			target_sources (MTS-ESP_Master PRIVATE "${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp"
-												   "${MTS_ESP_MASTER_DIR}/libMTSMaster.h")
+			target_sources (
+				MTS-ESP_Master
+				PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
+						$<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
+						$<INSTALL_INTERFACE:include/MTS-ESP_Master/libMTSMaster.h>)
 
 			target_include_directories (
 				MTS-ESP_Master PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
@@ -169,19 +175,19 @@ if(TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster)
 
 	set (MTS-ESP_FOUND TRUE)
 
-	add_library (MTS_ESP INTERFACE)
+	add_library (MTS-ESP INTERFACE)
 
 	if(TARGET ODDSound::MTSClient)
-		target_link_libraries (MTS_ESP INTERFACE ODDSound::MTSClient)
+		target_link_libraries (MTS-ESP INTERFACE ODDSound::MTSClient)
 	endif()
 
 	if(TARGET ODDSound::MTSMaster)
-		target_link_libraries (MTS_ESP INTERFACE ODDSound::MTSMaster)
+		target_link_libraries (MTS-ESP INTERFACE ODDSound::MTSMaster)
 	endif()
 
-	oranges_export_alias_target (MTS_ESP ODDSound)
+	oranges_export_alias_target (MTS-ESP ODDSound)
 
-	oranges_install_targets (TARGETS MTS_ESP EXPORT OrangesTargets OPTIONAL)
+	oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets OPTIONAL)
 
 else()
 	set (MTS-ESP_FOUND FALSE)

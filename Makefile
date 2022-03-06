@@ -13,7 +13,7 @@ BUILDS = Builds
 CMAKE = cmake
 CPACK = cpack
 PRECOMMIT = pre-commit
-RM = rm -rf
+RM = $(CMAKE) -E rm -rf
 SUDO = sudo
 GIT = git
 

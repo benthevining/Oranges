@@ -104,6 +104,19 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 
 	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 
+	if(NOT EXISTS "${IPP_LIB_${IPP_COMPONENT}}")
+		if(IPP_FIND_REQUIRED)
+			message (FATAL_ERROR "IPP component ${IPP_COMPONENT} could not be found!")
+		endif()
+
+		if(NOT IPP_FIND_QUIETLY)
+			message (WARNING "IPP component ${IPP_COMPONENT} could not be found!")
+		endif()
+
+		set (IPP_FOUND FALSE)
+		return ()
+	endif()
+
 	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED UNKNOWN)
 
 	set_target_properties (ipp_lib_${IPP_COMPONENT} PROPERTIES IMPORTED_LOCATION
@@ -119,9 +132,7 @@ _oranges_find_ipp_library (VM) # Vector Math
 target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
-if(NOT TARGET Intel::IPP)
-	add_library (Intel::IPP ALIAS IntelIPP)
-endif()
+oranges_export_alias_target (IntelIPP Intel)
 
 oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets)
 

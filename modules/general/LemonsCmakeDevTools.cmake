@@ -50,9 +50,17 @@ endmacro()
 
 #
 
+function(oranges_export_alias_target origTarget namespace)
+	if(NOT TARGET "${namespace}::${origTarget}")
+		add_library ("${namespace}::${origTarget}" ALIAS "${origTarget}")
+	endif()
+endfunction()
+
+#
+
 function(oranges_install_targets)
 
-	set (oneValueArgs EXPORT REL_PATH)
+	set (oneValueArgs EXPORT REL_PATH ALIAS_NAMESPACE)
 
 	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "${oneValueArgs}" "TARGETS" ${ARGN})
 
@@ -84,15 +92,10 @@ function(oranges_install_targets)
 
 		install (${install_command})
 
+		if(ORANGES_ARG_ALIAS_NAMESPACE)
+			oranges_export_alias_target ("${target}" "${ORANGES_ARG_ALIAS_NAMESPACE}")
+		endif()
 	endforeach()
-endfunction()
-
-#
-
-function(oranges_export_alias_target origTarget namespace)
-	if(NOT TARGET "${namespace}::${origTarget}")
-		add_library ("${namespace}::${origTarget}" ALIAS "${origTarget}")
-	endif()
 endfunction()
 
 #
