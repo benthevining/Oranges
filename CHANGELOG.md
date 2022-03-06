@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.5.0](http://github.com/benthevining/Oranges/compare/v1.4.1...v1.5.0) (2022-03-06)
+
+
+### Features
+
+* added more toolchain files ([a59dd78](http://github.com/benthevining/Oranges/commit/a59dd78ee45d6d1cc6099d22a4e870c5620b088f))
+
 ### [1.4.1](http://github.com/benthevining/Oranges/compare/v1.4.0...v1.4.1) (2022-03-06)
 
 
