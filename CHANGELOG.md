@@ -1,5 +1,17 @@
 # Oranges changelog
 
+## [1.4.0](http://github.com/benthevining/Oranges/compare/v1.3.5...v1.4.0) (2022-03-06)
+
+
+### Features
+
+* added an uninstall target module ([ba8c739](http://github.com/benthevining/Oranges/commit/ba8c739d7e11c24c91a70669462e33a4f04bec6c))
+
+
+### Bug Fixes
+
+* fixing filename casing for Linux ([ab67042](http://github.com/benthevining/Oranges/commit/ab67042c47bd4fffe51085f8caac1fc273381831))
+
 ### [1.3.5](http://github.com/benthevining/Oranges/compare/v1.3.4...v1.3.5) (2022-03-06)
 
 
