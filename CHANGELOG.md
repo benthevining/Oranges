@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.6.0](http://github.com/benthevining/Oranges/compare/v1.5.0...v1.6.0) (2022-03-06)
+
+
+### Features
+
+* added a module for library ABI control features ([976aa97](http://github.com/benthevining/Oranges/commit/976aa97a10c3a9805a072eab1fd527235db55bde))
+
 ## [1.5.0](http://github.com/benthevining/Oranges/compare/v1.4.1...v1.5.0) (2022-03-06)
 
 
