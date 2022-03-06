@@ -15,22 +15,22 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (lemons_iwyu_path NAMES include-what-you-use iwyu)
+find_program (ORANGES_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
 
-mark_as_advanced (FORCE lemons_iwyu_path)
+mark_as_advanced (FORCE ORANGES_INCLUDE_WHAT_YOU_USE)
 
-if(NOT lemons_iwyu_path)
+if(NOT ORANGES_INCLUDE_WHAT_YOU_USE)
 	return ()
 endif()
 
 message (VERBOSE "Using include-what-you-use!")
 
-set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${lemons_iwyu_path}")
+set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${ORANGES_INCLUDE_WHAT_YOU_USE}")
 
 add_library (OrangesIncludeWhatYouUse INTERFACE)
 
 set_target_properties (OrangesIncludeWhatYouUse PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-														   "${lemons_iwyu_path}")
+														   "${ORANGES_INCLUDE_WHAT_YOU_USE}")
 
 oranges_export_alias_target (OrangesIncludeWhatYouUse Oranges)
 

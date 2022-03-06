@@ -15,23 +15,23 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (lemonsCppLintProgram NAMES cpplint)
+find_program (ORANGES_CPPLINT NAMES cpplint)
 
-mark_as_advanced (FORCE lemonsCppLintProgram)
+mark_as_advanced (FORCE ORANGES_CPPLINT)
 
-if(NOT lemonsCppLintProgram)
+if(NOT ORANGES_CPPLINT)
 	return ()
 endif()
 
 message (VERBOSE "Using cpplint!")
 
-set (CMAKE_CXX_CPPLINT "${lemonsCppLintProgram}")
-set (CMAKE_C_CPPLINT "${lemonsCppLintProgram}")
+set (CMAKE_CXX_CPPLINT "${ORANGES_CPPLINT}")
+set (CMAKE_C_CPPLINT "${ORANGES_CPPLINT}")
 
 add_library (OrangesCppLint INTERFACE)
 
-set_target_properties (OrangesCppLint PROPERTIES CXX_CPPLINT "${lemonsCppLintProgram}"
-												 C_CPPLINT "${lemonsCppLintProgram}")
+set_target_properties (OrangesCppLint PROPERTIES CXX_CPPLINT "${ORANGES_CPPLINT}"
+												 C_CPPLINT "${ORANGES_CPPLINT}")
 
 oranges_export_alias_target (OrangesCppLint Oranges)
 

@@ -22,8 +22,8 @@ Sets up some default configuration settings for CPack.
 
 include_guard (GLOBAL)
 
-option (MARK_ALL_CPACK_OPTIONS_ADVANCED "Prevent CPack options from cluttering up the cache editor"
-		ON)
+option (ORANGES_MARK_ALL_CPACK_OPTIONS_ADVANCED
+		"Prevent CPack options from cluttering up the cache editor" ON)
 
 include (LemonsSetDefaultCpackGenerator)
 
@@ -82,7 +82,7 @@ endif()
 
 #
 
-if(MARK_ALL_CPACK_OPTIONS_ADVANCED)
+if(ORANGES_MARK_ALL_CPACK_OPTIONS_ADVANCED)
 	mark_as_advanced (
 		FORCE
 		CPACK_PACKAGE_NAME

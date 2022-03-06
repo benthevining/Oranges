@@ -15,23 +15,23 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (lemonsClangTidyProgram NAMES clang-tidy)
+find_program (ORANGES_CLANG_TIDY NAMES clang-tidy)
 
-mark_as_advanced (FORCE lemonsClangTidyProgram)
+mark_as_advanced (FORCE ORANGES_CLANG_TIDY)
 
-if(NOT lemonsClangTidyProgram)
+if(NOT ORANGES_CLANG_TIDY)
 	return ()
 endif()
 
 message (VERBOSE "Using clang-tidy!")
 
-set (CMAKE_CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
+set (CMAKE_CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
 set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_library (OrangesClangTidy INTERFACE)
 
 set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
-												   CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
+												   CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
 
 oranges_export_alias_target (OrangesClangTidy Oranges)
 

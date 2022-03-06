@@ -36,20 +36,20 @@ if(LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
 	return ()
 endif()
 
-find_program (DEB_EXE debuild)
+find_program (ORANGES_DEB_EXE debuild)
 
-mark_as_advanced (FORCE DEB_EXE)
+mark_as_advanced (FORCE ORANGES_DEB_EXE)
 
-if(DEB_EXE)
+if(ORANGES_DEB_EXE)
 	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
 	return ()
 endif()
 
-find_program (RPM_EXE rpmbuild)
+find_program (ORANGES_RPM_EXE rpmbuild)
 
-mark_as_advanced (FORCE RPM_EXE)
+mark_as_advanced (FORCE ORANGES_RPM_EXE)
 
-if(RPM_EXE)
+if(ORANGES_RPM_EXE)
 	set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
 	return ()
 endif()

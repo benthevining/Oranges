@@ -29,11 +29,16 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (CCACHE_PROGRAM ccache)
+define_property (
+	TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
+	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
+	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
 
-mark_as_advanced (FORCE CCACHE_PROGRAM)
+find_program (ORANGES_CCACHE ccache)
 
-if(NOT CCACHE_PROGRAM)
+mark_as_advanced (FORCE ORANGES_CCACHE)
+
+if(NOT ORANGES_CCACHE)
 	message (VERBOSE "ccache could not be found.")
 	return ()
 endif()
@@ -50,7 +55,7 @@ endif()
 
 list (APPEND ccache_options "CCACHE_COMPRESS=true" "CCACHE_COMPRESSLEVEL=6" "CCACHE_MAXSIZE=800M")
 
-list (JOIN ccache_options "\n export " CCCACHE_EXPORTS)
+list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 
 #
 
@@ -62,7 +67,7 @@ function(_lemons_configure_compiler_launcher language)
 
 	set (script_name "launch-${language}")
 
-	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in" "${script_name}")
+	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in" "${script_name}" @ONLY)
 
 	set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}" PARENT_SCOPE)
 endfunction()
@@ -75,6 +80,8 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 #
 
 add_library (OrangesCcache INTERFACE)
+
+set_target_properties (OrangesCcache PROPERTIES ORANGES_USING_CCACHE TRUE)
 
 if(XCODE)
 	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")

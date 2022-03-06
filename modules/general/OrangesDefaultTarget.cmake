@@ -29,6 +29,42 @@ define_property (
 		"Boolean indicator of whether this target is being consumed downstream as an installed version"
 	)
 
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_PROJECT_IS_TOP_LEVEL
+	BRIEF_DOCS
+		"Boolean indicating whether the project that created this target is the top-level CMake project"
+	FULL_DOCS
+		"Boolean indicating whether the project that created this target is the top-level CMake project"
+	)
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_IOS_SIMULATOR
+	BRIEF_DOCS "TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
+	FULL_DOCS
+		"TRUE if compiling for an iOS simulator; FALSE if compiling for a real device. FALSE if not cross-compiling for iOS"
+	)
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_MAC_UNIVERSAL_BINARY
+	BRIEF_DOCS "TRUE if building a universal binary; otherwise FALSE"
+	FULL_DOCS
+		"When TRUE, the OSX architectures have been set to x86_64 and arm64; when false, it has been set to only this Mac's native architecture, ${osx_native_arch}. FALSE on non-MacOSX platforms."
+	)
+
+define_property (
+	TARGET INHERITED
+	PROPERTY ORANGES_MAC_NATIVE_ARCH
+	BRIEF_DOCS
+		"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
+	FULL_DOCS
+		"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1). Undefined on non-MacOSX platforms."
+	)
+
+#
+
 set_target_properties (
 	OrangesDefaultTarget
 	PROPERTIES DEBUG_POSTFIX -d
@@ -37,20 +73,18 @@ set_target_properties (
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
-define_property (
-	TARGET INHERITED
-	PROPERTY ORANGES_PROJECT_IS_TOP_LEVEL
-	BRIEF_DOCS
-		"Boolean indicating whether the project that created this target is the top-level CMake project"
-	FULL_DOCS
-		"Boolean indicating whether the project that created this target is the top-level CMake project"
-		INITIALIZE_FROM_VARIABLE
-		PROJECT_IS_TOP_LEVEL)
-
 if(PROJECT_IS_TOP_LEVEL)
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL TRUE)
 else()
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL FALSE)
+endif()
+
+if(NOT IOS)
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
+endif()
+
+if(IOS OR NOT APPLE)
+	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 endif()
 
 #
@@ -154,14 +188,6 @@ if(APPLE)
 
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 
-		define_property (
-			TARGET INHERITED
-			PROPERTY ORANGES_IOS_SIMULATOR
-			BRIEF_DOCS
-				"TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
-			FULL_DOCS "TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
-					  INITIALIZE_FROM_VARIABLE LEMONS_IOS_SIMULATOR)
-
 		if(LEMONS_IOS_SIMULATOR)
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64"
 																   ORANGES_IOS_SIMULATOR TRUE)
@@ -186,38 +212,19 @@ if(APPLE)
 
 	else() # if (IOS)
 
-		option (LEMONS_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 
 		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 		set (osx_native_arch "${osx_native_arch}" CACHE INTERNAL "")
 
-		define_property (
-			TARGET INHERITED
-			PROPERTY ORANGES_MAC_UNIVERSAL_BINARY
-			BRIEF_DOCS "TRUE if building a universal binary; otherwise FALSE"
-			FULL_DOCS
-				"When TRUE, the OSX architectures have been set to x86_64 and arm64; when false, it has been set to only this Mac's native architecture, ${osx_native_arch}"
-				INITIALIZE_FROM_VARIABLE
-				LEMONS_MAC_UNIVERSAL_BINARY)
-
-		define_property (
-			TARGET INHERITED
-			PROPERTY ORANGES_MAC_NATIVE_ARCH
-			BRIEF_DOCS
-				"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
-			FULL_DOCS
-				"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
-				INITIALIZE_FROM_VARIABLE
-				osx_native_arch)
-
 		message (DEBUG "Mac native arch: ${osx_native_arch}")
 
 		set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_NATIVE_ARCH
 															   "${osx_native_arch}")
 
-		if(("${osx_native_arch}" STREQUAL "arm64") AND LEMONS_MAC_UNIVERSAL_BINARY AND XCODE)
+		if(("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE)
 			set_target_properties (
 				OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "x86_64;arm64"
 												ORANGES_MAC_UNIVERSAL_BINARY TRUE)
@@ -242,19 +249,8 @@ option (ORANGES_IGNORE_CCACHE "Never use ccache" OFF)
 
 mark_as_advanced (ORANGES_IGNORE_CCACHE FORCE)
 
-define_property (
-	TARGET INHERITED
-	PROPERTY ORANGES_USING_CCACHE
-	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
-	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
-			  INITIALIZE_FROM_VARIABLE ORANGES_IGNORE_CCACHE)
-
 if((TARGET Oranges::OrangesCcache) AND (NOT ORANGES_IGNORE_CCACHE))
-
 	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesCcache)
-
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE TRUE)
-
 else()
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE FALSE)
 endif()
@@ -288,8 +284,6 @@ endif()
 # Coverage flags
 
 option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
-
-mark_as_advanced (FORCE ORANGES_COVERAGE_FLAGS)
 
 if(ORANGES_COVERAGE_FLAGS)
 	include (OrangesCoverageFlags)

@@ -15,23 +15,23 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (lemonsCppCheckProgram NAMES cppcheck)
+find_program (ORANGES_CPPCHECK NAMES cppcheck)
 
-mark_as_advanced (FORCE lemonsCppCheckProgram)
+mark_as_advanced (FORCE ORANGES_CPPCHECK)
 
-if(NOT lemonsCppCheckProgram)
+if(NOT ORANGES_CPPCHECK)
 	return ()
 endif()
 
 message (VERBOSE "Using cppcheck!")
 
-set (CMAKE_CXX_CPPCHECK "${lemonsCppCheckProgram};--suppress=preprocessorErrorDirective")
+set (CMAKE_CXX_CPPCHECK "${ORANGES_CPPCHECK};--suppress=preprocessorErrorDirective")
 set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_library (OrangesCppCheck INTERFACE)
 
-set_target_properties (OrangesCppCheck PROPERTIES EXPORT_COMPILE_COMMANDS ON
-												  CXX_CPPCHECK "${lemonsCppCheckProgram}")
+set_target_properties (OrangesCppCheck PROPERTIES EXPORT_COMPILE_COMMANDS ON CXX_CPPCHECK
+																			 "${ORANGES_CPPCHECK}")
 
 oranges_export_alias_target (OrangesCppCheck Oranges)
 
