@@ -15,6 +15,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesDefaultWarnings)
+include (LemonsCmakeDevTools)
 
 add_library (OrangesDefaultTarget INTERFACE)
 
@@ -68,10 +69,13 @@ define_property (
 set_target_properties (
 	OrangesDefaultTarget
 	PROPERTIES DEBUG_POSTFIX -d
-			   CXX_VISIBILITY_PRESET hidden
-			   VISIBILITY_INLINES_HIDDEN TRUE
+			   CXX_STANDARD 20
+			   CXX_STANDARD_REQUIRED ON
+			   EXPORT_COMPILE_COMMANDS ON
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
+
+target_compile_features (OrangesDefaultTarget INTERFACE cxx_std_20)
 
 if(PROJECT_IS_TOP_LEVEL)
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_PROJECT_IS_TOP_LEVEL TRUE)
@@ -86,15 +90,6 @@ endif()
 if(IOS OR NOT APPLE)
 	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 endif()
-
-#
-
-set_target_properties (
-	OrangesDefaultTarget
-	PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON EXPORT_COMPILE_COMMANDS ON
-			   VISIBILITY_INLINES_HIDDEN ON)
-
-target_compile_features (OrangesDefaultTarget INTERFACE cxx_std_20)
 
 if(WIN32)
 	target_compile_definitions (OrangesDefaultTarget INTERFACE NOMINMAX UNICODE STRICT)

@@ -24,6 +24,7 @@
 .style.yapf benthevining
 CMakeLists.txt benthevining
 CMakePresets.json benthevining
+CPackConfig.cmake benthevining
 Makefile benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining

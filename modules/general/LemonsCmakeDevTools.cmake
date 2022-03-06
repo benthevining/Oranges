@@ -14,6 +14,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (GNUInstallDirs)
+
 #
 
 function(_lemons_const_variable_watch variableName access)
@@ -66,8 +68,6 @@ function(oranges_install_targets)
 
 	lemons_require_function_arguments (ORANGES_ARG EXPORT TARGETS)
 
-	include (GNUInstallDirs)
-
 	foreach(target ${ORANGES_ARG_TARGETS})
 
 		set (install_command TARGETS "${target}" EXPORT "${ORANGES_ARG_EXPORT}")
@@ -75,15 +75,17 @@ function(oranges_install_targets)
 		if(ORANGES_ARG_REL_PATH)
 			set (
 				install_command
-				${install_command} LIBRARY DESTINATION "${ORANGES_ARG_REL_PATH}" ARCHIVE
-				DESTINATION "${ORANGES_ARG_REL_PATH}" RUNTIME DESTINATION "${ORANGES_ARG_REL_PATH}"
-				INCLUDES DESTINATION "include/${target}")
+				${install_command} LIBRARY DESTINATION
+				"${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}" ARCHIVE DESTINATION
+				"${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}" RUNTIME DESTINATION
+				"${CMAKE_INSTALL_BINDIR}/${ORANGES_ARG_REL_PATH}" INCLUDES DESTINATION
+				"${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
 		else()
 			set (
 				install_command
 				${install_command} LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" ARCHIVE
 				DESTINATION "${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-				INCLUDES DESTINATION "include/${target}")
+				INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 		endif()
 
 		if(ORANGES_ARG_OPTIONAL)
