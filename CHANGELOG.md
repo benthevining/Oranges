@@ -1,5 +1,19 @@
 # Oranges changelog
 
+## [1.7.0](http://github.com/benthevining/Oranges/compare/v1.6.0...v1.7.0) (2022-03-06)
+
+
+### Features
+
+* added a cmake module to create a default docs target ([75ba1fc](http://github.com/benthevining/Oranges/commit/75ba1fcb9413787834a8fc63fabf22a793c8afce))
+* cpack settings module now creates a default CPackConfig file as well ([8801eec](http://github.com/benthevining/Oranges/commit/8801eec5935528140da3044737ec40b318753417))
+* set up documentation build targets ([c106e1e](http://github.com/benthevining/Oranges/commit/c106e1e06332000f30c6e1e853c5c6f7983f1e3e))
+
+
+### Bug Fixes
+
+* not failing with an error if Doxygen cannot be found ([c6d6e07](http://github.com/benthevining/Oranges/commit/c6d6e07be4d390e19b603a9c0e94104dccd3dec1))
+
 ## [1.6.0](http://github.com/benthevining/Oranges/compare/v1.5.0...v1.6.0) (2022-03-06)
 
 
