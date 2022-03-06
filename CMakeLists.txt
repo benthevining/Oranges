@@ -9,14 +9,6 @@ project (
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)
 
-set (ORANGES_INSTALL_DEST lib/cmake/Oranges
-	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
-
-mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
-
-set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME Oranges)
-set (CMAKE_FOLDER Oranges)
-
 if(PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 	enable_language (C)
@@ -28,6 +20,8 @@ set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
+
+include (OrangesDefaultCMakeSettings)
 
 #
 
@@ -79,6 +73,7 @@ install (
 
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesUninstallTarget)
+	include (OrangesGraphVizConfig)
 	include (LemonsDefaultCPackSettings)
 endif()
 

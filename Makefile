@@ -34,6 +34,9 @@ pack: build ## Creates a CPack installer
 
 #
 
+deps_graph: config ## Generates a PNG image of the CMake dependency graph [requires graphviz's dot tool]
+	@cd $(ORANGES_ROOT) && $(call cmake_default_build) --target DependencyGraph
+
 docs: config ## Builds the documentation
 	@cd $(ORANGES_ROOT) && $(call cmake_default_build) --target OrangesDoxygen
 

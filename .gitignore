@@ -10,3 +10,5 @@ CMakeUserPresets.json
 cpm-package-lock.cmake
 node_modules/
 package-lock.json
+deps_graph.dot
+deps_graph.png

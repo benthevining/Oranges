@@ -29,11 +29,11 @@ Sets up some default configuration settings for CPack.
 
 ]]
 
-# NO include_guard here, by design!!
+include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (InstallRequiredSystemLibraries)
+include (OrangesInstallSystemLibs)
 
 # CPACK_PACKAGE_INSTALL_DIRECTORY CPACK_PACKAGE_INSTALL_REGISTRY_KEY
 

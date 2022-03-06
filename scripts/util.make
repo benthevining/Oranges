@@ -8,12 +8,12 @@ CPACK ?= cpack
 PRECOMMIT ?= pre-commit
 GIT ?= git
 
-# TO DO: CPACK_GENERATOR
-
 # directory aliases
 BUILDS ?= Builds
 DOCS ?= doc
 CACHE ?= Cache
+
+DEPS_GRAPH ?= deps_graph
 
 ifeq ($(OS),Windows_NT)
 	CMAKE_GENERATOR ?= Visual Studio 17 2022
@@ -28,6 +28,9 @@ else
 endif
 
 #
+# TO DO: check if graphviz can be found
+
+#
 
 override print_help = grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(THIS_MAKEFILE) | sort | awk 'BEGIN {FS = ":.*?\#\# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -35,7 +38,7 @@ override precommit_init = $(PRECOMMIT) install --install-hooks --overwrite && $(
 
 override run_precommit = $(GIT) add . && $(PRECOMMIT) run --all-files
 
-override run_clean = $(RM) $(BUILDS) $(DOCS); $(PRECOMMIT) gc
+override run_clean = $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot $(DEPS_GRAPH).png; $(PRECOMMIT) gc
 
 override run_wipe_cache = $(RM) $(CACHE); $(PRECOMMIT) clean
 
@@ -43,7 +46,7 @@ override run_uninstall = $(CMAKE) -P $(BUILDS)/uninstall.cmake
 
 override cmake_configure_preset = $(CMAKE) --preset $(1) -G "$(CMAKE_GENERATOR)"
 
-override cmake_default_configure = $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG)
+override cmake_default_configure = $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG) --graphviz=$(DEPS_GRAPH).dot
 
 override cmake_build_preset = $(CMAKE) --build --preset $(1)
 

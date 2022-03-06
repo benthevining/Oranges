@@ -16,17 +16,6 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsDefaultPlatformSettings)
 include (LemonsCmakeDevTools)
-
-set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
-							  "${PROJECT_SOURCE_DIR}/logs/undefined_properties.log")
-
-set_property (GLOBAL PROPERTY USE_FOLDERS YES)
-set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
-
-set (CMAKE_SUPPRESS_REGENERATION TRUE)
-
-#
-
 include (OrangesDefaultTarget)
 
 #

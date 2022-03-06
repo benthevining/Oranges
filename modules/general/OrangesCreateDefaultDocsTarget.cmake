@@ -27,6 +27,7 @@ if(NOT TARGET Doxygen::doxygen)
 endif()
 
 include (LemonsCmakeDevTools)
+include (OrangesGraphVizConfig)
 
 #
 
@@ -36,7 +37,13 @@ function(oranges_create_default_docs_target)
 
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
-	lemons_require_function_arguments (ORANGES_ARG TARGET PROJECT)
+	if(NOT ORANGES_ARG_PROJECT)
+		set (ORANGES_ARG_PROJECT "${PROJECT_NAME}")
+	endif()
+
+	if(NOT ORANGES_ARG_TARGET)
+		set (ORANGES_ARG_TARGET "${ORANGES_ARG_PROJECT}Doxygen")
+	endif()
 
 	add_custom_target (
 		"${ORANGES_ARG_TARGET}"
@@ -50,6 +57,10 @@ function(oranges_create_default_docs_target)
 
 	add_custom_command (TARGET "${ORANGES_ARG_TARGET}" PRE_BUILD COMMAND Doxygen::doxygen --version
 						COMMENT "Doxygen version:")
+
+	if(TARGET DependencyGraph)
+		add_dependencies ("${ORANGES_ARG_TARGET}" DependencyGraph)
+	endif()
 
 	set (docs_output_dir "${PROJECT_SOURCE_DIR}/doc")
 

@@ -10,10 +10,9 @@
 #
 # ======================================================================================
 
-include_guard (GLOBAL)
+set (GRAPHVIZ_GRAPH_NAME "@PROJECT_NAME@")
 
-# removes MSVC warning: D9025
-if(MSVC)
-	string (REGEX REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-	string (REGEX REPLACE "-W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-endif()
+set (GRAPHVIZ_CUSTOM_TARGETS TRUE)
+
+set (GRAPHVIZ_GENERATE_PER_TARGET FALSE)
+set (GRAPHVIZ_GENERATE_DEPENDERS FALSE)

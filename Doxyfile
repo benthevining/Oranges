@@ -78,13 +78,13 @@ WARN_NO_PARAMDOC	   = NO
 
 INPUT				  = modules toolchains
 
-FILE_PATTERNS		  = *.cmake
+FILE_PATTERNS		  = *.cmake *.png
 
 RECURSIVE			  = YES
 
 EXCLUDE_SYMLINKS	   = YES
 
-IMAGE_PATH			 =
+IMAGE_PATH			 = deps_graph.png
 
 USE_MDFILE_AS_MAINPAGE =
 

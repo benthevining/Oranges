@@ -72,6 +72,7 @@ set_target_properties (
 			   CXX_STANDARD 20
 			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON
+			   OPTIMIZE_DEPENDENCIES ON
 			   ORANGES_PROJECT_IS_TOP_LEVEL "${PROJECT_IS_TOP_LEVEL}"
 			   MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
@@ -172,13 +173,24 @@ target_link_options (
 if(APPLE)
 
 	if(IOS)
-
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
+		option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
 
-		if(LEMONS_IOS_SIMULATOR)
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64"
-																   ORANGES_IOS_SIMULATOR TRUE)
+		if(LEMONS_IOS_COMBINED)
+			set (LEMONS_IOS_SIMULATOR ON)
+		endif()
+
+		if(LEMONS_IOS_SIMULATOR OR LEMONS_IOS_COMBINED)
+			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR TRUE)
 		else()
+			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
+		endif()
+
+		if(LEMONS_IOS_SIMULATOR AND NOT LEMONS_IOS_COMBINED)
+			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
+		else()
+			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
+																   "armv7;armv7s;arm64;i386;x86_64")
 
 			set (ORANGES_IOS_DEV_TEAM_ID "" CACHE STRING "10-character Apple Developer ID")
 
@@ -192,11 +204,12 @@ if(APPLE)
 			set_target_properties (
 				OrangesDefaultTarget
 				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${ORANGES_IOS_DEV_TEAM_ID}"
-						   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\""
-						   OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64"
-						   ORANGES_IOS_SIMULATOR FALSE)
+						   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\"")
 		endif()
 
+		if(LEMONS_IOS_COMBINED)
+			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED ON)
+		endif()
 	else() # if (IOS)
 
 		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
