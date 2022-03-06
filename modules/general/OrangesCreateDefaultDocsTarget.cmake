@@ -56,10 +56,29 @@ function(oranges_create_default_docs_target)
 	set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES ADDITIONAL_CLEAN_FILES
 															  "${docs_output_dir}")
 
-	install (DIRECTORY "${docs_output_dir}/man3" TYPE MAN
-			 COMPONENT "${ORANGES_ARG_PROJECT}_Documentation" EXCLUDE_FROM_ALL OPTIONAL)
+	install (
+		DIRECTORY "${docs_output_dir}/man3"
+		TYPE MAN
+		COMPONENT "${ORANGES_ARG_PROJECT}_Documentation"
+		EXCLUDE_FROM_ALL OPTIONAL
+		PATTERN .DS_Store EXCLUDE)
 
-	install (DIRECTORY "${docs_output_dir}/html" TYPE INFO
-			 COMPONENT "${ORANGES_ARG_PROJECT}_Documentation" EXCLUDE_FROM_ALL OPTIONAL)
+	install (
+		DIRECTORY "${docs_output_dir}/html"
+		TYPE INFO
+		COMPONENT "${ORANGES_ARG_PROJECT}_Documentation"
+		EXCLUDE_FROM_ALL OPTIONAL
+		PATTERN .DS_Store EXCLUDE)
+
+	set ("CPACK_COMPONENT_${ORANGES_ARG_PROJECT}_Documentation_DISPLAY_NAME"
+		 "${ORANGES_ARG_PROJECT} documentation")
+
+	set ("CPACK_COMPONENT_${ORANGES_ARG_PROJECT}_Documentation_DESCRIPTION"
+		 "Installs HTML and man-page documentation for ${ORANGES_ARG_PROJECT}")
+
+	set ("CPACK_COMPONENT_${ORANGES_ARG_PROJECT}_Documentation_GROUP" Documentation)
+
+	set (CPACK_COMPONENT_GROUP_Documentation_DESCRIPTION
+		 "Installs all available sets of documentation")
 
 endfunction()

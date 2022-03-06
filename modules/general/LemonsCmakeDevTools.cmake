@@ -77,6 +77,11 @@ function(oranges_install_targets)
 		endif()
 	endif()
 
+	set ("CPACK_COMPONENT_${ORANGES_ARG_RUNTIME_COMPONENT}_GROUP" Runtime)
+
+	set (CPACK_COMPONENT_GROUP_Runtime_DESCRIPTION
+		 "Installs all available runtime artifacts and executables")
+
 	if(NOT DEV_COMPONENT)
 		if(ORANGES_ARG_COMPONENT_PREFIX)
 			set (ORANGES_ARG_DEV_COMPONENT "${ORANGES_ARG_COMPONENT_PREFIX}_Development")
@@ -84,6 +89,11 @@ function(oranges_install_targets)
 			set (ORANGES_ARG_DEV_COMPONENT "${PROJECT_NAME}_Development")
 		endif()
 	endif()
+
+	set ("CPACK_COMPONENT_${ORANGES_ARG_COMPONENT_PREFIX}_GROUP" Development)
+
+	set (CPACK_COMPONENT_GROUP_Development_DESCRIPTION
+		 "Installs all available development artifacts")
 
 	foreach(target ${ORANGES_ARG_TARGETS})
 

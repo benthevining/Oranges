@@ -60,7 +60,7 @@ write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJEC
 
 configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
-	INSTALL_DESTINATION lib/cmake/Oranges PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
+	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
 
 install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
 		 EXPORT_LINK_INTERFACE_LIBRARIES)
