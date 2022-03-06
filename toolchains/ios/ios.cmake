@@ -10,9 +10,11 @@
 #
 # ======================================================================================
 
+set (CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "<10 character ID>")
+
+set (IOS_PLATFORM_LOCATION "iPhoneOS.platform")
+set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
+
+set (CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
+
 include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")
-
-set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")
-set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
-
-set (CMAKE_OSX_ARCHITECTURES "i386;x86_64")

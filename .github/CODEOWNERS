@@ -13,6 +13,7 @@
 .github/CODEOWNERS benthevining
 .github/ISSUE_TEMPLATE/bug_report.md benthevining
 .github/ISSUE_TEMPLATE/config.yml benthevining
+.github/ISSUE_TEMPLATE/feature_request.md benthevining
 .github/workflows/release.yml benthevining
 .gitignore benthevining
 .gitlint benthevining
@@ -22,6 +23,7 @@
 .pylintrc benthevining
 .style.yapf benthevining
 CMakeLists.txt benthevining
+CMakePresets.json benthevining
 Makefile benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
@@ -84,5 +86,8 @@ scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining
+toolchains/ios/ios_simulator.cmake benthevining
 toolchains/ios_common.cmake benthevining
+toolchains/mingw/mac_mingw.cmake benthevining
+toolchains/mingw/mingw_common.cmake benthevining
 util/oranges_header.txt benthevining

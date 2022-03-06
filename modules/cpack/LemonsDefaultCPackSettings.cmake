@@ -22,6 +22,14 @@ Sets up some default configuration settings for CPack.
 
 include_guard (GLOBAL)
 
+#
+
+macro(oranges_create_win_start_menu_shortcut)
+	list (APPEND CPACK_PACKAGE_EXECUTABLES ${ARGN})
+endmacro()
+
+#
+
 option (ORANGES_MARK_ALL_CPACK_OPTIONS_ADVANCED
 		"Prevent CPack options from cluttering up the cache editor" ON)
 

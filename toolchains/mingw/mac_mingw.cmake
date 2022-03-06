@@ -10,11 +10,9 @@
 #
 # ======================================================================================
 
-include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")
+# Choose an appropriate compiler prefix for classical mingw32 see http://www.mingw.org/
+# set(COMPILER_PREFIX "i586-mingw32msvc") for 32 or 64 bits mingw-w64 see
+# http://mingw-w64.sourceforge.net/
+set (COMPILER_PREFIX "x86_64-w64-mingw32")
 
-set (CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "<10 character ID>")
-
-set (IOS_PLATFORM_LOCATION "iPhoneOS.platform")
-set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
-
-set (CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
+include ("${CMAKE_CURRENT_LIST_DIR}/mingw_common.cmake")
