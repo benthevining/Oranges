@@ -51,6 +51,7 @@ modules/general/LemonsGetCPM.cmake benthevining
 modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
 modules/general/OrangesCoverageFlags.cmake benthevining
+modules/general/OrangesCreateDefaultDocsTarget.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining

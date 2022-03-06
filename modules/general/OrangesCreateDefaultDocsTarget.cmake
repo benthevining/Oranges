@@ -14,7 +14,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (Doxygen REQUIRED dot)
+find_package (Doxygen COMPONENTS dot)
 
 if(NOT TARGET Doxygen::doxygen)
 	message (WARNING "Doxygen dependencies missing!")
