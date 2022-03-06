@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.3.5](http://github.com/benthevining/Oranges/compare/v1.3.4...v1.3.5) (2022-03-06)
+
+
+### Bug Fixes
+
+* checking for existence of imported targets before creating aliases ([c212793](http://github.com/benthevining/Oranges/commit/c21279366b69b5d3920f97af4b85bbfb80c3954e))
+
 ### [1.3.4](http://github.com/benthevining/Oranges/compare/v1.3.3...v1.3.4) (2022-03-06)
 
 
