@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.4.1](http://github.com/benthevining/Oranges/compare/v1.4.0...v1.4.1) (2022-03-06)
+
+
+### Bug Fixes
+
+* makefile bug on Windows ([9b54419](http://github.com/benthevining/Oranges/commit/9b544197e408f3b7af931a366159c3fbe45f1b34))
+
 ## [1.4.0](http://github.com/benthevining/Oranges/compare/v1.3.5...v1.4.0) (2022-03-06)
 
 
