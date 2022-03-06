@@ -32,7 +32,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 set (LEMONS_JUCE_BRANCH "develop" CACHE STRING "The branch of the JUCE GitHub repository to use")
 set_property (CACHE LEMONS_JUCE_BRANCH PROPERTY STRINGS "develop;master")
-mark_as_advanced (LEMONS_JUCE_BRANCH)
+mark_as_advanced (FORCE LEMONS_JUCE_BRANCH)
 
 include (LemonsGetCPM)
 

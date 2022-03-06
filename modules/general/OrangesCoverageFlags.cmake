@@ -33,3 +33,5 @@ target_compile_options (
 target_link_options (OrangesCoverageFlags PUBLIC --coverage)
 
 add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)
+
+oranges_install_targets (TARGETS OrangesCoverageFlags EXPORT OrangesTargets OPTIONAL)

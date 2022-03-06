@@ -7,10 +7,15 @@ SHELL = /bin/sh
 
 #
 
+CONFIG = Release
+BUILDS = Builds
+
 CMAKE = cmake
 CPACK = cpack
 PRECOMMIT = pre-commit
 RM = rm -rf
+SUDO = sudo
+GIT = git
 
 override ORANGES_ROOT := $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
 
@@ -26,6 +31,8 @@ else
 	export CXX=g++-10
 endif
 
+# TO DO: CPACK_GENERATOR
+
 #
 
 help:  ## Print this message
@@ -34,16 +41,16 @@ help:  ## Print this message
 #
 
 config: clean ## configure CMake
-	@cd $(ORANGES_ROOT) && $(CMAKE) -B Builds -G $(CMAKE_GENERATOR) -D CMAKE_BUILD_TYPE=""
+	@cd $(ORANGES_ROOT) && $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG)
 
 build: config ## runs CMake build
-	@cd $(ORANGES_ROOT) && $(CMAKE) --build Builds --config ""
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build $(BUILDS) --config $(CONFIG)
 
 install: build ## runs CMake install
-	@cd $(ORANGES_ROOT) && sudo $(CMAKE) --install Builds --config Release --strip --verbose
+	@cd $(ORANGES_ROOT) && $(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG) --strip --verbose
 
 pack: install ## Creates a CPack installer
-	@cd $(ORANGES_ROOT) && $(CPACK) -G "" -C Release --verbose
+	@cd $(ORANGES_ROOT) && $(CPACK) -G "$(CPACK_GENERATOR)" -C $(CONFIG) --verbose
 
 #
 
@@ -54,12 +61,12 @@ init:  ## Initializes the Lemons workspace and installs all dependencies
 
 
 pc:  ## Runs all pre-commit hooks over all files
-	@cd $(ORANGES_ROOT) && git add . && $(PRECOMMIT) run --all-files
+	@cd $(ORANGES_ROOT) && $(GIT) add . && $(PRECOMMIT) run --all-files
 
 #
 
 clean: ## Removes the builds directory
-	$(RM) $(ORANGES_ROOT)/Builds
+	$(RM) $(ORANGES_ROOT)/$(BUILDS)
 
 #
 

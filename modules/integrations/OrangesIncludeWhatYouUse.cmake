@@ -13,8 +13,11 @@
 include_guard (GLOBAL)
 
 include (OrangesAllIntegrations)
+include (LemonsCmakeDevTools)
 
 find_program (lemons_iwyu_path NAMES include-what-you-use iwyu)
+
+mark_as_advanced (FORCE lemons_iwyu_path)
 
 if(NOT lemons_iwyu_path)
 	return ()
@@ -29,8 +32,8 @@ add_library (OrangesIncludeWhatYouUse INTERFACE)
 set_target_properties (OrangesIncludeWhatYouUse PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
 														   "${lemons_iwyu_path}")
 
-target_link_libraries (OrangesAllIntegrations INTERFACE OrangesIncludeWhatYouUse)
-
 add_library (Oranges::OrangesIncludeWhatYouUse ALIAS OrangesIncludeWhatYouUse)
 
-install (TARGETS OrangesIncludeWhatYouUse EXPORT OrangesTargets OPTIONAL)
+target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesIncludeWhatYouUse)
+
+oranges_install_targets (TARGETS OrangesIncludeWhatYouUse EXPORT OrangesTargets OPTIONAL)

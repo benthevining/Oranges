@@ -26,7 +26,12 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (OrangesAllIntegrations)
+include (LemonsCmakeDevTools)
+
 find_program (CCACHE_PROGRAM ccache)
+
+mark_as_advanced (FORCE CCACHE_PROGRAM)
 
 if(NOT CCACHE_PROGRAM)
 	message (VERBOSE "ccache could not be found.")
@@ -89,8 +94,8 @@ else()
 													CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif()
 
-target_link_libraries (OrangesAllIntegrations INTERFACE OrangesCcache)
-
 add_library (Oranges::OrangesCcache ALIAS OrangesCcache)
 
-install (TARGETS OrangesCcache EXPORT OrangesTargets OPTIONAL)
+target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCcache)
+
+oranges_install_targets (TARGETS OrangesCcache EXPORT OrangesTargets OPTIONAL)

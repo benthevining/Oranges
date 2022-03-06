@@ -13,8 +13,11 @@
 include_guard (GLOBAL)
 
 include (OrangesAllIntegrations)
+include (LemonsCmakeDevTools)
 
 find_program (lemonsCppLintProgram NAMES cpplint)
+
+mark_as_advanced (FORCE lemonsCppLintProgram)
 
 if(NOT lemonsCppLintProgram)
 	return ()
@@ -30,8 +33,8 @@ add_library (OrangesCppLint INTERFACE)
 set_target_properties (OrangesCppLint PROPERTIES CXX_CPPLINT "${lemonsCppLintProgram}"
 												 C_CPPLINT "${lemonsCppLintProgram}")
 
-target_link_libraries (OrangesAllIntegrations INTERFACE OrangesCppLint)
-
 add_library (Oranges::OrangesCppLint ALIAS OrangesCppLint)
 
-install (TARGETS OrangesCppLint EXPORT OrangesTargets OPTIONAL)
+target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppLint)
+
+oranges_install_targets (TARGETS OrangesCppLint EXPORT OrangesTargets OPTIONAL)

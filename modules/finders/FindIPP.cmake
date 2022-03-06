@@ -31,6 +31,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
 find_path (IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
 									   /opt/intel/oneapi/ipp/include DOC "Intel IPP root directory")
 
@@ -67,6 +69,8 @@ endif()
 option (IPP_STATIC "Use static IPP libraries" ON)
 option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
 
+mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
+
 if(IPP_STATIC)
 	if(IPP_MULTI_THREADED)
 		set (IPP_LIBNAME_SUFFIX _t)
@@ -100,16 +104,24 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 
 	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 
-	target_link_libraries (IntelIPP INTERFACE "${IPP_LIB_${IPP_COMPONENT}}")
+	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED UNKNOWN)
+
+	set_target_properties (ipp_lib_${IPP_COMPONENT} PROPERTIES IMPORTED_LOCATION
+															   "${IPP_LIB_${IPP_COMPONENT}}")
+
+	target_link_libraries (IntelIPP INTERFACE ipp_lib_${IPP_COMPONENT})
 endmacro()
 
 _oranges_find_ipp_library (CORE) # Core
 _oranges_find_ipp_library (S) # Signal Processing
 _oranges_find_ipp_library (VM) # Vector Math
 
-target_include_directories (IntelIPP INTERFACE "${IPP_INCLUDE_DIR}")
+target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
+											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
 add_library (Intel::IPP ALIAS IntelIPP)
+
+oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets)
 
 set (IPP_FOUND TRUE)
 set (IPP_DIR "${IPP_ROOT}")

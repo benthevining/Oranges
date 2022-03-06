@@ -304,4 +304,4 @@ endif()
 
 add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 
-install (TARGETS OrangesDefaultTarget EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesDefaultTarget EXPORT OrangesTargets OPTIONAL)

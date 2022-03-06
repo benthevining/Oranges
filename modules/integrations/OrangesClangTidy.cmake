@@ -13,8 +13,11 @@
 include_guard (GLOBAL)
 
 include (OrangesAllIntegrations)
+include (LemonsCmakeDevTools)
 
 find_program (lemonsClangTidyProgram NAMES clang-tidy)
+
+mark_as_advanced (FORCE lemonsClangTidyProgram)
 
 if(NOT lemonsClangTidyProgram)
 	return ()
@@ -30,8 +33,8 @@ add_library (OrangesClangTidy INTERFACE)
 set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
 												   CXX_CLANG_TIDY "${lemonsClangTidyProgram}")
 
-target_link_libraries (OrangesAllIntegrations INTERFACE OrangesClangTidy)
-
 add_library (Oranges::OrangesClangTidy ALIAS OrangesClangTidy)
 
-install (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)
+target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesClangTidy)
+
+oranges_install_targets (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)

@@ -60,28 +60,31 @@ function(oranges_install_targets)
 
 	include (GNUInstallDirs)
 
-	set (install_command TARGETS "${ORANGES_ARG_TARGETS}" EXPORT "${ORANGES_ARG_EXPORT}")
+	foreach(target ${ORANGES_ARG_TARGETS})
 
-	if(ORANGES_ARG_REL_PATH)
-		set (
-			install_command
-			${install_command} LIBRARY DESTINATION "${ORANGES_ARG_REL_PATH}" ARCHIVE DESTINATION
-			"${ORANGES_ARG_REL_PATH}" RUNTIME DESTINATION "${ORANGES_ARG_REL_PATH}" INCLUDES
-			DESTINATION include)
-	else()
-		set (
-			install_command
-			${install_command} LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" ARCHIVE DESTINATION
-			"${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" INCLUDES
-			DESTINATION include)
-	endif()
+		set (install_command TARGETS "${target}" EXPORT "${ORANGES_ARG_EXPORT}")
 
-	if(ORANGES_ARG_OPTIONAL)
-		set (install_command ${install_command} OPTIONAL)
-	endif()
+		if(ORANGES_ARG_REL_PATH)
+			set (
+				install_command
+				${install_command} LIBRARY DESTINATION "${ORANGES_ARG_REL_PATH}" ARCHIVE
+				DESTINATION "${ORANGES_ARG_REL_PATH}" RUNTIME DESTINATION "${ORANGES_ARG_REL_PATH}"
+				INCLUDES DESTINATION "include/${target}")
+		else()
+			set (
+				install_command
+				${install_command} LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" ARCHIVE
+				DESTINATION "${CMAKE_INSTALL_LIBDIR}" RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+				INCLUDES DESTINATION "include/${target}")
+		endif()
 
-	install (${install_command})
+		if(ORANGES_ARG_OPTIONAL)
+			set (install_command ${install_command} OPTIONAL)
+		endif()
 
+		install (${install_command})
+
+	endforeach()
 endfunction()
 
 #

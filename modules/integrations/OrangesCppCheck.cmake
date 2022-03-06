@@ -13,8 +13,11 @@
 include_guard (GLOBAL)
 
 include (OrangesAllIntegrations)
+include (LemonsCmakeDevTools)
 
 find_program (lemonsCppCheckProgram NAMES cppcheck)
+
+mark_as_advanced (FORCE lemonsCppCheckProgram)
 
 if(NOT lemonsCppCheckProgram)
 	return ()
@@ -30,8 +33,8 @@ add_library (OrangesCppCheck INTERFACE)
 set_target_properties (OrangesCppCheck PROPERTIES EXPORT_COMPILE_COMMANDS ON
 												  CXX_CPPCHECK "${lemonsCppCheckProgram}")
 
-target_link_libraries (OrangesAllIntegrations INTERFACE OrangesCppCheck)
-
 add_library (Oranges::OrangesCppCheck ALIAS OrangesCppCheck)
 
-install (TARGETS OrangesCppCheck EXPORT OrangesTargets OPTIONAL)
+target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppCheck)
+
+oranges_install_targets (TARGETS OrangesCppCheck EXPORT OrangesTargets OPTIONAL)

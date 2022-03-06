@@ -98,6 +98,8 @@ if(TARGET AAXSDK)
 	message (VERBOSE "Configured AAXSDK target!")
 
 	add_library (Lemons::AAXSDK ALIAS AAXSDK)
+
+	oranges_install_targets (TARGETS AAXSDK EXPORT OrangesTargets)
 else()
 	message (WARNING "Error configuring the AAXSDK target!")
 endif()

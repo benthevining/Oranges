@@ -50,6 +50,7 @@ modules/integrations/LemonsClangTidy.cmake benthevining
 modules/integrations/LemonsCppCheck.cmake benthevining
 modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
+modules/integrations/OrangesCcache.cmake benthevining
 modules/integrations/OrangesClangTidy.cmake benthevining
 modules/integrations/OrangesCppCheck.cmake benthevining
 modules/integrations/OrangesCppLint.cmake benthevining

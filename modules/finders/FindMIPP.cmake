@@ -28,6 +28,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsGetCPM)
+include (LemonsCmakeDevTools)
 
 CPMAddPackage (
 	NAME
@@ -41,9 +42,12 @@ CPMAddPackage (
 
 add_library (MIPP INTERFACE)
 
-target_include_directories (MIPP INTERFACE "${MIPP_SOURCE_DIR}/src")
+target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
+										   $<INSTALL_INTERFACE:include/MIPP>)
 
 add_library (aff3ct::MIPP ALIAS MIPP)
+
+oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets OPTIONAL)
 
 set (MIPP_FOUND TRUE)
 set (MIPP_DIR "${MIPP_SOURCE_DIR}")

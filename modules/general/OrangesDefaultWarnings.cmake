@@ -75,4 +75,4 @@ endif()
 
 add_library (Oranges::OrangesDefaultWarnings ALIAS OrangesDefaultWarnings)
 
-install (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets OPTIONAL)
