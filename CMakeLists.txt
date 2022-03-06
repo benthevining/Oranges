@@ -77,8 +77,6 @@ install (
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesUninstallTarget)
 	include (LemonsDefaultCPackSettings)
-
-	set (CPACK_PROJECT_CONFIG_FILE "${CMAKE_CURRENT_LIST_DIR}/CPackConfig.cmake")
 endif()
 
 export (PACKAGE Oranges)
