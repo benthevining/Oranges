@@ -51,6 +51,7 @@ modules/integrations/LemonsClangTidy.cmake benthevining
 modules/integrations/LemonsCppCheck.cmake benthevining
 modules/integrations/LemonsCppLint.cmake benthevining
 modules/integrations/LemonsIncludeWhatYouUse.cmake benthevining
+modules/integrations/OrangesAllIntegrations.cmake benthevining
 modules/integrations/OrangesCcache.cmake benthevining
 modules/integrations/OrangesClangTidy.cmake benthevining
 modules/integrations/OrangesCppCheck.cmake benthevining
@@ -66,6 +67,7 @@ modules/platform/LinuxLSBInfo.cmake benthevining
 modules/platform/scripts/lemons_ios_settings.cmake benthevining
 modules/platform/scripts/lemons_linux_settings.cmake benthevining
 modules/platform/scripts/lemons_macos_settings.cmake benthevining
+modules/platform/scripts/lemons_windows_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/AAX/LemonsCreateAAXSDKTarget.cmake benthevining

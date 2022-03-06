@@ -66,6 +66,9 @@ pc:  ## Runs all pre-commit hooks over all files
 
 #
 
+uninstall: ## Runs uninstall script [only works if project has been installed and was top-level project in configure]
+	$(CMAKE) -P $(BUILDS)/uninstall.cmake
+
 clean: ## Removes the builds directory
 	$(RM) $(ORANGES_ROOT)/$(BUILDS)
 
