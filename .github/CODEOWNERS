@@ -53,6 +53,7 @@ modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
+modules/general/scripts/uninstall.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
 modules/integrations/LemonsCcache.cmake benthevining
 modules/integrations/LemonsClangTidy.cmake benthevining
@@ -82,10 +83,12 @@ modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/AAX/LemonsCreateAAXSDKTarget.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
+modules/plugins/LemonsPluginUtilities.cmake benthevining
 package.json benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
+scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining

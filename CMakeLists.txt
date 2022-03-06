@@ -49,6 +49,10 @@ oranges_export_alias_target (Oranges Oranges)
 
 #
 
+add_subdirectory (docs)
+
+#
+
 include (CMakePackageConfigHelpers)
 
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"

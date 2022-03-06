@@ -34,6 +34,11 @@ pack: build ## Creates a CPack installer
 
 #
 
+docs: config ## Builds the documentation
+	@cd $(ORANGES_ROOT) && $(call cmake_default_build) --target OrangesDoxygen
+
+#
+
 init:  ## Initializes the workspace and installs all dependencies
 	@chmod +x $(ORANGES_ROOT)/scripts/alphabetize_codeowners.py
 	@cd $(ORANGES_ROOT) && $(call precommit_init)
