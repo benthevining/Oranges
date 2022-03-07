@@ -138,37 +138,38 @@ endif()
 #
 # MacOS options
 
-set_target_properties (
-	OrangesDefaultTarget
-	PROPERTIES $<$<PLATFORM_ID:IOS>:ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH
-																$(LOCAL_APPS_DIR)
-			   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>)
-
-target_compile_definitions (OrangesDefaultTarget
-							INTERFACE $<$<PLATFORM_ID:Darwin>:JUCE_USE_VDSP_FRAMEWORK=1>)
-
-set (ios_min_deployment_target 9.3)
-set (macos_min_deployment_target 10.11)
-
-set_target_properties (
-	OrangesDefaultTarget
-	PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
-			   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET
-			   $<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>)
-
-target_compile_options (
-	OrangesDefaultTarget
-	INTERFACE
-		-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
-	)
-
-target_link_options (
-	OrangesDefaultTarget
-	INTERFACE
-	-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
-	)
-
 if(APPLE)
+
+	set_target_properties (
+		OrangesDefaultTarget
+		PROPERTIES $<$<PLATFORM_ID:IOS>:ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH
+																	$(LOCAL_APPS_DIR)
+				   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>)
+
+	target_compile_definitions (OrangesDefaultTarget
+								INTERFACE $<$<PLATFORM_ID:Darwin>:JUCE_USE_VDSP_FRAMEWORK=1>)
+
+	set (ios_min_deployment_target 9.3)
+	set (macos_min_deployment_target 10.11)
+
+	set_target_properties (
+		OrangesDefaultTarget
+		PROPERTIES
+			XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
+			XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET
+			$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>)
+
+	target_compile_options (
+		OrangesDefaultTarget
+		INTERFACE
+			-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
+		)
+
+	target_link_options (
+		OrangesDefaultTarget
+		INTERFACE
+		-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
+		)
 
 	if(IOS)
 		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
