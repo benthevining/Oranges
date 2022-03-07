@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.11.3](http://github.com/benthevining/Oranges/compare/v1.11.2...v1.11.3) (2022-03-07)
+
+
+### Bug Fixes
+
+* more generator expression errors ([12e6c8e](http://github.com/benthevining/Oranges/commit/12e6c8e4c29b3d9108e221c43f955fe7543c5e95))
+
 ### [1.11.2](http://github.com/benthevining/Oranges/compare/v1.11.1...v1.11.2) (2022-03-07)
 
 
