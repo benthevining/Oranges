@@ -24,7 +24,7 @@ set (ORANGES_DOXYLAYOUT_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/DoxygenLayout.x
 
 #
 
-find_package (Doxygen COMPONENTS dot)
+find_package (Doxygen OPTIONAL_COMPONENTS dot)
 
 if(NOT TARGET Doxygen::doxygen)
 	message (WARNING "Doxygen dependencies missing!")

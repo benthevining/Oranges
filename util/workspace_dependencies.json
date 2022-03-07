@@ -1,20 +1,4 @@
 {
-  "declare_source_packages": [
-    {
-      "branch": "$<ENV:ORANGES_JUCE_BRANCH,develop>",
-      "force_from_source": true,
-      "github_repository": "juce-framework/JUCE",
-      "name": "JUCE"
-    },
-    {
-      "github_repository": "ODDSound/MTS-ESP",
-      "name": "MTS-ESP"
-    },
-    {
-      "github_repository": "aff3ct/MIPP",
-      "name": "MIPP"
-    }
-  ],
   "export_files": [
     {
       "id": "make_utils",

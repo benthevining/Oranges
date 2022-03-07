@@ -17,13 +17,19 @@ Finds the Intel IPP libraries for signal processing.
 Options:
 - IPP_STATIC
 - IPP_MULTI_THREADED
+- IPP_ROOT : this can be manually overridden to provide the path to the root of the IPP installation.
+
+Components:
+- CORE
+- S : signal processing
+- VM : vector math
+Each one produces an imported target named Intel::ipp_lib_<Component>.
 
 Targets:
-- Intel::IPP : interface library that can be linked to
+- Intel::IPP : interface library that links to all found component libraries
 
 Output variables:
 - IPP_FOUND
-- IPP_DIR
 
 ]]
 
@@ -31,10 +37,21 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+option (IPP_STATIC "Use static IPP libraries" ON)
+option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
+
+mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
+
+#
+
 include (LemonsCmakeDevTools)
 
-find_path (IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
-									   /opt/intel/oneapi/ipp/include DOC "Intel IPP root directory")
+set (IPP_FOUND FALSE)
+
+find_path (
+	IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
+								/opt/intel/oneapi/ipp/include "${IPP_ROOT}/include"
+	DOC "Intel IPP root directory")
 
 mark_as_advanced (FORCE IPP_INCLUDE_DIR)
 
@@ -46,12 +63,11 @@ if(NOT IPP_INCLUDE_DIR OR NOT IS_DIRECTORY "${IPP_INCLUDE_DIR}")
 			message (WARNING "IPP include directory could not be located!")
 		endif()
 
-		set (IPP_FOUND FALSE)
 		return ()
 	endif()
 endif()
 
-set (IPP_ROOT "${IPP_INCLUDE_DIR}/..")
+set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel IPP installation")
 
 if(NOT IS_DIRECTORY "${IPP_ROOT}")
 	if(IPP_FIND_REQUIRED)
@@ -61,15 +77,11 @@ if(NOT IS_DIRECTORY "${IPP_ROOT}")
 			message (WARNING "IPP root directory could not be located!")
 		endif()
 
-		set (IPP_FOUND FALSE)
 		return ()
 	endif()
 endif()
 
-option (IPP_STATIC "Use static IPP libraries" ON)
-option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
-
-mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
+#
 
 if(IPP_STATIC)
 	if(IPP_MULTI_THREADED)
@@ -78,21 +90,23 @@ if(IPP_STATIC)
 		set (IPP_LIBNAME_SUFFIX _l)
 	endif()
 
-	set (IPP_LIBTYPE_PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}")
-	set (IPP_LIBTYPE_SUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}")
+	set (IPP_LIB_TYPE STATIC)
 else()
 	set (IPP_LIBNAME_SUFFIX "")
-	set (IPP_LIBTYPE_PREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}")
-	set (IPP_LIBTYPE_SUFFIX "${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
+	set (IPP_LIB_TYPE SHARED)
 endif()
 
-add_library (IntelIPP INTERFACE)
+set (IPP_LIBTYPE_PREFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_PREFIX}")
+set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
 
-macro(_oranges_find_ipp_library IPP_COMPONENT)
+#
+
+function(_oranges_find_ipp_library IPP_COMPONENT comp_required result_var)
 
 	string (TOLOWER "${IPP_COMPONENT}" IPP_COMPONENT_LOWER)
 
-	set (baseName "${ipp${IPP_COMPONENT_LOWER}${IPP_LIBNAME_SUFFIX}}")
+	set (baseName "ipp${IPP_COMPONENT_LOWER}")
 
 	find_library (
 		IPP_LIB_${IPP_COMPONENT}
@@ -104,7 +118,7 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 
 	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 
-	if(NOT EXISTS "${IPP_LIB_${IPP_COMPONENT}}")
+	if(NOT IPP_LIB_${IPP_COMPONENT} OR NOT EXISTS "${IPP_LIB_${IPP_COMPONENT}}")
 		if(IPP_FIND_REQUIRED)
 			message (FATAL_ERROR "IPP component ${IPP_COMPONENT} could not be found!")
 		endif()
@@ -113,28 +127,62 @@ macro(_oranges_find_ipp_library IPP_COMPONENT)
 			message (WARNING "IPP component ${IPP_COMPONENT} could not be found!")
 		endif()
 
-		set (IPP_FOUND FALSE)
-		return ()
+		if(comp_required)
+			set (${result_var} FALSE PARENT_SCOPE)
+			return ()
+		endif()
 	endif()
 
-	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED UNKNOWN)
+	set (${result_var} TRUE PARENT_SCOPE)
+
+	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED ${IPP_LIB_TYPE})
 
 	set_target_properties (ipp_lib_${IPP_COMPONENT} PROPERTIES IMPORTED_LOCATION
 															   "${IPP_LIB_${IPP_COMPONENT}}")
 
-	target_link_libraries (IntelIPP INTERFACE ipp_lib_${IPP_COMPONENT})
-endmacro()
+	oranges_export_alias_target (ipp_lib_${IPP_COMPONENT} Intel)
 
-_oranges_find_ipp_library (CORE) # Core
-_oranges_find_ipp_library (S) # Signal Processing
-_oranges_find_ipp_library (VM) # Vector Math
+	if(NOT TARGET IntelIPP)
+		add_library (IntelIPP INTERFACE)
+	endif()
+
+	target_link_libraries (IntelIPP INTERFACE Intel::ipp_lib_${IPP_COMPONENT})
+endfunction()
+
+#
+
+foreach(ipp_component ${IPP_FIND_COMPONENTS})
+	_oranges_find_ipp_library ("${ipp_component}" "${IPP_FIND_REQUIRED_${IPP_COMPONENT}}" result)
+
+	if(IPP_FIND_REQUIRED_${IPP_COMPONENT} AND NOT result)
+		return ()
+	endif()
+
+	# process all this component's comp dependencies...
+endforeach()
+
+#
+
+if(NOT TARGET IntelIPP)
+	if(IPP_FIND_REQUIRED)
+		message (FATAL_ERROR "Error creating IntelIPP library target!")
+	endif()
+
+	if(NOT IPP_FIND_QUIETLY)
+		message (WARNING "Error creating IntelIPP library target!")
+	endif()
+
+	return ()
+endif()
+
+#
 
 target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
-oranges_export_alias_target (IntelIPP Intel)
-
 oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets)
 
+oranges_export_alias_target (IntelIPP Intel)
+
 set (IPP_FOUND TRUE)
-set (IPP_DIR "${IPP_ROOT}")
+# set (IPP_DIR "${IPP_ROOT}")
