@@ -1,0 +1,147 @@
+{
+  "declare_source_packages": [
+    {
+      "branch": "$<ENV:ORANGES_JUCE_BRANCH,develop>",
+      "force_from_source": true,
+      "github_repository": "juce-framework/JUCE",
+      "name": "JUCE"
+    },
+    {
+      "github_repository": "ODDSound/MTS-ESP",
+      "name": "MTS-ESP"
+    },
+    {
+      "github_repository": "aff3ct/MIPP",
+      "name": "MIPP"
+    }
+  ],
+  "export_files": [
+    {
+      "id": "make_utils",
+      "path": "$<PROJECT_DIR>/scripts/util.make"
+    }
+  ],
+  "known_system_package_mappings": [
+    {
+      "package_managers": {
+        "choco": "doxygen.install"
+      },
+      "primary_name": "doxygen"
+    },
+    {
+      "possible_names": [
+        "gmake"
+      ],
+      "primary_name": "make"
+    }
+  ],
+  "project": {
+    "default_package_versions": {
+      "python": "python3"
+    },
+    "github_repository": "benthevining/Oranges",
+    "name": "Oranges"
+  },
+  "system_package_sets": [
+    {
+      "doc": "system libraries required for building JUCE on Linux",
+      "export": "project_public",
+      "linux_packages": [
+        "libasound2-dev",
+        "libjack-jackd2-dev",
+        "ladspa-sdk",
+        "libcurl4-openssl-dev",
+        "libfreetype6-dev",
+        "libx11-dev",
+        "libxcomposite-dev",
+        "libxcursor-dev",
+        "libxext-dev",
+        "libxinerama-dev",
+        "libxrandr-dev",
+        "libxrender-dev",
+        "libwebkit2gtk-4.0-dev",
+        "libglu1-mesa-dev",
+        "mesa-common-dev",
+        "openssh-client"
+      ],
+      "name": "JUCE_deps"
+    },
+    {
+      "doc": "packages needed for building the documentation",
+      "export": "project_public",
+      "name": "docs",
+      "system_packages": [
+        "graphviz",
+        "doxygen"
+      ]
+    },
+    {
+      "doc": "packages that provide programs the build can integrate with, like static analysis tools",
+      "export": "project_public",
+      "linux_packages": [
+        "clang-tidy"
+      ],
+      "name": "integrations",
+      "python_packages": [
+        "cpplint",
+        "clang-format"
+      ],
+      "system_packages": [
+        "ccache",
+        "cppcheck",
+        "shellcheck",
+        "make"
+      ]
+    },
+    {
+      "doc": "packages needed to build this project's installers",
+      "export": "project_public",
+      "mac_packages": [
+        "package maker"
+      ],
+      "name": "installers",
+      "windows_packages": [
+        "NSIS"
+      ]
+    },
+    {
+      "doc": "minimum packages needed to build this project",
+      "export": "project_main_set",
+      "linux_packages": [
+        "ninja-build"
+      ],
+      "name": "workspace_dependencies",
+      "project_default": false,
+      "python_packages": [
+        "pre-commit"
+      ],
+      "system_packages": [
+        "git",
+        "python3"
+      ]
+    },
+    {
+      "doc": "Default recommended packages to install for this workspace",
+      "export": "project_public",
+      "name": "default",
+      "project_default": true,
+      "system_package_sets": [
+        {
+          "error_fatal": false,
+          "name": "integrations"
+        },
+        {
+          "error_fatal": false,
+          "name": "docs"
+        },
+        {
+          "error_fatal": false,
+          "name": "installers"
+        },
+        {
+          "name": "workspace_dependencies"
+        }
+      ]
+    }
+  ]
+}

@@ -18,9 +18,15 @@ include $(ORANGES_ROOT)/scripts/util.make
 help:  ## Print this message
 	@$(call print_help)
 
+.PHONY: $(shell grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(THIS_MAKEFILE) | sed 's/:.*/\ /' | tr '\n' ' ')
+
 #
 
-config: ## configure CMake
+.PHONY: query_cmake_file_api
+query_cmake_file_api:
+	@$(call cmake_query_file_api,$(ORANGES_ROOT))
+
+config: query_cmake_file_api ## configure CMake
 	@cd $(ORANGES_ROOT) && $(call cmake_default_configure)
 
 build: config ## runs CMake build
@@ -58,7 +64,3 @@ uninstall: ## Runs uninstall script [only works if project has been installed an
 clean: ## Cleans the source tree
 	@echo "Cleaning..."
 	@cd $(ORANGES_ROOT) && $(call run_clean)
-
-#
-
-.PHONY: $(shell grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(THIS_MAKEFILE) | sed 's/:.*/\ /' | tr '\n' ' ')

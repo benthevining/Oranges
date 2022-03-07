@@ -51,7 +51,7 @@ include (LemonsCmakeDevTools)
 
 #
 
-find_package (JUCE MODULE REQUIRED)
+find_package (JUCE REQUIRED)
 
 include (LemonsAssetsHelpers)
 

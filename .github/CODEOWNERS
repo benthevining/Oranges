@@ -36,6 +36,7 @@ modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsDefaultCPackSettings.cmake benthevining
 modules/cpack/LemonsSetDefaultCpackGenerator.cmake benthevining
+modules/cpack/OrangesInstallSystemLibs.cmake benthevining
 modules/cpack/scripts/CPackConfig.cmake benthevining
 modules/cpack/scripts/deb/deb_settings.cmake benthevining
 modules/cpack/scripts/deb/postinst benthevining
@@ -45,6 +46,7 @@ modules/cpack/scripts/rpm/rpm_settings.cmake benthevining
 modules/cpack/scripts/rpmPostInstall.sh benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
+modules/documentation/OrangesDoxygenConfig.cmake benthevining
 modules/documentation/scripts/Doxyfile benthevining
 modules/documentation/scripts/generate_deps_graph_image.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
@@ -107,8 +109,10 @@ scripts/alphabetize_codeowners.py benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining
+toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining
+toolchains/ios/tvOS_simulator.cmake benthevining
 toolchains/ios_common.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining
 toolchains/mingw/mingw_common.cmake benthevining
