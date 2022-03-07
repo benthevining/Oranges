@@ -82,6 +82,7 @@ modules/integrations/OrangesCppLint.cmake benthevining
 modules/integrations/OrangesIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/internal/BVBrandFlags.cmake benthevining
+modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
 modules/juce/LemonsJuceModuleUtilities.cmake benthevining
@@ -106,6 +107,7 @@ scripts/alphabetize_codeowners.py benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining
+toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining
 toolchains/ios_common.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining

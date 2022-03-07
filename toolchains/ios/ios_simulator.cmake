@@ -10,6 +10,8 @@
 #
 # ======================================================================================
 
+set (CMAKE_SYSTEM_NAME iOS)
+
 set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")
 set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
 
