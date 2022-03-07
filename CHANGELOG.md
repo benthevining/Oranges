@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.10.0](http://github.com/benthevining/Oranges/compare/v1.9.0...v1.10.0) (2022-03-07)
+
+
+### Features
+
+* added toolchains for tvOS and watchOS ([050830d](http://github.com/benthevining/Oranges/commit/050830d91f225e1c67da907b5081066037f9bd34))
+
 ## [1.9.0](http://github.com/benthevining/Oranges/compare/v1.8.0...v1.9.0) (2022-03-07)
 
 
