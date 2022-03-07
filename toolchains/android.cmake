@@ -9,3 +9,5 @@
 #  This file is part of the Oranges open source CMake library and is licensed under the terms of the GNU Public License.
 #
 # ======================================================================================
+
+set (CMAKE_SYSTEM_NAME Android)
