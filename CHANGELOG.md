@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.11.0](http://github.com/benthevining/Oranges/compare/v1.10.0...v1.11.0) (2022-03-07)
+
+
+### Features
+
+* added a script to automatically query the cmake file API ([3624342](http://github.com/benthevining/Oranges/commit/3624342887fa7705d511a09796ae40032099311e))
+
 ## [1.10.0](http://github.com/benthevining/Oranges/compare/v1.9.0...v1.10.0) (2022-03-07)
 
 
