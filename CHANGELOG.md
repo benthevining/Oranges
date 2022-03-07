@@ -1,5 +1,17 @@
 # Oranges changelog
 
+## [1.9.0](http://github.com/benthevining/Oranges/compare/v1.8.0...v1.9.0) (2022-03-07)
+
+
+### Features
+
+* added Doxygen layout file and step to copy deps graph image to source tree ([e39904c](http://github.com/benthevining/Oranges/commit/e39904ca8de646f64bf70c26c37a7d03869b9c4b))
+
+
+### Bug Fixes
+
+* don't fail with error if Doxygen can't be found ([33c1a4c](http://github.com/benthevining/Oranges/commit/33c1a4c3c38e04a1886ce8efeb42e36bdcebcd29))
+
 ## [1.8.0](http://github.com/benthevining/Oranges/compare/v1.7.0...v1.8.0) (2022-03-06)
 
 
