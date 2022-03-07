@@ -60,7 +60,7 @@ SORT_GROUP_NAMES	   = YES
 
 GENERATE_TESTLIST	  = NO
 
-LAYOUT_FILE			=
+LAYOUT_FILE			= @CMAKE_BINARY_DIR@/DoxygenLayout.xml
 
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
@@ -104,7 +104,7 @@ VERBATIM_HEADERS	   = NO
 
 GENERATE_HTML = YES
 
-HTML_OUTPUT			= doc/html
+HTML_OUTPUT			= @ORANGES_DOC_OUTPUT_DIR@/html
 
 HTML_EXTRA_STYLESHEET  =
 
@@ -136,7 +136,7 @@ FORMULA_TRANSPARENT	= YES
 
 GENERATE_MAN           = YES
 
-MAN_OUTPUT             = doc
+MAN_OUTPUT             = @ORANGES_DOC_OUTPUT_DIR@
 
 MAN_EXTENSION          = .3
 
@@ -166,7 +166,7 @@ SKIP_FUNCTION_MACROS   = YES
 
 TAGFILES			   =
 
-GENERATE_TAGFILE	   = doc/@PROJECT_NAME@.tag
+GENERATE_TAGFILE	   = @ORANGES_DOC_OUTPUT_DIR@/@PROJECT_NAME@.tag
 
 EXTERNAL_GROUPS		= NO
 

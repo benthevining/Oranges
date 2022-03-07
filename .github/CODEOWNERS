@@ -30,6 +30,7 @@ CMakePresets.json benthevining
 CPackConfig.cmake benthevining
 Doxyfile benthevining
 Makefile benthevining
+README.md benthevining
 age.cmake benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining

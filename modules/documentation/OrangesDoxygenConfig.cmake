@@ -31,6 +31,8 @@ include (OrangesGraphVizConfig)
 include (LemonsFileUtils)
 
 set (ORANGES_DOXYFILE_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/Doxyfile" CACHE INTERNAL "")
+set (ORANGES_DOXYLAYOUT_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/DoxygenLayout.xml" CACHE INTERNAL
+																						  "")
 
 #
 
@@ -43,7 +45,14 @@ function(oranges_create_doxygen_target)
 
 	lemons_require_function_arguments (ORANGES_ARG INPUT_PATHS)
 
-	list (JOIN ORANGES_ARG_INPUT_PATHS " " ORANGES_DOXYGEN_INPUT_PATHS)
+	foreach(input_path ${ORANGES_ARG_INPUT_PATHS})
+		lemons_make_path_absolute (VAR input_path BASE_DIR "${PROJECT_SOURCE_DIR}")
+
+		list (APPEND ORANGES_DOXYGEN_INPUT_PATHS "${input_path}")
+	endforeach()
+
+	list (REMOVE_DUPLICATES ORANGES_DOXYGEN_INPUT_PATHS)
+	list (JOIN ORANGES_DOXYGEN_INPUT_PATHS " " ORANGES_DOXYGEN_INPUT_PATHS)
 
 	if(ORANGES_ARG_MAIN_PAGE_MD_FILE)
 		lemons_make_path_absolute (VAR ORANGES_ARG_MAIN_PAGE_MD_FILE BASE_DIR
@@ -95,8 +104,11 @@ function(oranges_create_doxygen_target)
 	list (JOIN ORANGES_ARG_FILE_PATTERNS " " ORANGES_DOXYGEN_INPUT_FILE_PATTERNS)
 
 	set (doxyfile_output "${CMAKE_BINARY_DIR}/Doxyfile")
+	set (doxylayout_output "${CMAKE_BINARY_DIR}/DoxygenLayout.xml")
 
 	configure_file ("${ORANGES_DOXYFILE_INPUT}" "${doxyfile_output}" @ONLY)
+
+	configure_file ("${ORANGES_DOXYLAYOUT_INPUT}" "${doxylayout_output}" @ONLY)
 
 	if(NOT ORANGES_ARG_TARGET)
 		set (ORANGES_ARG_TARGET "${PROJECT_NAME}Doxygen")
@@ -108,7 +120,8 @@ function(oranges_create_doxygen_target)
 		COMMAND Doxygen::doxygen "${doxyfile_output}"
 		WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
 		VERBATIM
-		DEPENDS "${ORANGES_DOXYFILE_INPUT}" "${doxyfile_output}"
+		DEPENDS "${ORANGES_DOXYFILE_INPUT}" "${doxyfile_output}" "${ORANGES_DOXYLAYOUT_INPUT}"
+				"${doxylayout_output}"
 		BYPRODUCTS "${ORANGES_DOC_OUTPUT_DIR}/html/index.html"
 		COMMENT "Building ${PROJECT_NAME} documentation...")
 

@@ -17,7 +17,21 @@ file (MAKE_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@")
 find_file (original_dot_file deps_graph.dot PATHS "@CMAKE_SOURCE_DIR@" "@ORANGES_DOC_OUTPUT_DIR@"
 		   NO_DEFAULT_PATH)
 
-execute_process (COMMAND "@ORANGES_DOT@" -Tpng -o "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
-						 "${original_dot_file}")
+if(NOT original_dot_file OR NOT EXISTS "${original_dot_file}")
+	message (
+		WARNING ".dot input file ${original_dot_file} does not exist, image cannot be generated")
+
+	return ()
+endif()
+
+execute_process (
+	COMMAND "@ORANGES_DOT@" -Tpng -o "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
+			"${original_dot_file}" WORKING_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@" COMMAND_ECHO STDOUT
+													 COMMAND_ERROR_IS_FATAL ANY)
 
 file (RENAME "${original_dot_file}" "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.dot")
+
+if(IS_DIRECTORY "@ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE@")
+	file (COPY "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
+		  DESTINATION "@ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE@" FOLLOW_SYMLINK_CHAIN)
+endif()

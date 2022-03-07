@@ -26,6 +26,9 @@ if(NOT ORANGES_DOT)
 	return ()
 endif()
 
+set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${PROJECT_SOURCE_DIR}/util"
+	 CACHE PATH "Location within the source tree to store the generated dependency graph image")
+
 set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake"
