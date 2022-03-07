@@ -86,32 +86,30 @@ target_compile_definitions (OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windo
 target_compile_options (OrangesDefaultTarget
 						INTERFACE $<$<CXX_COMPILER_ID:MSVC>:$<IF:$<CONFIG:Debug>,/Od /Zi,/Ox>>)
 
-target_compile_options (
-	OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>>,/MP>,
-								   /EHsc>)
+target_compile_options (OrangesDefaultTarget
+						INTERFACE $<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MP,/EHsc>>)
 
 target_compile_options (OrangesDefaultTarget
-						INTERFACE $<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:MSVC>,-GL>)
+						INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Release>>:-GL>)
 
 target_compile_options (
-	OrangesDefaultTarget INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:$<$<CONFIG:Debug>:-g
-								   -O0> $<$<CONFIG:Release>:-O3> $<NOT:$<PLATFORM_ID:MINGW>>:-flto>)
+	OrangesDefaultTarget
+	INTERFACE $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Debug>>:-g -O0>
+			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Debug>>:-g -O3>
+			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>)
 
 target_link_libraries (OrangesDefaultTarget
-					   INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang,GNU>:-flto>)
+					   INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Release>>:-LTCG>)
 
-target_link_libraries (OrangesDefaultTarget
-					   INTERFACE $<$<CONFIG:Release>:$<$<CXX_COMPILER_ID:MSVC>:-LTCG>>)
-
-set_target_properties (OrangesDefaultTarget PROPERTIES $<NOT:$<PLATFORM_ID:Darwin>:INSTALL_RPATH
+set_target_properties (OrangesDefaultTarget PROPERTIES $<$<NOT:$<PLATFORM_ID:Darwin>>:INSTALL_RPATH
 													   $ORIGIN>)
 
 set_target_properties (OrangesDefaultTarget
-					   PROPERTIES $<NOT:$<PLATFORM_ID:IOS>,ORANGES_IOS_SIMULATOR FALSE>)
+					   PROPERTIES $<$<NOT:$<PLATFORM_ID:IOS>>:ORANGES_IOS_SIMULATOR FALSE>)
 
 set_target_properties (
 	OrangesDefaultTarget
-	PROPERTIES $<OR:$<PLATFORM_ID:IOS>,$<NOT:$<PLATFORM_ID:Darwin>>,ORANGES_MAC_UNIVERSAL_BINARY
+	PROPERTIES $<$<OR:$<PLATFORM_ID:IOS>,$<NOT:$<PLATFORM_ID:Darwin>>>:ORANGES_MAC_UNIVERSAL_BINARY
 			   FALSE>)
 
 #
