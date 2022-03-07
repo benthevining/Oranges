@@ -46,7 +46,16 @@ oranges_export_alias_target (Oranges Oranges)
 
 #
 
-add_subdirectory (docs)
+include (OrangesDocsBuildConfig)
+
+oranges_create_doxygen_target (
+	TARGET
+	OrangesDoxygen
+	INPUT_PATHS
+	modules
+	toolchains
+	FILE_PATTERNS
+	*.cmake)
 
 #
 
@@ -73,7 +82,6 @@ install (
 
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesUninstallTarget)
-	include (OrangesGraphVizConfig)
 	include (LemonsDefaultCPackSettings)
 endif()
 

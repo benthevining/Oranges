@@ -3,12 +3,9 @@ Builds/
 Cache/
 Testing/
 doc/
-man/
 logs/
 __pycache__/
 CMakeUserPresets.json
-cpm-package-lock.cmake
 node_modules/
 package-lock.json
 deps_graph.dot
-deps_graph.png

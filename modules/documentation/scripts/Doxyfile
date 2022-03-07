@@ -2,11 +2,11 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-PROJECT_NAME		   = Oranges
+PROJECT_NAME		   = @PROJECT_NAME@
 
-PROJECT_BRIEF		  = "CMake modules, scripts, and toolchains"
+PROJECT_BRIEF		  = "@PROJECT_DESCRIPTION@"
 
-PROJECT_LOGO		   =
+PROJECT_LOGO		   = @ORANGES_DOXYGEN_LOGO@
 
 OUTPUT_LANGUAGE		= English
 
@@ -76,17 +76,17 @@ WARN_NO_PARAMDOC	   = NO
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT				  = modules toolchains
+INPUT				  = @ORANGES_DOXYGEN_INPUT_PATHS@
 
-FILE_PATTERNS		  = *.cmake *.png
+FILE_PATTERNS		  = @ORANGES_DOXYGEN_INPUT_FILE_PATTERNS@
 
 RECURSIVE			  = YES
 
 EXCLUDE_SYMLINKS	   = YES
 
-IMAGE_PATH			 = deps_graph.png
+IMAGE_PATH			 = @ORANGES_DOXYGEN_INPUT_IMAGE_PATHS@
 
-USE_MDFILE_AS_MAINPAGE =
+USE_MDFILE_AS_MAINPAGE = @ORANGES_DOXYGEN_MAIN_PAGE_MARKDOWN_FILE@
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -166,7 +166,7 @@ SKIP_FUNCTION_MACROS   = YES
 
 TAGFILES			   =
 
-GENERATE_TAGFILE	   = doc/oranges.tag
+GENERATE_TAGFILE	   = doc/@PROJECT_NAME@.tag
 
 EXTERNAL_GROUPS		= NO
 

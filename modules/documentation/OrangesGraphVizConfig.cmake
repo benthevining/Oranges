@@ -26,12 +26,17 @@ if(NOT ORANGES_DOT)
 	return ()
 endif()
 
+set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
+
+configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake"
+				generate_deps_graph_image.cmake @ONLY)
+
 add_custom_target (
 	DependencyGraph
-	COMMAND "${ORANGES_DOT}" -Tpng -o deps_graph.png deps_graph.dot
-	DEPENDS "${CMAKE_SOURCE_DIR}/deps_graph.dot"
+	COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	COMMENT "Generating images..."
+	DEPENDS "${CMAKE_SOURCE_DIR}/deps_graph.dot" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
 set_target_properties (
@@ -39,8 +44,8 @@ set_target_properties (
 	PROPERTIES ADDITIONAL_CLEAN_FILES
 			   "${CMAKE_SOURCE_DIR}/deps_graph.png;${CMAKE_SOURCE_DIR}/deps_graph.dot")
 
-install (FILES "${CMAKE_SOURCE_DIR}/deps_graph.png" "${CMAKE_SOURCE_DIR}/deps_graph.dot" TYPE INFO
-		 COMPONENT "${PROJECT_NAME}_Documentation")
+install (FILES "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
+		 TYPE INFO OPTIONAL COMPONENT "${PROJECT_NAME}_Documentation")
 
 set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_DISPLAY_NAME" "${PROJECT_NAME} documentation")
 

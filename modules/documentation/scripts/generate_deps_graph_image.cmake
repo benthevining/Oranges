@@ -10,23 +10,14 @@
 #
 # ======================================================================================
 
-include_guard (GLOBAL)
-
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (Python3 COMPONENTS Interpreter)
+file (MAKE_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@")
 
-if(NOT TARGET Python3::Interpreter)
-	message (WARNING "Doxygen dependencies missing!")
-	return ()
-endif()
+find_file (original_dot_file deps_graph.dot PATHS "@CMAKE_SOURCE_DIR@" "@ORANGES_DOC_OUTPUT_DIR@"
+		   NO_DEFAULT_PATH)
 
-#
+execute_process (COMMAND "@ORANGES_DOT@" -Tpng -o "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
+						 "${original_dot_file}")
 
-# run python script...
-
-#
-
-include (OrangesCreateDefaultDocsTarget)
-
-oranges_create_default_docs_target (TARGET OrangesDoxygen PROJECT Oranges)
+file (RENAME "${original_dot_file}" "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.dot")
