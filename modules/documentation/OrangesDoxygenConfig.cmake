@@ -14,18 +14,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (Doxygen COMPONENTS dot)
-
-if(NOT TARGET Doxygen::doxygen)
-	message (WARNING "Doxygen dependencies missing!")
-
-	function(oranges_create_default_docs_target)
-
-	endfunction()
-
-	return ()
-endif()
-
 include (LemonsCmakeDevTools)
 include (OrangesGraphVizConfig)
 include (LemonsFileUtils)
@@ -33,6 +21,20 @@ include (LemonsFileUtils)
 set (ORANGES_DOXYFILE_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/Doxyfile" CACHE INTERNAL "")
 set (ORANGES_DOXYLAYOUT_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/DoxygenLayout.xml" CACHE INTERNAL
 																						  "")
+
+#
+
+find_package (Doxygen COMPONENTS dot)
+
+if(NOT TARGET Doxygen::doxygen)
+	message (WARNING "Doxygen dependencies missing!")
+
+	function(oranges_create_doxygen_target)
+
+	endfunction()
+
+	return ()
+endif()
 
 #
 
