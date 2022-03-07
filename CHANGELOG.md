@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.11.1](http://github.com/benthevining/Oranges/compare/v1.11.0...v1.11.1) (2022-03-07)
+
+
+### Bug Fixes
+
+* bug fixes with incorporating docs modules into containing project ([fb1588d](http://github.com/benthevining/Oranges/commit/fb1588dadcb7b824be6d66c0b1a7d94b8d58e77b))
+
 ## [1.11.0](http://github.com/benthevining/Oranges/compare/v1.10.0...v1.11.0) (2022-03-07)
 
 
