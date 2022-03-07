@@ -14,7 +14,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 file (MAKE_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@")
 
-find_file (original_dot_file deps_graph.dot PATHS "@CMAKE_SOURCE_DIR@" "@ORANGES_DOC_OUTPUT_DIR@"
+find_file (original_dot_file deps_graph.dot PATHS "@PROJECT_SOURCE_DIR@" "@ORANGES_DOC_OUTPUT_DIR@"
 		   NO_DEFAULT_PATH)
 
 if(NOT original_dot_file OR NOT EXISTS "${original_dot_file}")

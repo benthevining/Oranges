@@ -14,6 +14,9 @@ if(PROJECT_IS_TOP_LEVEL)
 	enable_language (C)
 endif()
 
+set (ORANGES_INSTALL_DEST lib/cmake/Oranges
+	 CACHE STRING "Directory below INSTALL_PREFIX where Limes will be installed to")
+
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 

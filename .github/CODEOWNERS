@@ -47,6 +47,7 @@ modules/cpack/scripts/rpmPostInstall.sh benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
+modules/documentation/OrangesGraphVizConfig.cmake benthevining
 modules/documentation/scripts/Doxyfile benthevining
 modules/documentation/scripts/generate_deps_graph_image.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
@@ -113,6 +114,7 @@ toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining
 toolchains/ios/tvOS_simulator.cmake benthevining
+toolchains/ios/watchOS.cmake benthevining
 toolchains/ios_common.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining
 toolchains/mingw/mingw_common.cmake benthevining

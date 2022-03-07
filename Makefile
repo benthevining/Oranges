@@ -58,7 +58,7 @@ pc:  ## Runs all pre-commit hooks over all files
 
 #
 
-uninstall: ## Runs uninstall script [only works if project has been installed and was top-level project in configure]
+uninstall: ## Runs uninstall script [only works if project has been installed]
 	@$(call run_uninstall)
 
 clean: ## Cleans the source tree

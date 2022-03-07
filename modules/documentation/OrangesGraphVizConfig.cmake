@@ -29,7 +29,8 @@ endif()
 set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${PROJECT_SOURCE_DIR}/util"
 	 CACHE PATH "Location within the source tree to store the generated dependency graph image")
 
-set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
+set (ORANGES_DOC_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/doc"
+	 CACHE PATH "Location to output the generated documentation files")
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake"
 				generate_deps_graph_image.cmake @ONLY)
@@ -37,15 +38,15 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cma
 add_custom_target (
 	DependencyGraph
 	COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	DEPENDS "${CMAKE_SOURCE_DIR}/deps_graph.dot" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+	WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+	DEPENDS "${PROJECT_SOURCE_DIR}/deps_graph.dot" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
 	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
 set_target_properties (
 	DependencyGraph
 	PROPERTIES ADDITIONAL_CLEAN_FILES
-			   "${CMAKE_SOURCE_DIR}/deps_graph.png;${CMAKE_SOURCE_DIR}/deps_graph.dot")
+			   "${PROJECT_SOURCE_DIR}/deps_graph.png;${PROJECT_SOURCE_DIR}/deps_graph.dot")
 
 install (FILES "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
 		 TYPE INFO OPTIONAL COMPONENT "${PROJECT_NAME}_Documentation")
