@@ -55,7 +55,7 @@ if(ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 	add_custom_command (
 		TARGET DependencyGraph
 		POST_BUILD
-		COMMAND "${CMAKE_COMMAND}" -E copy "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+		COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
 				"${ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE}"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		COMMENT "Copying generated dependency graph image to source tree..."
@@ -63,13 +63,14 @@ if(ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 endif()
 
 install (FILES "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
-		 TYPE INFO OPTIONAL COMPONENT "${PROJECT_NAME}_Documentation")
+		 TYPE INFO OPTIONAL COMPONENT "${CMAKE_PROJECT_NAME}_Documentation")
 
-set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_DISPLAY_NAME" "${PROJECT_NAME} documentation")
+set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DISPLAY_NAME"
+	 "${CMAKE_PROJECT_NAME} documentation")
 
-set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_DESCRIPTION"
-	 "Installs HTML and man-page documentation for ${PROJECT_NAME}")
+set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DESCRIPTION"
+	 "Installs HTML and man-page documentation for ${CMAKE_PROJECT_NAME}")
 
-set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_GROUP" Documentation)
+set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_GROUP" Documentation)
 
 set (CPACK_COMPONENT_GROUP_Documentation_DESCRIPTION "Installs all available sets of documentation")
