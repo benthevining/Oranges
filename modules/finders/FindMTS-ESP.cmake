@@ -45,7 +45,8 @@ oranges_fetch_repository (
 	ODDSound/MTS-ESP
 	GIT_TAG
 	origin/master
-	DOWNLOAD_ONLY)
+	DOWNLOAD_ONLY
+	NEVER_LOCAL)
 
 set (MTS-ESP_FOUND FALSE)
 

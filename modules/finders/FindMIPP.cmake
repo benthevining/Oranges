@@ -36,7 +36,8 @@ oranges_fetch_repository (
 	aff3ct/MIPP
 	GIT_TAG
 	origin/master
-	DOWNLOAD_ONLY)
+	DOWNLOAD_ONLY
+	NEVER_LOCAL)
 
 add_library (MIPP INTERFACE)
 
