@@ -28,7 +28,6 @@ Targets:
 
 Output variables:
 - MTS-ESP_FOUND
-- MTS-ESP_DIR (points to the downloaded sources)
 
 ]]
 
@@ -36,20 +35,19 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsGetCPM)
 include (LemonsCmakeDevTools)
+include (OrangesFetchRepository)
 
-CPMAddPackage (
+oranges_fetch_repository (
 	NAME
 	MTS-ESP
 	GITHUB_REPOSITORY
 	ODDSound/MTS-ESP
 	GIT_TAG
 	origin/master
-	DOWNLOAD_ONLY
-	YES)
+	DOWNLOAD_ONLY)
 
-set (MTS-ESP_DIR "${MTS-ESP_SOURCE_DIR}")
+set (MTS-ESP_FOUND FALSE)
 
 # Client
 
@@ -65,21 +63,20 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 	if(MTS_ESP_CLIENT_DIR AND IS_DIRECTORY "${MTS_ESP_CLIENT_DIR}")
 
-		add_library (MTS-ESP_Client STATIC)
+		add_library (MTSClient STATIC)
 
 		target_sources (
-			MTS-ESP_Client
+			MTSClient
 			PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
 					$<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
-					$<INSTALL_INTERFACE:include/MTS-ESP_Client/libMTSClient.h>)
+					$<INSTALL_INTERFACE:include/MTSClient/libMTSClient.h>)
 
-		target_include_directories (
-			MTS-ESP_Client PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
-								  $<INSTALL_INTERFACE:include/MTS-ESP_Client>)
+		target_include_directories (MTSClient PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
+													 $<INSTALL_INTERFACE:include/MTSClient>)
 
-		oranges_export_alias_target (MTS-ESP_Client ODDSound)
+		oranges_export_alias_target (MTSClient ODDSound)
 
-		oranges_install_targets (TARGETS MTS-ESP_Client EXPORT OrangesTargets)
+		oranges_install_targets (TARGETS MTSClient EXPORT OrangesTargets)
 	else()
 		if(MTS-ESP_FIND_REQUIRED_Client)
 			message (FATAL_ERROR "MTS-ESP component 'Client' could not be found!")
@@ -141,23 +138,23 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 			set_target_properties (lib_mts PROPERTIES IMPORTED_LOCATION "${libMTS}")
 
-			add_library (MTS-ESP_Master STATIC)
+			add_library (MTSMaster STATIC)
 
-			target_link_libraries (MTS-ESP_Master PRIVATE lib_mts)
+			target_link_libraries (MTSMaster PRIVATE lib_mts)
 
 			target_sources (
-				MTS-ESP_Master
+				MTSMaster
 				PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
 						$<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
 						$<INSTALL_INTERFACE:include/MTS-ESP_Master/libMTSMaster.h>)
 
 			target_include_directories (
-				MTS-ESP_Master PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
-									  $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
+				MTSMaster PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
+								 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
 
-			oranges_export_alias_target (MTS-ESP_Master ODDSound)
+			oranges_export_alias_target (MTSMaster ODDSound)
 
-			oranges_install_targets (TARGETS MTS-ESP_Master EXPORT OrangesTargets)
+			oranges_install_targets (TARGETS MTSMaster EXPORT OrangesTargets)
 
 		else()
 			if(NOT MTS-ESP_FIND_QUIETLY)
@@ -184,10 +181,9 @@ if(TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster)
 
 	oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets OPTIONAL)
 
-else()
-	set (MTS-ESP_FOUND FALSE)
+	return ()
+endif()
 
-	if(MTS-ESP_FIND_REQUIRED)
-		message (FATAL_ERROR "MTS-ESP could not be located!")
-	endif()
+if(MTS-ESP_FIND_REQUIRED)
+	message (FATAL_ERROR "MTS-ESP could not be located!")
 endif()

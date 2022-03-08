@@ -74,6 +74,7 @@ modules/general/scripts/uninstall.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining
 modules/installing/OrangesInstallSystemLibs.cmake benthevining
+modules/installing/scripts/rpmPostInstall.sh benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
 modules/integrations/LemonsCcache.cmake benthevining
 modules/integrations/LemonsClangTidy.cmake benthevining

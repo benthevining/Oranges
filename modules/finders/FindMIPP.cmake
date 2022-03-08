@@ -19,7 +19,6 @@ Targets:
 
 Output variables:
 - MIPP_FOUND
-- MIPP_DIR
 
 ]]
 
@@ -27,18 +26,17 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsGetCPM)
 include (LemonsCmakeDevTools)
+include (OrangesFetchRepository)
 
-CPMAddPackage (
+oranges_fetch_repository (
 	NAME
 	MIPP
 	GITHUB_REPOSITORY
 	aff3ct/MIPP
 	GIT_TAG
 	origin/master
-	DOWNLOAD_ONLY
-	ON)
+	DOWNLOAD_ONLY)
 
 add_library (MIPP INTERFACE)
 
@@ -53,4 +51,4 @@ oranges_export_alias_target (MIPP aff3ct)
 oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets OPTIONAL)
 
 set (MIPP_FOUND TRUE)
-set (MIPP_DIR "${MIPP_SOURCE_DIR}")
+# set (MIPP_DIR "${MIPP_SOURCE_DIR}")

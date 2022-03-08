@@ -26,7 +26,7 @@ Components:
 Each one produces an imported target named Intel::ipp_lib_<Component>.
 
 Targets:
-- Intel::IPP : interface library that links to all found component libraries
+- Intel::IntelIPP : interface library that links to all found component libraries
 
 Output variables:
 - IPP_FOUND
@@ -36,6 +36,17 @@ Output variables:
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+
+find_package (PkgConfig)
+
+pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
+
+if(IPP_FOUND AND TARGET PkgConfig::IPP)
+	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
+
+	set (IPP_FOUND TRUE)
+	return ()
+endif()
 
 option (IPP_STATIC "Use static IPP libraries" ON)
 option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
