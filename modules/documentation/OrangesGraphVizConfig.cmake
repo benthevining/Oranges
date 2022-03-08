@@ -26,7 +26,7 @@ if(NOT ORANGES_DOT)
 	return ()
 endif()
 
-set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${PROJECT_SOURCE_DIR}/util"
+set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${CMAKE_SOURCE_DIR}/util"
 	 CACHE PATH "Location within the source tree to store the generated dependency graph image")
 
 set (ORANGES_DOC_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/doc"
@@ -38,15 +38,26 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cma
 add_custom_target (
 	DependencyGraph
 	COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
-	WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-	DEPENDS "${PROJECT_SOURCE_DIR}/deps_graph.dot" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	DEPENDS "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
 	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
 set_target_properties (
 	DependencyGraph
 	PROPERTIES ADDITIONAL_CLEAN_FILES
-			   "${PROJECT_SOURCE_DIR}/deps_graph.png;${PROJECT_SOURCE_DIR}/deps_graph.dot")
+			   "${CMAKE_SOURCE_DIR}/deps_graph.png;${CMAKE_SOURCE_DIR}/deps_graph.dot")
+
+if(ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE)
+	add_custom_command (
+		TARGET DependencyGraph
+		POST_BUILD
+		COMMAND "${CMAKE_COMMAND}" -E copy "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+				"${ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE}"
+		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		COMMENT "Copying generated dependency graph image to source tree..."
+		VERBATIM USES_TERMINAL)
+endif()
 
 install (FILES "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
 		 TYPE INFO OPTIONAL COMPONENT "${PROJECT_NAME}_Documentation")

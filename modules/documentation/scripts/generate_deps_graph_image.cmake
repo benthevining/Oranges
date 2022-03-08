@@ -30,8 +30,3 @@ execute_process (
 													 COMMAND_ERROR_IS_FATAL ANY)
 
 file (RENAME "${original_dot_file}" "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.dot")
-
-if(IS_DIRECTORY "@ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE@")
-	file (COPY "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
-		  DESTINATION "@ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE@" FOLLOW_SYMLINK_CHAIN)
-endif()
