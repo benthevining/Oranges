@@ -33,13 +33,11 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (OrangesInstallSystemLibs)
-
 # CPACK_PACKAGE_INSTALL_DIRECTORY CPACK_PACKAGE_INSTALL_REGISTRY_KEY
 
 #
 
-include (LemonsSetDefaultCpackGenerator)
+include (OrangesSetDefaultCpackGenerator)
 
 set (CPACK_STRIP_FILES TRUE)
 set (CPACK_SOURCE_STRIP_FILES TRUE)
@@ -198,13 +196,12 @@ set (CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_LIST_DIR}/scripts/rpmPo
 
 # #########################################################################################
 
+set (config_file_output "${CMAKE_CURRENT_BINARY_DIR}/generated/CPackConfig.cmake")
+
+configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CPackConfig.cmake" "${config_file_output}" @ONLY)
+
+set (CPACK_PROJECT_CONFIG_FILE "${config_file_output}")
+
 if(PROJECT_IS_TOP_LEVEL)
 	include (CPack)
-
-	set (config_file_output "${CMAKE_CURRENT_BINARY_DIR}/generated/CPackConfig.cmake")
-
-	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CPackConfig.cmake" "${config_file_output}"
-					@ONLY)
-
-	set (CPACK_PROJECT_CONFIG_FILE "${config_file_output}")
 endif()

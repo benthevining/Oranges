@@ -12,6 +12,16 @@
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+if(NOT TARGET "${PROJECT_NAME}")
+	message (WARNING "No target named ${PROJECT_NAME} - this is used to infer pkgconfig settings!")
+
+	return ()
+endif()
+
+if(${PROJECT_NAME}_SKIP_PKGCONFIG)
+	return ()
+endif()
+
 include (GNUInstallDirs)
 
 set (pc_file_dir "${PROJECT_BINARY_DIR}/pkgconfig")
@@ -21,10 +31,6 @@ set (pc_file_configured "${pc_file_dir}/${PROJECT_NAME}.pc.in")
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/config.pc" "${pc_file_configured}" @ONLY)
 
 set (pc_file_output "${pc_file_dir}/${PROJECT_NAME}-$<CONFIG>.pc")
-
-if(NOT TARGET "${PROJECT_NAME}")
-
-endif()
 
 file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}" TARGET "${PROJECT_NAME}"
 																		NEWLINE_STYLE UNIX)

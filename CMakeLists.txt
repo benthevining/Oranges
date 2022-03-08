@@ -83,9 +83,8 @@ install (
 		  "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
 	DESTINATION "${ORANGES_INSTALL_DEST}")
 
-if(PROJECT_IS_TOP_LEVEL)
-	include (OrangesUninstallTarget)
-	include (LemonsDefaultCPackSettings)
-endif()
+set (Oranges_SKIP_PKGCONFIG ON)
+
+include (OrangesDefaultInstallSettings)
 
 export (PACKAGE Oranges)

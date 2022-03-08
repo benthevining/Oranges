@@ -65,6 +65,7 @@ modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
 modules/general/OrangesCoverageFlags.cmake benthevining
 modules/general/OrangesCreateDefaultDocsTarget.cmake benthevining
+modules/general/OrangesDefaultCMakeSettings.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining
@@ -73,8 +74,11 @@ modules/general/lemons_AggregateTargets.cmake benthevining
 modules/general/scripts/uninstall.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining
+modules/installing/OrangesGeneratePkgConfig.cmake benthevining
 modules/installing/OrangesInstallSystemLibs.cmake benthevining
+modules/installing/OrangesUninstallTarget.cmake benthevining
 modules/installing/scripts/rpmPostInstall.sh benthevining
+modules/installing/scripts/uninstall.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
 modules/integrations/LemonsCcache.cmake benthevining
 modules/integrations/LemonsClangTidy.cmake benthevining
