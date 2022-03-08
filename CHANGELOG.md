@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.12.0](http://github.com/benthevining/Oranges/compare/v1.11.3...v1.12.0) (2022-03-08)
+
+
+### Features
+
+* added a module to automatically generate pkgconfig manifest files ([5e94a82](http://github.com/benthevining/Oranges/commit/5e94a822b006cc0dc5b12aac84556599fe2e5672))
+
 ### [1.11.3](http://github.com/benthevining/Oranges/compare/v1.11.2...v1.11.3) (2022-03-07)
 
 
