@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.13.0](http://github.com/benthevining/Oranges/compare/v1.12.0...v1.13.0) (2022-03-08)
+
+
+### Features
+
+* added a FetchContent wrapper module ([3091b7a](http://github.com/benthevining/Oranges/commit/3091b7abc13465de92c2629967e705212e6df652))
+
 ## [1.12.0](http://github.com/benthevining/Oranges/compare/v1.11.3...v1.12.0) (2022-03-08)
 
 
