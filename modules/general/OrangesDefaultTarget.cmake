@@ -95,7 +95,7 @@ target_compile_options (OrangesDefaultTarget
 target_compile_options (
 	OrangesDefaultTarget
 	INTERFACE $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Debug>>:-g -O0>
-			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Debug>>:-g -O3>
+			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Release>>:-g -O3>
 			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>)
 
 target_link_libraries (OrangesDefaultTarget

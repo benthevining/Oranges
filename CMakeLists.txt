@@ -38,7 +38,7 @@ oranges_install_targets (
 	EXPORT
 	OrangesTargets
 	REL_PATH
-	"${ORANGES_INSTALL_DEST}"
+	Oranges
 	OPTIONAL)
 
 include (OrangesDefaultTarget)
