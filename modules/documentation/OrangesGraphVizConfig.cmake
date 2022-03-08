@@ -10,6 +10,9 @@
 #
 # ======================================================================================
 
+# NB becuase cmake only outputs a dependency graph for the top-level project, I use variables
+# CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
