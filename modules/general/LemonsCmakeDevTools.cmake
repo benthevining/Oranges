@@ -62,8 +62,7 @@ endfunction()
 
 function(oranges_install_targets)
 
-	set (oneValueArgs EXPORT REL_PATH RUNTIME_COMPONENT DEV_COMPONENT COMPONENT_PREFIX
-					  ALIAS_NAMESPACE)
+	set (oneValueArgs EXPORT REL_PATH RUNTIME_COMPONENT DEV_COMPONENT COMPONENT_PREFIX)
 
 	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "${oneValueArgs}" "TARGETS" ${ARGN})
 
@@ -95,51 +94,44 @@ function(oranges_install_targets)
 	set (CPACK_COMPONENT_GROUP_Development_DESCRIPTION
 		 "Installs all available development artifacts")
 
-	foreach(target ${ORANGES_ARG_TARGETS})
+	set (install_command TARGETS "${ORANGES_ARG_TARGETS}" EXPORT "${ORANGES_ARG_EXPORT}")
 
-		set (install_command TARGETS "${target}" EXPORT "${ORANGES_ARG_EXPORT}")
+	if(ORANGES_ARG_OPTIONAL)
+		set (install_command ${install_command} OPTIONAL)
+	endif()
 
-		if(ORANGES_ARG_OPTIONAL)
-			set (install_command ${install_command} OPTIONAL)
-		endif()
+	if(ORANGES_ARG_REL_PATH)
+		set (lib_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
+		set (archive_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
+		set (runtime_dest "${CMAKE_INSTALL_BINDIR}/${ORANGES_ARG_REL_PATH}")
+	else()
+		set (lib_dest "${CMAKE_INSTALL_LIBDIR}")
+		set (archive_dest "${CMAKE_INSTALL_LIBDIR}")
+		set (runtime_dest "${CMAKE_INSTALL_BINDIR}")
+	endif()
 
-		if(ORANGES_ARG_REL_PATH)
-			set (lib_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
-			set (archive_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
-			set (runtime_dest "${CMAKE_INSTALL_BINDIR}/${ORANGES_ARG_REL_PATH}")
-		else()
-			set (lib_dest "${CMAKE_INSTALL_LIBDIR}")
-			set (archive_dest "${CMAKE_INSTALL_LIBDIR}")
-			set (runtime_dest "${CMAKE_INSTALL_BINDIR}")
-		endif()
-
-		install (
-			${install_command}
-			LIBRARY
-			DESTINATION
-			"${lib_dest}"
-			COMPONENT
-			"${ORANGES_ARG_RUNTIME_COMPONENT}"
-			NAMELINK_COMPONENT
-			"${ORANGES_ARG_DEV_COMPONENT}"
-			ARCHIVE
-			DESTINATION
-			"${archive_dest}"
-			COMPONENT
-			"${ORANGES_ARG_DEV_COMPONENT}"
-			RUNTIME
-			DESTINATION
-			"${runtime_dest}"
-			COMPONENT
-			"${ORANGES_ARG_RUNTIME_COMPONENT}"
-			INCLUDES
-			DESTINATION
-			"${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
-
-		if(ORANGES_ARG_ALIAS_NAMESPACE)
-			oranges_export_alias_target ("${target}" "${ORANGES_ARG_ALIAS_NAMESPACE}")
-		endif()
-	endforeach()
+	install (
+		${install_command}
+		LIBRARY
+		DESTINATION
+		"${lib_dest}"
+		COMPONENT
+		"${ORANGES_ARG_RUNTIME_COMPONENT}"
+		NAMELINK_COMPONENT
+		"${ORANGES_ARG_DEV_COMPONENT}"
+		ARCHIVE
+		DESTINATION
+		"${archive_dest}"
+		COMPONENT
+		"${ORANGES_ARG_DEV_COMPONENT}"
+		RUNTIME
+		DESTINATION
+		"${runtime_dest}"
+		COMPONENT
+		"${ORANGES_ARG_RUNTIME_COMPONENT}"
+		INCLUDES
+		DESTINATION
+		"${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
 endfunction()
 
 #

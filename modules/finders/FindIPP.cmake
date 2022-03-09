@@ -84,6 +84,9 @@ if(NOT IPP_IGNORE_PKGCONFIG)
 	if(IPP_FOUND AND TARGET PkgConfig::IPP)
 		add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
 
+		oranges_install_targets (TARGETS Intel::IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX
+								 Intel)
+
 		set (IPP_FOUND TRUE)
 		return ()
 	endif()
@@ -293,6 +296,8 @@ target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_D
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
 oranges_export_alias_target (IntelIPP Intel)
+
+oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
 
 set (IPP_FOUND TRUE)
 # set (IPP_DIR "${IPP_ROOT}")
