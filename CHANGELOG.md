@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.13.1](http://github.com/benthevining/Oranges/compare/v1.13.0...v1.13.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* fixed bug with variable propagation in oranges_fetch_repository ([bb44cef](http://github.com/benthevining/Oranges/commit/bb44cefa63e2cff9a4e797084657acf9d88f81c4))
+
 ## [1.13.0](http://github.com/benthevining/Oranges/compare/v1.12.0...v1.13.0) (2022-03-08)
 
 
