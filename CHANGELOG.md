@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.15.0](http://github.com/benthevining/Oranges/compare/v1.14.0...v1.15.0) (2022-03-09)
+
+
+### Features
+
+* added a new helper macro for adding header files with install rules to a target ([e2655c5](http://github.com/benthevining/Oranges/commit/e2655c50f6e719e1cacbabb32520c7b54106e73f))
+
 ## [1.14.0](http://github.com/benthevining/Oranges/compare/v1.13.1...v1.14.0) (2022-03-09)
 
 
