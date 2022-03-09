@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.14.0](http://github.com/benthevining/Oranges/compare/v1.13.1...v1.14.0) (2022-03-09)
+
+
+### Features
+
+* added a FindPluginval module ([4a85247](http://github.com/benthevining/Oranges/commit/4a85247efd62d6dc599f92c5a08a2cdd32b874b3))
+
 ### [1.13.1](http://github.com/benthevining/Oranges/compare/v1.13.0...v1.13.1) (2022-03-09)
 
 
