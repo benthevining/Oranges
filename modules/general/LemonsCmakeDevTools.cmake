@@ -144,6 +144,50 @@ endfunction()
 
 #
 
+function(oranges_add_target_headers)
+
+	set (oneValueArgs TARGET SCOPE REL_PATH)
+
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG TARGET SCOPE)
+
+	if(NOT TARGET "${ORANGES_ARG_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} given target name ${ORANGES_ARG_TARGET}, but target does not exist!"
+			)
+	endif()
+
+	foreach(headerFile ${ORANGES_ARG_FILES})
+		target_sources (
+			"${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+									$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${headerFile}>)
+
+		if(ORANGES_ARG_REL_PATH)
+			target_sources (
+				"${ORANGES_ARG_TARGET}"
+				"${ORANGES_ARG_SCOPE}"
+				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${headerFile}>
+				)
+
+			install (FILES "${CMAKE_CURRENT_LIST_DIR}/${headerFile}"
+					 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
+		else()
+			target_sources (
+				"${ORANGES_ARG_TARGET}"
+				"${ORANGES_ARG_SCOPE}"
+				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${headerFile}>)
+
+			install (FILES "${CMAKE_CURRENT_LIST_DIR}/${headerFile}"
+					 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+		endif()
+	endforeach()
+
+endfunction()
+
+#
+
 macro(lemons_warn_if_not_processing_project)
 	# if (NOT CMAKE_ROLE STREQUAL "PROJECT") message (AUTHOR_WARNING "This module
 	# (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some

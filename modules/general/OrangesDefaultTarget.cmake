@@ -52,7 +52,7 @@ define_property (
 	PROPERTY ORANGES_MAC_UNIVERSAL_BINARY
 	BRIEF_DOCS "TRUE if building a universal binary; otherwise FALSE"
 	FULL_DOCS
-		"When TRUE, the OSX architectures have been set to x86_64 and arm64; when false, it has been set to only this Mac's native architecture, ${osx_native_arch}. FALSE on non-MacOSX platforms."
+		"When TRUE, the OSX architectures have been set to x86_64 and arm64; when false, it has been set to only this Mac's native architecture. FALSE on non-MacOSX platforms."
 	)
 
 define_property (

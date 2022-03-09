@@ -2,6 +2,9 @@
 CONFIG ?= Release
 
 export CMAKE_BUILD_TYPE ?= $(CONFIG)
+export CMAKE_CONFIG_TYPE ?= $(CONFIG)
+
+export VERBOSE=1
 
 # program aliases
 RM = $(CMAKE) -E rm -rf # force this one to use CMake
@@ -28,6 +31,8 @@ else
 	export CC=gcc-10
 	export CXX=g++-10
 endif
+
+# env var for num jobs: CMAKE_BUILD_PARALLEL_LEVEL
 
 #
 # TO DO: check if graphviz can be found
@@ -58,6 +63,6 @@ override cmake_build_preset = $(CMAKE) --build --preset $(1)
 
 override cmake_default_build = $(CMAKE) --build $(BUILDS) --config $(CONFIG)
 
-override cmake_install = $(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG) --strip --verbose
+override cmake_install = $(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG) --strip
 
 override cpack_create_installer = $(CMAKE) --build $(BUILDS) --target package

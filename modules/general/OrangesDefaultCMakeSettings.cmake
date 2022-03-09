@@ -71,13 +71,6 @@ set (CMAKE_CTEST_ARGUMENTS --parallel "${num_procs}")
 set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "${PROJECT_NAME}")
 set (CMAKE_FOLDER "${PROJECT_NAME}")
 
-string (TOUPPER "${PROJECT_NAME}" upperProjectName)
-
-set ("${upperProjectName}_INSTALL_DEST" "lib/cmake/${PROJECT_NAME}"
-	 CACHE PATH "Directory below INSTALL_PREFIX where ${}PROJECT_NAME will be installed to")
-
-mark_as_advanced (FORCE "${upperProjectName}_INSTALL_DEST")
-
 #
 
 include (LemonsDefaultProjectSettings)
