@@ -37,12 +37,17 @@ variable FETCHCONTENT_SOURCE_DIR_<name> can override package location locally.
 
 cache option ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST will redirect this command to try using find_package first.
 
+cache option ORANGES_FETCH_CACHE defines location of cached sources
+
 ]]
 
 #
 
-set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache"
-	 CACHE PATH "Directory under which to collect all populated content")
+set (ORANGES_FETCH_CACHE "${CMAKE_SOURCE_DIR}/Cache"
+	 CACHE PATH "Directory in which to cache all downloaded dependencies")
+
+set (FETCHCONTENT_BASE_DIR "${ORANGES_FETCH_CACHE}"
+	 CACHE PATH "Directory in which to cache all downloaded dependencies" FORCE)
 
 set (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST OFF
 	 CACHE BOOL "Try local find_package before fetching dependencies from git")
