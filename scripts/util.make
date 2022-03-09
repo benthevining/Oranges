@@ -1,6 +1,8 @@
 
 CONFIG ?= Release
 
+export CMAKE_BUILD_TYPE ?= $(CONFIG)
+
 # program aliases
 RM = $(CMAKE) -E rm -rf # force this one to use CMake
 CMAKE ?= cmake
@@ -16,12 +18,12 @@ CACHE ?= Cache
 DEPS_GRAPH ?= deps_graph
 
 ifeq ($(OS),Windows_NT)
-	CMAKE_GENERATOR ?= Visual Studio 17 2022
+	export CMAKE_GENERATOR ?= Visual Studio 17 2022
 else ifeq ($(shell uname -s),Darwin)
-	CMAKE_GENERATOR ?= Xcode
+	export CMAKE_GENERATOR ?= Xcode
 	SUDO ?= sudo
 else
-	CMAKE_GENERATOR ?= Ninja
+	export CMAKE_GENERATOR ?= Ninja
 	SUDO ?= sudo
 	export CC=gcc-10
 	export CXX=g++-10
@@ -48,9 +50,9 @@ override run_uninstall = $(SUDO) $(CMAKE) -P $(BUILDS)/uninstall.cmake
 
 override cmake_query_file_api = $(CMAKE) -D ORANGES_PROJECT_ROOT=$(1) -P $(1)/scripts/cmake_file_api/query_cmake_file_api.cmake
 
-override cmake_configure_preset = $(CMAKE) --preset $(1) -G "$(CMAKE_GENERATOR)"
+override cmake_configure_preset = $(CMAKE) --preset $(1)
 
-override cmake_default_configure = $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG)
+override cmake_default_configure = $(CMAKE) -B $(BUILDS)
 
 override cmake_build_preset = $(CMAKE) --build --preset $(1)
 

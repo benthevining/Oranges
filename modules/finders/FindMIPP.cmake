@@ -58,7 +58,5 @@ target_sources (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
 
 oranges_export_alias_target (MIPP aff3ct)
 
-oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets OPTIONAL)
-
 set (MIPP_FOUND TRUE)
 # set (MIPP_DIR "${MIPP_SOURCE_DIR}")

@@ -292,8 +292,6 @@ endif()
 target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
-oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets)
-
 oranges_export_alias_target (IntelIPP Intel)
 
 set (IPP_FOUND TRUE)

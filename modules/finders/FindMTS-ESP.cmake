@@ -194,6 +194,4 @@ target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSCl
 
 oranges_export_alias_target (MTS-ESP ODDSound)
 
-oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets OPTIONAL)
-
 return ()

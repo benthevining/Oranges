@@ -1,3 +1,15 @@
+# ======================================================================================
+#    ____  _____            _   _  _____ ______  _____
+#   / __ \|  __ \     /\   | \ | |/ ____|  ____|/ ____|
+#  | |  | | |__) |   /  \  |  \| | |  __| |__  | (___
+#  | |  | |  _  /   / /\ \ | . ` | | |_ |  __|  \___ \
+#  | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) |
+#   \____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
+#
+#  This file is part of the Oranges open source CMake library and is licensed under the terms of the GNU Public License.
+#
+# ======================================================================================
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
@@ -9,13 +21,10 @@ project (
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)
 
-if(PROJECT_IS_TOP_LEVEL)
-	enable_language (CXX)
-	enable_language (C)
-endif()
+enable_testing ()
 
-set (ORANGES_INSTALL_DEST lib/cmake/Oranges
-	 CACHE STRING "Directory below INSTALL_PREFIX where Limes will be installed to")
+set (ORANGES_INSTALL_DEST share/cmake/Oranges
+	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
@@ -65,11 +74,11 @@ oranges_create_doxygen_target (
 include (CMakePackageConfigHelpers)
 
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
-								  COMPATIBILITY SameMajorVersion)
+								  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
-	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR INSTALL_PREFIX "")
+	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
 
 install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
 		 EXPORT_LINK_INTERFACE_LIBRARIES)

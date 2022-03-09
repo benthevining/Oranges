@@ -16,17 +16,17 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 @PACKAGE_INIT@
 
-include (CMakeFindDependencyMacro)
+set_and_check (ORANGES_ROOT_DIR "@PACKAGE_ORANGES_ROOT_DIR@")
 
-# find_dependency ()
-
-set (ORANGES_ROOT_DIR "@PACKAGE_ORANGES_ROOT_DIR@")
+#
 
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesMacros.cmake")
 
 list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")
+
+#
 
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 
