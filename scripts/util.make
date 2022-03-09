@@ -42,7 +42,7 @@ override run_clean = $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
 
 override run_wipe_cache = $(RM) $(CACHE); $(PRECOMMIT) clean
 
-override run_uninstall = $(CMAKE) -P $(BUILDS)/uninstall.cmake
+override run_uninstall = $(SUDO) $(CMAKE) -P $(BUILDS)/uninstall.cmake
 
 #
 
@@ -50,7 +50,7 @@ override cmake_query_file_api = $(CMAKE) -D ORANGES_PROJECT_ROOT=$(1) -P $(1)/sc
 
 override cmake_configure_preset = $(CMAKE) --preset $(1) -G "$(CMAKE_GENERATOR)"
 
-override cmake_default_configure = $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG) --graphviz=$(DOCS)/$(DEPS_GRAPH).dot
+override cmake_default_configure = $(CMAKE) -B $(BUILDS) -G "$(CMAKE_GENERATOR)" -D CMAKE_BUILD_TYPE=$(CONFIG)
 
 override cmake_build_preset = $(CMAKE) --build --preset $(1)
 

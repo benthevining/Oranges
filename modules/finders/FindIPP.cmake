@@ -20,10 +20,37 @@ Options:
 - IPP_ROOT : this can be manually overridden to provide the path to the root of the IPP installation.
 
 Components:
+- All
 - CORE
+- AC : audio coding
+- CC : color conversion
+- CH : string processing
+- CP : cryptography
+- CV : computer vision
+- DC : data compression
+- DI : data integrity
+- GEN : generated functions
+- I : image processing
+- J : image compression
+- R : rendering and 3D data processing
+- M : small matrix operations
 - S : signal processing
+- SC : speech coding
+- SR : speech recognition
+- VC : video coding
 - VM : vector math
 Each one produces an imported target named Intel::ipp_lib_<Component>.
+
+Domain             Domain Code  Depends on
+----------------------------------------------
+Color Conversion   CC           Core, VM, S, I
+String Operations  CH           Core, VM, S
+Computer Vision    CV           Core, VM, S, I
+Data Compression   DC           Core, VM, S
+Image Processing   I            Core, VM, S
+Signal Processing  S            Core, VM
+Vector Math        VM           Core
+
 
 Targets:
 - Intel::IntelIPP : interface library that links to all found component libraries
@@ -37,15 +64,21 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (PkgConfig)
+option (IPP_IGNORE_PKGCONFIG "Don't try using pkgconfig to search for the IPP libraries" OFF)
 
-pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
+mark_as_advanced (IPP_IGNORE_PKGCONFIG)
 
-if(IPP_FOUND AND TARGET PkgConfig::IPP)
-	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
+if(NOT IPP_IGNORE_PKGCONFIG)
+	find_package (PkgConfig)
 
-	set (IPP_FOUND TRUE)
-	return ()
+	pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
+
+	if(IPP_FOUND AND TARGET PkgConfig::IPP)
+		add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
+
+		set (IPP_FOUND TRUE)
+		return ()
+	endif()
 endif()
 
 option (IPP_STATIC "Use static IPP libraries" ON)
@@ -113,7 +146,7 @@ set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
 
 #
 
-function(_oranges_find_ipp_library IPP_COMPONENT comp_required result_var)
+function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 
 	string (TOLOWER "${IPP_COMPONENT}" IPP_COMPONENT_LOWER)
 
@@ -139,12 +172,9 @@ function(_oranges_find_ipp_library IPP_COMPONENT comp_required result_var)
 		endif()
 
 		if(comp_required)
-			set (${result_var} FALSE PARENT_SCOPE)
 			return ()
 		endif()
 	endif()
-
-	set (${result_var} TRUE PARENT_SCOPE)
 
 	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED ${IPP_LIB_TYPE})
 
@@ -162,14 +192,79 @@ endfunction()
 
 #
 
-foreach(ipp_component ${IPP_FIND_COMPONENTS})
-	_oranges_find_ipp_library ("${ipp_component}" "${IPP_FIND_REQUIRED_${IPP_COMPONENT}}" result)
+function(_oranges_find_ipp_component IPP_COMPONENT comp_required)
 
-	if(IPP_FIND_REQUIRED_${IPP_COMPONENT} AND NOT result)
-		return ()
+	if("${IPP_COMPONENT}" STREQUAL CC)
+		set (comp_dependencies CORE VM S I)
+	elseif("${IPP_COMPONENT}" STREQUAL CH)
+		set (comp_dependencies CORE VM S)
+	elseif("${IPP_COMPONENT}" STREQUAL CV)
+		set (comp_dependencies CORE VM S I)
+	elseif("${IPP_COMPONENT}" STREQUAL DC)
+		set (comp_dependencies CORE VM S)
+	elseif("${IPP_COMPONENT}" STREQUAL I)
+		set (comp_dependencies CORE VM S)
+	elseif("${IPP_COMPONENT}" STREQUAL S)
+		set (comp_dependencies CORE VM)
+	elseif("${IPP_COMPONENT}" STREQUAL VM)
+		set (comp_dependencies CORE)
+	else()
+		set (comp_dependencies "")
 	endif()
 
-	# process all this component's comp dependencies...
+	foreach(dep_component IN LISTS comp_dependencies)
+		if(NOT TARGET ipp_lib_${dep_component})
+			_oranges_find_ipp_component ("${dep_component}" TRUE)
+		endif()
+
+		if(NOT TARGET ipp_lib_${dep_component})
+			if(NOT IPP_FIND_QUIETLY)
+				message (
+					WARNING
+						"IPP component ${IPP_COMPONENT} is missing dependent IPP component library ${dep_component}!"
+					)
+			endif()
+
+			return ()
+		endif()
+	endforeach()
+
+	_oranges_find_ipp_library ("${ipp_component}" "${comp_required}")
+
+endfunction()
+
+#
+
+if(All IN LISTS ${IPP_FIND_COMPONENTS})
+	set (
+		IPP_FIND_COMPONENTS
+		CORE
+		AC
+		CC
+		CH
+		CP
+		CV
+		DC
+		DI
+		GEN
+		I
+		J
+		R
+		M
+		S
+		SC
+		SR
+		VC
+		VM)
+endif()
+
+foreach(ipp_component ${IPP_FIND_COMPONENTS})
+
+	_oranges_find_ipp_component ("${ipp_component}" "${IPP_FIND_REQUIRED_${ipp_component}}")
+
+	if(IPP_FIND_REQUIRED_${ipp_component} AND NOT TARGET ipp_lib_${ipp_component})
+		return ()
+	endif()
 endforeach()
 
 #

@@ -50,6 +50,8 @@ oranges_fetch_repository (
 
 set (MTS-ESP_FOUND FALSE)
 
+# MTS-ESP_SOURCE_DIR
+
 # Client
 
 # editorconfig-checker-disable
@@ -101,40 +103,37 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 		# locate the libMTS dynamic library
 		if(WIN32)
+			set (libMTS_name libMTS.dll)
+
 			if(CMAKE_SIZEOF_VOID_P EQUAL 4) # 32-bit
-				find_library (
-					libMTS NAMES LIBMTS.dll PATHS "Program Files (x86)\\Common Files\\MTS-ESP"
-												  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/32bit"
-					DOC "MTS-ESP master dynamic library")
+				set (libMTS_paths "Program Files (x86)\\Common Files\\MTS-ESP"
+								  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/32bit")
 			elseif(CMAKE_SIZEOF_VOID_P EQUAL 8) # 64-bit
-				find_library (
-					libMTS NAMES LIBMTS.dll PATHS "Program Files\\Common Files\\MTS-ESP"
-												  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit"
-					DOC "MTS-ESP master dynamic library")
+				set (libMTS_paths "Program Files\\Common Files\\MTS-ESP"
+								  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit")
 			else()
 				if(NOT MTS-ESP_FIND_QUIETLY)
 					message (WARNING "Neither 32-bit nor 64-bit architecture could be detected!")
 				endif()
 			endif()
 		elseif(APPLE)
-			find_library (
-				libMTS
-				NAMES libMTS.dylib
-				PATHS "/Library/Application Support/MTS-ESP"
-					  "${MTS-ESP_SOURCE_DIR}/libMTS/Mac/i386_x86_64"
-					  "${MTS-ESP_SOURCE_DIR}/libMTS/Mac/x86_64_ARM"
-				DOC "MTS-ESP master dynamic library")
+			set (libMTS_name libMTS.dylib)
+			set (
+				libMTS_paths
+				"/Library/Application Support/MTS-ESP"
+				"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/i386_x86_64"
+				"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/x86_64_ARM")
 		else() # Linux
-			find_library (
-				libMTS NAMES libMTS.so PATHS "/usr/local/lib"
-											 "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64"
-				DOC "MTS-ESP master dynamic library")
+			set (libMTS_name libMTS.so)
+			set (libMTS_paths "/usr/local/lib" "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64")
 		endif()
+
+		find_library (libMTS NAMES "${libMTS_name}" PATHS "${libMTS_paths}"
+					  DOC "MTS-ESP master dynamic library")
 
 		mark_as_advanced (FORCE libMTS)
 
 		if(libMTS)
-
 			add_library (lib_mts IMPORTED UNKNOWN)
 
 			set_target_properties (lib_mts PROPERTIES IMPORTED_LOCATION "${libMTS}")
@@ -169,22 +168,23 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 	endif()
 endif()
 
-if(TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster)
-
-	set (MTS-ESP_FOUND TRUE)
-
-	add_library (MTS-ESP INTERFACE)
-
-	target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSClient>
-											 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
-
-	oranges_export_alias_target (MTS-ESP ODDSound)
-
-	oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets OPTIONAL)
+if(NOT (TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster))
+	if(MTS-ESP_FIND_REQUIRED)
+		message (FATAL_ERROR "MTS-ESP could not be located!")
+	endif()
 
 	return ()
 endif()
 
-if(MTS-ESP_FIND_REQUIRED)
-	message (FATAL_ERROR "MTS-ESP could not be located!")
-endif()
+set (MTS-ESP_FOUND TRUE)
+
+add_library (MTS-ESP INTERFACE)
+
+target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSClient>
+										 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
+
+oranges_export_alias_target (MTS-ESP ODDSound)
+
+oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets OPTIONAL)
+
+return ()

@@ -35,35 +35,42 @@ set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${CMAKE_SOURCE_DIR}/util"
 set (ORANGES_DOC_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/doc"
 	 CACHE PATH "Location to output the generated documentation files")
 
+set (dot_file_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot")
+set (graph_image_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
+
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake"
 				generate_deps_graph_image.cmake @ONLY)
 
 add_custom_target (
-	DependencyGraph
+	DependencyGraph COMMAND "${CMAKE_COMMAND}" -S "${CMAKE_SOURCE_DIR}" -B "${CMAKE_BINARY_DIR}"
+							"--graphviz=${dot_file_output}" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	VERBATIM USES_TERMINAL)
+
+add_custom_command (
+	TARGET DependencyGraph
+	POST_BUILD
 	COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	DEPENDS "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
+	DEPENDS "${dot_file_output}"
 	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
-set_target_properties (
-	DependencyGraph
-	PROPERTIES ADDITIONAL_CLEAN_FILES
-			   "${CMAKE_SOURCE_DIR}/deps_graph.png;${CMAKE_SOURCE_DIR}/deps_graph.dot")
+set_target_properties (DependencyGraph PROPERTIES ADDITIONAL_CLEAN_FILES "${dot_file_output}")
 
 if(ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 	add_custom_command (
 		TARGET DependencyGraph
 		POST_BUILD
-		COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png"
+		COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${graph_image_output}"
 				"${ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE}"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		DEPENDS "${graph_image_output}"
 		COMMENT "Copying generated dependency graph image to source tree..."
 		VERBATIM USES_TERMINAL)
 endif()
 
-install (FILES "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png" "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot"
-		 TYPE INFO OPTIONAL COMPONENT "${CMAKE_PROJECT_NAME}_Documentation")
+install (FILES "${graph_image_output}" "${dot_file_output}" TYPE INFO OPTIONAL
+		 COMPONENT "${CMAKE_PROJECT_NAME}_Documentation")
 
 set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DISPLAY_NAME"
 	 "${CMAKE_PROJECT_NAME} documentation")

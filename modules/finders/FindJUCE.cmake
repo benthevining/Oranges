@@ -50,4 +50,4 @@ oranges_fetch_repository (
 	NEVER_LOCAL)
 
 set (JUCE_FOUND TRUE)
-set (JUCE_DIR "${JUCE_SOURCE_DIR}")
+# set (JUCE_DIR "${JUCE_SOURCE_DIR}")

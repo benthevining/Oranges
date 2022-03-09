@@ -15,7 +15,6 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
-include (OrangesGraphVizConfig)
 include (LemonsFileUtils)
 
 set (ORANGES_DOXYFILE_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/Doxyfile" CACHE INTERNAL "")
