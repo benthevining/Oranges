@@ -56,6 +56,7 @@ modules/finders/FindIPP.cmake benthevining
 modules/finders/FindJUCE.cmake benthevining
 modules/finders/FindMIPP.cmake benthevining
 modules/finders/FindMTS-ESP.cmake benthevining
+modules/finders/Findcodesign.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
@@ -84,6 +85,7 @@ modules/installing/OrangesInstallSystemLibs.cmake benthevining
 modules/installing/OrangesSetDefaultCpackGenerator.cmake benthevining
 modules/installing/OrangesUninstallTarget.cmake benthevining
 modules/installing/scripts/config.pc benthevining
+modules/installing/scripts/postinst benthevining
 modules/installing/scripts/rpmPostInstall.sh benthevining
 modules/installing/scripts/uninstall.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
