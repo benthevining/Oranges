@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.15.1](http://github.com/benthevining/Oranges/compare/v1.15.0...v1.15.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* errors with exporting dependency targets from find modules ([2a27e69](http://github.com/benthevining/Oranges/commit/2a27e691d732cf245925f692985cc81ccef43c53))
+
 ## [1.15.0](http://github.com/benthevining/Oranges/compare/v1.14.0...v1.15.0) (2022-03-09)
 
 
