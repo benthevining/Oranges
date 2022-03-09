@@ -15,9 +15,7 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (ORANGES_CPPLINT NAMES cpplint)
-
-mark_as_advanced (FORCE ORANGES_CPPLINT)
+find_package (cpplint QUIET)
 
 if(NOT ORANGES_CPPLINT)
 	return ()

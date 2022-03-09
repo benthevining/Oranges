@@ -37,6 +37,10 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 include (OrangesFetchRepository)
+include (FeatureSummary)
+
+set_package_properties (MTS-ESP PROPERTIES URL "https://oddsound.com/index.php"
+						DESCRIPTION "MIDI master/client microtuning tuning library")
 
 if(MTS-ESP_FIND_QUIETLY)
 	set (quiet_flag QUIET)

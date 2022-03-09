@@ -48,16 +48,6 @@ if(APPLE)
 			WARNING
 				"You're not building for x86_64, which will cause linker errors with AAX targets! Enable universal binaries to build for AAX."
 			)
-		return ()
-	endif()
-
-	find_program (XCODE_BUILD xcodebuild)
-
-	mark_as_advanced (FORCE XCODE_BUILD)
-
-	if(NOT XCODE_BUILD)
-		message (WARNING "xcodebuild is required to build the AAXSDK, but could not be found!")
-		return ()
 	endif()
 
 	set (macBuildDir "${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild")
@@ -69,9 +59,16 @@ if(APPLE)
 		return ()
 	endif()
 
+	find_package (xcodebuild QUIET)
+
+	if(NOT TARGET Apple::xcodebuild)
+		message (WARNING "xcodebuild is required to build the AAXSDK, but could not be found!")
+		return ()
+	endif()
+
 	add_custom_target (
 		AAXSDK
-		COMMAND "${XCODE_BUILD}" -scheme AAXLibrary_libcpp ONLY_ACTIVE_ARCH=NO ARCHS=x86_64
+		COMMAND Apple::xcodebuild -scheme AAXLibrary_libcpp ONLY_ACTIVE_ARCH=NO ARCHS=x86_64
 				-configuration $<COMMAND_CONFIG:$<CONFIG>> build
 		COMMAND_EXPAND_LISTS VERBATIM
 		WORKING_DIRECTORY "${macBuildDir}"

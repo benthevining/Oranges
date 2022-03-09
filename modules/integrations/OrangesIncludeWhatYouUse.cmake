@@ -15,9 +15,7 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (ORANGES_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
-
-mark_as_advanced (FORCE ORANGES_INCLUDE_WHAT_YOU_USE)
+find_package (include-what-you-use QUIET)
 
 if(NOT ORANGES_INCLUDE_WHAT_YOU_USE)
 	return ()

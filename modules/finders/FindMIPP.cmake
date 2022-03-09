@@ -28,6 +28,10 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 include (OrangesFetchRepository)
+include (FeatureSummary)
+
+set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
+						DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
 
 if(MIPP_FIND_QUIETLY)
 	set (quiet_flag QUIET)

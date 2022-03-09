@@ -15,9 +15,7 @@ include_guard (GLOBAL)
 include (OrangesAllIntegrations)
 include (LemonsCmakeDevTools)
 
-find_program (ORANGES_CPPCHECK NAMES cppcheck)
-
-mark_as_advanced (FORCE ORANGES_CPPCHECK)
+find_package (cppcheck QUIET)
 
 if(NOT ORANGES_CPPCHECK)
 	return ()

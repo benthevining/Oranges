@@ -20,9 +20,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake"
 				"${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake" @ONLY)
 
-find_program (ORANGES_DOT dot)
-
-mark_as_advanced (FORCE ORANGES_DOT)
+find_package (dot QUIET)
 
 if(NOT ORANGES_DOT)
 	message (AUTHOR_WARNING "dot cannot be found, dependency graph images cannot be generated")

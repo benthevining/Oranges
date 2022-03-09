@@ -12,27 +12,31 @@
 
 include_guard (GLOBAL)
 
-include (OrangesAllIntegrations)
-include (LemonsCmakeDevTools)
+cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (clang-tidy QUIET)
+include (FeatureSummary)
 
-if(NOT ORANGES_CLANG_TIDY)
+set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
+						DESCRIPTION "C/C++ compiler cache")
+
+set (ccache_FOUND FALSE)
+
+find_program (ORANGES_CCACHE ccache)
+
+mark_as_advanced (FORCE ORANGES_CCACHE)
+
+if(NOT ORANGES_CCACHE)
+	if(ccache_FIND_REQUIRED)
+		message (FATAL_ERROR "ccache program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
-message (VERBOSE "Using clang-tidy!")
+add_executable (ccache IMPORTED GLOBAL)
 
-set (CMAKE_CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
-set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+set_target_properties (ccache PROPERTIES IMPORTED_LOCATION "${ORANGES_CCACHE}")
 
-add_library (OrangesClangTidy INTERFACE)
+add_executable (ccache::ccache ALIAS ccache)
 
-set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
-												   CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
-
-oranges_export_alias_target (OrangesClangTidy Oranges)
-
-target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesClangTidy)
-
-oranges_install_targets (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)
+set (ccache_FOUND TRUE)

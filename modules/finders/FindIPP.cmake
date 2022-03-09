@@ -64,6 +64,14 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+include (FeatureSummary)
+
+set_package_properties (
+	IPP PROPERTIES
+	URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
+	DESCRIPTION "Hardware-accelerated functions for signal and image processing provided by Intel")
+
 option (IPP_IGNORE_PKGCONFIG "Don't try using pkgconfig to search for the IPP libraries" OFF)
 
 mark_as_advanced (IPP_IGNORE_PKGCONFIG)
@@ -87,8 +95,6 @@ option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
 mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
 
 #
-
-include (LemonsCmakeDevTools)
 
 set (IPP_FOUND FALSE)
 

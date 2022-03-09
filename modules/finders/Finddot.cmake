@@ -12,27 +12,31 @@
 
 include_guard (GLOBAL)
 
-include (OrangesAllIntegrations)
-include (LemonsCmakeDevTools)
+cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-find_package (clang-tidy QUIET)
+include (FeatureSummary)
 
-if(NOT ORANGES_CLANG_TIDY)
+set_package_properties (dot PROPERTIES URL "https://graphviz.org/"
+						DESCRIPTION "Graph image creation tool")
+
+set (dot_FOUND FALSE)
+
+find_program (ORANGES_DOT dot)
+
+mark_as_advanced (FORCE ORANGES_DOT)
+
+if(NOT ORANGES_DOT)
+	if(dot_FIND_REQUIRED)
+		message (FATAL_ERROR "dot program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
-message (VERBOSE "Using clang-tidy!")
+add_executable (dot IMPORTED GLOBAL)
 
-set (CMAKE_CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
-set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+set_target_properties (dot PROPERTIES IMPORTED_LOCATION "${ORANGES_DOT}")
 
-add_library (OrangesClangTidy INTERFACE)
+add_executable (Graphviz::dot ALIAS dot)
 
-set_target_properties (OrangesClangTidy PROPERTIES EXPORT_COMPILE_COMMANDS ON
-												   CXX_CLANG_TIDY "${ORANGES_CLANG_TIDY}")
-
-oranges_export_alias_target (OrangesClangTidy Oranges)
-
-target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesClangTidy)
-
-oranges_install_targets (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)
+set (dot_FOUND TRUE)

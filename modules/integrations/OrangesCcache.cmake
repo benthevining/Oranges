@@ -34,9 +34,7 @@ define_property (
 	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
 	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
 
-find_program (ORANGES_CCACHE ccache)
-
-mark_as_advanced (FORCE ORANGES_CCACHE)
+find_package (ccache QUIET)
 
 if(NOT ORANGES_CCACHE)
 	message (VERBOSE "ccache could not be found.")

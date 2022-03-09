@@ -46,9 +46,11 @@ modules/cpack/scripts/rpm/rpm_settings.cmake benthevining
 modules/cpack/scripts/rpmPostInstall.sh benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
+modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
 modules/documentation/OrangesGraphVizConfig.cmake benthevining
 modules/documentation/scripts/Doxyfile benthevining
+modules/documentation/scripts/DoxygenLayout.xml benthevining
 modules/documentation/scripts/generate_deps_graph_image.cmake benthevining
 modules/finders/FindIPP.cmake benthevining
 modules/finders/FindJUCE.cmake benthevining
@@ -75,10 +77,13 @@ modules/general/lemons_AggregateTargets.cmake benthevining
 modules/general/scripts/uninstall.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining
+modules/installing/OrangesDefaultCPackSettings.cmake benthevining
+modules/installing/OrangesDefaultInstallSettings.cmake benthevining
 modules/installing/OrangesGeneratePkgConfig.cmake benthevining
 modules/installing/OrangesInstallSystemLibs.cmake benthevining
 modules/installing/OrangesSetDefaultCpackGenerator.cmake benthevining
 modules/installing/OrangesUninstallTarget.cmake benthevining
+modules/installing/scripts/config.pc benthevining
 modules/installing/scripts/rpmPostInstall.sh benthevining
 modules/installing/scripts/uninstall.cmake benthevining
 modules/integrations/LemonsAllIntegrations.cmake benthevining
@@ -125,7 +130,10 @@ toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining
 toolchains/ios/tvOS_simulator.cmake benthevining
 toolchains/ios/watchOS.cmake benthevining
+toolchains/ios/watchOS_simulator.cmake benthevining
 toolchains/ios_common.cmake benthevining
+toolchains/mac_universal_binary.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining
 toolchains/mingw/mingw_common.cmake benthevining
 util/oranges_header.txt benthevining
+util/workspace_dependencies.json benthevining

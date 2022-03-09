@@ -16,6 +16,14 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 
+find_package (wraptool QUIET)
+
+if(NOT TARGET PACE::wraptool)
+	message (WARNING "wraptool cannot be found, AAX signing disabled!")
+endif()
+
+#
+
 function(lemons_set_aax_signing_settings)
 
 	set (oneValueArgs ACCOUNT SIGNID KEYFILE KEYPASSWORD)
@@ -53,10 +61,7 @@ function(lemons_configure_aax_plugin_signing)
 	lemons_require_function_arguments (LEMONS_AAX TARGET GUID ACCOUNT)
 	lemons_check_for_unparsed_args (LEMONS_AAX)
 
-	find_program (WRAPTOOL_PROGRAM wraptool)
-
-	if(NOT WRAPTOOL_PROGRAM)
-		message (WARNING "wraptool cannot be found, AAX signing disabled!")
+	if(NOT TARGET PACE::wraptool)
 		return ()
 	endif()
 
@@ -67,7 +72,7 @@ function(lemons_configure_aax_plugin_signing)
 			TARGET ${LEMONS_AAX_TARGET}
 			POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
 			COMMAND
-				"${WRAPTOOL_PROGRAM}" ARGS sign --verbose --dsig1-compat off --account
+				PACE::wraptool ARGS sign --verbose --dsig1-compat off --account
 				"${LEMONS_AAX_ACCOUNT}" --wcguid "${LEMONS_AAX_GUID}" --signid
 				"${LEMONS_AAX_SIGNID}" --in
 				"$<TARGET_PROPERTY:${aaxTarget},JUCE_PLUGIN_ARTEFACT_FILE>" --out
@@ -80,7 +85,7 @@ function(lemons_configure_aax_plugin_signing)
 			TARGET ${LEMONS_AAX_TARGET}
 			POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
 			COMMAND
-				"${WRAPTOOL_PROGRAM}" ARGS sign --verbose --dsig1-compat off --account
+				PACE::wraptool ARGS sign --verbose --dsig1-compat off --account
 				"${LEMONS_AAX_ACCOUNT}" --keyfile "${LEMONS_AAX_KEYFILE}" --keypassword
 				"${LEMONS_AAX_KEYPASSWORD}" --wcguid "${LEMONS_AAX_GUID}" --in
 				"$<TARGET_PROPERTY:${aaxTarget},JUCE_PLUGIN_ARTEFACT_FILE>" --out

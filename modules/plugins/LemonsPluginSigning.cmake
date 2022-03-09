@@ -31,17 +31,17 @@ function(lemons_configure_plugin_signing)
 	if(TARGET ${aaxTarget} AND LEMONS_SIGN_GUID AND LEMONS_SIGN_ACCOUNT)
 		lemons_configure_aax_plugin_signing (
 			TARGET
-			${aaxTarget}
+			"${aaxTarget}"
 			GUID
-			${LEMONS_SIGN_GUID}
+			"${LEMONS_SIGN_GUID}"
 			ACCOUNT
-			${LEMONS_SIGN_ACCOUNT}
+			"${LEMONS_SIGN_ACCOUNT}"
 			SIGNID
-			${LEMONS_SIGN_SIGNID}
+			"${LEMONS_SIGN_SIGNID}"
 			KEYFILE
-			${LEMONS_SIGN_KEYFILE}
+			"${LEMONS_SIGN_KEYFILE}"
 			KEYPASSWORD
-			${LEMONS_SIGN_KEYPASSWORD})
+			"${LEMONS_SIGN_KEYPASSWORD}")
 	endif()
 
 	get_target_property (pluginFormats ${LEMONS_SIGN_TARGET} JUCE_FORMATS)
@@ -57,21 +57,21 @@ function(lemons_configure_plugin_signing)
 
 		if(APPLE)
 
-			find_program (CODESIGN codesign)
+			find_package (codesign QUIET)
 
-			if(NOT CODESIGN)
+			if(NOT TARGET Apple::codesign)
 				message (WARNING "Codesign cannot be found, plugin signing cannot be configured!")
 				return ()
 			endif()
 
 			add_custom_command (
 				TARGET ${formatTarget} POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-				COMMAND ${CODESIGN} -s - --force "$<TARGET_BUNDLE_DIR:${formatTarget}>"
+				COMMAND Apple::codesign -s - --force "$<TARGET_BUNDLE_DIR:${formatTarget}>"
 				COMMENT "Signing ${formatTarget}...")
 
 			add_custom_command (
 				TARGET ${formatTarget} POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-				COMMAND ${CODESIGN} -verify "$<TARGET_BUNDLE_DIR:${formatTarget}>"
+				COMMAND Apple::codesign -verify "$<TARGET_BUNDLE_DIR:${formatTarget}>"
 				COMMENT "Verifying signing of ${formatTarget}...")
 
 		elseif(WIN32)
