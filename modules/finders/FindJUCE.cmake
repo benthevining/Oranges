@@ -36,6 +36,10 @@ mark_as_advanced (FORCE LEMONS_JUCE_BRANCH)
 
 include (OrangesFetchRepository)
 
+if(JUCE_FIND_QUIETLY)
+	set (quiet_flag QUIET)
+endif()
+
 oranges_fetch_repository (
 	NAME
 	JUCE
@@ -47,7 +51,8 @@ oranges_fetch_repository (
 	"JUCE_ENABLE_MODULE_SOURCE_GROUPS ON"
 	"JUCE_BUILD_EXAMPLES OFF"
 	"JUCE_BUILD_EXTRAS OFF"
-	NEVER_LOCAL)
+	NEVER_LOCAL
+	${quiet_flag})
 
 set (JUCE_FOUND TRUE)
 # set (JUCE_DIR "${JUCE_SOURCE_DIR}")

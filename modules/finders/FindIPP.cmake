@@ -235,7 +235,7 @@ endfunction()
 
 #
 
-if(All IN LISTS ${IPP_FIND_COMPONENTS})
+if(All IN_LIST IPP_FIND_COMPONENTS)
 	set (
 		IPP_FIND_COMPONENTS
 		CORE

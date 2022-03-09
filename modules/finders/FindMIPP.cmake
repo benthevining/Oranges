@@ -29,6 +29,10 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (LemonsCmakeDevTools)
 include (OrangesFetchRepository)
 
+if(MIPP_FIND_QUIETLY)
+	set (quiet_flag QUIET)
+endif()
+
 oranges_fetch_repository (
 	NAME
 	MIPP
@@ -37,7 +41,8 @@ oranges_fetch_repository (
 	GIT_TAG
 	origin/master
 	DOWNLOAD_ONLY
-	NEVER_LOCAL)
+	NEVER_LOCAL
+	${quiet_flag})
 
 add_library (MIPP INTERFACE)
 

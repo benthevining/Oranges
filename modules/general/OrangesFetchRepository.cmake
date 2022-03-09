@@ -21,15 +21,15 @@ include (FetchContent)
 
 #[[
 oranges_fetch_repository (NAME <name>
-						  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <> | BITBUCKET_REPOSITORY
-						  GIT_TAG <ref>
+						  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <> | BITBUCKET_REPOSITORY <>
+						  [GIT_TAG <ref>]
 						  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
 						  [CMAKE_SUBDIR <rel_path>]
-						  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value"...]
+						  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
 						  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
-						  [GIT_OPTIONS "Option1=Value" "Option2=Value"...])
+						  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
 
-Output variables:
+Output variables (set in the scope of the caller):
 - <name>_SOURCE_DIR
 - <name>_BINARY_DIR
 
@@ -41,9 +41,11 @@ cache option ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST will redirect this command t
 
 #
 
-set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache" CACHE INTERNAL "")
+set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache"
+	 CACHE PATH "Directory under which to collect all populated content")
 
-set (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST OFF CACHE BOOL "")
+set (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST OFF
+	 CACHE BOOL "Try local find_package before fetching dependencies from git")
 
 #
 
@@ -61,29 +63,9 @@ function(oranges_fetch_repository)
 		find_package ("${ORANGES_ARG_NAME}" QUIET)
 
 		if(${ORANGES_ARG_NAME}_FOUND)
-			set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${ORANGES_ARG_NAME}_DIR" PARENT_SCOPE)
+			set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${${ORANGES_ARG_NAME}_DIR}" PARENT_SCOPE)
 			return ()
 		endif()
-	endif()
-
-	if(NOT ORANGES_ARG_GIT_REPOSITORY AND NOT ORANGES_ARG_GITHUB_REPOSITORY AND NOT
-																				GITLAB_REPOSITORY
-	   AND NOT BITBUCKET_REPOSITORY)
-		message (
-			FATAL_ERROR
-				"One of GIT_REPOSITORY, GITHUB_REPOSITORY, GITLAB_REPOSITORY, or BITBUCKET_REPOSITORY must be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
-			)
-	endif()
-
-	if(ORANGES_ARG_DOWNLOAD_ONLY AND ORANGES_ARG_CMAKE_SUBDIR)
-		message (
-			AUTHOR_WARNING
-				"DOWNLOAD_ONLY and CMAKE_SUBDIR cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
-			)
-	endif()
-
-	if(ORANGES_ARG_CMAKE_SUBDIR)
-		set (subdir_flag SOURCE_SUBDIR "${ORANGES_ARG_CMAKE_SUBDIR}")
 	endif()
 
 	if(ORANGES_ARG_GIT_REPOSITORY)
@@ -94,6 +76,15 @@ function(oranges_fetch_repository)
 		set (git_repo_flag "https://gitlab.com/${ORANGES_ARG_GITLAB_REPOSITORY}.git")
 	elseif(ORANGES_ARG_BITBUCKET_REPOSITORY)
 		set (git_repo_flag "https://bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git")
+	else()
+		message (
+			FATAL_ERROR
+				"One of GIT_REPOSITORY, GITHUB_REPOSITORY, GITLAB_REPOSITORY, or BITBUCKET_REPOSITORY must be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
+			)
+	endif()
+
+	if(ORANGES_ARG_CMAKE_SUBDIR)
+		set (subdir_flag SOURCE_SUBDIR "${ORANGES_ARG_CMAKE_SUBDIR}")
 	endif()
 
 	if(NOT ORANGES_ARG_FULL)
@@ -131,39 +122,55 @@ function(oranges_fetch_repository)
 		"${ORANGES_ARG_NAME}" GIT_REPOSITORY "${git_repo_flag}"
 		${git_tag} ${shallow_flag} ${progress_flag} ${subdir_flag} ${git_options} ${git_strategy})
 
-	FetchContent_GetProperties ("${ORANGES_ARG_NAME}")
+	_oranges_populate_repository ("${ORANGES_ARG_NAME}" "${ORANGES_ARG_DOWNLOAD_ONLY}"
+								  "${ORANGES_ARG_CMAKE_OPTIONS}" "${ORANGES_ARG_CMAKE_SUBDIR}")
 
-	if(NOT ${${ORANGES_ARG_NAME}_POPULATED})
+	set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${pkg_source_dir}" PARENT_SCOPE)
+	set ("${ORANGES_ARG_NAME}_BINARY_DIR" "${pkg_bin_dir}" PARENT_SCOPE)
+endfunction()
 
-		if(FETCHCONTENT_SOURCE_DIR_${ORANGES_ARG_NAME})
-			set (${ORANGES_ARG_NAME}_SOURCE_DIR "${FETCHCONTENT_SOURCE_DIR_${ORANGES_ARG_NAME}}")
-		else()
-			FetchContent_Populate ("${ORANGES_ARG_NAME}")
-		endif()
+#
 
-		if(NOT ORANGES_ARG_DOWNLOAD_ONLY AND EXISTS
-											 "${${ORANGES_ARG_NAME}_SOURCE_DIR}/CMakeLists.txt")
-			foreach(option ORANGES_ARG_CMAKE_OPTIONS)
-				_oranges_parse_package_option ("${option}")
-				set ("${OPTION_KEY}" "${OPTION_VALUE}")
-			endforeach()
+function(_oranges_populate_repository pkg_name download_only cmake_options cmake_subdir)
 
-			if(ORANGES_ARG_EXCLUDE_FROM_ALL)
-				set (exclude_flag EXCLUDE_FROM_ALL)
-			endif()
+	FetchContent_GetProperties ("${pkg_name}" POPULATED fc_populated SOURCE_DIR pkg_source_dir
+								BINARY_DIR pkg_bin_dir)
 
-			add_subdirectory ("${${ORANGES_ARG_NAME}_SOURCE_DIR}"
-							  "${${ORANGES_ARG_NAME}_BINARY_DIR}" ${exclude_flag})
-		endif()
+	if(fc_populated)
+		set (pkg_source_dir "${pkg_source_dir}" PARENT_SCOPE)
+		set (pkg_bin_dir "${pkg_bin_dir}" PARENT_SCOPE)
+
+		return ()
 	endif()
 
-	set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${${ORANGES_ARG_NAME}_SOURCE_DIR}" PARENT_SCOPE)
+	FetchContent_Populate ("${pkg_name}")
 
-	if(ORANGES_ARG_DOWNLOAD_ONLY)
-		set ("${ORANGES_ARG_NAME}_BINARY_DIR" "" PARENT_SCOPE)
+	FetchContent_GetProperties ("${pkg_name}" SOURCE_DIR pkg_source_dir BINARY_DIR pkg_bin_dir)
+
+	if(cmake_subdir)
+		set (pkg_cmakelists "${pkg_source_dir}/${cmake_subdir}/CMakeLists.txt")
 	else()
-		set ("${ORANGES_ARG_NAME}_BINARY_DIR" "${depname_BINARY_DIR}" PARENT_SCOPE)
+		set (pkg_cmakelists "${pkg_source_dir}/CMakeLists.txt")
 	endif()
+
+	if(download_only OR NOT EXISTS "${pkg_cmakelists}")
+		set (pkg_source_dir "${pkg_source_dir}" PARENT_SCOPE)
+		set (pkg_bin_dir "${pkg_bin_dir}" PARENT_SCOPE)
+
+		return ()
+	endif()
+
+	foreach(option ${cmake_options})
+		_oranges_parse_package_option ("${option}")
+		set ("${OPTION_KEY}" "${OPTION_VALUE}")
+	endforeach()
+
+	if(ORANGES_ARG_EXCLUDE_FROM_ALL)
+		set (exclude_flag EXCLUDE_FROM_ALL)
+	endif()
+
+	add_subdirectory ("${pkg_source_dir}" "${pkg_bin_dir}" ${exclude_flag})
+
 endfunction()
 
 #

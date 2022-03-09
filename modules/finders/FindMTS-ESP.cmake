@@ -38,6 +38,10 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (LemonsCmakeDevTools)
 include (OrangesFetchRepository)
 
+if(MTS-ESP_FIND_QUIETLY)
+	set (quiet_flag QUIET)
+endif()
+
 oranges_fetch_repository (
 	NAME
 	MTS-ESP
@@ -46,7 +50,8 @@ oranges_fetch_repository (
 	GIT_TAG
 	origin/master
 	DOWNLOAD_ONLY
-	NEVER_LOCAL)
+	NEVER_LOCAL
+	${quiet_flag})
 
 set (MTS-ESP_FOUND FALSE)
 
