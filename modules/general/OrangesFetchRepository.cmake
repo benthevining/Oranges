@@ -114,8 +114,6 @@ function(oranges_fetch_repository)
 		else()
 			set (git_strategy GIT_REMOTE_UPDATE_STRATEGY "${ORANGES_ARG_GIT_STRATEGY}")
 		endif()
-	else()
-		set (git_strategy GIT_REMOTE_UPDATE_STRATEGY REBASE_CHECKOUT)
 	endif()
 
 	FetchContent_Declare (
