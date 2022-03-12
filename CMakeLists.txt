@@ -26,6 +26,9 @@ enable_testing ()
 set (ORANGES_INSTALL_DEST share/cmake/Oranges
 	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
+set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME Oranges)
+set (CMAKE_FOLDER Oranges)
+
 set (CPM_Oranges_SOURCE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (Oranges_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 

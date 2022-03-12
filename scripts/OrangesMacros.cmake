@@ -48,7 +48,6 @@ set (orangesModulePaths "")
 
 file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
 
-# TO DO build this up using directory properties instead...?
 foreach(child ${children})
 	_oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
 endforeach()
@@ -63,5 +62,3 @@ set (ORANGES_CMAKE_MODULE_PATH "${orangesModulePaths}" CACHE INTERNAL "")
 list (APPEND CMAKE_MODULE_PATH "${orangesModulePaths}")
 
 list (REMOVE_DUPLICATES CMAKE_MODULE_PATH)
-
-set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" CACHE INTERNAL "")
