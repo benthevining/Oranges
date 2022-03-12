@@ -35,4 +35,4 @@ oranges_export_alias_target (OrangesCppLint Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppLint)
 
-oranges_install_targets (TARGETS OrangesCppLint EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesCppLint EXPORT OrangesTargets)

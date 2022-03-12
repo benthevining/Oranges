@@ -35,4 +35,4 @@ oranges_export_alias_target (OrangesClangTidy Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesClangTidy)
 
-oranges_install_targets (TARGETS OrangesClangTidy EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesClangTidy EXPORT OrangesTargets)

@@ -22,4 +22,4 @@ include (OrangesIncludeWhatYouUse)
 
 oranges_export_alias_target (OrangesAllIntegrations Oranges)
 
-install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets OPTIONAL)
+install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets)

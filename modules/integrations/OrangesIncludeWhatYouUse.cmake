@@ -34,4 +34,4 @@ oranges_export_alias_target (OrangesIncludeWhatYouUse Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesIncludeWhatYouUse)
 
-oranges_install_targets (TARGETS OrangesIncludeWhatYouUse EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesIncludeWhatYouUse EXPORT OrangesTargets)

@@ -103,4 +103,4 @@ oranges_export_alias_target (OrangesCcache Oranges)
 
 target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCcache)
 
-oranges_install_targets (TARGETS OrangesCcache EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS OrangesCcache EXPORT OrangesTargets)
