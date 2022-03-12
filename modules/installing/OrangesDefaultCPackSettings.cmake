@@ -79,16 +79,17 @@ set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "${${PROJECT_NAME}_DESCRIPTION}"
 #
 
 find_file (
-	license_file
+	ORANGES_CPACK_LICENSE_FILE
 	NAMES LICENSE.txt LICENSE.md LICENSE COPYRIGHT.txt COPYRIGHT.md COPYRIGHT
 	PATHS "${PROJECT_SOURCE_DIR}"
 	DOC "Path to project license file"
 	NO_DEFAULT_PATH)
 
-if(license_file AND EXISTS "${license_file}")
-	set (CPACK_RESOURCE_FILE_LICENSE "${license_file}" CACHE PATH
-															 "License file for the CPack package")
+mark_as_advanced (FORCE ORANGES_CPACK_LICENSE_FILE)
 
+if(ORANGES_CPACK_LICENSE_FILE AND EXISTS "${ORANGES_CPACK_LICENSE_FILE}")
+	set (CPACK_RESOURCE_FILE_LICENSE "${ORANGES_CPACK_LICENSE_FILE}"
+		 CACHE FILEPATH "License file for the CPack package")
 elseif((NOT CPACK_RESOURCE_FILE_LICENSE) OR (NOT EXISTS "${CPACK_RESOURCE_FILE_LICENSE}"))
 	message (
 		AUTHOR_WARNING
@@ -99,18 +100,21 @@ endif()
 #
 
 find_file (
-	readme_file
+	ORANGES_CPACK_README_FILE
 	NAMES README README.txt README.md readme readme.txt readme.md
 	PATHS "${PROJECT_SOURCE_DIR}"
 	DOC "Path to project Readme/description file"
 	NO_DEFAULT_PATH)
 
-if(readme_file AND EXISTS "${readme_file}")
+mark_as_advanced (FORCE ORANGES_CPACK_README_FILE)
 
-	set (CPACK_PACKAGE_DESCRIPTION_FILE "${readme_file}"
-		 CACHE PATH "Description file for the CPack package")
+if(ORANGES_CPACK_README_FILE AND EXISTS "${ORANGES_CPACK_README_FILE}")
 
-	set (CPACK_RESOURCE_FILE_README "${readme_file}" CACHE PATH "Readme file for the CPack package")
+	set (CPACK_PACKAGE_DESCRIPTION_FILE "${ORANGES_CPACK_README_FILE}"
+		 CACHE FILEPATH "Description file for the CPack package")
+
+	set (CPACK_RESOURCE_FILE_README "${ORANGES_CPACK_README_FILE}"
+		 CACHE FILEPATH "Readme file for the CPack package")
 
 elseif((NOT CPACK_PACKAGE_DESCRIPTION_FILE) OR (NOT EXISTS "${CPACK_PACKAGE_DESCRIPTION_FILE}"))
 	message (

@@ -38,16 +38,32 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 if(APPLE)
 	if(IOS)
-		include ("${CMAKE_CURRENT_LIST_DIR}/scripts/lemons_ios_settings.cmake")
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE STRING "Minimum iOS deployment target")
+
+		enable_language (OBJCXX)
+		enable_language (OBJC)
+
+		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
+
+		mark_as_advanced (FORCE ORANGES_IOS_SIMULATOR)
+
+		if(ORANGES_IOS_SIMULATOR)
+			set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")
+			set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
+		else()
+			set (IOS_PLATFORM_LOCATION "iPhoneOS.platform")
+			set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphoneos")
+		endif()
 	else()
-		include ("${CMAKE_CURRENT_LIST_DIR}/scripts/lemons_macos_settings.cmake")
+		set (CMAKE_OSX_DEPLOYMENT_TARGET "10.11" CACHE STRING "Minimum MacOS deployment target")
 	endif()
+
+	mark_as_advanced (CMAKE_OSX_DEPLOYMENT_TARGET FORCE)
 else()
 	set (CMAKE_INSTALL_RPATH $ORIGIN)
 
-	if(WIN32)
-		include ("${CMAKE_CURRENT_LIST_DIR}/scripts/lemons_windows_settings.cmake")
-	else()
+	if(UNIX AND NOT WIN32)
+		# Linux settings
 		set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
 		set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
 

@@ -49,7 +49,7 @@ include (lemons_AggregateTargets)
 
 option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF)
 
-mark_as_advanced (LEMONS_INCLUDE_PRIVATE_SDKS)
+mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
 
 if(LEMONS_INCLUDE_PRIVATE_SDKS OR CPM_PrivateSDKs_SOURCE OR DEFINED ENV{LEMONS_PRIVATE_SDKS})
 	include (LemonsAddPrivateSDKs)

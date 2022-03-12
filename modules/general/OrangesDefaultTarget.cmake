@@ -172,20 +172,20 @@ if(APPLE)
 		)
 
 	if(IOS)
-		option (LEMONS_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
+		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
 		option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
 
 		if(LEMONS_IOS_COMBINED)
-			set (LEMONS_IOS_SIMULATOR ON)
+			set (ORANGES_IOS_SIMULATOR ON)
 		endif()
 
-		if(LEMONS_IOS_SIMULATOR OR LEMONS_IOS_COMBINED)
+		if(ORANGES_IOS_SIMULATOR OR LEMONS_IOS_COMBINED)
 			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR TRUE)
 		else()
 			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
 		endif()
 
-		if(LEMONS_IOS_SIMULATOR AND NOT LEMONS_IOS_COMBINED)
+		if(ORANGES_IOS_SIMULATOR AND NOT LEMONS_IOS_COMBINED)
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
 		else()
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES

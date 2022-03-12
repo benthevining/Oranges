@@ -23,6 +23,11 @@ project (
 
 enable_testing ()
 
+if(PROJECT_IS_TOP_LEVEL)
+	enable_language (CXX)
+	enable_language (C)
+endif()
+
 set (ORANGES_INSTALL_DEST share/cmake/Oranges
 	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
