@@ -72,24 +72,17 @@ set_package_properties (
 	URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
 	DESCRIPTION "Hardware-accelerated functions for signal and image processing provided by Intel")
 
-option (IPP_IGNORE_PKGCONFIG "Don't try using pkgconfig to search for the IPP libraries" OFF)
+find_package (PkgConfig QUIET)
 
-mark_as_advanced (IPP_IGNORE_PKGCONFIG)
+pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
 
-if(NOT IPP_IGNORE_PKGCONFIG)
-	find_package (PkgConfig)
+if(IPP_FOUND AND TARGET PkgConfig::IPP)
+	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
 
-	pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
+	oranges_install_targets (TARGETS Intel::IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
 
-	if(IPP_FOUND AND TARGET PkgConfig::IPP)
-		add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
-
-		oranges_install_targets (TARGETS Intel::IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX
-								 Intel)
-
-		set (IPP_FOUND TRUE)
-		return ()
-	endif()
+	set (IPP_FOUND TRUE)
+	return ()
 endif()
 
 option (IPP_STATIC "Use static IPP libraries" ON)

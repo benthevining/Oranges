@@ -58,6 +58,7 @@ function(oranges_fetch_repository)
 	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG NAME)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST AND NOT ORANGES_ARG_NEVER_LOCAL)
 		find_package ("${ORANGES_ARG_NAME}" QUIET)

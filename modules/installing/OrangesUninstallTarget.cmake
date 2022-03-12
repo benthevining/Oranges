@@ -15,6 +15,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if(TARGET uninstall)
+	message (AUTHOR_WARNING "uninstall target already exists!")
 	return ()
 endif()
 
@@ -28,5 +29,8 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/uninstall.cmake"
 				"${CMAKE_BINARY_DIR}/uninstall.cmake" @ONLY)
 
 add_custom_target (
-	uninstall COMMAND "${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
-	COMMENT "Running uninstall..." VERBATIM USES_TERMINAL)
+	uninstall
+	COMMAND "${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/uninstall.cmake"
+	COMMENT "Running uninstall..."
+	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+	VERBATIM USES_TERMINAL)

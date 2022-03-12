@@ -67,6 +67,7 @@ function(oranges_install_targets)
 	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "${oneValueArgs}" "TARGETS" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG EXPORT TARGETS)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(NOT ORANGES_ARG_RUNTIME_COMPONENT)
 		if(ORANGES_ARG_COMPONENT_PREFIX)
@@ -143,6 +144,7 @@ function(oranges_add_target_headers)
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET SCOPE)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(NOT TARGET "${ORANGES_ARG_TARGET}")
 		message (

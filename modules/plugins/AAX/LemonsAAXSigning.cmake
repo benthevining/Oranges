@@ -31,6 +31,7 @@ function(lemons_set_aax_signing_settings)
 	cmake_parse_arguments (LEMONS_AAX "FORCE" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_check_for_unparsed_args (LEMONS_AAX)
+	lemons_check_for_unparsed_args (LEMONS_AAX)
 
 	if(LEMONS_AAX_FORCE)
 		set (aax_force FORCE)

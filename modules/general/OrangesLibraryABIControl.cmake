@@ -38,6 +38,7 @@ function(oranges_add_library_abi_control)
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(NOT ORANGES_ARG_HEADER)
 		set (ORANGES_ARG_HEADER "${ORANGES_ARG_TARGET}_export.h")

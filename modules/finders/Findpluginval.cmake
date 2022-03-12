@@ -96,6 +96,7 @@ function(pluginval_add_plugin_test)
 	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(NOT ORANGES_ARG_NAME)
 		set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}.pluginval")

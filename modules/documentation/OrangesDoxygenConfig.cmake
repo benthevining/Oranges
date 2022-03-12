@@ -45,6 +45,7 @@ function(oranges_create_doxygen_target)
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG INPUT_PATHS)
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	foreach(input_path ${ORANGES_ARG_INPUT_PATHS})
 		lemons_make_path_absolute (VAR input_path BASE_DIR "${PROJECT_SOURCE_DIR}")

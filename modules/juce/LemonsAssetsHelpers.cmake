@@ -45,6 +45,7 @@ function(lemons_add_resources_folder)
 	cmake_parse_arguments (LEMONS_RSRC_FLDR "SHIM" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_require_function_arguments (LEMONS_RSRC_FLDR TARGET ASSET_FOLDER)
+	lemons_check_for_unparsed_args (LEMONS_RSRC_FLDR)
 
 	lemons_make_path_absolute (VAR LEMONS_RSRC_FLDR_ASSET_FOLDER BASE_DIR "${PROJECT_SOURCE_DIR}")
 
