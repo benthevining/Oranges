@@ -178,6 +178,10 @@ function(oranges_add_target_headers)
 		endif()
 	endforeach()
 
+	target_include_directories (
+		"${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
+
 endfunction()
 
 #
