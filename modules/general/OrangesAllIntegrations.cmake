@@ -12,27 +12,22 @@
 
 include_guard (GLOBAL)
 
-include (OrangesAllIntegrations)
-include (LemonsCmakeDevTools)
-
+find_package (ccache QUIET)
+find_package (clang-tidy QUIET)
 find_package (cppcheck QUIET)
+find_package (cpplint QUIET)
+find_package (include-what-you-use QUIET)
 
-if(NOT ORANGES_CPPCHECK)
-	return ()
-endif()
+add_library (OrangesAllIntegrations INTERFACE)
 
-message (VERBOSE "Using cppcheck!")
+target_link_libraries (
+	OrangesAllIntegrations
+	INTERFACE $<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>
+			  $<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>
+			  $<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>
+			  $<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>
+			  $<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>)
 
-set (CMAKE_CXX_CPPCHECK "${ORANGES_CPPCHECK};--suppress=preprocessorErrorDirective")
-set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+oranges_export_alias_target (OrangesAllIntegrations Oranges)
 
-add_library (OrangesCppCheck INTERFACE)
-
-set_target_properties (OrangesCppCheck PROPERTIES EXPORT_COMPILE_COMMANDS ON CXX_CPPCHECK
-																			 "${ORANGES_CPPCHECK}")
-
-oranges_export_alias_target (OrangesCppCheck Oranges)
-
-target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCppCheck)
-
-oranges_install_targets (TARGETS OrangesCppCheck EXPORT OrangesTargets)
+install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets)

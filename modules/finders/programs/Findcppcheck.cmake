@@ -15,17 +15,18 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (FeatureSummary)
+include (LemonsCmakeDevTools)
 
 set_package_properties (cppcheck PROPERTIES URL "https://cppcheck.sourceforge.io/"
 						DESCRIPTION "C++ code linter")
 
 set (cppcheck_FOUND FALSE)
 
-find_program (ORANGES_CPPCHECK NAMES cppcheck)
+find_program (CPPCHECK NAMES cppcheck)
 
-mark_as_advanced (FORCE ORANGES_CPPCHECK)
+mark_as_advanced (FORCE CPPCHECK)
 
-if(NOT ORANGES_CPPCHECK)
+if(NOT CPPCHECK)
 	if(cppcheck_FIND_REQUIRED)
 		message (FATAL_ERROR "cppcheck program cannot be found!")
 	endif()
@@ -33,10 +34,26 @@ if(NOT ORANGES_CPPCHECK)
 	return ()
 endif()
 
+if(NOT cppcheck_FIND_QUIETLY)
+	message (VERBOSE "Using cppcheck!")
+endif()
+
 add_executable (cppcheck IMPORTED GLOBAL)
 
-set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${ORANGES_CPPCHECK}")
+set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${CPPCHECK}")
 
 add_executable (cppcheck::cppcheck ALIAS cppcheck)
 
 set (cppcheck_FOUND TRUE)
+
+set (CMAKE_CXX_CPPCHECK "${CPPCHECK};--suppress=preprocessorErrorDirective" CACHE STRING "")
+set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+add_library (cppcheck-interface INTERFACE)
+
+set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON CXX_CPPCHECK
+																				"${CPPCHECK}")
+
+oranges_export_alias_target (cppcheck-interface cppcheck)
+
+oranges_install_targets (TARGETS cppcheck-interface EXPORT OrangesTargets)

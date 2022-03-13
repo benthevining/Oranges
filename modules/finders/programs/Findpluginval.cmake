@@ -102,17 +102,61 @@ function(pluginval_add_plugin_test)
 		set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}.pluginval")
 	endif()
 
+	#
+
 	if(NOT ORANGES_ARG_LEVEL)
 		set (ORANGES_ARG_LEVEL 5)
 	endif()
 
+	set (PLUGINVAL_LEVEL "${ORANGES_ARG_LEVEL}" CACHE STRING "Pluginval testing intensity level")
+
+	set_property (CACHE PLUGINVAL_LEVEL PROPERTY STRINGS "1;2;3;4;5;6;7;8;9;10")
+
+	#
+
 	if(ORANGES_ARG_VERBOSE)
+		set (PLUGINVAL_VERBOSE TRUE CACHE BOOL "Enable verbose testing output")
+	else()
+		set (PLUGINVAL_VERBOSE FALSE CACHE BOOL "Enable verbose testing output")
+	endif()
+
+	if(PLUGINVAL_VERBOSE)
 		set (verbose_flag --verbose)
 	endif()
 
+	#
+
+	set (PLUGINVAL_SAMPLERATES "${ORANGES_ARG_SAMPLERATES}" CACHE STRING "Testing samplerates")
+
+	list (JOIN "${PLUGINVAL_SAMPLERATES}" "," sr_list)
+
+	if(sr_list)
+		set (samplerates_flag --sample-rates "${sr_list}")
+	endif()
+
+	#
+
+	set (PLUGINVAL_BLOCKSIZES "${ORANGES_ARG_BLOCKSIZES}" CACHE STRING "Testing blocksizes")
+
+	list (JOIN "${ORANGES_ARG_BLOCKSIZES}" "," blk_list)
+
+	if(blk_list)
+		set (blocksizes_flag --block-sizes "${blk_list}")
+	endif()
+
+	#
+
 	if(ORANGES_ARG_NO_GUI)
+		set (PLUGINVAL_DISABLE_GUI TRUE CACHE BOOL "Disable GUI tests")
+	else()
+		set (PLUGINVAL_DISABLE_GUI FALSE CACHE BOOL "Disable GUI tests")
+	endif()
+
+	if(PLUGINVAL_DISABLE_GUI)
 		set (no_gui_flag --skip-gui-tests)
 	endif()
+
+	#
 
 	if(ORANGES_ARG_LOG_DIR)
 		set (log_dir_flag --output-dir "${ORANGES_ARG_LOG_DIR}")
@@ -126,21 +170,12 @@ function(pluginval_add_plugin_test)
 		set (random_flag --randomise)
 	endif()
 
-	if(ORANGES_ARG_SAMPLERATES)
-		list (JOIN "${ORANGES_ARG_SAMPLERATES}" "," sr_list)
-		set (samplerates_flag --sample-rates "${sr_list}")
-	endif()
-
-	if(ORANGES_ARG_BLOCKSIZES)
-		list (JOIN "${ORANGES_ARG_BLOCKSIZES}" "," blk_list)
-		set (blocksizes_flag --block-sizes "${ORANGES_ARG_BLOCKSIZES}")
-	endif()
-
 	add_test (
 		NAME "${ORANGES_ARG_NAME}"
 		COMMAND
-			Tracktion::pluginval --strictness-level "${ORANGES_ARG_LEVEL}" --validate
-			$<TARGET_FILE:${ORANGES_ARG_TARGET}> ${no_gui_flag} ${log_dir_flag} ${verbose_flag}
-			${samplerates_flag} ${blocksizes_flag} ${repeats_flag} ${random_flag})
+			Tracktion::pluginval --strictness-level "${PLUGINVAL_LEVEL}" --validate
+			$<TARGET_PROPERTY:${ORANGES_ARG_TARGET},JUCE_PLUGIN_ARTEFACT_FILE> ${no_gui_flag}
+			${log_dir_flag} ${verbose_flag} ${samplerates_flag} ${blocksizes_flag} ${repeats_flag}
+			${random_flag})
 
 endfunction()

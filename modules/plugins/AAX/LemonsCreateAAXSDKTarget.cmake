@@ -50,30 +50,19 @@ if(APPLE)
 			)
 	endif()
 
-	set (macBuildDir "${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild")
+	find_package (xcodebuild REQUIRED QUIET)
 
-	set (xcode_proj_file "${macBuildDir}/AAXLibrary.xcodeproj")
-
-	if(NOT EXISTS "${xcode_proj_file}")
-		message (AUTHOR_WARNING "${xcode_proj_file} could not be found, AAX SDK cannot be built!")
-		return ()
-	endif()
-
-	find_package (xcodebuild QUIET)
-
-	if(NOT TARGET Apple::xcodebuild)
-		message (WARNING "xcodebuild is required to build the AAXSDK, but could not be found!")
-		return ()
-	endif()
-
-	add_custom_target (
+	include_external_xcode_project (
+		TARGET
 		AAXSDK
-		COMMAND Apple::xcodebuild -scheme AAXLibrary_libcpp ONLY_ACTIVE_ARCH=NO ARCHS=x86_64
-				-configuration $<COMMAND_CONFIG:$<CONFIG>> build
-		COMMAND_EXPAND_LISTS VERBATIM
-		WORKING_DIRECTORY "${macBuildDir}"
-		COMMENT "Building AAX SDK..."
-		COMMAND_ECHO STDOUT)
+		DIRECTORY
+		"${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild"
+		SCHEME
+		AAXLibrary_libcpp
+		EXTRA_ARGS
+		"-arch x86_64 ONLY_ACTIVE_ARCH=NO"
+		COMMENT
+		"Building AAX SDK...")
 
 	set_target_properties (AAXSDK PROPERTIES OSX_ARCHITECTURES x86_64)
 

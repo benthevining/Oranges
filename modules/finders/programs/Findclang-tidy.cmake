@@ -15,17 +15,18 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (FeatureSummary)
+include (LemonsCmakeDevTools)
 
 set_package_properties (clang-tidy PROPERTIES URL "https://clang.llvm.org/extra/clang-tidy/"
 						DESCRIPTION "C++ code linter")
 
 set (clang-tidy_FOUND FALSE)
 
-find_program (ORANGES_CLANG_TIDY NAMES clang-tidy)
+find_program (CLANG_TIDY NAMES clang-tidy)
 
-mark_as_advanced (FORCE ORANGES_CLANG_TIDY)
+mark_as_advanced (FORCE CLANG_TIDY)
 
-if(NOT ORANGES_CLANG_TIDY)
+if(NOT CLANG_TIDY)
 	if(clang-tidy_FIND_REQUIRED)
 		message (FATAL_ERROR "clang-tidy program cannot be found!")
 	endif()
@@ -33,10 +34,26 @@ if(NOT ORANGES_CLANG_TIDY)
 	return ()
 endif()
 
+if(NOT clang-tidy_FIND_QUIETLY)
+	message (VERBOSE "Using clang-tidy!")
+endif()
+
 add_executable (clang-tidy IMPORTED GLOBAL)
 
-set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${ORANGES_CLANG_TIDY}")
+set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${CLANG_TIDY}")
 
 add_executable (Clang::clang-tidy ALIAS clang-tidy)
 
 set (clang-tidy_FOUND TRUE)
+
+set (CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY}" CACHE STRING "")
+set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+add_library (clang-tidy-interface INTERFACE)
+
+set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON CXX_CLANG_TIDY
+																				  "${CLANG_TIDY}")
+
+oranges_export_alias_target (clang-tidy-interface Clang)
+
+oranges_install_targets (TARGETS clang-tidy-interface EXPORT OrangesTargets)

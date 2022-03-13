@@ -10,50 +10,58 @@
 #
 # ======================================================================================
 
-#[[
-Configures the ccache compiler cache for use with CMake projects.
-
-## Include-time actions:
-Configures a compiler-launcher script that uses ccache to execute CMake's generated compiler command line. Does nothing if ccache cannot be located at configure-time.
-
-## Note
-
-If the `LEMONS_ENABLE_INTEGRATIONS` option is ON, then this module will be included by Lemons, when Lemons is added as a subdirectory.
-
-]]
-
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (OrangesAllIntegrations)
+include (FeatureSummary)
 include (LemonsCmakeDevTools)
+
+set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
+						DESCRIPTION "C/C++ compiler cache")
 
 define_property (
 	TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
 	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
 	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
 
-find_package (ccache QUIET)
+set (ccache_FOUND FALSE)
 
-if(NOT ORANGES_CCACHE)
-	message (VERBOSE "ccache could not be found.")
+find_program (CCACHE ccache)
+
+mark_as_advanced (FORCE CCACHE)
+
+if(NOT CCACHE)
+	if(ccache_FIND_REQUIRED)
+		message (FATAL_ERROR "ccache program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
-message (STATUS " -- Using ccache! -- ")
-
-set (ccache_options "CCACHE_BASEDIR=${PROJECT_SOURCE_DIR}")
-
-if(DEFINED ENV{CPM_SOURCE_CACHE})
-	list (APPEND ccache_options "CCACHE_DIR=$ENV{CPM_SOURCE_CACHE}/ccache/cache")
-else()
-	list (APPEND ccache_options "CCACHE_DIR=${PROJECT_SOURCE_DIR}/Cache/ccache/cache")
+if(NOT ccache_FIND_QUIETLY)
+	message (VERBOSE "Using ccache!")
 endif()
 
-list (APPEND ccache_options "CCACHE_COMPRESS=true" "CCACHE_COMPRESSLEVEL=6" "CCACHE_MAXSIZE=800M")
+add_executable (ccache IMPORTED GLOBAL)
 
-list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
+set_target_properties (ccache PROPERTIES IMPORTED_LOCATION "${CCACHE}")
+
+add_executable (ccache::ccache ALIAS ccache)
+
+set (ccache_FOUND TRUE)
+
+#
+
+set (CCACHE_OPTIONS "CCACHE_COMPRESS=true;CCACHE_COMPRESSLEVEL=6;CCACHE_MAXSIZE=800M" CACHE STRING
+																							"")
+
+set (ccache_opts ${CCACHE_OPTIONS})
+
+list (APPEND ccache_opts "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
+list (APPEND ccache_opts "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
+
+list (JOIN ccache_opts "\n export " CCACHE_EXPORTS)
 
 #
 
@@ -77,9 +85,9 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 #
 
-add_library (OrangesCcache INTERFACE)
+add_library (ccache-interface INTERFACE)
 
-set_target_properties (OrangesCcache PROPERTIES ORANGES_USING_CCACHE TRUE)
+set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
 
 if(XCODE)
 	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
@@ -88,19 +96,17 @@ if(XCODE)
 	set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 
 	set_target_properties (
-		OrangesCcache
+		ccache-interface
 		PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
 				   XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 else()
 	set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
 	set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
 
-	set_target_properties (OrangesCcache PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-													CXX_COMPILER_LAUNCHER "${cxx_script}")
+	set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+													   CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif()
 
-oranges_export_alias_target (OrangesCcache Oranges)
+oranges_export_alias_target (ccache-interface ccache)
 
-target_link_libraries (OrangesAllIntegrations INTERFACE Oranges::OrangesCcache)
-
-oranges_install_targets (TARGETS OrangesCcache EXPORT OrangesTargets)
+oranges_install_targets (TARGETS ccache-interface EXPORT OrangesTargets)

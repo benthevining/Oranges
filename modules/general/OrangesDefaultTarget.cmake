@@ -242,29 +242,12 @@ endif()
 
 include (OrangesAllIntegrations)
 
-option (ORANGES_IGNORE_CCACHE "Never use ccache" OFF)
+option (ORANGES_IGNORE_INTEGRATIONS "Ignore all integrations by default" OFF)
 
-mark_as_advanced (ORANGES_IGNORE_CCACHE FORCE)
+mark_as_advanced (ORANGES_IGNORE_INTEGRATIONS FORCE)
 
-if(ORANGES_IGNORE_CCACHE)
-	set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE FALSE)
-else()
-	set_target_properties (
-		OrangesDefaultTarget PROPERTIES ORANGES_USING_CCACHE
-										$<$<TARGET_EXISTS:Oranges::OrangesCcache>>)
-	target_link_libraries (OrangesDefaultTarget
-						   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesCcache>)
-endif()
-
-if(PROJECT_IS_TOP_LEVEL)
-	option (ORANGES_IGNORE_INTEGRATIONS "Ignore all static analysis integrations by default" OFF)
-
-	mark_as_advanced (ORANGES_IGNORE_INTEGRATIONS FORCE)
-
-	if(NOT ORANGES_IGNORE_INTEGRATIONS)
-		target_link_libraries (OrangesDefaultTarget
-							   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesAllIntegrations>)
-	endif()
+if(NOT ORANGES_IGNORE_INTEGRATIONS)
+	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
 endif()
 
 #
