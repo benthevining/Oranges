@@ -67,6 +67,7 @@ modules/finders/programs/Findcppcheck.cmake benthevining
 modules/finders/programs/Finddot.cmake benthevining
 modules/finders/programs/Findinclude-what-you-use.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
+modules/finders/programs/Findwraptool.cmake benthevining
 modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
