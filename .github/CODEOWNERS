@@ -65,6 +65,7 @@ modules/finders/programs/Findcodesign.cmake benthevining
 modules/finders/programs/Findcppcheck.cmake benthevining
 modules/finders/programs/Finddot.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
+modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
@@ -80,6 +81,7 @@ modules/general/OrangesDefaultCMakeSettings.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesFetchRepository.cmake benthevining
+modules/general/OrangesInstallPackages.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining
 modules/general/OrangesUninstallTarget.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
