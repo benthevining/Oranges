@@ -22,6 +22,8 @@ else()
 	find_package (Apt REQUIRED)
 endif()
 
+find_package (Pip REQUIRED)
+
 #
 
 function(oranges_update_all_packages)
@@ -32,6 +34,8 @@ function(oranges_update_all_packages)
 	else()
 		apt_update_all ()
 	endif()
+
+	pip_upgrade_all ()
 endfunction()
 
 #
