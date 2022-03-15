@@ -7,9 +7,8 @@ export CMAKE_CONFIG_TYPE ?= $(CONFIG)
 export VERBOSE=1
 
 # program aliases
-RM = $(CMAKE) -E rm -rf # force this one to use CMake
+RM = $(CMAKE) -E rm -rf
 CMAKE ?= cmake
-CPACK ?= cpack
 PRECOMMIT ?= pre-commit
 GIT ?= git
 
@@ -22,20 +21,18 @@ DEPS_GRAPH ?= deps_graph
 
 ifeq ($(OS),Windows_NT)
 	export CMAKE_GENERATOR ?= Visual Studio 17 2022
+	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(NUMBER_OF_PROCESSORS)
 else ifeq ($(shell uname -s),Darwin)
 	export CMAKE_GENERATOR ?= Xcode
+	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell sysctl hw.ncpu | awk '{print $$2}')
 	SUDO ?= sudo
-else
+else # Linux
 	export CMAKE_GENERATOR ?= Ninja
-	SUDO ?= sudo
+	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell grep -c ^processor /proc/cpuinfo)
 	export CC=gcc-10
 	export CXX=g++-10
+	SUDO ?= sudo
 endif
-
-# env var for num jobs: CMAKE_BUILD_PARALLEL_LEVEL
-
-#
-# TO DO: check if graphviz can be found
 
 #
 

@@ -61,6 +61,7 @@ modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
 modules/finders/programs/Findclang-tidy.cmake benthevining
+modules/finders/programs/Findcodesign.cmake benthevining
 modules/finders/programs/Findcppcheck.cmake benthevining
 modules/finders/programs/Finddot.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
