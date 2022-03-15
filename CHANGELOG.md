@@ -1,5 +1,17 @@
 # Oranges changelog
 
+## [1.17.0](http://github.com/benthevining/Oranges/compare/v1.16.0...v1.17.0) (2022-03-15)
+
+
+### Features
+
+* bumping version in CMakeLists.txt with semantic release ([273e5b7](http://github.com/benthevining/Oranges/commit/273e5b72a29f6404342aaa69f17ce5549cf850a7))
+
+
+### Bug Fixes
+
+* installing extra deps for semantic release ([8023be6](http://github.com/benthevining/Oranges/commit/8023be652eeddde971373f9c1ba083fd3c903509))
+
 ## [1.16.0](http://github.com/benthevining/Oranges/compare/v1.15.1...v1.16.0) (2022-03-15)
 
 
