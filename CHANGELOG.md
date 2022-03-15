@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.16.0](http://github.com/benthevining/Oranges/compare/v1.15.1...v1.16.0) (2022-03-15)
+
+
+### Features
+
+* added find modules for system package managers ([bbde11c](http://github.com/benthevining/Oranges/commit/bbde11c754e48d0ae389d816d525e8f3c8537620))
+
 ### [1.15.1](http://github.com/benthevining/Oranges/compare/v1.15.0...v1.15.1) (2022-03-09)
 
 
