@@ -23,10 +23,10 @@
 .gitownrc benthevining
 .markdownlint.json benthevining
 .nitpick.toml benthevining
-.nitpick.toml benthevining
 .pre-commit-config.yaml benthevining
 .pylintrc benthevining
 .style.yapf benthevining
+.tool-versions benthevining
 CMakeLists.txt benthevining
 CMakePresets.json benthevining
 CPackConfig.cmake benthevining
