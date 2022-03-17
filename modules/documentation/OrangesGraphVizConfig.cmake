@@ -79,3 +79,6 @@ set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DESCRIPTION"
 set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_GROUP" Documentation)
 
 set (CPACK_COMPONENT_GROUP_Documentation_DESCRIPTION "Installs all available sets of documentation")
+
+unset (dot_file_output)
+unset (graph_image_output)

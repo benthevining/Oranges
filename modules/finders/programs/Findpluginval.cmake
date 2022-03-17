@@ -44,6 +44,10 @@ else()
 
 	if(PLUGINVAL_BUILD_AT_CONFIGURE_TIME)
 
+		if(pluginval_FIND_QUIETLY)
+			set (quiet_flag QUIET)
+		endif()
+
 		oranges_fetch_repository (
 			NAME
 			pluginval
@@ -53,7 +57,10 @@ else()
 			origin/master
 			DOWNLOAD_ONLY
 			EXCLUDE_FROM_ALL
-			NEVER_LOCAL)
+			NEVER_LOCAL
+			${quiet_flag})
+
+		unset (quiet_flag)
 
 		if(APPLE)
 			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/mac_build")

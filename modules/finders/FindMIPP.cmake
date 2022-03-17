@@ -62,3 +62,5 @@ oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets COMPONENT_PREFIX aff
 
 set (MIPP_FOUND TRUE)
 # set (MIPP_DIR "${MIPP_SOURCE_DIR}")
+
+unset (quiet_flag)

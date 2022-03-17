@@ -133,6 +133,9 @@ else()
 	else()
 		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 	endif()
+
+	unset (output)
+	unset (ipo_supported)
 endif()
 
 #
@@ -170,6 +173,9 @@ if(APPLE)
 		INTERFACE
 		-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
 		)
+
+	unset (ios_min_deployment_target)
+	unset (macos_min_deployment_target)
 
 	if(IOS)
 		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
@@ -234,6 +240,8 @@ if(APPLE)
 				OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "${osx_native_arch}"
 												ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 		endif()
+
+		unset (osx_native_arch)
 	endif()
 endif()
 

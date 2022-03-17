@@ -16,16 +16,6 @@ Default settings and configuration for a CMake build on the OS you're currently 
 ## Include-time actions:
 Sets appropriate platform-specific settings for the current build.
 
-## Function:
-
-### lemons_set_default_macos_options
-```
-lemons_set_default_macos_options (<target>)
-```
-Sets default Apple-only options for the given target.
-Does nothing on non-Apple platforms.
-
-
 ## Note
 
 This module is included by Lemons by default, when Lemons is added as a subdirectory.

@@ -96,6 +96,8 @@ if(NOT LEMONS_PLUGIN_FORMATS)
 
 	set (LEMONS_PLUGIN_FORMATS ${available_formats} CACHE STRING "Available plugin formats")
 
+	unset (available_formats)
+
 	mark_as_advanced (LEMONS_PLUGIN_FORMATS)
 
 endif()

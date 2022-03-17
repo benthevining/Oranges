@@ -44,6 +44,15 @@ define_property (
 		"The original names of a juce module category target's individual juce modules, without the Namespace:: prefixes."
 	)
 
+define_property (
+	TARGET
+	PROPERTY ModuleCategoryNames
+	INHERITED
+	BRIEF_DOCS "Juce module category names"
+	FULL_DOCS
+		"The original names of the lemons juce module category targets, without the Lemons:: prefix."
+	)
+
 function(lemons_add_juce_modules)
 
 	set (oneValueArgs DIR AGGREGATE ALIAS_NAMESPACE)
@@ -91,17 +100,6 @@ function(lemons_add_juce_modules)
 		endif()
 	endif()
 endfunction()
-
-#
-
-define_property (
-	TARGET
-	PROPERTY ModuleCategoryNames
-	INHERITED
-	BRIEF_DOCS "Juce module category names"
-	FULL_DOCS
-		"The original names of the lemons juce module category targets, without the Lemons:: prefix."
-	)
 
 #
 

@@ -60,3 +60,5 @@ oranges_fetch_repository (
 
 set (JUCE_FOUND TRUE)
 # set (JUCE_DIR "${JUCE_SOURCE_DIR}")
+
+unset (quiet_flag)

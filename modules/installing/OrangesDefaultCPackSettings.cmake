@@ -210,6 +210,8 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CPackConfig.cmake" "${config_
 
 set (CPACK_PROJECT_CONFIG_FILE "${config_file_output}")
 
+unset (config_file_output)
+
 if(PROJECT_IS_TOP_LEVEL)
 	include (CPack)
 endif()

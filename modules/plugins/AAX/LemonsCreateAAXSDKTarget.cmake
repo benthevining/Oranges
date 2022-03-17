@@ -77,6 +77,8 @@ elseif(WIN32)
 
 	include_external_msproject (AAXSDK "${msvc_proj_file}")
 
+	unset (msvc_proj_file)
+
 endif()
 
 if(TARGET AAXSDK)

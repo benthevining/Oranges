@@ -56,12 +56,10 @@ set (ccache_FOUND TRUE)
 set (CCACHE_OPTIONS "CCACHE_COMPRESS=true;CCACHE_COMPRESSLEVEL=6;CCACHE_MAXSIZE=800M" CACHE STRING
 																							"")
 
-set (ccache_opts ${CCACHE_OPTIONS})
+list (APPEND CCACHE_OPTIONS "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
+list (APPEND CCACHE_OPTIONS "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
 
-list (APPEND ccache_opts "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
-list (APPEND ccache_opts "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
-
-list (JOIN ccache_opts "\n export " CCACHE_EXPORTS)
+list (JOIN CCACHE_OPTIONS "\n export " CCACHE_EXPORTS)
 
 #
 
@@ -80,6 +78,8 @@ endfunction()
 
 _lemons_configure_compiler_launcher (c)
 _lemons_configure_compiler_launcher (cxx)
+
+unset (CCACHE_EXPORTS)
 
 execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 

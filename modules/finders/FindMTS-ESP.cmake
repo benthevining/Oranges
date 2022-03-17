@@ -57,6 +57,8 @@ oranges_fetch_repository (
 	NEVER_LOCAL
 	${quiet_flag})
 
+unset (quiet_flag)
+
 set (MTS-ESP_FOUND FALSE)
 
 # MTS-ESP_SOURCE_DIR
@@ -141,6 +143,9 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 					  DOC "MTS-ESP master dynamic library")
 
 		mark_as_advanced (FORCE libMTS)
+
+		unset (libMTS_name)
+		unset (libMTS_paths)
 
 		if(libMTS)
 			add_library (lib_mts IMPORTED UNKNOWN)

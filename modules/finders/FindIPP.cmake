@@ -72,6 +72,20 @@ set_package_properties (
 	URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
 	DESCRIPTION "Hardware-accelerated functions for signal and image processing provided by Intel")
 
+#
+
+macro(_ipp_unset_vars)
+	unset (IPP_ROOT)
+	unset (IPP_LIBNAME_SUFFIX)
+	unset (IPP_LIB_TYPE)
+	unset (IPP_LIBTYPE_PREFIX)
+	unset (IPP_LIBTYPE_SUFFIX)
+endmacro()
+
+cmake_language (DEFER CALL _ipp_unset_vars)
+
+#
+
 find_package (PkgConfig QUIET)
 
 pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)

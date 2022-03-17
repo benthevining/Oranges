@@ -66,6 +66,8 @@ endif()
 
 set (CMAKE_CTEST_ARGUMENTS --parallel "${num_procs}")
 
+unset (num_procs)
+
 #
 
 set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "${PROJECT_NAME}")
