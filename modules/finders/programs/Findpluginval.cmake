@@ -10,6 +10,41 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for the pluginval plugin testing tool.
+
+Options:
+- PLUGINVAL_BUILD_AT_CONFIGURE_TIME : If this is ON and pluginval cannot be found on the system, then it will be built from source at configure time.
+Defaults to ON.
+
+Targets:
+- Tracktion::pluginval : The pluginval executable
+
+Output variables:
+- pluginval_FOUND
+
+Functions:
+
+pluginval_add_plugin_test (TARGET <targetName>
+						   [NAME <testname>]
+						   [LEVEL <testingLevel>]
+						   [LOG_DIR <logOutputDir>]
+						   [REPEATS <numRepeats>]
+						   [SAMPLERATES <testingSamplerates>]
+						   [BLOCKSIZES <testingBlocksizes>]
+						   [NO_GUI] [VERBOSE] [RANDOMIZE])
+
+Adds a test that executes pluginval on the passed plugin target.
+
+NAME defaults to <TARGET>.pluginval.
+
+LEVEL defaults to 5.
+
+All the options except TARGET and NAME set cache variables prefixed with PLUGINVAL_.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -23,6 +58,7 @@ set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/p
 
 set (pluginval_FOUND FALSE)
 
+# TO DO: search the cache location where it would've been built...
 find_program (PLUGINVAL_PROGRAM pluginval)
 
 mark_as_advanced (FORCE PLUGINVAL_PROGRAM)
@@ -87,6 +123,16 @@ else()
 	endif()
 endif()
 
+if(NOT TARGET Tracktion::pluginval)
+	if(pluginval_FIND_REQUIRED)
+		message (FATAL_ERROR "pluginval cannot be found!")
+	endif()
+
+	if(NOT pluginval_FIND_QUIETLY)
+		message (WARNING "pluginval cannot be found!")
+	endif()
+endif()
+
 # #########################################################################################################
 
 function(pluginval_add_plugin_test)
@@ -104,6 +150,12 @@ function(pluginval_add_plugin_test)
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
+
+	if(NOT TARGET "${ORANGES_ARG_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
+	endif()
 
 	if(NOT ORANGES_ARG_NAME)
 		set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}.pluginval")

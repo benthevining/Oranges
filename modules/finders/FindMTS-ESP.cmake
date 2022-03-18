@@ -19,7 +19,7 @@ Components that may be specified:
 - Master
 - All
 
-If no component(s) are specified, this module will default to creating both the client and master targets.
+If no component(s) are specified, this module will default to finding both the client and master components.
 
 Targets:
 - ODDSound::MTSClient : static library build of the MTS-ESP client library
@@ -61,8 +61,6 @@ unset (quiet_flag)
 
 set (MTS-ESP_FOUND FALSE)
 
-# MTS-ESP_SOURCE_DIR
-
 # Client
 
 # editorconfig-checker-disable
@@ -89,11 +87,13 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 													 $<INSTALL_INTERFACE:include/MTSClient>)
 
 		oranges_export_alias_target (MTSClient ODDSound)
-
-		oranges_install_targets (TARGETS MTSClient EXPORT OrangesTargets)
 	else()
 		if(MTS-ESP_FIND_REQUIRED_Client)
 			message (FATAL_ERROR "MTS-ESP component 'Client' could not be found!")
+		endif()
+
+		if(NOT MTS-ESP_FIND_QUIETLY)
+			message (WARNING "Error creating MTS-ESP client target!")
 		endif()
 	endif()
 endif()
@@ -123,9 +123,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 				set (libMTS_paths "Program Files\\Common Files\\MTS-ESP"
 								  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit")
 			else()
-				if(NOT MTS-ESP_FIND_QUIETLY)
-					message (WARNING "Neither 32-bit nor 64-bit architecture could be detected!")
-				endif()
+				message (FATAL_ERROR "Neither 32-bit nor 64-bit architecture could be detected!")
 			endif()
 		elseif(APPLE)
 			set (libMTS_name libMTS.dylib)
@@ -167,9 +165,6 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 								 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
 
 			oranges_export_alias_target (MTSMaster ODDSound)
-
-			oranges_install_targets (TARGETS MTSMaster EXPORT OrangesTargets)
-
 		else()
 			if(NOT MTS-ESP_FIND_QUIETLY)
 				message (WARNING "libMTS could not be found!")
@@ -177,14 +172,24 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 		endif()
 	endif()
 
-	if(NOT TARGET ODDSound::MTSMaster AND MTS-ESP_FIND_REQUIRED_Master)
-		message (FATAL_ERROR "MTS-ESP component 'Master' could not be found!")
+	if(NOT TARGET ODDSound::MTSMaster)
+		if(MTS-ESP_FIND_REQUIRED_Master)
+			message (FATAL_ERROR "MTS-ESP component 'Master' could not be found!")
+		endif()
+
+		if(NOT MTS-ESP_FIND_QUIETLY)
+			message (WARNING "Error creating MTS-ESP master target!")
+		endif()
 	endif()
 endif()
 
 if(NOT (TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster))
 	if(MTS-ESP_FIND_REQUIRED)
 		message (FATAL_ERROR "MTS-ESP could not be located!")
+	endif()
+
+	if(NOT MTS-ESP_FIND_QUIETLY)
+		message (WARNING "MTS-ESP could not be located!")
 	endif()
 
 	return ()
@@ -198,7 +203,3 @@ target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSCl
 										 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
 
 oranges_export_alias_target (MTS-ESP ODDSound)
-
-oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets COMPONENT_PREFIX ODDSound)
-
-return ()

@@ -10,6 +10,18 @@
 #
 # ======================================================================================
 
+#[[
+
+This find module locates the dot executable.
+
+Targets:
+- Graphviz::dot
+
+Output variables:
+- dot_FOUND
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -28,6 +40,10 @@ mark_as_advanced (FORCE ORANGES_DOT)
 if(NOT ORANGES_DOT)
 	if(dot_FIND_REQUIRED)
 		message (FATAL_ERROR "dot program cannot be found!")
+	endif()
+
+	if(NOT dot_FIND_QUIETLY)
+		message (WARNING "dot program cannot be found!")
 	endif()
 
 	return ()

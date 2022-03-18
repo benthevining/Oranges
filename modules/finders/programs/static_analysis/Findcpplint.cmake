@@ -10,6 +10,19 @@
 #
 # ======================================================================================
 
+#[[
+
+A find module for the cpplint static analysis tool.
+
+Targets:
+- Google::cpplint : the cpplint executable
+- Google::cpplint-interface : interface library that can be linked against to enable cpplint integrations for a target
+
+Output variables:
+- cpplint_FOUND
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -31,6 +44,10 @@ if(NOT CPPLINT)
 		message (FATAL_ERROR "cpplint program cannot be found!")
 	endif()
 
+	if(NOT cpplint_FIND_QUIETLY)
+		message (WARNING "cpplint program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
@@ -49,10 +66,11 @@ set (cpplint_FOUND TRUE)
 set (CMAKE_CXX_CPPLINT "${CPPLINT}" CACHE STRING "")
 set (CMAKE_C_CPPLINT "${CPPLINT}" CACHE STRING "")
 
+mark_as_advanced (FORCE CMAKE_CXX_CPPLINT CMAKE_C_CPPLINT)
+
 add_library (cpplint-interface INTERFACE)
 
-set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${CPPLINT}" C_CPPLINT "${CPPLINT}")
+set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${CMAKE_CXX_CPPLINT}"
+													C_CPPLINT "${CMAKE_C_CPPLINT}")
 
 oranges_export_alias_target (cpplint-interface Google)
-
-oranges_install_targets (TARGETS cpplint-interface EXPORT OrangesTargets)

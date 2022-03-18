@@ -10,6 +10,19 @@
 #
 # ======================================================================================
 
+#[[
+
+A find module for the cppcheck static analysis tool.
+
+Targets:
+- cppcheck::cppcheck : The cppcheck executable.
+- cppcheck::cppcheck-interface : Interface library that can be linked against to enable cppcheck integrations for a target
+
+Output variables:
+- cppcheck_FOUND
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -31,6 +44,10 @@ if(NOT CPPCHECK)
 		message (FATAL_ERROR "cppcheck program cannot be found!")
 	endif()
 
+	if(NOT cppcheck_FIND_QUIETLY)
+		message (WARNING "cppcheck program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
@@ -47,13 +64,14 @@ add_executable (cppcheck::cppcheck ALIAS cppcheck)
 set (cppcheck_FOUND TRUE)
 
 set (CMAKE_CXX_CPPCHECK "${CPPCHECK};--suppress=preprocessorErrorDirective" CACHE STRING "")
+
+mark_as_advanced (FORCE CMAKE_CXX_CPPCHECK)
+
 set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_library (cppcheck-interface INTERFACE)
 
-set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON CXX_CPPCHECK
-																				"${CPPCHECK}")
+set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+													 CXX_CPPCHECK "${CMAKE_CXX_CPPCHECK}")
 
 oranges_export_alias_target (cppcheck-interface cppcheck)
-
-oranges_install_targets (TARGETS cppcheck-interface EXPORT OrangesTargets)

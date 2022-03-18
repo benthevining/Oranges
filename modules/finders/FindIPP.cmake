@@ -15,8 +15,8 @@
 Finds the Intel IPP libraries for signal processing.
 
 Options:
-- IPP_STATIC
-- IPP_MULTI_THREADED
+- IPP_STATIC - defaults to on
+- IPP_MULTI_THREADED - defaults to off
 - IPP_ROOT : this can be manually overridden to provide the path to the root of the IPP installation.
 
 Components:
@@ -93,8 +93,6 @@ pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
 if(IPP_FOUND AND TARGET PkgConfig::IPP)
 	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
 
-	oranges_install_targets (TARGETS Intel::IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
-
 	set (IPP_FOUND TRUE)
 	return ()
 endif()
@@ -128,6 +126,8 @@ if(NOT IPP_INCLUDE_DIR OR NOT IS_DIRECTORY "${IPP_INCLUDE_DIR}")
 endif()
 
 set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel IPP installation")
+
+mark_as_advanced (FORCE IPP_ROOT)
 
 if(NOT IS_DIRECTORY "${IPP_ROOT}")
 	if(IPP_FIND_REQUIRED)
@@ -279,6 +279,10 @@ foreach(ipp_component ${IPP_FIND_COMPONENTS})
 	_oranges_find_ipp_component ("${ipp_component}" "${IPP_FIND_REQUIRED_${ipp_component}}")
 
 	if(IPP_FIND_REQUIRED_${ipp_component} AND NOT TARGET ipp_lib_${ipp_component})
+		if(NOT IPP_FIND_QUIETLY)
+			message (WARNING "IPP required component ${ipp_component} cannot be found!")
+		endif()
+
 		return ()
 	endif()
 endforeach()
@@ -304,7 +308,4 @@ target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_D
 
 oranges_export_alias_target (IntelIPP Intel)
 
-oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
-
 set (IPP_FOUND TRUE)
-# set (IPP_DIR "${IPP_ROOT}")

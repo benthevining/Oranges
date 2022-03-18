@@ -10,6 +10,32 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for the pip Python package manager. This module finds pip3.
+
+Targets:
+- Python3::Pip : the pip executable.
+
+Output variables:
+- Pip_FOUND
+
+Functions:
+
+pip_upgrade_all()
+
+Upgrades all installed packages.
+
+
+pip_install_packages (PACKAGES <packageNames>
+					  [UPDATE_FIRST] [OPTIONAL])
+
+Installs the list of packages using pip.
+If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
+If the OPTIONAL option is present, it is not an error for a package to fail to install.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -17,23 +43,31 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (FeatureSummary)
 include (LemonsCmakeDevTools)
 
-set_package_properties (Pip PROPERTIES URL "" DESCRIPTION "Python package manager")
+set_package_properties (Pip PROPERTIES URL "https://pypi.org/project/pip/"
+						DESCRIPTION "Python package manager")
 
 set (Pip_FOUND FALSE)
 
 find_package (Python3 COMPONENTS Interpreter)
 
-if(Pip_FIND_REQUIRED AND NOT Python3_FOUND)
-	message (FATAL_ERROR "Python interpreter cannot be found!")
+if(TARGET Python3::Interpreter)
+	execute_process (COMMAND Python3::Interpreter -m ensurepip --upgrade COMMAND_ECHO STDOUT)
+
+	execute_process (COMMAND Python3::Interpreter -m pip3 install --upgrade pip3 COMMAND_ECHO
+							 STDOUT)
+
+	find_program (PIP3 pip3)
+
+	mark_as_advanced (FORCE PIP3)
+else()
+	if(Pip_FIND_REQUIRED)
+		message (FATAL_ERROR "Python interpreter cannot be found!")
+	endif()
+
+	if(NOT Pip_FIND_QUIETLY)
+		message (WARNING "Python interpreter cannot be found!")
+	endif()
 endif()
-
-execute_process (COMMAND Python3::Interpreter -m ensurepip --upgrade COMMAND_ECHO STDOUT)
-
-execute_process (COMMAND Python3::Interpreter -m pip3 install --upgrade pip3 COMMAND_ECHO STDOUT)
-
-find_program (PIP3 pip3)
-
-mark_as_advanced (FORCE PIP3)
 
 if(PIP3)
 	set (Pip_FOUND TRUE)
@@ -43,9 +77,14 @@ if(PIP3)
 	set_target_properties (Pip PROPERTIES IMPORTED_LOCATION "${PIP3}")
 
 	add_executable (Python3::Pip ALIAS Pip)
+else()
+	if(Pip_FIND_REQUIRED)
+		message (FATAL_ERROR "Pip cannot be found!")
+	endif()
 
-elseif(Pip_FIND_REQUIRED)
-	message (FATAL_ERROR "Error installing pip!")
+	if(NOT Pip_FIND_QUIETLY)
+		message (WARNING "Pip cannot be found!")
+	endif()
 endif()
 
 #

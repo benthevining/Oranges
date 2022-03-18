@@ -10,12 +10,30 @@
 #
 # ======================================================================================
 
+#[[
+
+When this module is included, it creates a target that generates a png image of the CMake dependency graph for the current project.
+
+This module can only be included once per project, and should usually be included only from the top-level project.
+
+Cache variables:
+- ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE : if set, the generated png image will be copied to this folder.
+The use case is to commit the dependency graph image to the source tree. Defaults to ${CMAKE_SOURCE_DIR}/util.
+- ORANGES_DOC_OUTPUT_DIR : The directory where the image will be generated. Defaults to ${CMAKE_SOURCE_DIR}/doc.
+
+]]
+
 # NB becuase cmake only outputs a dependency graph for the top-level project, I use variables
 # CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.
 
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+
+if(NOT PROJECT_IS_TOP_LEVEL)
+	message (
+		WARNING "OrangesGraphVizConfig.cmake included from non-top-level project ${PROJECT_NAME}!")
+endif()
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake"
 				"${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake" @ONLY)

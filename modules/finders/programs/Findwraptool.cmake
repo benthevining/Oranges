@@ -10,6 +10,31 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for PACE's wraptool code signing program.
+
+Targets:
+- PACE::wraptool : the wraptool executable.
+
+Output variables:
+- wraptool_FOUND
+
+Functions:
+
+wraptool_configure_aax_plugin_signing (TARGET <targetName>
+									   GUID <guid>
+									   [ACCOUNT <accountID>]
+									   [SIGNID <signID>]
+									   [KEYFILE <keyfilePath>]
+									   [KEYPASSWORD <password>])
+
+Configures signing of an AAX plugin target. Does nothing on Linux.
+
+The ACCOUNT, SIGNID, KEYFILE, and KEYPASSWORD options set the cache variables WRAPTOOL_ACCOUNT, WRAPTOOL_SIGNID, WRAPTOOL_KEYFILE, and WRAPTOOL_KEYPASSWORD, respectively.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -56,10 +81,16 @@ function(wraptool_configure_aax_plugin_signing)
 		return ()
 	endif()
 
+	if(NOT TARGET "${LEMONS_AAX_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${LEMONS_AAX_TARGET}!")
+	endif()
+
 	set (WRAPTOOL_ACCOUNT "${LEMONS_AAX_ACCOUNT}" CACHE STRING "Account ID")
-	set (WRAPTOOL_SIGNID "${LEMONS_AAX_SIGNID}" CACHE STRING "")
-	set (WRAPTOOL_KEYFILE "${LEMONS_AAX_KEYFILE}" CACHE FILEPATH "")
-	set (WRAPTOOL_KEYPASSWORD "${LEMONS_AAX_KEYPASSWORD}" CACHE STRING "")
+	set (WRAPTOOL_SIGNID "${LEMONS_AAX_SIGNID}" CACHE STRING "Sign ID")
+	set (WRAPTOOL_KEYFILE "${LEMONS_AAX_KEYFILE}" CACHE FILEPATH "Keyfile path")
+	set (WRAPTOOL_KEYPASSWORD "${LEMONS_AAX_KEYPASSWORD}" CACHE STRING "Key password")
 
 	if(APPLE)
 		add_custom_command (

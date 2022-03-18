@@ -10,6 +10,19 @@
 #
 # ======================================================================================
 
+#[[
+
+A find module for the include-what-you-use static analysis tool.
+
+Targets:
+- Google::include-what-you-use : include-what-you-use executable
+- Google::include-what-you-use-interface : interface library that can be linked against to enable include-what-you-use integrations for a target
+
+Output variables:
+- include-what-you-use_FOUND
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -31,6 +44,10 @@ if(NOT INCLUDE_WHAT_YOU_USE)
 		message (FATAL_ERROR "include-what-you-use program cannot be found!")
 	endif()
 
+	if(NOT include-what-you-use_FIND_QUIETLY)
+		message (WARNING "include-what-you-use program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
@@ -48,11 +65,11 @@ set (include-what-you-use_FOUND TRUE)
 
 set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${INCLUDE_WHAT_YOU_USE}" CACHE STRING "")
 
+mark_as_advanced (FORCE CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
+
 add_library (include-what-you-use-interface INTERFACE)
 
-set_target_properties (include-what-you-use-interface PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-																 "${INCLUDE_WHAT_YOU_USE}")
+set_target_properties (include-what-you-use-interface
+					   PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}")
 
 oranges_export_alias_target (include-what-you-use-interface Google)
-
-oranges_install_targets (TARGETS include-what-you-use-interface EXPORT OrangesTargets)

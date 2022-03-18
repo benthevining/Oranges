@@ -10,6 +10,19 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for the ccache compiler cache.
+
+Targets:
+- ccache::ccache : The ccache executable.
+- ccache::ccache-interface : Interface library that can be linked against to enable ccache for a target
+
+Output variables:
+- ccache_FOUND
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -36,6 +49,10 @@ if(NOT CCACHE)
 		message (FATAL_ERROR "ccache program cannot be found!")
 	endif()
 
+	if(NOT ccache_FIND_QUIETLY)
+		message (WARNING "ccache program cannot be found!")
+	endif()
+
 	return ()
 endif()
 
@@ -55,6 +72,8 @@ set (ccache_FOUND TRUE)
 
 set (CCACHE_OPTIONS "CCACHE_COMPRESS=true;CCACHE_COMPRESSLEVEL=6;CCACHE_MAXSIZE=800M" CACHE STRING
 																							"")
+
+mark_as_advanced (FORCE CCACHE_OPTIONS)
 
 list (APPEND CCACHE_OPTIONS "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
 list (APPEND CCACHE_OPTIONS "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
@@ -81,6 +100,7 @@ _lemons_configure_compiler_launcher (cxx)
 
 unset (CCACHE_EXPORTS)
 
+# TO DO: use cmake for this?
 execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 #
@@ -108,5 +128,3 @@ else()
 endif()
 
 oranges_export_alias_target (ccache-interface ccache)
-
-oranges_install_targets (TARGETS ccache-interface EXPORT OrangesTargets)

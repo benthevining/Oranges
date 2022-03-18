@@ -10,6 +10,33 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for the apt package manager.
+
+This module first tries to find apt-get, then falls back to apt if apt-get cannot be found.
+
+Note that sudo is used on Linux.
+
+Output variables:
+- Apt_FOUND
+
+Functions:
+
+apt_update_all()
+
+Updates all installed packages.
+
+
+apt_install_packages (PACKAGES <packageNames>
+					  [UPDATE_FIRST] [OPTIONAL])
+
+Installs the list of packages using apt.
+If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
+If the OPTIONAL option is present, it is not an error for a package to fail to install.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -40,7 +67,6 @@ else()
 	if(APT)
 		set (apt_program "${APT}" CACHE INTERNAL "")
 	else()
-
 		find_program (DNF dnf)
 
 		if(DNF)
@@ -48,6 +74,10 @@ else()
 		else()
 			if(Apt_FIND_REQUIRED)
 				message (FATAL_ERROR "No package manager program can be found!")
+			endif()
+
+			if(NOT Apt_FIND_QUIETLY)
+				message (WARNING "No package manager program can be found!")
 			endif()
 		endif()
 	endif()

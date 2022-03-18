@@ -12,17 +12,16 @@
 
 #[[
 
-A find module for the MIPP intrinsics library.
+A find module for the JUCE library. This module fetches the JUCE sources from GitHub.
 
 Options:
-- LEMONS_JUCE_BRANCH: the branch of the GitHub repository to use; develop or master.
+- LEMONS_JUCE_BRANCH: the branch of the GitHub repository to use; develop or master. Defaults to develop.
 
 Targets:
 - all of JUCE's targets (the JUCE modules, etc)
 
 Output variables:
 - JUCE_FOUND
-- JUCE_DIR
 
 ]]
 
@@ -58,7 +57,6 @@ oranges_fetch_repository (
 	NEVER_LOCAL
 	${quiet_flag})
 
-set (JUCE_FOUND TRUE)
-# set (JUCE_DIR "${JUCE_SOURCE_DIR}")
-
 unset (quiet_flag)
+
+set (JUCE_FOUND TRUE)

@@ -10,6 +10,37 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for the Homebrew package manager.
+
+Options:
+- HOMEBREW_NO_INSTALL : if set to OFF and Homebrew cannot be found, then it will be installed at configure time.
+If set to ON and Homebrew cannot be found, then Homebrew will not be installed and this module's functions will produce fatal errors.
+Defaults to OFF.
+
+Targets:
+- Homebrew::Homebrew : the Homebrew executable
+
+Output variables:
+- Homebrew_FOUND
+
+Functions:
+
+homebrew_update_all()
+
+Updates all installed packages.
+
+
+homebrew_install_packages (PACKAGES <packageNames>
+						   [UPDATE_FIRST] [OPTIONAL])
+
+Installs the list of packages using Homebrew.
+If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
+If the OPTIONAL option is present, it is not an error for a package to fail to install.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -22,9 +53,13 @@ set_package_properties (Homebrew PROPERTIES URL "https://brew.sh/"
 
 set (Homebrew_FOUND FALSE)
 
+option (HOMEBREW_NO_INSTALL "Don't attempt to install Homebrew if it cannot be found" OFF)
+
+mark_as_advanced (FORCE HOMEBREW_NO_INSTALL)
+
 find_program (HOMEBREW brew)
 
-if(NOT HOMEBREW)
+if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 	unset (CACHE{HOMEBREW})
 
 	find_program (BASH bash)
@@ -41,10 +76,6 @@ if(NOT HOMEBREW)
 							 COMMAND_ERROR_IS_FATAL ANY)
 
 	find_program (HOMEBREW brew)
-
-	if(Homebrew_FIND_REQUIRED AND NOT HOMEBREW)
-		message (FATAL_ERROR "Error installing Homebrew!")
-	endif()
 endif()
 
 mark_as_advanced (FORCE HOMEBREW BASH)
@@ -57,6 +88,14 @@ if(HOMEBREW)
 	set_target_properties (Homebrew PROPERTIES IMPORTED_LOCATION "${HOMEBREW}")
 
 	add_executable (Homebrew::Homebrew ALIAS Homebrew)
+else()
+	if(Homebrew_FIND_REQUIRED)
+		message (FATAL_ERROR "Homebrew cannot be found!")
+	endif()
+
+	if(NOT Homebrew_FIND_QUIETLY)
+		message (WARNING "Homebrew cannot be found!")
+	endif()
 endif()
 
 #

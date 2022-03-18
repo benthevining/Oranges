@@ -10,6 +10,28 @@
 #
 # ======================================================================================
 
+#[[
+
+This module provides the function oranges_create_doxygen_target().
+
+Functions:
+
+oranges_create_doxygen_target (INPUT_PATHS <inputPaths>
+							   [TARGET <docsTargetName>]
+							   [OUTPUT_DIR <docsOutputDir>]
+							   [MAIN_PAGE_MD_FILE <mainPageFile>]
+							   [LOGO <logoFile>]
+							   [FILE_PATTERNS <filePatterns>]
+							   [IMAGE_PATHS <imagePaths>])
+
+Creates a target to execute Doxygen.
+
+The only required argument is the INPUT_PATHS.
+TARGET defaults to ${PROJECT_NAME}Doxygen.
+OUTPUT_DIR defaults to ${PROJECT_SOURCE_DIR}/doc.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -39,7 +61,7 @@ endif()
 
 function(oranges_create_doxygen_target)
 
-	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO)
+	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR)
 	set (multiValueArgs INPUT_PATHS FILE_PATTERNS IMAGE_PATHS)
 
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -69,7 +91,14 @@ function(oranges_create_doxygen_target)
 				)
 		endif()
 	else()
-		# fall back to using readme from project source dir
+		find_file (
+			ORANGES_DOCS_README README.md README PATHS "${PROJECT_SOURCE_DIR}"
+													   ${ORANGES_DOXYGEN_INPUT_PATHS} NO_CACHE
+			NO_DEFAULT_PATH)
+
+		if(ORANGES_DOCS_README)
+			set (ORANGES_ARG_MAIN_PAGE_MD_FILE "${ORANGES_DOCS_README}")
+		endif()
 	endif()
 
 	if(ORANGES_ARG_LOGO)
@@ -92,7 +121,11 @@ function(oranges_create_doxygen_target)
 		list (APPEND ORANGES_ARG_FILE_PATTERNS *.md)
 	endif()
 
-	set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
+	if(ORANGES_ARG_OUTPUT_DIR)
+		set (ORANGES_DOC_OUTPUT_DIR "${ORANGES_ARG_OUTPUT_DIR}")
+	else()
+		set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
+	endif()
 
 	if(TARGET DependencyGraph)
 		list (APPEND ORANGES_ARG_IMAGE_PATHS "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")

@@ -12,10 +12,10 @@
 
 #[[
 
-A find module for the MIPP intrinsics library.
+A find module for the MIPP intrinsics library. This module fetches the MIPP sources from GitHub.
 
 Targets:
-- aff3ct::MIPP : interface library that can be linked against
+- aff3ct::MIPP : MIPP interface library
 
 Output variables:
 - MIPP_FOUND
@@ -48,6 +48,8 @@ oranges_fetch_repository (
 	NEVER_LOCAL
 	${quiet_flag})
 
+unset (quiet_flag)
+
 add_library (MIPP INTERFACE)
 
 target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
@@ -58,9 +60,4 @@ target_sources (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
 
 oranges_export_alias_target (MIPP aff3ct)
 
-oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets COMPONENT_PREFIX aff3ct)
-
 set (MIPP_FOUND TRUE)
-# set (MIPP_DIR "${MIPP_SOURCE_DIR}")
-
-unset (quiet_flag)

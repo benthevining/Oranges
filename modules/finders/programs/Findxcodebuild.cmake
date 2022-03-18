@@ -10,6 +10,28 @@
 #
 # ======================================================================================
 
+#[[
+
+Find module for xcodebuild.
+
+Targets:
+- Apple::xcodebuild : xcodebuild executable
+
+Output variables:
+- xcodebuild_FOUND
+
+Functions:
+
+include_external_xcode_project (TARGET <targetName>
+								DIRECTORY <dirOfXcodeProject>
+								SCHEME <nameOfScheme>
+								[EXTRA_ARGS <extraXcodebuildArgs>]
+								[COMMENT <buildComment>])
+
+Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -39,6 +61,10 @@ if(XCODE_BUILD)
 else()
 	if(xcodebuild_FIND_REQUIRED)
 		message (FATAL_ERROR "xcodebuild program cannot be found!")
+	endif()
+
+	if(NOT xcodebuild_FIND_QUIETLY)
+		message (WARNING "xcodebuild program cannot be found!")
 	endif()
 endif()
 
