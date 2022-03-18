@@ -237,4 +237,10 @@ function(pluginval_add_plugin_test)
 			${log_dir_flag} ${verbose_flag} ${samplerates_flag} ${blocksizes_flag} ${repeats_flag}
 			${random_flag})
 
+	set_tests_properties (
+		"${ORANGES_ARG_NAME}"
+		PROPERTIES REQUIRED_FILES
+				   $<TARGET_PROPERTY:${ORANGES_ARG_TARGET},JUCE_PLUGIN_ARTEFACT_FILE> LABELS
+				   pluginval)
+
 endfunction()
