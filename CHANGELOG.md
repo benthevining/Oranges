@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.18.0](http://github.com/benthevining/Oranges/compare/v1.17.0...v1.18.0) (2022-03-18)
+
+
+### Features
+
+* added a find module for auval ([f3a32f0](http://github.com/benthevining/Oranges/commit/f3a32f0b5fcc2f23254d56d17f27c398c03b08f1))
+
 ## [1.17.0](http://github.com/benthevining/Oranges/compare/v1.16.0...v1.17.0) (2022-03-15)
 
 
