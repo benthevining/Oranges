@@ -103,6 +103,18 @@ endfunction()
 
 #
 
+function(get_required_target_property output target property)
+	get_target_property (property_value "${target}" "${property}")
+
+	if(NOT property_value)
+		message (FATAL_ERROR "Error retrieving property ${property} from target ${target}!")
+	endif()
+
+	set (${output} ${property_value} PARENT_SCOPE)
+endfunction()
+
+#
+
 function(oranges_export_alias_target origTarget namespace)
 	if(NOT TARGET "${namespace}::${origTarget}")
 		add_library ("${namespace}::${origTarget}" ALIAS "${origTarget}")

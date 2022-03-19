@@ -61,11 +61,7 @@ function(call_for_each_plugin_format)
 			)
 	endif()
 
-	get_target_property (plugin_formats "${ORANGES_ARG_TARGET}" JUCE_FORMATS)
-
-	if(NOT plugin_formats)
-		message (FATAL_ERROR "Error retrieving plugin formats from target ${ORANGES_ARG_TARGET}!")
-	endif()
+	get_required_target_property (plugin_formats "${ORANGES_ARG_TARGET}" JUCE_FORMATS)
 
 	foreach(format ${plugin_formats})
 

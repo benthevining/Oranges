@@ -89,25 +89,12 @@ function(auval_add_plugin_test)
 		set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}.auval")
 	endif()
 
-	get_target_property (plugin_code "${ORANGES_ARG_TARGET}" JUCE_PLUGIN_CODE)
+	get_required_target_property (plugin_code "${ORANGES_ARG_TARGET}" JUCE_PLUGIN_CODE)
 
-	if(NOT plugin_code)
-		message (FATAL_ERROR "Error retrieving plugin code from target ${ORANGES_ARG_TARGET}!")
-	endif()
+	get_required_target_property (manufacturer_code "${ORANGES_ARG_TARGET}"
+								  JUCE_PLUGIN_MANUFACTURER_CODE)
 
-	get_target_property (manufacturer_code "${ORANGES_ARG_TARGET}" JUCE_PLUGIN_MANUFACTURER_CODE)
-
-	if(NOT manufacturer_code)
-		message (
-			FATAL_ERROR "Error retrieving manufacturer code from target ${ORANGES_ARG_TARGET}!")
-	endif()
-
-	# TO DO: CATEGORY!!
-	get_target_property (category "${ORANGES_ARG_TARGET}" JUCE_AU_MAIN_TYPE)
-
-	if(NOT category)
-		message (FATAL_ERROR "Error retrieving category from target ${ORANGES_ARG_TARGET}!")
-	endif()
+	get_required_target_property (category "${ORANGES_ARG_TARGET}" JUCE_AU_MAIN_TYPE)
 
 	if(ORANGES_ARG_REPEATS)
 		set (repeats_flag -r "${ORANGES_ARG_REPEATS}")

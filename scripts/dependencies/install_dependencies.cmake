@@ -115,6 +115,8 @@ _oranges_install_git_repository (NAME <name>
 ]]
 
 #[[
+# TO DO: add github repo and rel path options
+
 _oranges_install_file (URL <url>
 					   OUTPUT_PATH <localPath>
 					   [FILENAME <filename>]
