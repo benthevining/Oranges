@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.22.0](http://github.com/benthevining/Oranges/compare/v1.21.0...v1.22.0) (2022-03-19)
+
+
+### Features
+
+* initial commit of package manager scripts ([996cd9d](http://github.com/benthevining/Oranges/commit/996cd9df242235313ff5897b670e4ae5c4bb771c))
+
 ## [1.21.0](http://github.com/benthevining/Oranges/compare/v1.20.0...v1.21.0) (2022-03-19)
 
 
