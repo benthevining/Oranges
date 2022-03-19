@@ -38,14 +38,7 @@ find_program (ORANGES_DOT dot)
 mark_as_advanced (FORCE ORANGES_DOT)
 
 if(NOT ORANGES_DOT)
-	if(dot_FIND_REQUIRED)
-		message (FATAL_ERROR "dot program cannot be found!")
-	endif()
-
-	if(NOT dot_FIND_QUIETLY)
-		message (WARNING "dot program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("dot program cannot be found!")
 	return ()
 endif()
 

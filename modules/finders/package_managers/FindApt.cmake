@@ -21,19 +21,25 @@ Note that sudo is used on Linux.
 Output variables:
 - Apt_FOUND
 
-Functions:
+## Functions:
 
+### apt_update_all
+```
 apt_update_all()
+```
 
 Updates all installed packages.
 
 
+### apt_install_packages
+```
 apt_install_packages (PACKAGES <packageNames>
 					  [UPDATE_FIRST] [OPTIONAL])
+```
 
 Installs the list of packages using apt.
-If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
-If the OPTIONAL option is present, it is not an error for a package to fail to install.
+If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
+If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
 ]]
 
@@ -72,13 +78,7 @@ else()
 		if(DNF)
 			set (apt_program "${DNF}" CACHE INTERNAL "")
 		else()
-			if(Apt_FIND_REQUIRED)
-				message (FATAL_ERROR "No package manager program can be found!")
-			endif()
-
-			if(NOT Apt_FIND_QUIETLY)
-				message (WARNING "No package manager program can be found!")
-			endif()
+			find_package_warning_or_error ("No package manager program can be found!")
 		endif()
 	endif()
 endif()

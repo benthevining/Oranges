@@ -10,19 +10,22 @@
 #
 # ======================================================================================
 
-include_guard (GLOBAL)
+#[[
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+This module provides the function lemons_json_array_to_list.
 
-include (LemonsCmakeDevTools)
+Inclusion style: once globally
 
-#[[ Populate a list variable in the calling scope with all the values from a an array of a JSON object.
+## Functions:
 
+### lemons_json_array_to_list
 ```
 lemons_json_array_to_list (TEXT <jsonString>
 						   ARRAY <nameOfArray>
 						   OUT <outputVar>)
 ```
+
+Populate a list variable in the calling scope with all the values from a an array of a JSON object.
 
 If the array is not present in the passed JSON string, the output variable will be empty.
 
@@ -50,6 +53,12 @@ endif()
 ```
 
 ]]
+
+include_guard (GLOBAL)
+
+cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+
+include (LemonsCmakeDevTools)
 
 function(lemons_json_array_to_list)
 

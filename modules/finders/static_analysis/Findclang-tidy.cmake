@@ -40,14 +40,7 @@ find_program (CLANG_TIDY NAMES clang-tidy)
 mark_as_advanced (FORCE CLANG_TIDY)
 
 if(NOT CLANG_TIDY)
-	if(clang-tidy_FIND_REQUIRED)
-		message (FATAL_ERROR "clang-tidy program cannot be found!")
-	endif()
-
-	if(NOT clang-tidy_FIND_QUIETLY)
-		message (WARNING "clang-tidy program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("clang-tidy program cannot be found!")
 	return ()
 endif()
 

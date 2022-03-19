@@ -14,15 +14,21 @@
 
 This module provides the function oranges_create_doxygen_target().
 
-Functions:
+Inclusion style: Once globally
 
+## Functions:
+
+### oranges_create_doxygen_target
+```
 oranges_create_doxygen_target (INPUT_PATHS <inputPaths>
 							   [TARGET <docsTargetName>]
 							   [OUTPUT_DIR <docsOutputDir>]
 							   [MAIN_PAGE_MD_FILE <mainPageFile>]
 							   [LOGO <logoFile>]
 							   [FILE_PATTERNS <filePatterns>]
-							   [IMAGE_PATHS <imagePaths>])
+							   [IMAGE_PATHS <imagePaths>]
+							   [NO_VERSION_DISPLAY])
+```
 
 Creates a target to execute Doxygen.
 
@@ -64,7 +70,8 @@ function(oranges_create_doxygen_target)
 	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR)
 	set (multiValueArgs INPUT_PATHS FILE_PATTERNS IMAGE_PATHS)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "NO_VERSION_DISPLAY" "${oneValueArgs}" "${multiValueArgs}"
+						   ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG INPUT_PATHS)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -160,8 +167,11 @@ function(oranges_create_doxygen_target)
 		BYPRODUCTS "${ORANGES_DOC_OUTPUT_DIR}/html/index.html"
 		COMMENT "Building ${PROJECT_NAME} documentation...")
 
-	add_custom_command (TARGET "${ORANGES_ARG_TARGET}" PRE_BUILD COMMAND Doxygen::doxygen --version
-						COMMENT "Doxygen version:")
+	if(NOT ORANGES_ARG_NO_VERSION_DISPLAY)
+		add_custom_command (
+			TARGET "${ORANGES_ARG_TARGET}" PRE_BUILD COMMAND Doxygen::doxygen --version
+			COMMENT "Doxygen version:")
+	endif()
 
 	if(TARGET DependencyGraph)
 		add_dependencies ("${ORANGES_ARG_TARGET}" DependencyGraph)

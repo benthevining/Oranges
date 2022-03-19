@@ -10,6 +10,66 @@
 #
 # ======================================================================================
 
+#[[
+
+This module provides the function oranges_fetch_repository.
+
+Inclusion style: once globally
+
+## Cache variables:
+- ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST : if ON, oranges_fetch_repository will first try find_package(<packageName>) before resorting to actually downloading the repository. Defaults to OFF.
+- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored.
+I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
+Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+
+
+## Functions:
+
+### oranges_fetch_repository
+```
+oranges_fetch_repository (NAME <name>
+						  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
+						  [GIT_TAG <ref>]
+						  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
+						  [CMAKE_SUBDIR <rel_path>]
+						  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
+						  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
+						  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
+```
+
+Fetches a git repository, with options for routing the call to `find_package()` or a local location.
+
+Output variables (set in the scope of the caller):
+- `<name>_SOURCE_DIR`
+- `<name>_BINARY_DIR`
+
+If the variable `FETCHCONTENT_SOURCE_DIR_<name>` is set, this function will simply call `add_subdirectory()` on that directory.
+
+The variables `GITHUB_USERNAME`, `GITHUB_ACCESS_TOKEN`, `BITBUCKET_USERNAME`, and `BITBUCKET_PASSWORD` can be set to enable fetching private/protected repositories.
+
+`GIT_TAG` can be an exact commit ref, or the name of a branch.
+
+If `DOWNLOAD_ONLY` is present, `add_subdirectory()` will not be called on the fetched repository.
+
+If `CMAKE_SUBDIR` is set, `add_subdirectory()` will be called on `<pkgName_SOURCE_DIR>/${CMAKE_SUBDIR}` (if a CMakeLists.txt exists in that directory).
+This is useful for projects which have their CMakeLists.txt in a subdirectory, instead of in the root of their source tree.
+
+If the `FULL` option is present, the full git history will be pulled (the default behavior is a shallow clone).
+
+If the `QUIET` option is present, this function will not output status updates.
+
+If the `EXCLUDE_FROM_ALL` option is present, it will be forwarded to the `add_subdirectory()` call for the fetched dependency (if `add_subdirectory()` is called).
+
+If the `NEVER_LOCAL` option is present, then this function will never be routed to a `find_package()` call.
+
+`CMAKE_OPTIONS` is an optional list of space-separated key-value pairs, which will be set as variables before calling `add_subdirectory()` on the fetched dependency (if `add_subdirectory()` is called).
+
+`GIT_STRATEGY` may be one of `CHECKOUT`, `REBASE`, or `REBASE_CHECKOUT` and defines how the git repository is checked out and pulled.
+
+`GIT_OPTIONS` is an optional list of "key=value" pairs that will be passed to the git pull's command line with --config.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -22,30 +82,6 @@ option (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
 
 include (LemonsCmakeDevTools)
 include (FetchContent)
-
-#
-
-#[[
-oranges_fetch_repository (NAME <name>
-						  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <> | BITBUCKET_REPOSITORY <>
-						  [GIT_TAG <ref>]
-						  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
-						  [CMAKE_SUBDIR <rel_path>]
-						  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
-						  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
-						  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
-
-Output variables (set in the scope of the caller):
-- <name>_SOURCE_DIR
-- <name>_BINARY_DIR
-
-variable FETCHCONTENT_SOURCE_DIR_<name> can override package location locally.
-
-cache option ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST will redirect this command to try using find_package first.
-
-cache option ORANGES_FETCH_CACHE defines location of cached sources
-
-]]
 
 #
 

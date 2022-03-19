@@ -20,19 +20,25 @@ Targets:
 Output variables:
 - Pip_FOUND
 
-Functions:
+## Functions:
 
+### pip_upgrade_all
+```
 pip_upgrade_all()
+```
 
 Upgrades all installed packages.
 
 
+### pip_install_packages
+```
 pip_install_packages (PACKAGES <packageNames>
 					  [UPDATE_FIRST] [OPTIONAL])
+```
 
 Installs the list of packages using pip.
-If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
-If the OPTIONAL option is present, it is not an error for a package to fail to install.
+If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
+If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
 ]]
 
@@ -60,13 +66,7 @@ if(TARGET Python3::Interpreter)
 
 	mark_as_advanced (FORCE PIP3)
 else()
-	if(Pip_FIND_REQUIRED)
-		message (FATAL_ERROR "Python interpreter cannot be found!")
-	endif()
-
-	if(NOT Pip_FIND_QUIETLY)
-		message (WARNING "Python interpreter cannot be found!")
-	endif()
+	find_package_warning_or_error ("Python interpreter cannot be found!")
 endif()
 
 if(PIP3)
@@ -78,13 +78,7 @@ if(PIP3)
 
 	add_executable (Python3::Pip ALIAS Pip)
 else()
-	if(Pip_FIND_REQUIRED)
-		message (FATAL_ERROR "Pip cannot be found!")
-	endif()
-
-	if(NOT Pip_FIND_QUIETLY)
-		message (WARNING "Pip cannot be found!")
-	endif()
+	find_package_warning_or_error ("Pip cannot be found!")
 endif()
 
 #

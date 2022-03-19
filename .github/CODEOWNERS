@@ -48,6 +48,8 @@ modules/cpack/scripts/rpm/rpm_settings.cmake benthevining
 modules/cpack/scripts/rpmPostInstall.sh benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
+modules/dependencies/OrangesDownloadFile.cmake benthevining
+modules/dependencies/OrangesInstallPackages.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
 modules/documentation/OrangesGraphVizConfig.cmake benthevining
@@ -64,6 +66,7 @@ modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
+modules/finders/programs/Findauval.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
 modules/finders/programs/Findclang-tidy.cmake benthevining
 modules/finders/programs/Findcodesign.cmake benthevining
@@ -93,6 +96,7 @@ modules/general/OrangesAllIntegrations.cmake benthevining
 modules/general/OrangesCoverageFlags.cmake benthevining
 modules/general/OrangesCreateDefaultDocsTarget.cmake benthevining
 modules/general/OrangesDefaultCMakeSettings.cmake benthevining
+modules/general/OrangesDefaultProjectSettings.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesFetchRepository.cmake benthevining
@@ -102,6 +106,7 @@ modules/general/OrangesUninstallTarget.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
 modules/general/scripts/uninstall.cmake benthevining
 modules/helper_targets/OrangesAllIntegrations.cmake benthevining
+modules/helper_targets/OrangesDefaultTarget.cmake benthevining
 modules/helper_targets/OrangesDefaultWarnings.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining

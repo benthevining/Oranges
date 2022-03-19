@@ -13,6 +13,8 @@
 #[[
 Utilities for AAX plugins.
 
+Inclusion style: once globally
+
 ## Include-time actions:
 Attempts to configure a target to build the AAX SDK based on the path you've provided to LEMONS_AAX_SDK_PATH.
 This module may return early if the AAXSDK target cannot be configured correctly, in which case the AAXSDK target will not exist and the functions provided by this module may not exist.
@@ -39,29 +41,6 @@ Configures default settings for the specified AAX plugin target. Note that `<tar
 `PAGETABLE_FILE` is optional and specifies the name of an AAX pagetable file within your resources target to use.
 
 If `GUID` is present, `${ARGN}` will be forwarded to lemons_configure_aax_plugin_signing.
-
-
-### lemons_configure_aax_plugin_signing
-
-```
-lemons_configure_aax_plugin_signing (TARGET <target> GUID <guid>
-									 ACCOUNT <account> SIGNID <signid> KEYFILE <keyfile> KEYPASSWORD <password>)
-```
-Configures a post-build digital signing step for the specified AAX plugin target. Note that `<target>` is the *literal* name of this plugin target, not the shared plugin target name!
-
-Does nothing if wraptool cannot be located at configure-time.
-
-
-### lemons_set_aax_signing_settings
-```
-lemons_set_aax_signing_settings ([ACCOUNT <accountID>]
-								 [SIGNID <signID>]
-								 [KEYFILE <keyfilePath>]
-								 [KEYPASSWORD <keyPassword>])
-```
-Configures some default settings for the lemons_configure_aax_plugin_signing() function, so that these settings don't have to be provided for each target you configure.
-
-I recommend you create a `YourBrand.cmake` module in some shared location that each project can include, and that module can call this function at include-time with your settings.
 
 ]]
 

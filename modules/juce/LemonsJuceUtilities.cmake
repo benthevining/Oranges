@@ -13,6 +13,8 @@
 #[[
 General JUCE CMake utilities.
 
+Inclusion style: once globally
+
 ## Include-time actions:
 This module adds JUCE using CPM.cmake. By default the tip of JUCE's develop branch is added.
 

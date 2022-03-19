@@ -20,14 +20,20 @@ Targets:
 Output variables:
 - codesign_FOUND
 
-Functions:
+## Functions:
 
+### codesign_sign_target
+```
 codesign_sign_target (TARGET <target>)
+```
 
 Adds a post-build command to the specified target to run codesign on the target's bundle.
 
 
+### codesign_sign_plugin_targets
+```
 codesign_sign_plugin_targets (TARGET <pluginTarget>)
+```
 
 Configures code signing for every individual format target of a plugin.
 
@@ -39,6 +45,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (FeatureSummary)
 include (LemonsCmakeDevTools)
+include (CallForEachPluginFormat)
 
 set_package_properties (
 	codesign PROPERTIES
@@ -60,13 +67,7 @@ if(CODESIGN_PROGRAM)
 
 	set (codesign_FOUND TRUE)
 else()
-	if(codesign_FIND_REQUIRED)
-		message (FATAL_ERROR "codesign program cannot be found!")
-	endif()
-
-	if(NOT codesign_FIND_QUIETLY)
-		message (WARNING "codesign program cannot be found!")
-	endif()
+	find_package_warning_or_error ("codesign program cannot be found!")
 endif()
 
 #
@@ -117,23 +118,11 @@ function(codesign_sign_plugin_targets)
 				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
 	endif()
 
-	get_target_property (plugin_formats "${ORANGES_ARG_TARGET}" JUCE_FORMATS)
-
-	if(NOT plugin_formats)
-		message (FATAL_ERROR "Error retrieving plugin formats from target ${ORANGES_ARG_TARGET}!")
-	endif()
-
-	foreach(format ${plugin_formats})
-
-		set (targetName "${ORANGES_ARG_TARGET}_${format}")
-
-		if(NOT TARGET "${targetName}")
-			message (WARNING "Plugin format target ${targetName} does not exist!")
-			continue ()
-		endif()
-
+	macro(_codesign_config_plugin_format_sign targetName formatName)
 		codesign_sign_target (TARGET "${targetName}")
+	endmacro()
 
-	endforeach()
+	call_for_each_plugin_format (TARGET "${ORANGES_ARG_TARGET}" FUNCTION
+								 _codesign_config_plugin_format_sign)
 
 endfunction()

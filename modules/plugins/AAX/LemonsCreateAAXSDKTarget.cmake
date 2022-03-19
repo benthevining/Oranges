@@ -10,6 +10,20 @@
 #
 # ======================================================================================
 
+#[[
+
+This module creates a target to build the AAX SDK.
+
+Inclusion style: once globally
+
+Targets:
+- AAXSDK
+
+Input variables:
+- LEMONS_AAX_SDK_PATH
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -85,8 +99,6 @@ if(TARGET AAXSDK)
 	message (VERBOSE "Configured AAXSDK target!")
 
 	oranges_export_alias_target (AAXSDK Lemons)
-
-	oranges_install_targets (TARGETS AAXSDK EXPORT OrangesTargets)
 else()
 	message (WARNING "Error configuring the AAXSDK target!")
 endif()

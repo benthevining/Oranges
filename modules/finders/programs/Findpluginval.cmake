@@ -24,8 +24,11 @@ Targets:
 Output variables:
 - pluginval_FOUND
 
-Functions:
 
+## Functions:
+
+### pluginval_add_plugin_test
+```
 pluginval_add_plugin_test (TARGET <targetName>
 						   [NAME <testname>]
 						   [LEVEL <testingLevel>]
@@ -34,14 +37,29 @@ pluginval_add_plugin_test (TARGET <targetName>
 						   [SAMPLERATES <testingSamplerates>]
 						   [BLOCKSIZES <testingBlocksizes>]
 						   [NO_GUI] [VERBOSE] [RANDOMIZE])
+```
 
 Adds a test that executes pluginval on the passed plugin target.
 
-NAME defaults to <TARGET>.pluginval.
+`NAME` defaults to <TARGET>.pluginval.
 
-LEVEL defaults to 5.
+`LEVEL` defaults to 5.
 
 All the options except TARGET and NAME set cache variables prefixed with PLUGINVAL_.
+
+
+### pluginval_add_all_plugin_tests
+```
+pluginval_add_all_plugin_tests (TARGET <pluginTarget>
+								[LEVEL <testingLevel>]
+								[LOG_DIR <logOutputDir>]
+								[REPEATS <numRepeats>]
+								[SAMPLERATES <testingSamplerates>]
+								[BLOCKSIZES <testingBlocksizes>]
+								[NO_GUI] [VERBOSE] [RANDOMIZE])
+```
+
+Creates pluginval tests for each plugin format (by calling pluginval_add_plugin_test for each one).
 
 ]]
 
@@ -52,6 +70,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (FeatureSummary)
 include (OrangesFetchRepository)
 include (LemonsCmakeDevTools)
+include (CallForEachPluginFormat)
 
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
 						DESCRIPTION "Audio plugin testing and validation tool")
@@ -124,13 +143,7 @@ else()
 endif()
 
 if(NOT TARGET Tracktion::pluginval)
-	if(pluginval_FIND_REQUIRED)
-		message (FATAL_ERROR "pluginval cannot be found!")
-	endif()
-
-	if(NOT pluginval_FIND_QUIETLY)
-		message (WARNING "pluginval cannot be found!")
-	endif()
+	find_package_warning_or_error ("pluginval cannot be found!")
 endif()
 
 # #########################################################################################################
@@ -242,5 +255,75 @@ function(pluginval_add_plugin_test)
 		PROPERTIES REQUIRED_FILES
 				   $<TARGET_PROPERTY:${ORANGES_ARG_TARGET},JUCE_PLUGIN_ARTEFACT_FILE> LABELS
 				   pluginval)
+endfunction()
+
+#
+
+#
+
+function(pluginval_add_all_plugin_tests)
+
+	set (options NO_GUI VERBOSE RANDOMIZE)
+	set (oneValueArgs TARGET LEVEL LOG_DIR REPEATS)
+	set (multiValueArgs SAMPLERATES BLOCKSIZES)
+
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG TARGET)
+
+	if(NOT TARGET "${ORANGES_ARG_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
+	endif()
+
+	if(ORANGES_ARG_LEVEL)
+		set (level_flag LEVEL "${ORANGES_ARG_LEVEL}")
+	endif()
+
+	if(ORANGES_ARG_LOG_DIR)
+		set (log_dir_flag LOG_DIR "${ORANGES_ARG_LOG_DIR}")
+	endif()
+
+	if(ORANGES_ARG_REPEATS)
+		set (repeats_flag REPEATS "${ORANGES_ARG_REPEATS}")
+	endif()
+
+	if(ORANGES_ARG_SAMPLERATES)
+		set (samplerates_flag SAMPLERATES ${ORANGES_ARG_SAMPLERATES})
+	endif()
+
+	if(ORANGES_ARG_BLOCKSIZES)
+		set (blocksize_flag BLOCKSIZES ORANGES_ARG_BLOCKSIZES)
+	endif()
+
+	if(ORANGES_ARG_NO_GUI)
+		set (no_gui_flag NO_GUI)
+	endif()
+
+	if(ORANGES_ARG_VERBOSE)
+		set (verbose_flag VERBOSE)
+	endif()
+
+	if(ORANGES_ARG_RANDOMIZE)
+		set (random_flag RANDOMIZE)
+	endif()
+
+	macro(_oranges_create_plugin_format_pluginval_test targetName formatName)
+		pluginval_add_plugin_test (
+			TARGET
+			"${targetName}"
+			${level_flag}
+			${log_dir_flag}
+			${repeats_flag}
+			${samplerates_flag}
+			${blocksize_flag}
+			${no_gui_flag}
+			${verbose_flag}
+			${random_flag})
+	endmacro()
+
+	call_for_each_plugin_format (TARGET "${ORANGES_ARG_TARGET}" FUNCTION
+								 _oranges_create_plugin_format_pluginval_test)
 
 endfunction()

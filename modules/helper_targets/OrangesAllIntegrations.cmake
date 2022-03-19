@@ -10,6 +10,22 @@
 #
 # ======================================================================================
 
+#[[
+
+This module creates the target Oranges::OrangesAllIntegrations and searches for the following packages:
+- ccache
+- clang-tidy
+- cppcheck
+- cpplint
+- include-what-you-use
+
+Inclusion style: once globally
+
+Targets:
+- Oranges::OrangesAllIntegrations
+
+]]
+
 include_guard (GLOBAL)
 
 find_package (ccache QUIET)

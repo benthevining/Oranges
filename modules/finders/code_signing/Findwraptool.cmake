@@ -20,18 +20,21 @@ Targets:
 Output variables:
 - wraptool_FOUND
 
-Functions:
+## Functions:
 
+### wraptool_configure_aax_plugin_signing
+```
 wraptool_configure_aax_plugin_signing (TARGET <targetName>
 									   GUID <guid>
 									   [ACCOUNT <accountID>]
 									   [SIGNID <signID>]
 									   [KEYFILE <keyfilePath>]
 									   [KEYPASSWORD <password>])
+```
 
 Configures signing of an AAX plugin target. Does nothing on Linux.
 
-The ACCOUNT, SIGNID, KEYFILE, and KEYPASSWORD options set the cache variables WRAPTOOL_ACCOUNT, WRAPTOOL_SIGNID, WRAPTOOL_KEYFILE, and WRAPTOOL_KEYPASSWORD, respectively.
+The `ACCOUNT`, `SIGNID`, `KEYFILE`, and `KEYPASSWORD` options set the cache variables `WRAPTOOL_ACCOUNT`, `WRAPTOOL_SIGNID`, `WRAPTOOL_KEYFILE`, and `WRAPTOOL_KEYPASSWORD`, respectively.
 
 ]]
 
@@ -60,9 +63,7 @@ if(WRAPTOOL_PROGRAM)
 
 	set (wraptool_FOUND TRUE)
 else()
-	if(wraptool_FIND_REQUIRED)
-		message (FATAL_ERROR "wraptool program cannot be found!")
-	endif()
+	find_package_warning_or_error ("wraptool program cannot be found!")
 endif()
 
 #

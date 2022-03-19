@@ -20,13 +20,16 @@ Targets:
 Output variables:
 - xcodebuild_FOUND
 
-Functions:
+## Functions:
 
+### include_external_xcode_project
+```
 include_external_xcode_project (TARGET <targetName>
 								DIRECTORY <dirOfXcodeProject>
 								SCHEME <nameOfScheme>
 								[EXTRA_ARGS <extraXcodebuildArgs>]
 								[COMMENT <buildComment>])
+```
 
 Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
 
@@ -59,13 +62,7 @@ if(XCODE_BUILD)
 
 	set (xcodebuild_FOUND TRUE)
 else()
-	if(xcodebuild_FIND_REQUIRED)
-		message (FATAL_ERROR "xcodebuild program cannot be found!")
-	endif()
-
-	if(NOT xcodebuild_FIND_QUIETLY)
-		message (WARNING "xcodebuild program cannot be found!")
-	endif()
+	find_package_warning_or_error ("xcodebuild program cannot be found!")
 endif()
 
 #

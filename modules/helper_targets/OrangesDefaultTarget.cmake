@@ -10,6 +10,17 @@
 #
 # ======================================================================================
 
+#[[
+
+This module creates the target Oranges::OrangesDefaultTarget.
+
+Inclusion style: once globally
+
+Targets:
+- Oranges::OrangesDefaultTarget
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
@@ -28,15 +39,6 @@ define_property (
 		"TRUE if this target has been linked to from outside the original build tree; otherwise FALSE"
 	FULL_DOCS
 		"Boolean indicator of whether this target is being consumed downstream as an installed version"
-	)
-
-define_property (
-	TARGET INHERITED
-	PROPERTY ORANGES_PROJECT_IS_TOP_LEVEL
-	BRIEF_DOCS
-		"Boolean indicating whether the project that created this target is the top-level CMake project"
-	FULL_DOCS
-		"Boolean indicating whether the project that created this target is the top-level CMake project"
 	)
 
 define_property (
@@ -73,7 +75,6 @@ set_target_properties (
 			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON
 			   OPTIMIZE_DEPENDENCIES ON
-			   ORANGES_PROJECT_IS_TOP_LEVEL "${PROJECT_IS_TOP_LEVEL}"
 			   MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)

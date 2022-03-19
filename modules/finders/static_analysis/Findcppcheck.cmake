@@ -40,14 +40,7 @@ find_program (CPPCHECK NAMES cppcheck)
 mark_as_advanced (FORCE CPPCHECK)
 
 if(NOT CPPCHECK)
-	if(cppcheck_FIND_REQUIRED)
-		message (FATAL_ERROR "cppcheck program cannot be found!")
-	endif()
-
-	if(NOT cppcheck_FIND_QUIETLY)
-		message (WARNING "cppcheck program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("cppcheck program cannot be found!")
 	return ()
 endif()
 

@@ -10,6 +10,46 @@
 #
 # ======================================================================================
 
+#[[
+
+This module provides the function oranges_download_file.
+
+Inclusion style: once globally
+
+Cache variables:
+- ORANGES_FILE_DOWNLOAD_CACHE : defines the directory where downloaded files will be stored.
+I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
+If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR.
+Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
+
+## Functions:
+
+### oranges_download_file
+```
+oranges_download_file (URL <url>
+					   FILENAME <localFilename>
+					   [PATH_OUTPUT <outputVar>]
+					   [NO_CACHE] [QUIET] [NEVER_LOCAL]
+					   [TIMEOUT <timeoutSeconds>]
+					   [USERNAME <username>]
+					   [PASSWORD <password>]
+					   [EXPECTED_HASH <alg=expectedHash>])
+```
+
+`URL` and `FILENAME` are required.
+
+`PATH_OUTPUT` may name a variable that will be set with the absolute path of the downloaded file, in the scope of the caller.
+If `PATH_OUTPUT` isn't specified, the variable `${FILENAME}_PATH` will be set to the absolute path of the downloaded file in the scope of the caller.
+
+If the variable `FILE_${FILENAME}_PATH` is set, this function will only set the path output variable to that path, not downloading anything.
+However, if the `NEVER_LOCAL` option is present, the local filepath is ignored and the file will always be downloaded.
+
+If the `QUIET` option is present, this function won't output status updates.
+
+If the `NO_CACHE` option is present, the file will downloaded into the binary tree, instead of the cache folder.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -30,7 +70,7 @@ mark_as_advanced (FORCE ORANGES_FILE_DOWNLOAD_CACHE)
 
 function(oranges_download_file)
 
-	set (options NO_CACHE QUIET)
+	set (options NO_CACHE QUIET NEVER_LOCAL)
 	set (
 		oneValueArgs
 		URL
@@ -50,14 +90,19 @@ function(oranges_download_file)
 		set (ORANGES_ARG_PATH_OUTPUT "${FILENAME}_PATH")
 	endif()
 
+	if(FILE_${ORANGES_ARG_FILENAME}_PATH AND NOT ORANGES_ARG_NEVER_LOCAL)
+		set (local_file_location "${FILE_${ORANGES_ARG_FILENAME}_PATH}")
+
+		if(EXISTS "${local_file_location}")
+			set (${ORANGES_ARG_PATH_OUTPUT} "${local_file_location}" PARENT_SCOPE)
+			return ()
+		endif()
+	endif()
+
 	if(ORANGES_ARG_NO_CACHE)
 		set (cached_file_location "${CMAKE_CURRENT_BINARY_DIR}/_deps/${ORANGES_ARG_FILENAME}")
 	else()
-		if(FILE_${ORANGES_ARG_FILENAME}_PATH)
-			set (cached_file_location "${FILE_${ORANGES_ARG_FILENAME}_PATH}")
-		else()
-			set (cached_file_location "${ORANGES_FILE_DOWNLOAD_CACHE}/${ORANGES_ARG_FILENAME}")
-		endif()
+		set (cached_file_location "${ORANGES_FILE_DOWNLOAD_CACHE}/${ORANGES_ARG_FILENAME}")
 	endif()
 
 	set (${ORANGES_ARG_PATH_OUTPUT} "${cached_file_location}" PARENT_SCOPE)

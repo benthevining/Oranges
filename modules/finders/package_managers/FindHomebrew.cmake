@@ -25,19 +25,25 @@ Targets:
 Output variables:
 - Homebrew_FOUND
 
-Functions:
+## Functions:
 
+### homebrew_update_all
+```
 homebrew_update_all()
+```
 
 Updates all installed packages.
 
 
+### homebrew_install_packages
+```
 homebrew_install_packages (PACKAGES <packageNames>
 						   [UPDATE_FIRST] [OPTIONAL])
+```
 
 Installs the list of packages using Homebrew.
-If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
-If the OPTIONAL option is present, it is not an error for a package to fail to install.
+If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
+If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
 ]]
 
@@ -104,13 +110,7 @@ if(HOMEBREW)
 
 	add_executable (Homebrew::Homebrew ALIAS Homebrew)
 else()
-	if(Homebrew_FIND_REQUIRED)
-		message (FATAL_ERROR "Homebrew cannot be found!")
-	endif()
-
-	if(NOT Homebrew_FIND_QUIETLY)
-		message (WARNING "Homebrew cannot be found!")
-	endif()
+	find_package_warning_or_error ("Homebrew cannot be found!")
 endif()
 
 #

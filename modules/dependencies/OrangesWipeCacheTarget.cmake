@@ -10,6 +10,17 @@
 #
 # ======================================================================================
 
+#[[
+
+When this module is included, it creates a target that wipes all persistent caches of downloaded dependencies.
+
+Inclusion style: Once globally, preferably from top-level project.
+
+Targets:
+- wipe_cache
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

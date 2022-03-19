@@ -18,6 +18,18 @@ include (GNUInstallDirs)
 
 #
 
+macro(find_package_warning_or_error message)
+	if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
+		message (FATAL_ERROR "${message}")
+	endif()
+
+	if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+		message (WARNING "${message}")
+	endif()
+endmacro()
+
+#
+
 function(_lemons_const_variable_watch variableName access)
 	if(access STREQUAL "WRITE_ACCESS")
 		message (AUTHOR_WARNING "Writing to const variable ${variableName}!")

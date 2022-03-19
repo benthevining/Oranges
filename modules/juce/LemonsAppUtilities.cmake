@@ -13,6 +13,8 @@
 #[[
 Utilities for configuring JUCE GUI apps.
 
+Inclusion style: once globally
+
 ## Functions:
 
 ### lemons_configure_headless_app

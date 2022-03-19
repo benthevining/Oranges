@@ -10,6 +10,14 @@
 #
 # ======================================================================================
 
+#[[
+
+When this modules is included, if CPACK_GENERATOR is not set, it will be set to a default value sensible for the current platform.
+
+Inclusion style: Once globally
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)

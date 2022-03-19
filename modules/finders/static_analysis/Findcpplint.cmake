@@ -40,14 +40,7 @@ find_program (CPPLINT NAMES cpplint)
 mark_as_advanced (FORCE CPPLINT)
 
 if(NOT CPPLINT)
-	if(cpplint_FIND_REQUIRED)
-		message (FATAL_ERROR "cpplint program cannot be found!")
-	endif()
-
-	if(NOT cpplint_FIND_QUIETLY)
-		message (WARNING "cpplint program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("cpplint program cannot be found!")
 	return ()
 endif()
 

@@ -10,6 +10,33 @@
 #
 # ======================================================================================
 
+#[[
+
+This module locates the auval tool and provides the function auval_add_plugin_test.
+
+Targets:
+- Apple::auval : the auval executable.
+
+Output variables:
+- auval_FOUND
+
+## Functions:
+
+### auval_add_plugin_test
+```
+auval_add_plugin_test (TARGET <targetName>
+					   [NAME <testName>]
+					   [REPEATS <numRepeats>])
+```
+
+Creates a test that executes auval on the given AudioUnit plugin target.
+
+`NAME` may specify the name of the test, and defaults to <TARGET>.auval.
+
+`REPEATS` may specify a number of times for validation to be repeated.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -35,13 +62,7 @@ if(AUVAL_PROGRAM)
 
 	set (auval_FOUND TRUE)
 else()
-	if(auval_FIND_REQUIRED)
-		message (FATAL_ERROR "auval cannot be found!")
-	endif()
-
-	if(NOT auval_FIND_QUIETLY)
-		message (WARNING "auval cannot be found!")
-	endif()
+	find_package_warning_or_error ("auval cannot be found!")
 endif()
 
 #

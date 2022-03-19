@@ -13,6 +13,8 @@
 #[[
 Utilities for audio plugins.
 
+Inclusion style: once globally
+
 ## Include-time actions:
 Determines the list of all available plugin formats.
 
@@ -20,8 +22,12 @@ Determines the list of all available plugin formats.
 - LEMONS_PLUGIN_FORMATS: list of all available plugin formats
 
 ## Options:
+- LEMONS_INCLUDE_PRIVATE_SDKS
 - LEMONS_VST2_SDK_PATH: if you have access to the VST2 SDK, you can define this variable to the absolute path of the VST2 SDK root to enable compiling VST2 plugins.
-- LEMONS_BUILD_TESTS: if ON, this module will include LemonsPluginvalUtils, and calling `lemons_configure_juce_plugin` will also call `lemons_configure_pluginval_tests`. Defaults to OFF.
+- LEMONS_AAX_SDK_PATH
+
+## Environment variables:
+- LEMONS_PRIVATE_SDKS
 
 
 ## Function:
@@ -51,7 +57,8 @@ option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF
 
 mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
 
-if(LEMONS_INCLUDE_PRIVATE_SDKS OR CPM_PrivateSDKs_SOURCE OR DEFINED ENV{LEMONS_PRIVATE_SDKS})
+if(LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs OR DEFINED
+																		 ENV{LEMONS_PRIVATE_SDKS})
 	include (LemonsAddPrivateSDKs)
 endif()
 

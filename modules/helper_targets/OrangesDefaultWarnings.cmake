@@ -10,6 +10,17 @@
 #
 # ======================================================================================
 
+#[[
+
+This module creates the target Oranges::OrangesDefaultWarnings.
+
+Inclusion style: once globally
+
+Targets:
+- Oranges::OrangesDefaultWarnings
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

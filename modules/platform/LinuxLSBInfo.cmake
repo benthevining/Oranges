@@ -12,12 +12,12 @@
 
 #[[
 
-## Include-time actions:
-Sets the cache variables LSB_DISTRIBUTOR_ID, LSB_RELEASE, and LSB_CODENAME.
+Inclusion style: once globally
 
-## Note
-
-This module is included by Lemons by default, when Lemons is added as a subdirectory.
+Output variables:
+- LSB_DISTRIBUTOR_ID
+- LSB_RELEASE
+- LSB_CODENAME
 
 ]]
 

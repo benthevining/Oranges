@@ -14,7 +14,7 @@
 
 When this module is included, it creates a target that generates a png image of the CMake dependency graph for the current project.
 
-This module can only be included once per project, and should usually be included only from the top-level project.
+Inclusion style: Once globally, preferably from top-level project
 
 Cache variables:
 - ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE : if set, the generated png image will be copied to this folder.
@@ -23,7 +23,7 @@ The use case is to commit the dependency graph image to the source tree. Default
 
 ]]
 
-# NB becuase cmake only outputs a dependency graph for the top-level project, I use variables
+# NB. becuase cmake only outputs a dependency graph for the top-level project, I use variables
 # CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.
 
 include_guard (GLOBAL)

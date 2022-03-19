@@ -45,14 +45,7 @@ find_program (CCACHE ccache)
 mark_as_advanced (FORCE CCACHE)
 
 if(NOT CCACHE)
-	if(ccache_FIND_REQUIRED)
-		message (FATAL_ERROR "ccache program cannot be found!")
-	endif()
-
-	if(NOT ccache_FIND_QUIETLY)
-		message (WARNING "ccache program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("ccache program cannot be found!")
 	return ()
 endif()
 

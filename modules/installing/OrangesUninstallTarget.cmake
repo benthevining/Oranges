@@ -10,6 +10,17 @@
 #
 # ======================================================================================
 
+#[[
+
+When this module is included, it creates a target that uninstalls all of the project's installed files.
+
+Inclusion style: Once globally, preferably from top-level project.
+
+Targets:
+- uninstall
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

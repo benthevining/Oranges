@@ -25,19 +25,25 @@ Targets:
 Output variables:
 - Chocolatey_FOUND
 
-Functions:
+## Functions:
 
+### choclatey_update_all
+```
 choclatey_update_all()
+```
 
 Updates all installed packages.
 
 
+### chocolatey_install_packages
+```
 chocolatey_install_packages (PACKAGES <packageNames>
 						     [UPDATE_FIRST] [OPTIONAL])
+```
 
 Installs the list of packages using Chocolatey.
-If the UPDATE_FIRST first option is present, all installed packages will be updated before installing new packages.
-If the OPTIONAL option is present, it is not an error for a package to fail to install.
+If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
+If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
 ]]
 
@@ -93,13 +99,7 @@ if(CHOCO)
 
 	add_executable (Chocolatey::Chocolatey ALIAS Chocolatey)
 else()
-	if(Chocolatey_FIND_REQUIRED)
-		message (FATAL_ERROR "Chocolatey cannot be found!")
-	endif()
-
-	if(NOT Chocolatey_FIND_QUIETLY)
-		message (WARNING "Chocolatey cannot be found!")
-	endif()
+	find_package_warning_or_error ("Chocolatey cannot be found!")
 endif()
 
 #

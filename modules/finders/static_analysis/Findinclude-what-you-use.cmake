@@ -40,14 +40,7 @@ find_program (INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
 mark_as_advanced (FORCE INCLUDE_WHAT_YOU_USE)
 
 if(NOT INCLUDE_WHAT_YOU_USE)
-	if(include-what-you-use_FIND_REQUIRED)
-		message (FATAL_ERROR "include-what-you-use program cannot be found!")
-	endif()
-
-	if(NOT include-what-you-use_FIND_QUIETLY)
-		message (WARNING "include-what-you-use program cannot be found!")
-	endif()
-
+	find_package_warning_or_error ("include-what-you-use program cannot be found!")
 	return ()
 endif()
 

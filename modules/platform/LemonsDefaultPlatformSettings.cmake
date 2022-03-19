@@ -13,12 +13,10 @@
 #[[
 Default settings and configuration for a CMake build on the OS you're currently running.
 
+Inclusion style: once globally
+
 ## Include-time actions:
 Sets appropriate platform-specific settings for the current build.
-
-## Note
-
-This module is included by Lemons by default, when Lemons is added as a subdirectory.
 
 ]]
 

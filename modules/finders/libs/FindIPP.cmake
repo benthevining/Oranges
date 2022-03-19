@@ -114,15 +114,8 @@ find_path (
 mark_as_advanced (FORCE IPP_INCLUDE_DIR)
 
 if(NOT IPP_INCLUDE_DIR OR NOT IS_DIRECTORY "${IPP_INCLUDE_DIR}")
-	if(IPP_FIND_REQUIRED)
-		message (FATAL_ERROR "IPP could not be located!")
-	else()
-		if(NOT IPP_FIND_QUIETLY)
-			message (WARNING "IPP include directory could not be located!")
-		endif()
-
-		return ()
-	endif()
+	find_package_warning_or_error ("IPP include directory could not be located!")
+	return ()
 endif()
 
 set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel IPP installation")
@@ -130,15 +123,8 @@ set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel 
 mark_as_advanced (FORCE IPP_ROOT)
 
 if(NOT IS_DIRECTORY "${IPP_ROOT}")
-	if(IPP_FIND_REQUIRED)
-		message (FATAL_ERROR "IPP could not be located!")
-	else()
-		if(NOT IPP_FIND_QUIETLY)
-			message (WARNING "IPP root directory could not be located!")
-		endif()
-
-		return ()
-	endif()
+	find_package_warning_or_error ("IPP root directory could not be located!")
+	return ()
 endif()
 
 #
@@ -179,16 +165,8 @@ function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 
 	if(NOT IPP_LIB_${IPP_COMPONENT} OR NOT EXISTS "${IPP_LIB_${IPP_COMPONENT}}")
-		if(IPP_FIND_REQUIRED)
-			message (FATAL_ERROR "IPP component ${IPP_COMPONENT} could not be found!")
-		endif()
-
-		if(NOT IPP_FIND_QUIETLY)
-			message (WARNING "IPP component ${IPP_COMPONENT} could not be found!")
-		endif()
-
 		if(comp_required)
-			return ()
+			find_package_warning_or_error ("IPP component ${IPP_COMPONENT} could not be found!")
 		endif()
 	endif()
 
@@ -290,14 +268,7 @@ endforeach()
 #
 
 if(NOT TARGET IntelIPP)
-	if(IPP_FIND_REQUIRED)
-		message (FATAL_ERROR "Error creating IntelIPP library target!")
-	endif()
-
-	if(NOT IPP_FIND_QUIETLY)
-		message (WARNING "Error creating IntelIPP library target!")
-	endif()
-
+	find_package_warning_or_error ("Error creating IntelIPP library target!")
 	return ()
 endif()
 

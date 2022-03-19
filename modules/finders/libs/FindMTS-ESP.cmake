@@ -88,13 +88,7 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 		oranges_export_alias_target (MTSClient ODDSound)
 	else()
-		if(MTS-ESP_FIND_REQUIRED_Client)
-			message (FATAL_ERROR "MTS-ESP component 'Client' could not be found!")
-		endif()
-
-		if(NOT MTS-ESP_FIND_QUIETLY)
-			message (WARNING "Error creating MTS-ESP client target!")
-		endif()
+		find_package_warning_or_error ("MTS-ESP component 'Client' could not be found!")
 	endif()
 endif()
 
@@ -166,32 +160,17 @@ if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 
 			oranges_export_alias_target (MTSMaster ODDSound)
 		else()
-			if(NOT MTS-ESP_FIND_QUIETLY)
-				message (WARNING "libMTS could not be found!")
-			endif()
+			find_package_warning_or_error ("libMTS could not be found!")
 		endif()
 	endif()
 
 	if(NOT TARGET ODDSound::MTSMaster)
-		if(MTS-ESP_FIND_REQUIRED_Master)
-			message (FATAL_ERROR "MTS-ESP component 'Master' could not be found!")
-		endif()
-
-		if(NOT MTS-ESP_FIND_QUIETLY)
-			message (WARNING "Error creating MTS-ESP master target!")
-		endif()
+		find_package_warning_or_error ("MTS-ESP component 'Master' could not be found!")
 	endif()
 endif()
 
 if(NOT (TARGET ODDSound::MTSClient OR TARGET ODDSound::MTSMaster))
-	if(MTS-ESP_FIND_REQUIRED)
-		message (FATAL_ERROR "MTS-ESP could not be located!")
-	endif()
-
-	if(NOT MTS-ESP_FIND_QUIETLY)
-		message (WARNING "MTS-ESP could not be located!")
-	endif()
-
+	find_package_warning_or_error ("MTS-ESP could not be located!")
 	return ()
 endif()
 

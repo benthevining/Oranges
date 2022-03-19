@@ -13,6 +13,8 @@
 #[[
 Utilities for adding binary data targets to JUCE projects.
 
+Inclusion style: once globally
+
 ## Function:
 
 ### lemons_add_resources_folder {#lemons_add_resources_folder}

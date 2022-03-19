@@ -10,6 +10,17 @@
 #
 # ======================================================================================
 
+#[[
+
+This module configures installation of system libraries.
+
+Inclusion style: Once globally
+
+Options:
+- ORANGES_IGNORE_SYSTEM_LIBS : if set to ON, including this module will do nothing. Defaults to OFF.
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -21,7 +32,7 @@ option (ORANGES_IGNORE_SYSTEM_LIBS
 
 mark_as_advanced (FORCE ORANGES_IGNORE_SYSTEM_LIBS)
 
-if(ORANGES_IGNORE_SYSTEM_LIBS OR ${PROJECT_NAME}_SKIP_SYSTEM_LIBS_INSTALL)
+if(ORANGES_IGNORE_SYSTEM_LIBS)
 	return ()
 endif()
 

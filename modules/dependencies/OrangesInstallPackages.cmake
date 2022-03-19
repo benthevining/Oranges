@@ -10,6 +10,31 @@
 #
 # ======================================================================================
 
+#[[
+
+This module provides functions that wrap platform-specific package managers, as well as Python's pip.
+
+Inclusion style: once globally
+
+## Functions:
+
+### oranges_update_all_packages
+```
+oranges_update_all_packages()
+```
+
+Updates all installed system packages.
+
+
+### oranges_install_packages
+```
+oranges_install_packages ([SYSTEM_PACKAGES <packageNames...>]
+						  [PIP_PACKAGES <packageNames...>]
+						  [UPDATE_FIRST] [OPTIONAL])
+```
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -41,11 +66,35 @@ endfunction()
 #
 
 function(oranges_install_packages)
-	if(APPLE)
-		homebrew_install_packages (${ARGN})
-	elseif(WIN32)
-		chocolatey_install_packages (${ARGN})
-	else()
-		apt_install_packages (${ARGN})
+
+	set (options UPDATE_FIRST OPTIONAL)
+	set (multiValueArgs SYSTEM_PACKAGES PIP_PACKAGES)
+
+	cmake_parse_arguments (ORANGES_ARG "${options}" "" "${multiValueArgs}" ${ARGN})
+
+	if(ORANGES_ARG_UPDATE_FIRST)
+		set (update_flag UPDATE_FIRST)
 	endif()
+
+	if(ORANGES_ARG_OPTIONAL)
+		set (optional_flag OPTIONAL)
+	endif()
+
+	if(ORANGES_ARG_SYSTEM_PACKAGES)
+		if(APPLE)
+			set (pkg_command homebrew_install_packages)
+		elseif(WIN32)
+			set (pkg_command chocolatey_install_packages)
+		else()
+			set (pkg_command apt_install_packages)
+		endif()
+
+		cmake_language (CALL "${pkg_command}" PACKAGES ${ORANGES_ARG_SYSTEM_PACKAGES}
+						${update_flag} ${optional_flag})
+	endif()
+
+	if(ORANGES_ARG_PIP_PACKAGES)
+		pip_install_packages (PACKAGES ${ORANGES_ARG_PIP_PACKAGES} ${update_flag} ${optional_flag})
+	endif()
+
 endfunction()

@@ -10,6 +10,21 @@
 #
 # ======================================================================================
 
+#[[
+
+Fetches the PrivateSDKs repository.
+
+Inclusion style: once globally
+
+Options:
+- FETCHCONTENT_SOURCE_DIR_PrivateSDKs
+- GITHUB_USERNAME, GITHUB_ACCESS_TOKEN
+
+Environment variables:
+- LEMONS_PRIVATE_SDKS
+
+]]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -18,6 +33,12 @@ include (OrangesFetchRepository)
 
 if(DEFINED ENV{LEMONS_PRIVATE_SDKS})
 	file (REAL_PATH "$ENV{LEMONS_PRIVATE_SDKS}" FETCHCONTENT_SOURCE_DIR_PrivateSDKs EXPAND_TILDE)
+endif()
+
+if(NOT FETCHCONTENT_SOURCE_DIR_PrivateSDKs)
+	if(NOT (GITHUB_USERNAME AND GITHUB_ACCESS_TOKEN))
+		message (WARNING "Github credentials missing!")
+	endif()
 endif()
 
 oranges_fetch_repository (
