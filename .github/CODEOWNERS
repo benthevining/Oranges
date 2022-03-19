@@ -18,6 +18,7 @@
 .github/ISSUE_TEMPLATE/bug_report.md benthevining
 .github/ISSUE_TEMPLATE/config.yml benthevining
 .github/ISSUE_TEMPLATE/feature_request.md benthevining
+.github/dependabot.yml benthevining
 .github/workflows/release.yml benthevining
 .gitignore benthevining
 .gitlint benthevining
@@ -70,7 +71,9 @@ modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
+modules/finders/package_managers/FindApt.cmake benthevining
 modules/finders/package_managers/FindChocolatey.cmake benthevining
+modules/finders/package_managers/FindHomebrew.cmake benthevining
 modules/finders/package_managers/FindPip.cmake benthevining
 modules/finders/programs/Findauval.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
@@ -171,6 +174,7 @@ scripts/alphabetize_codeowners.py benthevining
 scripts/cmake_file_api/query.json benthevining
 scripts/dependencies/download_file.cmake benthevining
 scripts/dependencies/download_repository.cmake benthevining
+scripts/dependencies/scripts/helper_functions.cmake benthevining
 scripts/dependencies/scripts/shim_template.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
