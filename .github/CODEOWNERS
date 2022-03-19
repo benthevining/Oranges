@@ -62,6 +62,8 @@ modules/finders/Findclang-tidy.cmake benthevining
 modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
+modules/finders/libs/FindMIPP.cmake benthevining
+modules/finders/libs/FindMTS-ESP.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
 modules/finders/programs/Findclang-tidy.cmake benthevining
 modules/finders/programs/Findcodesign.cmake benthevining
@@ -74,6 +76,9 @@ modules/finders/programs/package_managers/FindChocolatey.cmake benthevining
 modules/finders/programs/package_managers/FindHomebrew.cmake benthevining
 modules/finders/programs/package_managers/FindPip.cmake benthevining
 modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthevining
+modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
+modules/finders/static_analysis/Findclang-tidy.cmake benthevining
+modules/finders/static_analysis/Findcpplint.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
@@ -121,6 +126,7 @@ modules/integrations/OrangesCppLint.cmake benthevining
 modules/integrations/OrangesIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/internal/BVBrandFlags.cmake benthevining
+modules/internal/LemonsCmakeDevTools.cmake benthevining
 modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
