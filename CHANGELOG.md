@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.19.0](http://github.com/benthevining/Oranges/compare/v1.18.0...v1.19.0) (2022-03-19)
+
+
+### Features
+
+* added a module to download and cache single files ([9e71f73](http://github.com/benthevining/Oranges/commit/9e71f73e627904b6f6ac3e91d3fa39aa133afb19))
+
 ## [1.18.0](http://github.com/benthevining/Oranges/compare/v1.17.0...v1.18.0) (2022-03-18)
 
 
