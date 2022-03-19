@@ -58,16 +58,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
-
-if(FETCHCONTENT_BASE_DIR)
-	set (ORANGES_FILE_DOWNLOAD_CACHE "${FETCHCONTENT_BASE_DIR}"
-		 CACHE PATH "Directory in which to cache all downloaded files")
-else()
-	set (ORANGES_FILE_DOWNLOAD_CACHE "${CMAKE_SOURCE_DIR}/Cache"
-		 CACHE PATH "Directory in which to cache all downloaded files")
-endif()
-
-mark_as_advanced (FORCE ORANGES_FILE_DOWNLOAD_CACHE)
+include (OrangesSetUpCache)
 
 #
 

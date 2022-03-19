@@ -74,13 +74,11 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache"
-	 CACHE PATH "Directory in which to cache all downloaded dependencies")
-
 option (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
 		"Try local find_package before fetching dependencies from git" OFF)
 
 include (LemonsCmakeDevTools)
+include (OrangesSetUpCache)
 include (FetchContent)
 
 #

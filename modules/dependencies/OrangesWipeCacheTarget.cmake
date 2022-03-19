@@ -30,6 +30,8 @@ if(TARGET wipe_cache)
 	return ()
 endif()
 
+include (OrangesSetUpCache)
+
 if(PROJECT_IS_TOP_LEVEL)
 	message (DEBUG "Oranges - adding wipe_cache target in project ${PROJECT_NAME}")
 else()
