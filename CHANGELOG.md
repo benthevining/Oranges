@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.23.0](http://github.com/benthevining/Oranges/compare/v1.22.0...v1.23.0) (2022-03-19)
+
+
+### Features
+
+* added modules to abstract finding various UNIX or Windows shells ([fe0d7ea](http://github.com/benthevining/Oranges/commit/fe0d7ea24233c89d27f8159b9f420d7d2a644caa))
+
 ## [1.22.0](http://github.com/benthevining/Oranges/compare/v1.21.0...v1.22.0) (2022-03-19)
 
 
