@@ -28,7 +28,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 #[[
 
-- identify the set to use (either specified on cmd line or find the one marked as the project default)
+- identify the set to use (either specified on cmd line or find the one marked as the project default) - or option for all
 - for each set, resolve all includes
 
 ]]

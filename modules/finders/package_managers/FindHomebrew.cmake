@@ -68,11 +68,7 @@ find_program (HOMEBREW brew)
 if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 	unset (CACHE{HOMEBREW})
 
-	find_program (BASH bash)
-
-	if(Homebrew_FIND_REQUIRED AND NOT BASH)
-		message (FATAL_ERROR "bash is required for installing Homebrew, and cannot be found!")
-	endif()
+	include (OrangesFindUnixShell)
 
 	if(Homebrew_FIND_QUIETLY)
 		set (quiet_flag QUIET)
@@ -91,7 +87,7 @@ if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 
 	unset (quiet_flag)
 
-	find_package_execute_process (COMMAND "${BASH}" -c "${install_script}")
+	find_package_execute_process (COMMAND ${UnixShellCommand} "${install_script}")
 
 	unset (install_script)
 

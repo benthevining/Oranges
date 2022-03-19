@@ -171,6 +171,7 @@ scripts/alphabetize_codeowners.py benthevining
 scripts/cmake_file_api/query.json benthevining
 scripts/dependencies/download_file.cmake benthevining
 scripts/dependencies/download_repository.cmake benthevining
+scripts/dependencies/scripts/shim_template.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining

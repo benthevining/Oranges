@@ -65,21 +65,16 @@ find_program (CHOCO choco)
 if(NOT CHOCO AND NOT CHOCO_NO_INSTALL)
 	unset (CACHE{CHOCO})
 
-	find_program (POWERSHELL powershell)
-
-	if(Chocolatey_FIND_REQUIRED AND NOT POWERSHELL)
-		message (
-			FATAL_ERROR "Powershell is required for installing Chocolatey, and cannot be found!")
-	endif()
+	include (OrangesFindWindowsShell)
 
 	if(NOT Chocolatey_FIND_QUIETLY)
 		message (STATUS "Installing Chocolatey...")
 	endif()
 
-	find_package_execute_process (COMMAND "${POWERSHELL}" Set-ExecutionPolicy Bypass)
+	find_package_execute_process (COMMAND ${WindowsShellCommand} Set-ExecutionPolicy Bypass)
 
 	find_package_execute_process (
-		COMMAND "${POWERSHELL}" iex
+		COMMAND ${WindowsShellCommand} iex
 		"((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
 
 	find_program (CHOCO choco)
