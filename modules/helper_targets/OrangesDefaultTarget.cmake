@@ -72,6 +72,8 @@ define_property (
 set_target_properties (
 	OrangesDefaultTarget
 	PROPERTIES DEBUG_POSTFIX -d
+			   RELWITHDEBINFO_POSTFIX -rd
+			   MINSIZEREL_POSTFIX -mr
 			   CXX_STANDARD 20
 			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON

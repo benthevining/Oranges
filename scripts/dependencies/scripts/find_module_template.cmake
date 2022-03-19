@@ -21,7 +21,10 @@ set (source_dir "@@ORANGES_ARG_NAME@_SOURCE_DIR@")
 set (@ORANGES_ARG_NAME@_SOURCE_DIR "${source_dir}")
 set (FETCHCONTENT_SOURCE_DIR_@ORANGES_ARG_NAME@ "${source_dir}")
 
-add_subdirectory ("${source_dir}" "${CMAKE_CURRENT_BINARY_DIR}/@ORANGES_ARG_NAME@")
+if(NOT @ORANGES_ARG_NAME@_INCLUDED)
+	add_subdirectory ("${source_dir}" "${CMAKE_CURRENT_BINARY_DIR}/@ORANGES_ARG_NAME@")
+	set (@ORANGES_ARG_NAME@_INCLUDED TRUE)
+endif()
 
 set (@ORANGES_ARG_NAME@_FOUND TRUE)
 

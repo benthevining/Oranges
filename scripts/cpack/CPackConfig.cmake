@@ -12,7 +12,7 @@
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include ("@CMAKE_BINARY_DIR@/CPackConfig.cmake")
+include ("@CMAKE_BINARY_DIR@/Release/CPackConfig.cmake")
 
 unset (CPACK_INSTALL_CMAKE_PROJECTS)
 

@@ -56,6 +56,7 @@ else()
 endif()
 
 find_package (Pip REQUIRED)
+find_package (asdf QUIET)
 
 #
 
@@ -69,6 +70,10 @@ function(oranges_update_all_packages)
 	endif()
 
 	pip_upgrade_all ()
+
+	if(TARGET asdf::asdf)
+		asdf_update ("${CMAKE_SOURCE_DIR}")
+	endif()
 endfunction()
 
 #
@@ -78,7 +83,7 @@ function(oranges_install_packages)
 	set (options UPDATE_FIRST OPTIONAL)
 	set (multiValueArgs SYSTEM_PACKAGES PIP_PACKAGES)
 
-	cmake_parse_arguments (ORANGES_ARG "${options}" "" "${multiValueArgs}" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "DIR" "${multiValueArgs}" ${ARGN})
 
 	oranges_forward_function_arguments (
 		PREFIX
@@ -104,6 +109,14 @@ function(oranges_install_packages)
 
 	if(ORANGES_ARG_PIP_PACKAGES)
 		pip_install_packages (PACKAGES ${ORANGES_ARG_PIP_PACKAGES} ${ORANGES_FORWARDED_ARGUMENTS})
+	endif()
+
+	if(TARGET asdf::asdf)
+		if(NOT ORANGES_ARG_DIR)
+			set (ORANGES_ARG_DIR "${CMAKE_SOURCE_DIR}")
+		endif()
+
+		asdf_install ("${ORANGES_ARG_DIR}")
 	endif()
 
 endfunction()

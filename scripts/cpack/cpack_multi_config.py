@@ -51,7 +51,6 @@ def main(source_dir, configs):
 		config_binary_dir = os.path.join(binary_dir, config)
 
 		configure_build_tree(source_dir, config_binary_dir, config)
-
 		compile_build_tree(config_binary_dir, config)
 
 	configure_cpack(binary_dir)
@@ -62,4 +61,4 @@ def main(source_dir, configs):
 #
 
 if __name__ == '__main__':
-	main()
+	main(source_dir, ['Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'])

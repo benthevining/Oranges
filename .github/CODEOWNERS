@@ -93,6 +93,7 @@ modules/finders/programs/package_managers/FindPip.cmake benthevining
 modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthevining
 modules/finders/programs/scripts/launcher.in benthevining
 modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
+modules/finders/shells/FindBash.cmake benthevining
 modules/finders/shells/FindPowerShell.cmake benthevining
 modules/finders/shells/Findfish.cmake benthevining
 modules/finders/shells/Findsh.cmake benthevining
