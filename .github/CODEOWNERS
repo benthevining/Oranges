@@ -69,6 +69,7 @@ modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
+modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
@@ -93,6 +94,8 @@ modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthe
 modules/finders/programs/scripts/launcher.in benthevining
 modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
 modules/finders/shells/FindPowerShell.cmake benthevining
+modules/finders/shells/Findfish.cmake benthevining
+modules/finders/shells/Findsh.cmake benthevining
 modules/finders/static_analysis/Findclang-tidy.cmake benthevining
 modules/finders/static_analysis/Findcpplint.cmake benthevining
 modules/finders/static_analysis/Findinclude-what-you-use.cmake benthevining
@@ -170,6 +173,7 @@ modules/plugins/CallForEachPluginFormat.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
 modules/plugins/LemonsPluginUtilities.cmake benthevining
+modules/shells/OrangesFindUnixShell.cmake benthevining
 modules/shells/OrangesShellTargetProperties.cmake benthevining
 ning
 package.json benthevining

@@ -47,6 +47,18 @@ include (OrangesFindPackageHelpers)
 set_package_properties (wraptool PROPERTIES URL "https://paceap.com/pro-audio/"
 						DESCRIPTION "AAX plugin signing tool provided by PACE")
 
+define_property (GLOBAL PROPERTY WRAPTOOL_ACCOUNT BRIEF_DOCS "wraptool account ID"
+				 FULL_DOCS "wraptool account ID")
+
+define_property (GLOBAL PROPERTY WRAPTOOL_SIGNID BRIEF_DOCS "wraptool sign ID"
+				 FULL_DOCS "wraptool sign ID")
+
+define_property (GLOBAL PROPERTY WRAPTOOL_KEYFILE BRIEF_DOCS "wraptool keyfile"
+				 FULL_DOCS "wraptool keyfile")
+
+define_property (GLOBAL PROPERTY WRAPTOOL_KEYPASSWORD BRIEF_DOCS "wraptool key password"
+				 FULL_DOCS "wraptool key password")
+
 set (wraptool_FOUND FALSE)
 
 find_program (WRAPTOOL_PROGRAM wraptool)
@@ -91,6 +103,11 @@ function(wraptool_configure_aax_plugin_signing)
 	set (WRAPTOOL_SIGNID "${LEMONS_AAX_SIGNID}" CACHE STRING "Sign ID")
 	set (WRAPTOOL_KEYFILE "${LEMONS_AAX_KEYFILE}" CACHE FILEPATH "Keyfile path")
 	set (WRAPTOOL_KEYPASSWORD "${LEMONS_AAX_KEYPASSWORD}" CACHE STRING "Key password")
+
+	set_property (GLOBAL PROPERTY WRAPTOOL_ACCOUNT "${WRAPTOOL_ACCOUNT}")
+	set_property (GLOBAL PROPERTY WRAPTOOL_SIGNID "${WRAPTOOL_SIGNID}")
+	set_property (GLOBAL PROPERTY WRAPTOOL_KEYFILE "${WRAPTOOL_KEYFILE}")
+	set_property (GLOBAL PROPERTY WRAPTOOL_KEYPASSWORD "${WRAPTOOL_KEYPASSWORD}")
 
 	if(APPLE)
 		add_custom_command (

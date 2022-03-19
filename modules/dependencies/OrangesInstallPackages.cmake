@@ -41,10 +41,16 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 
+define_property (
+	GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME BRIEF_DOCS "System package manager being used"
+	FULL_DOCS "The name of the system package manager program being used")
+
 if(APPLE)
 	find_package (Homebrew REQUIRED)
+	set_property (GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME Homebrew)
 elseif(WIN32)
 	find_package (Chocolatey REQUIRED)
+	set_property (GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME Chocolatey)
 else()
 	find_package (Apt REQUIRED)
 endif()

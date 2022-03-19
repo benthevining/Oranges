@@ -24,6 +24,8 @@ Inclusion style: In each project
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+message (DEBUG "OrangesDefaultInstallSettings loaded - project name: ${PROJECT_NAME}")
+
 include (OrangesInstallSystemLibs)
 include (OrangesDefaultCPackSettings)
 include (OrangesGeneratePkgConfig)
@@ -32,6 +34,7 @@ if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesUninstallTarget)
 endif()
 
-if(NOT ${PROJECT_NAME}_SKIP_PKGCONFIG AND TARGET ${PROJECT_NAME})
+if((NOT ${PROJECT_NAME}_SKIP_PKGCONFIG) AND (TARGET ${PROJECT_NAME}))
+	message (DEBUG "Configuring pkgconfig file generation for target ${PROJECT_NAME}...")
 	oranges_create_pkgconfig_file (TARGET ${PROJECT_NAME})
 endif()

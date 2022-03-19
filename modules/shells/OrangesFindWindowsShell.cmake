@@ -18,7 +18,7 @@ Targets:
 - Oranges::WindowsShell : the located shell executable
 
 Output variables:
-- WindowsShellCommand : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
+- WINDOWS_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
 
 Supported shells (in searching order):
 - PowerShell
@@ -90,6 +90,7 @@ function(_oranges_set_windows_shell_global_properties)
 	endif()
 
 	set_property (GLOBAL PROPERTY WINDOWS_SHELL_COMMAND Oranges::WindowsShell ${shell_flags})
+	set (WINDOWS_SHELL_COMMAND Oranges::WindowsShell ${shell_flags} PARENT_SCOPE)
 
 endfunction()
 

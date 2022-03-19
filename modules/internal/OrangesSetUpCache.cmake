@@ -14,8 +14,22 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache"
-	 CACHE PATH "Directory in which to cache all downloaded dependencies")
+define_property (
+	GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
+	FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
+
+if(DEFINED ENV{CMAKE_CACHE})
+	set (default_cache "$ENV{CMAKE_CACHE}")
+else()
+	set (default_cache "${CMAKE_SOURCE_DIR}/Cache")
+endif()
+
+set (FETCHCONTENT_BASE_DIR "${default_cache}"
+	 CACHE PATH "Directory in which to cache all downloaded git repos")
+
+unset (default_cache)
+
+set_property (GLOBAL PROPERTY CACHE_DIR "${FETCHCONTENT_BASE_DIR}")
 
 set (ORANGES_FILE_DOWNLOAD_CACHE "${FETCHCONTENT_BASE_DIR}"
 	 CACHE PATH "Directory in which to cache all downloaded files")

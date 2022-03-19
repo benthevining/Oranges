@@ -27,6 +27,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesDefaultWarnings)
 include (LemonsCmakeDevTools)
+include (OrangesGeneratorExpressions)
 
 add_library (OrangesDefaultTarget INTERFACE)
 
@@ -91,16 +92,16 @@ target_compile_options (OrangesDefaultTarget
 						INTERFACE $<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MP,/EHsc>>)
 
 target_compile_options (OrangesDefaultTarget
-						INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Release>>:-GL>)
+						INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,${GEN_ANY_REL_CONFIG}>:-GL>)
 
 target_compile_options (
 	OrangesDefaultTarget
 	INTERFACE $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Debug>>:-g -O0>
-			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<CONFIG:Release>>:-g -O3>
+			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,${GEN_ANY_REL_CONFIG}>:-g -O3>
 			  $<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang,GNU>,$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>)
 
 target_link_libraries (OrangesDefaultTarget
-					   INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:Release>>:-LTCG>)
+					   INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,${GEN_ANY_REL_CONFIG}>:-LTCG>)
 
 set_target_properties (OrangesDefaultTarget PROPERTIES $<$<NOT:$<PLATFORM_ID:Darwin>>:INSTALL_RPATH
 													   $ORIGIN>)
@@ -198,7 +199,10 @@ if(APPLE)
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
 																   "armv7;armv7s;arm64;i386;x86_64")
 
-			set (ORANGES_IOS_DEV_TEAM_ID "" CACHE STRING "10-character Apple Developer ID")
+			if(DEFINED ENV{APPLE_DEV_ID})
+				set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
+					 CACHE STRING "10-character Apple Developer ID")
+			endif()
 
 			if(NOT ORANGES_IOS_DEV_TEAM_ID)
 				message (
@@ -251,13 +255,7 @@ endif()
 
 include (OrangesAllIntegrations)
 
-option (ORANGES_IGNORE_INTEGRATIONS "Ignore all integrations by default" OFF)
-
-mark_as_advanced (ORANGES_IGNORE_INTEGRATIONS FORCE)
-
-if(NOT ORANGES_IGNORE_INTEGRATIONS)
-	target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
-endif()
+target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
 
 #
 # Warnings

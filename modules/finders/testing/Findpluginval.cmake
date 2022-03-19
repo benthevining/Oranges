@@ -75,6 +75,23 @@ include (LemonsCmakeDevTools)
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
 						DESCRIPTION "Audio plugin testing and validation tool")
 
+define_property (GLOBAL PROPERTY PLUGINVAL_LEVEL BRIEF_DOCS "pluginval testing intensity level"
+				 FULL_DOCS "pluginval testing intensity level, 1-10")
+
+define_property (GLOBAL PROPERTY PLUGINVAL_VERBOSE BRIEF_DOCS "pluginval verbosity toggle"
+				 FULL_DOCS "pluginval verbosity toggle")
+
+define_property (GLOBAL PROPERTY PLUGINVAL_SAMPLERATES BRIEF_DOCS "pluginval testing samplerates"
+				 FULL_DOCS "pluginval testing samplerates")
+
+define_property (GLOBAL PROPERTY PLUGINVAL_BLOCKSIZES BRIEF_DOCS "pluginval testing blocksizes"
+				 FULL_DOCS "pluginval testing blocksizes")
+
+define_property (
+	GLOBAL PROPERTY PLUGINVAL_GUI_DISABLED
+	BRIEF_DOCS "pluginval GUI tests disabled (boolean toggle)"
+	FULL_DOCS "pluginval GUI tests disabled (boolean toggle)")
+
 set (pluginval_FOUND FALSE)
 
 # TO DO: search the cache location where it would've been built...
@@ -117,12 +134,21 @@ else()
 
 		unset (quiet_flag)
 
-		if(APPLE)
-			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/mac_build")
-		elseif(WIN32)
-			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/windows_build.bat")
+		if(WIN32)
+			include (OrangesFindWindowsShell)
+
+			execute_process (COMMAND ${WINDOWS_SHELL_COMMAND}
+									 "${pluginval_SOURCE_DIR}/install/windows_build.bat")
 		else()
-			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/linux_build")
+			include (OrangesFindUnixShell)
+
+			if(APPLE)
+				execute_process (COMMAND ${UNIX_SHELL_COMMAND}
+										 "${pluginval_SOURCE_DIR}/install/mac_build")
+			else()
+				execute_process (COMMAND ${UNIX_SHELL_COMMAND}
+										 "${pluginval_SOURCE_DIR}/install/linux_build")
+			endif()
 		endif()
 
 		unset (CACHE{PLUGINVAL_BUILT_PROGRAM})
@@ -181,8 +207,8 @@ function(pluginval_add_plugin_test)
 	endif()
 
 	set (PLUGINVAL_LEVEL "${ORANGES_ARG_LEVEL}" CACHE STRING "Pluginval testing intensity level")
-
 	set_property (CACHE PLUGINVAL_LEVEL PROPERTY STRINGS "1;2;3;4;5;6;7;8;9;10")
+	set_property (GLOBAL PROPERTY PLUGINVAL_LEVEL "${PLUGINVAL_LEVEL}")
 
 	#
 
@@ -192,6 +218,8 @@ function(pluginval_add_plugin_test)
 		set (PLUGINVAL_VERBOSE FALSE CACHE BOOL "Enable verbose testing output")
 	endif()
 
+	set_property (GLOBAL PROPERTY PLUGINVAL_VERBOSE "${PLUGINVAL_VERBOSE}")
+
 	if(PLUGINVAL_VERBOSE)
 		set (verbose_flag --verbose)
 	endif()
@@ -199,6 +227,8 @@ function(pluginval_add_plugin_test)
 	#
 
 	set (PLUGINVAL_SAMPLERATES "${ORANGES_ARG_SAMPLERATES}" CACHE STRING "Testing samplerates")
+
+	set_property (GLOBAL PROPERTY PLUGINVAL_SAMPLERATES "${PLUGINVAL_SAMPLERATES}")
 
 	list (JOIN "${PLUGINVAL_SAMPLERATES}" "," sr_list)
 
@@ -209,6 +239,8 @@ function(pluginval_add_plugin_test)
 	#
 
 	set (PLUGINVAL_BLOCKSIZES "${ORANGES_ARG_BLOCKSIZES}" CACHE STRING "Testing blocksizes")
+
+	set_property (GLOBAL PROPERTY PLUGINVAL_BLOCKSIZES "${PLUGINVAL_BLOCKSIZES}")
 
 	list (JOIN "${ORANGES_ARG_BLOCKSIZES}" "," blk_list)
 
@@ -223,6 +255,8 @@ function(pluginval_add_plugin_test)
 	else()
 		set (PLUGINVAL_DISABLE_GUI FALSE CACHE BOOL "Disable GUI tests")
 	endif()
+
+	set_property (GLOBAL PROPERTY PLUGINVAL_GUI_DISABLED "${PLUGINVAL_DISABLE_GUI}")
 
 	if(PLUGINVAL_DISABLE_GUI)
 		set (no_gui_flag --skip-gui-tests)

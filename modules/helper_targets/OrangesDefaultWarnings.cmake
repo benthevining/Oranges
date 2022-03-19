@@ -46,13 +46,12 @@ target_compile_options (
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wextra
-			  -Wno-implicit-fallthrough
-			  -Wno-maybe-uninitialized
-			  -Wno-strict-overflow
-			  -Wredundant-decls
-			  -Wshadow
-			  $<$<COMPILE_LANGUAGE:CXX>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>>)
+	INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
+			  -Wno-strict-overflow -Wredundant-decls -Wshadow>>)
+
+target_compile_options (
+	OrangesDefaultWarnings
+	INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>)
 
 target_compile_options (
 	OrangesDefaultWarnings
@@ -65,12 +64,18 @@ target_compile_options (
 			  -Wnullable-to-nonnull-conversion
 			  -Wshadow-all
 			  -Wshift-sign-overflow
-			  -Wshorten-64-to-32
-			  $<$<OR:$<COMPILE_LANGUAGE:CXX>,$<COMPILE_LANGUAGE:OBJCXX>>:
-			  -Wzero-as-null-pointer-constant
-			  -Wunused-private-field
-			  -Woverloaded-virtual
-			  -Winconsistent-missing-destructor-override>>)
+			  -Wshorten-64-to-32>>)
+
+set (clang_cxx_flags -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual
+					 -Winconsistent-missing-destructor-override)
+
+target_compile_options (OrangesDefaultWarnings
+						INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_flags}>)
+target_compile_options (
+	OrangesDefaultWarnings
+	INTERFACE $<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_flags}>)
+
+unset (clang_cxx_flags)
 
 oranges_export_alias_target (OrangesDefaultWarnings Oranges)
 

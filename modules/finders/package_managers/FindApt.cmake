@@ -49,6 +49,10 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
+define_property (
+	GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME BRIEF_DOCS "System package manager being used"
+	FULL_DOCS "The name of the system package manager program being used")
+
 set_package_properties (Apt PROPERTIES URL "https://linux.die.net/man/8/apt-get"
 						DESCRIPTION "Linux package manager")
 
@@ -66,16 +70,19 @@ find_program (APT_GET apt-get)
 
 if(APT_GET)
 	set (apt_program "${APT_GET}" CACHE INTERNAL "")
+	set_property (GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME apt-get)
 else()
 	find_program (APT apt)
 
 	if(APT)
 		set (apt_program "${APT}" CACHE INTERNAL "")
+		set_property (GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME apt)
 	else()
 		find_program (DNF dnf)
 
 		if(DNF)
 			set (apt_program "${DNF}" CACHE INTERNAL "")
+			set_property (GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME dnf)
 		else()
 			find_package_warning_or_error ("No package manager program can be found!")
 		endif()

@@ -17,6 +17,9 @@ Attempts to locate a UNIX shell in approximate order of preference.
 Targets:
 - Oranges::UnixShell : the located shell executable
 
+Output variables:
+- UNIX_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
+
 Supported shells (in searching order):
 - bash
 - zsh
@@ -91,6 +94,7 @@ function(_oranges_set_unix_shell_global_properties)
 	endif()
 
 	set_property (GLOBAL PROPERTY UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags})
+	set (UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags} PARENT_SCOPE)
 
 endfunction()
 

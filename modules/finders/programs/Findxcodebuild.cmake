@@ -70,7 +70,7 @@ function(include_external_xcode_project)
 
 	set (oneValueArgs TARGET DIRECTORY SCHEME EXTRA_ARGS COMMENT)
 
-	cmake_parse_arguments (ORANGES_ARG "" "" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
 	lemons_check_for_unparsed_args (ORANGES_ARG)

@@ -14,15 +14,17 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-function(_lemons_deprecated_variable_watch variableName access)
-	if(access STREQUAL "READ_ACCESS")
-		message (DEPRECATION "Read access of deprecated variable ${variableName}!")
-	endif()
+#
+
+function(_lemons_deprecated_variable_watch variableName access value current_file stack)
+	message (DEPRECATION "${access} of deprecated variable ${variableName}!")
 endfunction()
 
 macro(lemons_deprecate_variable variableName)
-	variable_watch (${variableName} _lemons_deprecated_variable_watch)
+	variable_watch ("${variableName}" _lemons_deprecated_variable_watch)
 endmacro()
+
+#
 
 macro(lemons_deprecate_function functionName)
 	if(NOT COMMAND ${functionName})
@@ -31,9 +33,9 @@ macro(lemons_deprecate_function functionName)
 				"Attempting to deprecate function ${functionName}, but command is not defined!")
 	endif()
 
-	function(${functionName})
+	function("${functionName}")
 		message (DEPRECATION "Deprecated function ${functionName} called!")
-		cmake_language (CALL "_${functionName}" ${ARGN})
+		cmake_language (CALL "_${functionName}" ${ARGV})
 	endfunction()
 endmacro()
 

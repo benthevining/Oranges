@@ -18,14 +18,14 @@ include (GNUInstallDirs)
 
 #
 
-function(_lemons_const_variable_watch variableName access)
+function(_lemons_const_variable_watch variableName access value current_file stack)
 	if(access STREQUAL "WRITE_ACCESS")
 		message (AUTHOR_WARNING "Writing to const variable ${variableName}!")
 	endif()
 endfunction()
 
 macro(lemons_make_variable_const variable)
-	variable_watch (${variableName} _lemons_const_variable_watch)
+	variable_watch ("${variableName}" _lemons_const_variable_watch)
 endmacro()
 
 #
@@ -58,13 +58,15 @@ function(oranges_forward_function_argument)
 
 	lemons_require_function_arguments (ORANGES_ARG PREFIX ARG KIND)
 
-	if(${PREFIX}_${ORANGES_ARG_ARG})
+	set (variable_name "${PREFIX}_${ORANGES_ARG_ARG}")
+
+	if(${variable_name})
 		if("${ORANGES_ARG_KIND}" STREQUAL "option")
 			set (new_flag "${ORANGES_ARG_ARG}")
 		elseif("${ORANGES_ARG_KIND}" STREQUAL "oneVal")
-			set (new_flag "${ORANGES_ARG_ARG}" "${${PREFIX}_${ORANGES_ARG_ARG}}")
+			set (new_flag "${ORANGES_ARG_ARG}" "${variable_name}")
 		elseif("${ORANGES_ARG_KIND}" STREQUAL "multiVal")
-			set (new_flag "${ORANGES_ARG_ARG}" ${${PREFIX}_${ORANGES_ARG_ARG}})
+			set (new_flag "${ORANGES_ARG_ARG}" ${variable_name})
 		else()
 			message (
 				FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
