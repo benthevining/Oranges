@@ -14,9 +14,17 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
 
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
+include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
 
 include (OrangesDownloadFile)
+
+#
+
+if(NOT CACHE)
+	set (CACHE "${CMAKE_CURRENT_LIST_DIR}/Cache")
+endif()
+
+set (ORANGES_FILE_DOWNLOAD_CACHE "${CACHE}")
 
 #
 
@@ -48,6 +56,10 @@ if(EXPECTED_HASH)
 	set (hash_flag EXPECTED_HASH "${EXPECTED_HASH}")
 endif()
 
+if(COPY_TO)
+	set (copy_flag COPY_TO "${COPY_TO}")
+endif()
+
 oranges_download_file (
 	URL
 	"${URL}"
@@ -57,4 +69,5 @@ oranges_download_file (
 	${timeout_flag}
 	${username_flag}
 	${password_flag}
-	${hash_flag})
+	${hash_flag}
+	${copy_flag})

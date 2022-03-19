@@ -14,9 +14,17 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
 
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
+include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
 
 include (OrangesFetchRepository)
+
+#
+
+if(NOT CACHE)
+	set (CACHE "${CMAKE_CURRENT_LIST_DIR}/Cache")
+endif()
+
+set (FETCHCONTENT_BASE_DIR "${CACHE}")
 
 #
 

@@ -166,6 +166,8 @@ scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 scripts/cmake_file_api/query.json benthevining
+scripts/dependencies/download_file.cmake benthevining
+scripts/dependencies/download_repository.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining

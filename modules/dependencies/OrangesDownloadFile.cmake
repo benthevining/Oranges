@@ -30,6 +30,7 @@ oranges_download_file (URL <url>
 					   FILENAME <localFilename>
 					   [PATH_OUTPUT <outputVar>]
 					   [NO_CACHE] [QUIET] [NEVER_LOCAL]
+					   [COPY_TO <path>]
 					   [TIMEOUT <timeoutSeconds>]
 					   [USERNAME <username>]
 					   [PASSWORD <password>]
@@ -47,6 +48,8 @@ However, if the `NEVER_LOCAL` option is present, the local filepath is ignored a
 If the `QUIET` option is present, this function won't output status updates.
 
 If the `NO_CACHE` option is present, the file will downloaded into the binary tree, instead of the cache folder.
+
+If the `COPY_TO` argument is present, the downloaded file will be copied to the specified path once it has been fetched.
 
 ]]
 
@@ -70,6 +73,12 @@ mark_as_advanced (FORCE ORANGES_FILE_DOWNLOAD_CACHE)
 
 function(oranges_download_file)
 
+	macro(_oranges_copy_downloaded_file source_path dest_path)
+		if(NOT "${source_path}" STREQUAL "${dest_path}")
+			file (COPY_FILE "${source_path}" "${dest_path}")
+		endif()
+	endmacro()
+
 	set (options NO_CACHE QUIET NEVER_LOCAL)
 	set (
 		oneValueArgs
@@ -79,12 +88,18 @@ function(oranges_download_file)
 		USERNAME
 		PASSWORD
 		EXPECTED_HASH
-		PATH_OUTPUT)
+		PATH_OUTPUT
+		COPY_TO)
 
 	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG URL FILENAME)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
+
+	if(ORANGES_ARG_COPY_TO)
+		cmake_language (DEFER CALL _oranges_copy_downloaded_file "${${ORANGES_ARG_PATH_OUTPUT}}"
+						"${ORANGES_ARG_COPY_TO}")
+	endif()
 
 	if(NOT ORANGES_ARG_PATH_OUTPUT)
 		set (ORANGES_ARG_PATH_OUTPUT "${FILENAME}_PATH")
@@ -120,9 +135,14 @@ function(oranges_download_file)
 			)
 	endif()
 
-	if(ORANGES_ARG_TIMEOUT)
-		set (timeout_flag TIMEOUT "${ORANGES_ARG_TIMEOUT}")
-	endif()
+	oranges_forward_function_arguments (
+		PREFIX
+		ORANGES_ARG
+		KIND
+		oneVal
+		ARGS
+		TIMEOUT
+		EXPECTED_HASH)
 
 	if(ORANGES_ARG_USERNAME OR ORANGES_ARG_PASSWORD)
 		if((NOT ORANGES_ARG_USERNAME) OR (NOT ORANGES_ARG_PASSWORD))
@@ -135,11 +155,7 @@ function(oranges_download_file)
 		set (pwd_flag USERPWD "${ORANGES_ARG_USERNAME}:${ORANGES_ARG_PASSWORD}")
 	endif()
 
-	if(ORANGES_ARG_EXPECTED_HASH)
-		set (hash_flag EXPECTED_HASH "${ORANGES_ARG_EXPECTED_HASH}")
-	endif()
-
-	file (DOWNLOAD "${ORANGES_ARG_URL}" "${cached_file_location}" ${progress_flag} ${timeout_flag}
-																  ${pwd_flag} ${hash_flag})
+	file (DOWNLOAD "${ORANGES_ARG_URL}" "${cached_file_location}" ${progress_flag} ${pwd_flag}
+																  ${ORANGES_FORWARDED_ARGUMENTS})
 
 endfunction()

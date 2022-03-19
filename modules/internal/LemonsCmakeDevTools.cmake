@@ -50,6 +50,55 @@ macro(lemons_check_for_unparsed_args prefix)
 	endif()
 endmacro()
 
+function(oranges_forward_function_argument)
+
+	set (oneValueArgs PREFIX ARG KIND)
+
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG PREFIX ARG KIND)
+
+	if(${PREFIX}_${ORANGES_ARG_ARG})
+		if("${ORANGES_ARG_KIND}" STREQUAL "option")
+			set (new_flag "${ORANGES_ARG_ARG}")
+		elseif("${ORANGES_ARG_KIND}" STREQUAL "oneVal")
+			set (new_flag "${ORANGES_ARG_ARG}" "${${PREFIX}_${ORANGES_ARG_ARG}}")
+		elseif("${ORANGES_ARG_KIND}" STREQUAL "multiVal")
+			set (new_flag "${ORANGES_ARG_ARG}" ${${PREFIX}_${ORANGES_ARG_ARG}})
+		else()
+			message (
+				FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
+				)
+		endif()
+	endif()
+
+	if(new_flag)
+		list (APPEND ORANGES_FORWARDED_ARGUMENTS ${new_flag})
+
+		set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
+	endif()
+
+endfunction()
+
+function(oranges_forward_function_arguments)
+
+	set (oneValueArgs PREFIX KIND)
+
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "ARGS" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG PREFIX KIND ARGS)
+
+	foreach(argument ${ORANGES_ARG_ARGS})
+		oranges_forward_function_argument (PREFIX "${ORANGES_ARG_PREFIX}" ARG "${argument}" KIND
+										   "${ORANGES_ARG_KIND}")
+	endforeach()
+
+	if(ORANGES_FORWARDED_ARGUMENTS)
+		set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
+	endif()
+
+endfunction()
+
 #
 
 function(oranges_export_alias_target origTarget namespace)

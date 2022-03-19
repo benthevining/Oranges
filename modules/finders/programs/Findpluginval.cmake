@@ -70,6 +70,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
 include (CallForEachPluginFormat)
+include (LemonsCmakeDevTools)
 
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
 						DESCRIPTION "Audio plugin testing and validation tool")
@@ -276,50 +277,35 @@ function(pluginval_add_all_plugin_tests)
 				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
 	endif()
 
-	if(ORANGES_ARG_LEVEL)
-		set (level_flag LEVEL "${ORANGES_ARG_LEVEL}")
-	endif()
-
-	if(ORANGES_ARG_LOG_DIR)
-		set (log_dir_flag LOG_DIR "${ORANGES_ARG_LOG_DIR}")
-	endif()
-
-	if(ORANGES_ARG_REPEATS)
-		set (repeats_flag REPEATS "${ORANGES_ARG_REPEATS}")
-	endif()
-
-	if(ORANGES_ARG_SAMPLERATES)
-		set (samplerates_flag SAMPLERATES ${ORANGES_ARG_SAMPLERATES})
-	endif()
-
-	if(ORANGES_ARG_BLOCKSIZES)
-		set (blocksize_flag BLOCKSIZES ORANGES_ARG_BLOCKSIZES)
-	endif()
-
-	if(ORANGES_ARG_NO_GUI)
-		set (no_gui_flag NO_GUI)
-	endif()
-
-	if(ORANGES_ARG_VERBOSE)
-		set (verbose_flag VERBOSE)
-	endif()
-
-	if(ORANGES_ARG_RANDOMIZE)
-		set (random_flag RANDOMIZE)
-	endif()
+	oranges_forward_function_arguments (
+		PREFIX
+		ORANGES_ARG
+		KIND
+		option
+		ARGS
+		NO_GUI
+		VERBOSE
+		RANDOMIZE)
+	oranges_forward_function_arguments (
+		PREFIX
+		ORANGES_ARG
+		KIND
+		oneVal
+		ARGS
+		LEVEL
+		LOG_DIR
+		REPEATS)
+	oranges_forward_function_arguments (
+		PREFIX
+		ORANGES_ARG
+		KIND
+		multiVal
+		ARGS
+		SAMPLERATES
+		BLOCKSIZES)
 
 	macro(_oranges_create_plugin_format_pluginval_test targetName formatName)
-		pluginval_add_plugin_test (
-			TARGET
-			"${targetName}"
-			${level_flag}
-			${log_dir_flag}
-			${repeats_flag}
-			${samplerates_flag}
-			${blocksize_flag}
-			${no_gui_flag}
-			${verbose_flag}
-			${random_flag})
+		pluginval_add_plugin_test (TARGET "${targetName}" ${ORANGES_FORWARDED_ARGUMENTS})
 	endmacro()
 
 	call_for_each_plugin_format (TARGET "${ORANGES_ARG_TARGET}" FUNCTION
