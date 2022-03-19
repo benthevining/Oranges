@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.24.0](http://github.com/benthevining/Oranges/compare/v1.23.0...v1.24.0) (2022-03-19)
+
+
+### Features
+
+* added a list transform function ([5b93c0c](http://github.com/benthevining/Oranges/commit/5b93c0cb64b774040f9422e1dc94ee7231f43cc0))
+
 ## [1.23.0](http://github.com/benthevining/Oranges/compare/v1.22.0...v1.23.0) (2022-03-19)
 
 
