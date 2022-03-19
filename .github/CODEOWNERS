@@ -95,6 +95,7 @@ modules/finders/static_analysis/Findclang-tidy.cmake benthevining
 modules/finders/static_analysis/Findcpplint.cmake benthevining
 modules/finders/static_analysis/Findinclude-what-you-use.cmake benthevining
 modules/finders/testing/Findauval.cmake benthevining
+modules/finders/testing/Findpluginval.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
