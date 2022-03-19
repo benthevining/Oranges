@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.25.0](http://github.com/benthevining/Oranges/compare/v1.24.0...v1.25.0) (2022-03-19)
+
+
+### Features
+
+* added a find module for asdf tool manager ([553e449](http://github.com/benthevining/Oranges/commit/553e44924e06bc46b8c63c980e056ff1e03415fa))
+
 ## [1.24.0](http://github.com/benthevining/Oranges/compare/v1.23.0...v1.24.0) (2022-03-19)
 
 
