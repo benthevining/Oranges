@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.20.0](http://github.com/benthevining/Oranges/compare/v1.19.0...v1.20.0) (2022-03-19)
+
+
+### Features
+
+* added a module with find module helpers ([87ae127](http://github.com/benthevining/Oranges/commit/87ae127a79695494e8848ffd54bf6d92eed876f3))
+
 ## [1.19.0](http://github.com/benthevining/Oranges/compare/v1.18.0...v1.19.0) (2022-03-19)
 
 
