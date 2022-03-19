@@ -143,12 +143,14 @@ package.json benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
+scripts/cmake_file_api/query.json benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining
+toolchains/ios/tvOS.cmake benthevining
 toolchains/ios/tvOS_simulator.cmake benthevining
 toolchains/ios/watchOS.cmake benthevining
 toolchains/ios/watchOS_simulator.cmake benthevining

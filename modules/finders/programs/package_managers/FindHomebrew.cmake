@@ -47,6 +47,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (FeatureSummary)
 include (LemonsCmakeDevTools)
+include (OrangesDownloadFile)
 
 set_package_properties (Homebrew PROPERTIES URL "https://brew.sh/"
 						DESCRIPTION "MacOS package manager")
@@ -68,12 +69,26 @@ if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 		message (FATAL_ERROR "bash is required for installing Homebrew, and cannot be found!")
 	endif()
 
-	if(NOT Homebrew_FIND_QUIETLY)
+	if(Homebrew_FIND_QUIETLY)
+		set (quiet_flag QUIET)
+	else()
 		message (STATUS "Installing Homebrew...")
 	endif()
 
-	execute_process (COMMAND "${BASH}" "${CMAKE_CURRENT_LIST_DIR}/scripts/mac_install_homebrew.sh"
-							 COMMAND_ERROR_IS_FATAL ANY)
+	oranges_download_file (
+		URL
+		"https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+		FILENAME
+		install_homebrew.sh
+		PATH_OUTPUT
+		install_script
+		${quiet_flag})
+
+	unset (quiet_flag)
+
+	execute_process (COMMAND "${BASH}" -c "${install_script}" COMMAND_ERROR_IS_FATAL ANY)
+
+	unset (install_script)
 
 	find_program (HOMEBREW brew)
 endif()

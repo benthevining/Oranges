@@ -72,11 +72,25 @@ function(oranges_fetch_repository)
 	if(ORANGES_ARG_GIT_REPOSITORY)
 		set (git_repo_flag "${ORANGES_ARG_GIT_REPOSITORY}")
 	elseif(ORANGES_ARG_GITHUB_REPOSITORY)
-		set (git_repo_flag "https://github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git")
+		if(GITHUB_USERNAME AND GITHUB_ACCESS_TOKEN)
+			set (
+				git_repo_flag
+				"https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git"
+				)
+		else()
+			set (git_repo_flag "https://git@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git")
+		endif()
 	elseif(ORANGES_ARG_GITLAB_REPOSITORY)
 		set (git_repo_flag "https://gitlab.com/${ORANGES_ARG_GITLAB_REPOSITORY}.git")
 	elseif(ORANGES_ARG_BITBUCKET_REPOSITORY)
-		set (git_repo_flag "https://bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git")
+		if(BITBUCKET_USERNAME AND BITBUCKET_PASSWORD)
+			set (
+				git_repo_flag
+				"https://${BITBUCKET_USERNAME}:${BITBUCKET_PASSWORD}@bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git"
+				)
+		else()
+			set (git_repo_flag "https://bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git")
+		endif()
 	else()
 		message (
 			FATAL_ERROR
