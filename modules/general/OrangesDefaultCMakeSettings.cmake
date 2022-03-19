@@ -12,7 +12,12 @@
 
 #[[
 
+This module sets some useful defaults for various CMake-wide settings.
 
+Inclusion style: once globally
+
+Targets:
+- OrangesUnityBuild
 
 ]]
 

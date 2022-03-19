@@ -12,7 +12,9 @@
 
 #[[
 
+This module sets up some project-specific defaults, and includes a basic set of modules used in most CMake projects.
 
+Inclusion style: In each project
 
 ]]
 

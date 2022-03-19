@@ -1,0 +1,38 @@
+{
+  "files": [
+    {
+      "_expected_hasH": "alg=expectedHash",
+      "_filename": "filename",
+      "_password": "password",
+      "_username": "username",
+      "output_path": "path",
+      "url": "url"
+    }
+  ],
+  "git_repositories": [
+    {
+      "_bitbucket_repository": "username/repo",
+      "_full_clone": false,
+      "_git_repoisitory": "something.git",
+      "_git_tag": "tag",
+      "_github_repository": "username/repo",
+      "_gitlab_repository": "username/repo",
+      "name": "package_name"
+    }
+  ],
+  "include": [
+    "$fileDir/system_packages.json"
+  ],
+  "project": {
+    "_file_download_timeout": 3000,
+    "_git_all_full": false,
+    "_git_options": [
+      "Option1=Value",
+      "Option2=Value"
+    ],
+    "_git_strategy": "REBASE_CHECKOUT",
+    "_ignore_oranges": true,
+    "name": "Oranges",
+    "root": "$fileDir/.."
+  }
+}

@@ -12,7 +12,24 @@
 
 #[[
 
+This module provides the function oranges_create_pkgconfig_file.
 
+Inclusion style: once globally
+
+## Functions:
+
+### oranges_create_pkgconfig_file
+```
+oranges_create_pkgconfig_file (TARGET <targetName>
+							   [OUTPUT_DIR <outputDir>]
+							   [NAME <projectName>]
+							   [INCLUDE_REL_PATH <basePath>]
+							   [DESCRIPTION <projectDescription>]
+							   [URL <projectURL>]
+							   [VERSION <projectVersion>]
+							   [NO_INSTALL]|[INSTALL_DEST <installDestination>]
+							   [REQUIRES <requiredPackages...>])
+```
 
 ]]
 

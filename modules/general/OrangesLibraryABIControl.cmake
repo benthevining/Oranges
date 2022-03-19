@@ -12,7 +12,18 @@
 
 #[[
 
+This module is a thin wrapper around CMake's generate_export_header.
 
+Inclusion style: once globally
+
+## Functions:
+
+### oranges_add_library_abi_control
+```
+oranges_add_library_abi_control (TARGET <targetName>
+								 [BASE_NAME <baseName>]
+								 [HEADER <exportHeaderName>])
+```
 
 ]]
 
@@ -55,7 +66,6 @@ function(oranges_add_library_abi_control)
 	endif()
 
 	string (TOUPPER "${ORANGES_ARG_BASE_NAME}" upperBaseName)
-	string (TOLOWER "${ORANGES_ARG_BASE_NAME}" lowerBaseName)
 
 	target_link_libraries ("${ORANGES_ARG_TARGET}" PRIVATE Oranges::OrangesABIControlledLibrary)
 

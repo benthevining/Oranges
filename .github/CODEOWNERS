@@ -50,6 +50,7 @@ modules/cpack/scripts/rpmPostInstall.sh benthevining
 modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
 modules/dependencies/OrangesDownloadFile.cmake benthevining
+modules/dependencies/OrangesFetchRepository.cmake benthevining
 modules/dependencies/OrangesInstallPackages.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
@@ -69,6 +70,7 @@ modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
+modules/finders/package_managers/FindChocolatey.cmake benthevining
 modules/finders/package_managers/FindPip.cmake benthevining
 modules/finders/programs/Findauval.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
@@ -89,6 +91,7 @@ modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
 modules/finders/static_analysis/Findclang-tidy.cmake benthevining
 modules/finders/static_analysis/Findcpplint.cmake benthevining
 modules/finders/static_analysis/Findinclude-what-you-use.cmake benthevining
+modules/finders/testing/Findauval.cmake benthevining
 modules/general/BVBrandFlags.cmake benthevining
 modules/general/LemonsCmakeDevTools.cmake benthevining
 modules/general/LemonsDefaultProjectSettings.cmake benthevining
