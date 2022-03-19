@@ -204,7 +204,7 @@ function(oranges_add_target_headers)
 
 	set (oneValueArgs TARGET SCOPE REL_PATH)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "BINARY_DIR" "${oneValueArgs}" "FILES" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET SCOPE)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -217,9 +217,23 @@ function(oranges_add_target_headers)
 	endif()
 
 	foreach(headerFile ${ORANGES_ARG_FILES})
-		target_sources (
-			"${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
-									$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${headerFile}>)
+
+		if(ORANGES_ARG_BINARY_DIR)
+			set (header_file_abs_path "${CMAKE_CURRENT_BINARY_DIR}/${headerFile}")
+		else()
+			set (header_file_abs_path "${CMAKE_CURRENT_LIST_DIR}/${headerFile}")
+		endif()
+
+		if(NOT EXISTS "${header_file_abs_path}")
+			message (
+				WARNING
+					"${CMAKE_CURRENT_FUNCTION} - Header file ${header_file_abs_path} cannot be found!"
+				)
+			continue ()
+		endif()
+
+		target_sources ("${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+												$<BUILD_INTERFACE:${header_file_abs_path}>)
 
 		if(ORANGES_ARG_REL_PATH)
 			target_sources (
@@ -228,7 +242,7 @@ function(oranges_add_target_headers)
 				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${headerFile}>
 				)
 
-			install (FILES "${CMAKE_CURRENT_LIST_DIR}/${headerFile}"
+			install (FILES "${header_file_abs_path}"
 					 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
 		else()
 			target_sources (
@@ -236,8 +250,7 @@ function(oranges_add_target_headers)
 				"${ORANGES_ARG_SCOPE}"
 				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${headerFile}>)
 
-			install (FILES "${CMAKE_CURRENT_LIST_DIR}/${headerFile}"
-					 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+			install (FILES "${header_file_abs_path}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 		endif()
 	endforeach()
 

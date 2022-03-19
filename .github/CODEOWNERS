@@ -120,6 +120,7 @@ modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesFetchRepository.cmake benthevining
 modules/general/OrangesInstallPackages.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining
+modules/general/OrangesListUtils.cmake benthevining
 modules/general/OrangesUninstallTarget.cmake benthevining
 modules/general/lemons_AggregateTargets.cmake benthevining
 modules/general/scripts/uninstall.cmake benthevining
@@ -199,5 +200,6 @@ toolchains/ios_common.cmake benthevining
 toolchains/mac_universal_binary.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining
 toolchains/mingw/mingw_common.cmake benthevining
+util/deps_graph.png benthevining
 util/oranges_header.txt benthevining
 util/workspace_dependencies.json benthevining

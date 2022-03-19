@@ -31,6 +31,7 @@ include (OrangesDefaultTarget)
 include (CMakePackageConfigHelpers)
 include (GNUInstallDirs)
 include (ProcessorCount)
+include (OrangesDeprecateDirectoryScopedCommands)
 
 #
 

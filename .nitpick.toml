@@ -1,7 +1,7 @@
 [tool.nitpick]
 style = [
-	"github://benthevining/Citrus@main/nitpick/BasicConfig.toml",
-	"github://benthevining/Citrus@main/nitpick/styles/cmake.toml"
+	"github://benthevining/nitpick_styles@main/BasicConfig.toml",
+	"github://benthevining/nitpick_styles@main/styles/cmake.toml"
 ]
 
 cache = "forever"
