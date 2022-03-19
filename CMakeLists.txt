@@ -75,6 +75,8 @@ configure_package_config_file (
 install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${Oranges_INSTALL_DEST}"
 		 EXPORT_LINK_INTERFACE_LIBRARIES)
 
+export (EXPORT OrangesTargets NAMESPACE Oranges:: FILE OrangesTargets.cmake)
+
 install (DIRECTORY modules toolchains DESTINATION "${Oranges_INSTALL_DEST}" PATTERN .DS_Store
 																					EXCLUDE)
 

@@ -24,7 +24,9 @@ if(NOT CACHE)
 	set (CACHE "${CMAKE_CURRENT_LIST_DIR}/Cache")
 endif()
 
-set (ORANGES_FILE_DOWNLOAD_CACHE "${CACHE}")
+set (FETCHCONTENT_BASE_DIR "${CACHE}" CACHE PATH "")
+
+include (OrangesSetUpCache)
 
 #
 

@@ -16,10 +16,13 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-set (@ORANGES_ARG_NAME@_SOURCE_DIR "@@ORANGES_ARG_NAME@_SOURCE_DIR@")
-set (FETCHCONTENT_SOURCE_DIR_@ORANGES_ARG_NAME@ "${@ORANGES_ARG_NAME@_SOURCE_DIR}")
+set (source_dir "@@ORANGES_ARG_NAME@_SOURCE_DIR@")
 
-add_subdirectory ("${@ORANGES_ARG_NAME@_SOURCE_DIR}"
-				  "${CMAKE_CURRENT_BINARY_DIR}/@ORANGES_ARG_NAME@")
+set (@ORANGES_ARG_NAME@_SOURCE_DIR "${source_dir}")
+set (FETCHCONTENT_SOURCE_DIR_@ORANGES_ARG_NAME@ "${source_dir}")
+
+add_subdirectory ("${source_dir}" "${CMAKE_CURRENT_BINARY_DIR}/@ORANGES_ARG_NAME@")
 
 set (@ORANGES_ARG_NAME@_FOUND TRUE)
+
+unset (source_dir)

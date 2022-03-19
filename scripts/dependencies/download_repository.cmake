@@ -21,10 +21,12 @@ include (OrangesFetchRepository)
 #
 
 if(NOT CACHE)
-	set (CACHE "${CMAKE_CURRENT_LIST_DIR}/Cache")
+	set (CACHE "${ORANGES_ROOT_DIR}/Cache")
 endif()
 
-set (FETCHCONTENT_BASE_DIR "${CACHE}")
+set (FETCHCONTENT_BASE_DIR "${CACHE}" CACHE PATH "")
+
+include (OrangesSetUpCache)
 
 #
 
