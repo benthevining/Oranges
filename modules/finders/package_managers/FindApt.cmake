@@ -47,8 +47,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (Apt PROPERTIES URL "https://linux.die.net/man/8/apt-get"
 						DESCRIPTION "Linux package manager")

@@ -27,8 +27,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (clang-tidy PROPERTIES URL "https://clang.llvm.org/extra/clang-tidy/"
 						DESCRIPTION "C++ code linter")

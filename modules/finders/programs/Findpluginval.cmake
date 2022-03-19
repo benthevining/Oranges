@@ -67,9 +67,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
+include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
-include (LemonsCmakeDevTools)
 include (CallForEachPluginFormat)
 
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"

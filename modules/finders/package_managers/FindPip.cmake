@@ -46,8 +46,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (Pip PROPERTIES URL "https://pypi.org/project/pip/"
 						DESCRIPTION "Python package manager")
@@ -57,10 +56,17 @@ set (Pip_FOUND FALSE)
 find_package (Python3 COMPONENTS Interpreter)
 
 if(TARGET Python3::Interpreter)
-	execute_process (COMMAND Python3::Interpreter -m ensurepip --upgrade COMMAND_ECHO STDOUT)
 
-	execute_process (COMMAND Python3::Interpreter -m pip3 install --upgrade pip3 COMMAND_ECHO
-							 STDOUT)
+	find_package_execute_process (COMMAND Python3::Interpreter -m ensurepip --upgrade)
+
+	find_package_execute_process (
+		COMMAND
+		Python3::Interpreter
+		-m
+		pip3
+		install
+		--upgrade
+		pip3)
 
 	find_program (PIP3 pip3)
 

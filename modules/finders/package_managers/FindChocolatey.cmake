@@ -51,8 +51,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (Chocolatey PROPERTIES URL "https://chocolatey.org/"
 						DESCRIPTION "Windows package manager")
@@ -77,13 +76,11 @@ if(NOT CHOCO AND NOT CHOCO_NO_INSTALL)
 		message (STATUS "Installing Chocolatey...")
 	endif()
 
-	execute_process (COMMAND "${POWERSHELL}" Set-ExecutionPolicy Bypass COMMAND_ECHO STDOUT)
+	find_package_execute_process (COMMAND "${POWERSHELL}" Set-ExecutionPolicy Bypass)
 
-	execute_process (
-		COMMAND
-			"${POWERSHELL}" iex
-			"((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-			COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+	find_package_execute_process (
+		COMMAND "${POWERSHELL}" iex
+		"((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))")
 
 	find_program (CHOCO choco)
 endif()

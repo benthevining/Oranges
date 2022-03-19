@@ -29,8 +29,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
-include (FeatureSummary)
 
 set_package_properties (JUCE PROPERTIES URL "https://juce.com/"
 						DESCRIPTION "Cross platform framework for plugin and app development")

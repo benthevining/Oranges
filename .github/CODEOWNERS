@@ -7,6 +7,7 @@
 # Order is important. The last matching pattern has the most precedence.
 # These owners will be the default owners for everything in the repo.
 # This file is also being managed automatically by the gitown tool.
+.bumpversion.cfg benthevining
 .cmake-format.json benthevining
 .ecrc benthevining
 .editorconfig benthevining
@@ -64,8 +65,10 @@ modules/finders/Findclang-tidy.cmake benthevining
 modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
+modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
+modules/finders/package_managers/FindPip.cmake benthevining
 modules/finders/programs/Findauval.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
 modules/finders/programs/Findclang-tidy.cmake benthevining
@@ -75,10 +78,12 @@ modules/finders/programs/Finddot.cmake benthevining
 modules/finders/programs/Findinclude-what-you-use.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
 modules/finders/programs/Findwraptool.cmake benthevining
+modules/finders/programs/Findxcodebuild.cmake benthevining
 modules/finders/programs/package_managers/FindChocolatey.cmake benthevining
 modules/finders/programs/package_managers/FindHomebrew.cmake benthevining
 modules/finders/programs/package_managers/FindPip.cmake benthevining
 modules/finders/programs/package_managers/scripts/mac_install_homebrew.sh benthevining
+modules/finders/programs/scripts/launcher.in benthevining
 modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
 modules/finders/static_analysis/Findclang-tidy.cmake benthevining
 modules/finders/static_analysis/Findcpplint.cmake benthevining
@@ -150,6 +155,7 @@ modules/platform/scripts/lemons_windows_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/AAX/LemonsCreateAAXSDKTarget.cmake benthevining
+modules/plugins/CallForEachPluginFormat.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining
 modules/plugins/LemonsPluginUtilities.cmake benthevining

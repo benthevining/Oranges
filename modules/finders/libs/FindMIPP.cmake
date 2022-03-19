@@ -26,9 +26,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
-include (FeatureSummary)
 
 set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
 						DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")

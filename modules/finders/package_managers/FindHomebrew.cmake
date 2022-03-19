@@ -51,8 +51,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 include (OrangesDownloadFile)
 
 set_package_properties (Homebrew PROPERTIES URL "https://brew.sh/"
@@ -92,7 +91,7 @@ if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 
 	unset (quiet_flag)
 
-	execute_process (COMMAND "${BASH}" -c "${install_script}" COMMAND_ERROR_IS_FATAL ANY)
+	find_package_execute_process (COMMAND "${BASH}" -c "${install_script}")
 
 	unset (install_script)
 

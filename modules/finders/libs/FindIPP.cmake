@@ -64,8 +64,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
-include (FeatureSummary)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (
 	IPP PROPERTIES

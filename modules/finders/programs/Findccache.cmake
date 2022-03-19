@@ -27,8 +27,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
 						DESCRIPTION "C/C++ compiler cache")

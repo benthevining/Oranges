@@ -27,8 +27,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
-include (LemonsCmakeDevTools)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (cppcheck PROPERTIES URL "https://cppcheck.sourceforge.io/"
 						DESCRIPTION "C++ code linter")

@@ -26,7 +26,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (FeatureSummary)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (dot PROPERTIES URL "https://graphviz.org/"
 						DESCRIPTION "Graph image creation tool")

@@ -12,11 +12,9 @@
 
 #[[
 
-## Include-time actions:
 Sets up some default configuration settings for CPack.
 
-## Includes:
-- LemonsSetDefaultCpackGenerator
+Inclusion style: once globally, ideally from the top-level project.
 
 ## USER INPUTS:
 - CPACK_PACKAGE_EXECUTABLES
