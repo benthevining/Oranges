@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.21.0](http://github.com/benthevining/Oranges/compare/v1.20.0...v1.21.0) (2022-03-19)
+
+
+### Features
+
+* added scripts for installing dependencies ([ea944db](http://github.com/benthevining/Oranges/commit/ea944db738d57290c9b3f7930c9894a0c9055fda))
+
 ## [1.20.0](http://github.com/benthevining/Oranges/compare/v1.19.0...v1.20.0) (2022-03-19)
 
 
