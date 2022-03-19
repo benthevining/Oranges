@@ -51,7 +51,7 @@ function(oranges_download_file)
 	endif()
 
 	if(ORANGES_ARG_NO_CACHE)
-		set (cached_file_location "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_FILENAME}")
+		set (cached_file_location "${CMAKE_CURRENT_BINARY_DIR}/_deps/${ORANGES_ARG_FILENAME}")
 	else()
 		if(FILE_${ORANGES_ARG_FILENAME}_PATH)
 			set (cached_file_location "${FILE_${ORANGES_ARG_FILENAME}_PATH}")

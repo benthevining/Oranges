@@ -10,21 +10,26 @@
 #
 # ======================================================================================
 
-# NO include_guard here - by design!
+include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+include (LemonsDefaultPlatformSettings)
+include (LemonsCmakeDevTools)
+include (OrangesDefaultTarget)
+include (CMakePackageConfigHelpers)
+include (GNUInstallDirs)
+include (ProcessorCount)
 
 #
 
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
-							  "${CMAKE_CURRENT_BINARY_DIR}/undefined_properties.log")
+							  "${CMAKE_BINARY_DIR}/undefined_properties.log")
 
 set_property (GLOBAL PROPERTY USE_FOLDERS YES)
 set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
 
 #
-
-# set (CMAKE_DEFAULT_BUILD_TYPE Release)
 
 set (CMAKE_SUPPRESS_REGENERATION TRUE)
 
@@ -56,8 +61,6 @@ set (CMAKE_VERBOSE_MAKEFILE ON)
 
 #
 
-include (ProcessorCount)
-
 ProcessorCount (num_procs)
 
 if(NOT num_procs)
@@ -70,9 +73,43 @@ unset (num_procs)
 
 #
 
-set (CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "${PROJECT_NAME}")
-set (CMAKE_FOLDER "${PROJECT_NAME}")
+add_library (OrangesUnityBuild INTERFACE)
+
+set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
+
+oranges_export_alias_target (OrangesUnityBuild Oranges)
+
+oranges_install_targets (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
 
 #
 
-include (LemonsDefaultProjectSettings)
+function(lemons_sort_target_sources target root_dir)
+
+	if(NOT IS_DIRECTORY "${root_dir}")
+		message (FATAL_ERROR "Source grouping root directory ${root_dir} does not exist!")
+	endif()
+
+	if(NOT TARGET "${target}")
+		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with nonexistent target ${target}!")
+	endif()
+
+	get_target_property (target_sources "${target}" SOURCES)
+
+	if(NOT target_sources)
+		unset (target_sources)
+	endif()
+
+	get_target_property (target_interface_sources "${target}" INTERFACE_SOURCES)
+
+	if(target_interface_sources)
+		list (APPEND target_sources ${target_interface_sources})
+	endif()
+
+	if(NOT target_sources)
+		message (WARNING "Error sorting sources for target ${target}")
+		return ()
+	endif()
+
+	source_group (TREE "${root_dir}" FILES "${target_sources}")
+
+endfunction()

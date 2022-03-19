@@ -44,7 +44,7 @@ override run_precommit = $(GIT) add . && $(PRECOMMIT) run --all-files
 
 override run_clean = $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
 
-override run_wipe_cache = $(RM) $(CACHE); $(PRECOMMIT) clean
+override run_wipe_cache = $(SUDO) $(CMAKE) -P $(BUILDS)/wipe_cache.cmake
 
 override run_uninstall = $(SUDO) $(CMAKE) -P $(BUILDS)/uninstall.cmake
 

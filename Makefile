@@ -64,3 +64,7 @@ uninstall: ## Runs uninstall script [only works if project has been installed]
 clean: ## Cleans the source tree
 	@echo "Cleaning..."
 	@cd $(ORANGES_ROOT) && $(call run_clean)
+
+wipe: ## Wipes the cache of downloaded dependencies
+	@echo "Wiping cache..."
+	@cd $(ORANGES_ROOT) && $(call run_wipe_cache)
