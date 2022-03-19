@@ -12,22 +12,29 @@
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(NOT ORANGES_PROJECT_ROOT)
-	message (FATAL_ERROR "ORANGES_PROJECT_ROOT must be defined with -D")
+set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
+
+include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
+
+include (OrangesInstallPackages)
+
+#
+
+if(SYSTEM_PACKAGES)
+	set (system_packages_flag SYSTEM_PACKAGES "${SYSTEM_PACKAGES}")
 endif()
 
-set (ORANGES_BUILD_ROOT "${ORANGES_PROJECT_ROOT}/Builds")
-set (ORANGES_CACHE_ROOT "${ORANGES_PROJECT_ROOT}/Cache")
+if(PIP_PACKAGES)
+	set (pip_packages_flag PIP_PACKAGES "${PIP_PACKAGES}")
+endif()
 
-set (api_base_dir "${ORANGES_BUILD_ROOT}/.cmake/api/v1")
+if(UPDATE_FIRST)
+	set (update_flag UPDATE_FIRST)
+endif()
 
-set (query_dir "${api_base_dir}/query")
-set (reply_dir "${api_base_dir}/reply")
+if(OPTIONAL)
+	set (optional_flag OPTIONAL)
+endif()
 
-file (MAKE_DIRECTORY "${query_dir}")
-file (MAKE_DIRECTORY "${reply_dir}")
-
-configure_file ("${CMAKE_CURRENT_LIST_DIR}/query.json" "${ORANGES_CACHE_ROOT}/query.json" @ONLY)
-
-file (COPY "${ORANGES_CACHE_ROOT}/query.json" DESTINATION "${query_dir}/client-Oranges"
-	  FOLLOW_SYMLINK_CHAIN)
+oranges_install_packages (${system_packages_flag} ${pip_packages_flag} ${update_flag}
+						  ${optional_flag})

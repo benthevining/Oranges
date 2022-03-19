@@ -65,6 +65,7 @@ modules/finders/Findclang-tidy.cmake benthevining
 modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
+modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining

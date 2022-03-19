@@ -10,6 +10,10 @@
 #
 # ======================================================================================
 
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+#
+
 function(_oranges_remove_directory dir_path)
 	if(IS_DIRECTORY "${dir_path}")
 		file (REMOVE_RECURSE "${dir_path}")

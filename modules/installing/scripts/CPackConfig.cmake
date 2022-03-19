@@ -10,6 +10,8 @@
 #
 # ======================================================================================
 
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
 include ("@CMAKE_BINARY_DIR@/CPackConfig.cmake")
 
 if("${CPACK_GENERATOR}" STREQUAL "RPM")

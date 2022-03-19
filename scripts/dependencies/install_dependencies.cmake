@@ -12,22 +12,10 @@
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(NOT ORANGES_PROJECT_ROOT)
-	message (FATAL_ERROR "ORANGES_PROJECT_ROOT must be defined with -D")
-endif()
+set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
 
-set (ORANGES_BUILD_ROOT "${ORANGES_PROJECT_ROOT}/Builds")
-set (ORANGES_CACHE_ROOT "${ORANGES_PROJECT_ROOT}/Cache")
+include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-set (api_base_dir "${ORANGES_BUILD_ROOT}/.cmake/api/v1")
-
-set (query_dir "${api_base_dir}/query")
-set (reply_dir "${api_base_dir}/reply")
-
-file (MAKE_DIRECTORY "${query_dir}")
-file (MAKE_DIRECTORY "${reply_dir}")
-
-configure_file ("${CMAKE_CURRENT_LIST_DIR}/query.json" "${ORANGES_CACHE_ROOT}/query.json" @ONLY)
-
-file (COPY "${ORANGES_CACHE_ROOT}/query.json" DESTINATION "${query_dir}/client-Oranges"
-	  FOLLOW_SYMLINK_CHAIN)
+include (OrangesInstallPackages)
+include (OrangesFetchRepository)
+include (OrangesDownloadFile)
