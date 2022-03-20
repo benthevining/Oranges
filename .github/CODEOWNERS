@@ -95,6 +95,7 @@ modules/finders/programs/scripts/launcher.in benthevining
 modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
 modules/finders/shells/FindBash.cmake benthevining
 modules/finders/shells/FindPowerShell.cmake benthevining
+modules/finders/shells/Findcsh.cmake benthevining
 modules/finders/shells/Findfish.cmake benthevining
 modules/finders/shells/Findsh.cmake benthevining
 modules/finders/static_analysis/Findclang-tidy.cmake benthevining
@@ -177,8 +178,11 @@ modules/plugins/LemonsPluginSigning.cmake benthevining
 modules/plugins/LemonsPluginUtilities.cmake benthevining
 modules/shells/OrangesFindUnixShell.cmake benthevining
 modules/shells/OrangesShellTargetProperties.cmake benthevining
+modules/testing/OrangesCTestConfig.cmake benthevining
 ning
 package.json benthevining
+package_manager/scripts/parse_json_file.cmake benthevining
+package_manager/scripts/parse_system_packages.cmake benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining

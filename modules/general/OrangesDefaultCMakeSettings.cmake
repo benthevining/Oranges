@@ -30,7 +30,6 @@ include (LemonsCmakeDevTools)
 include (OrangesDefaultTarget)
 include (CMakePackageConfigHelpers)
 include (GNUInstallDirs)
-include (ProcessorCount)
 include (OrangesDeprecateDirectoryScopedCommands)
 
 #
@@ -74,18 +73,6 @@ endif()
 
 set (CMAKE_COLOR_MAKEFILE ON)
 set (CMAKE_VERBOSE_MAKEFILE ON)
-
-#
-
-ProcessorCount (num_procs)
-
-if(NOT num_procs)
-	set (num_procs 2)
-endif()
-
-set (CMAKE_CTEST_ARGUMENTS --parallel "${num_procs}")
-
-unset (num_procs)
 
 #
 

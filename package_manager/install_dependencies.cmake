@@ -12,7 +12,7 @@
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/../..")
+set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
 
 include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
 

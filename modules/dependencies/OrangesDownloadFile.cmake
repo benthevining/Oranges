@@ -26,8 +26,7 @@ Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
 
 ### oranges_download_file
 ```
-oranges_download_file (URL <url>
-					   FILENAME <localFilename>
+oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot> [GIT_BRANCH <branchName>] ]
 					   [PATH_OUTPUT <outputVar>]
 					   [NO_CACHE] [QUIET] [NEVER_LOCAL]
 					   [COPY_TO <path>]
@@ -75,6 +74,10 @@ function(oranges_download_file)
 		oneValueArgs
 		URL
 		FILENAME
+		GITHUB_REPOSITORY
+		REPO_REL_PATH
+		GIT_BRANCH
+		PACKAGE_NAME
 		TIMEOUT
 		USERNAME
 		PASSWORD
@@ -117,13 +120,48 @@ function(oranges_download_file)
 		return ()
 	endif()
 
-	if(NOT ORANGES_ARG_QUIET)
-		set (progress_flag SHOW_PROGRESS)
+	if(ORANGES_ARG_GITHUB_REPOSITORY OR ORANGES_ARG_REPO_REL_PATH)
+		if((NOT ORANGES_ARG_GITHUB_REPOSITORY) OR (NOT ORANGES_ARG_REPO_REL_PATH))
+			message (
+				WARNING
+					"${CMAKE_CURRENT_FUNCTION} - GITHUB_REPOSITORY and REPO_REL_PATH must both be specified!"
+				)
+		else()
+			# check if this repository has been downloaded via OrangesFetchRepository... TO DO -
+			# check branch...?
 
-		message (
-			STATUS
-				"Downloading file ${ORANGES_ARG_FILENAME} from ${ORANGES_ARG_URL} to ${cached_file_location}..."
-			)
+			if(ORANGES_ARG_PACKAGE_NAME)
+				if(${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR)
+					set (git_repo_file_location
+						 "${${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR}/${ORANGES_ARG_REPO_REL_PATH}")
+
+					if(EXISTS "${git_repo_file_location}")
+						set (${ORANGES_ARG_PATH_OUTPUT} "${git_repo_file_location}" PARENT_SCOPE)
+						return ()
+					endif()
+				endif()
+			endif()
+
+			if(NOT ORANGES_ARG_GIT_BRANCH)
+				set (ORANGES_ARG_GIT_BRANCH main)
+			endif()
+
+			set (
+				ORANGES_ARG_URL
+				"https://raw.githubusercontent.com/${ORANGES_ARG_GITHUB_REPOSITORY}/${ORANGES_ARG_GIT_BRANCH}/${ORANGES_ARG_REPO_REL_PATH}"
+				)
+		endif()
+	else()
+		if(ORANGES_ARG_USERNAME OR ORANGES_ARG_PASSWORD)
+			if((NOT ORANGES_ARG_USERNAME) OR (NOT ORANGES_ARG_PASSWORD))
+				message (
+					FATAL_ERROR
+						"${CMAKE_CURRENT_FUNCTION} - if specifying USERNAME or PASSWORD, both must be specified!"
+					)
+			endif()
+
+			set (pwd_flag USERPWD "${ORANGES_ARG_USERNAME}:${ORANGES_ARG_PASSWORD}")
+		endif()
 	endif()
 
 	oranges_forward_function_arguments (
@@ -135,15 +173,13 @@ function(oranges_download_file)
 		TIMEOUT
 		EXPECTED_HASH)
 
-	if(ORANGES_ARG_USERNAME OR ORANGES_ARG_PASSWORD)
-		if((NOT ORANGES_ARG_USERNAME) OR (NOT ORANGES_ARG_PASSWORD))
-			message (
-				FATAL_ERROR
-					"${CMAKE_CURRENT_FUNCTION} - if specifying USERNAME or PASSWORD, both must be specified!"
-				)
-		endif()
+	if(NOT ORANGES_ARG_QUIET)
+		set (progress_flag SHOW_PROGRESS)
 
-		set (pwd_flag USERPWD "${ORANGES_ARG_USERNAME}:${ORANGES_ARG_PASSWORD}")
+		message (
+			STATUS
+				"Downloading file ${ORANGES_ARG_FILENAME} from ${ORANGES_ARG_URL} to ${cached_file_location}..."
+			)
 	endif()
 
 	file (DOWNLOAD "${ORANGES_ARG_URL}" "${cached_file_location}" ${progress_flag} ${pwd_flag}

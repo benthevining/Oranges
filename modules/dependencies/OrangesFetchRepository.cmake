@@ -28,7 +28,7 @@ Defaults to ${CMAKE_SOURCE_DIR}/Cache.
 ### oranges_fetch_repository
 ```
 oranges_fetch_repository (NAME <name>
-						  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
+						  [GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>]
 						  [GIT_TAG <ref>]
 						  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
 						  [CMAKE_SUBDIR <rel_path>]
