@@ -16,6 +16,11 @@ Attempts to locate a UNIX shell in approximate order of preference.
 
 Targets:
 - Oranges::UnixShell : the located shell executable
+- Unix::cp
+- Unix::gzip
+- Unix::mv
+- Unix::rm
+- Unix::tar
 
 Output variables:
 - UNIX_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
@@ -29,13 +34,25 @@ Supported shells (in searching order):
 - tcsh (csh)
 - Bourne shell (sh)
 
+## Functions:
+
+### execute_unix_command
+```
+execute_unix_command (COMMAND <CP|GZIP|MV|RM|TAR>
+					  [ARGS <commandArgs...>]
+					  [DIR <workingDirectory>]
+					  [OPTIONAL])
+```
+
 ]]
 
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (FindUnixCommands)
 include (OrangesShellTargetProperties)
+include (LemonsCmakeDevTools)
 
 #
 
@@ -99,6 +116,105 @@ function(_oranges_set_unix_shell_global_properties)
 endfunction()
 
 cmake_language (DEFER CALL _oranges_set_unix_shell_global_properties)
+
+#
+
+# create imported targets for each found Unix command
+
+if(CP)
+	add_executable (unix_cp IMPORTED GLOBAL)
+
+	set_target_properties (unix_cp PROPERTIES IMPORTED_LOCATION "${CP}")
+
+	add_executable (Unix::cp ALIAS unix_cp)
+endif()
+
+if(GZIP)
+	add_executable (unix_gzip IMPORTED GLOBAL)
+
+	set_target_properties (unix_gzip PROPERTIES IMPORTED_LOCATION "${GZIP}")
+
+	add_executable (Unix::gzip ALIAS unix_gzip)
+endif()
+
+if(MV)
+	add_executable (unix_mv IMPORTED GLOBAL)
+
+	set_target_properties (unix_mv PROPERTIES IMPORTED_LOCATION "${MV}")
+
+	add_executable (Unix::mv ALIAS unix_mv)
+endif()
+
+if(RM)
+	add_executable (unix_rm IMPORTED GLOBAL)
+
+	set_target_properties (unix_rm PROPERTIES IMPORTED_LOCATION "${RM}")
+
+	add_executable (Unix::rm ALIAS unix_rm)
+endif()
+
+if(TAR)
+	add_executable (unix_tar IMPORTED GLOBAL)
+
+	set_target_properties (unix_tar PROPERTIES IMPORTED_LOCATION "${TAR}")
+
+	add_executable (Unix::tar ALIAS unix_tar)
+endif()
+
+#
+
+function(execute_unix_command)
+
+	set (options OPTIONAL)
+	set (oneValueArgs COMMAND DIR)
+	set (multiValueArgs ARGS)
+
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
+
+	lemons_require_function_arguments (ORANGES_ARG COMMAND)
+
+	if("${ORANGES_ARG_COMMAND}" STREQUAL "CP")
+		set (target_name Unix::cp)
+	elseif("${ORANGES_ARG_COMMAND}" STREQUAL "GZIP")
+		set (target_name Unix::gzip)
+	elseif("${ORANGES_ARG_COMMAND}" STREQUAL "MV")
+		set (target_name Unix::mv)
+	elseif("${ORANGES_ARG_COMMAND}" STREQUAL "RM")
+		set (target_name Unix::rm)
+	elseif("${ORANGES_ARG_COMMAND}" STREQUAL "TAR")
+		set (target_name Unix::tar)
+	else()
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with invalid COMMAND ${ORANGES_ARG_COMMAND}!")
+	endif()
+
+	if(NOT TARGET "${target_name}")
+		if(ORANGES_ARG_OPTIONAL)
+			return ()
+		else()
+			message (
+				FATAL_ERROR
+					"${CMAKE_CURRENT_FUNCTION} - ${ORANGES_ARG_COMMAND} executable was not found!")
+		endif()
+	endif()
+
+	if(NOT ORANGES_ARG_OPTIONAL)
+		set (fatal_flag COMMAND_ERROR_IS_FATAL ANY)
+	endif()
+
+	if(ORANGES_ARG_DIR)
+		set (dir_flag WORKING_DIRECTORY "${ORANGES_ARG_DIR}")
+	endif()
+
+	if(ORANGES_ARG_ARGS)
+		list (JOIN ${ORANGES_ARG_ARGS} " " command_args)
+	endif()
+
+	execute_process (COMMAND "${target_name}" ${command_args} ${dir_flag} ${fatal_flag}
+							 COMMAND_ECHO STDOUT)
+
+endfunction()
 
 #
 

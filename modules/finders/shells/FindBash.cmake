@@ -14,6 +14,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (FindUnixCommands)
 include (OrangesFindPackageHelpers)
 include (OrangesShellTargetProperties)
 
@@ -21,14 +22,10 @@ set_package_properties (Bash PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
 set (Bash_FOUND FALSE)
 
-find_program (BASH_PROGRAM bash)
-
-mark_as_advanced (FORCE BASH_PROGRAM)
-
-if(BASH_PROGRAM)
+if(BASH)
 	add_executable (bash_shell IMPORTED GLOBAL)
 
-	set_target_properties (bash_shell PROPERTIES IMPORTED_LOCATION "${BASH_PROGRAM}")
+	set_target_properties (bash_shell PROPERTIES IMPORTED_LOCATION "${BASH}")
 
 	oranges_set_shell_target_properties (TARGET bash_shell NAME bash STARTUP_SCRIPT
 										 "~/.bash_profile")
