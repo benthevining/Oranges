@@ -93,7 +93,7 @@ function(oranges_generate_export_header)
 							EXPORT_FILE_NAME "${ORANGES_ARG_HEADER}" ${no_build_deprecated})
 
 	if(NOT ORANGES_ARG_REL_PATH)
-		set (ORANGES_ARG_REL_PATH Limes/limes_core)
+		set (ORANGES_ARG_REL_PATH "${ORANGES_ARG_TARGET}")
 	endif()
 
 	oranges_add_target_headers (
