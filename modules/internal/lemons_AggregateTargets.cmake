@@ -14,24 +14,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-option (LEMONS_CREATE_AGGREGATE_TARGETS
-		"Generate ALL_APPS and ALL_PLUGINS targets, populated accordingly" ON)
-
-mark_as_advanced (LEMONS_CREATE_AGGREGATE_TARGETS)
-
-if(NOT LEMONS_CREATE_AGGREGATE_TARGETS)
-
-	function(_lemons_add_to_all_apps_target)
-
-	endfunction()
-
-	function(_lemons_add_to_all_plugins_target)
-
-	endfunction()
-
-	return ()
-endif()
-
 include (LemonsCmakeDevTools)
 
 add_custom_target (LEMONS_ALL_APPS COMMENT "Building all apps...")
@@ -45,9 +27,7 @@ oranges_install_targets (TARGETS LEMONS_ALL_APPS LEMONS_ALL_PLUGINS EXPORT Orang
 #
 
 function(_lemons_add_to_all_apps_target target)
-
-	add_dependencies (LEMONS_ALL_APPS ${target})
-
+	add_dependencies (LEMONS_ALL_APPS "${target}")
 endfunction()
 
 #
@@ -58,8 +38,8 @@ function(_lemons_add_to_all_plugins_target target)
 
 	set (stdaln_target "${target}_Standalone")
 
-	if(TARGET ${stdaln_target})
-		_lemons_add_to_all_apps_target (${stdaln_target})
+	if(TARGET "${stdaln_target}")
+		_lemons_add_to_all_apps_target ("${stdaln_target}")
 	endif()
 
 endfunction()

@@ -62,9 +62,12 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cma
 				generate_deps_graph_image.cmake @ONLY)
 
 add_custom_target (
-	DependencyGraph COMMAND "${CMAKE_COMMAND}" -S "${CMAKE_SOURCE_DIR}" -B "${CMAKE_BINARY_DIR}"
-							"--graphviz=${dot_file_output}" WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	VERBATIM USES_TERMINAL)
+	DependencyGraph
+	COMMAND "${CMAKE_COMMAND}" -S "${CMAKE_SOURCE_DIR}" -B "${CMAKE_BINARY_DIR}"
+			"--graphviz=${dot_file_output}"
+	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+	VERBATIM USES_TERMINAL
+	COMMENT "Rerunning CMake to generate dependency graph...")
 
 add_custom_command (
 	TARGET DependencyGraph

@@ -30,6 +30,7 @@ Updates all installed system packages.
 ```
 oranges_install_packages ([SYSTEM_PACKAGES <packageNames...>]
 						  [PIP_PACKAGES <packageNames...>]
+						  [RUBY_GEMS <gems...>]
 						  [UPDATE_FIRST] [OPTIONAL])
 ```
 
@@ -58,6 +59,8 @@ else()
 endif()
 
 find_package (Pip REQUIRED)
+find_package (RubyGems)
+
 find_package (asdf QUIET)
 
 #
@@ -75,6 +78,10 @@ function(oranges_update_all_packages)
 
 	pip_upgrade_all ()
 
+	if(TARGET Ruby::gem)
+		ruby_update_all_gems ()
+	endif()
+
 	if(TARGET asdf::asdf)
 		asdf_update ("${CMAKE_SOURCE_DIR}")
 	endif()
@@ -87,7 +94,7 @@ function(oranges_install_packages)
 	oranges_add_function_message_context ()
 
 	set (options UPDATE_FIRST OPTIONAL)
-	set (multiValueArgs SYSTEM_PACKAGES PIP_PACKAGES)
+	set (multiValueArgs SYSTEM_PACKAGES PIP_PACKAGES RUBY_GEMS)
 
 	cmake_parse_arguments (ORANGES_ARG "${options}" "DIR" "${multiValueArgs}" ${ARGN})
 
@@ -115,6 +122,12 @@ function(oranges_install_packages)
 
 	if(ORANGES_ARG_PIP_PACKAGES)
 		pip_install_packages (PACKAGES ${ORANGES_ARG_PIP_PACKAGES} ${ORANGES_FORWARDED_ARGUMENTS})
+	endif()
+
+	if(TARGET Ruby::gem)
+		if(ORANGES_ARG_RUBY_GEMS)
+			ruby_install_gems (GEMS ${ORANGES_ARG_RUBY_GEMS} ${ORANGES_FORWARDED_ARGUMENTS})
+		endif()
 	endif()
 
 	if(TARGET asdf::asdf)

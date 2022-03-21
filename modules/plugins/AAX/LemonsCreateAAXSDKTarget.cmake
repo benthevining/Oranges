@@ -84,16 +84,17 @@ if(APPLE)
 
 elseif(WIN32)
 
-	set (msvc_proj_file "${LEMONS_AAX_SDK_PATH}/msvc/AAX_SDK.sln")
+	set (aax_msvc_proj_file "${LEMONS_AAX_SDK_PATH}/msvc/AAX_SDK.sln")
 
-	if(NOT EXISTS "${msvc_proj_file}")
-		message (AUTHOR_WARNING "${msvc_proj_file} could not be found, AAX SDK cannot be built!")
+	if(NOT EXISTS "${aax_msvc_proj_file}")
+		message (
+			AUTHOR_WARNING "${aax_msvc_proj_file} could not be found, AAX SDK cannot be built!")
 		return ()
 	endif()
 
-	include_external_msproject (AAXSDK "${msvc_proj_file}")
+	include_external_msproject (AAXSDK "${aax_msvc_proj_file}")
 
-	unset (msvc_proj_file)
+	unset (aax_msvc_proj_file)
 
 endif()
 

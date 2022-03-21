@@ -34,7 +34,7 @@ if(POWERSHELL_PROGRAM)
 
 	oranges_set_shell_target_properties (
 		TARGET powershell NAME PowerShell STARTUP_SCRIPT
-		"%USERPROFILE%\\Documents \\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1")
+		"%USERPROFILE%\\Documents\\WindowsPowerShell\\Microsoft.PowerShell_profile.ps1")
 
 	add_executable (PowerShell::PowerShell ALIAS powershell)
 

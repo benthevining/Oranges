@@ -203,6 +203,7 @@ if(APPLE)
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
 																   "armv7;armv7s;arm64;i386;x86_64")
 
+			# cmake-lint: disable=W0106
 			if(DEFINED ENV{APPLE_DEV_ID})
 				set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
 					 CACHE STRING "10-character Apple Developer ID")

@@ -84,7 +84,8 @@ function(lemons_json_array_to_list)
 
 	set (out_list "")
 
-	foreach(idx RANGE ${array_size})
+	# cmake-lint: disable=E1120
+	foreach(idx RANGE "${array_size}")
 
 		string (JSON item GET ${LEMONS_JSON_TEXT} "${LEMONS_JSON_ARRAY}" ${idx})
 

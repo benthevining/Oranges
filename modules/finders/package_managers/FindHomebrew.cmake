@@ -93,7 +93,7 @@ if(NOT HOMEBREW AND NOT HOMEBREW_NO_INSTALL)
 
 	unset (quiet_flag)
 
-	find_package_execute_process (COMMAND ${UnixShellCommand} "${install_script}")
+	find_package_execute_process (COMMAND Oranges::UnixShell "${install_script}")
 
 	unset (install_script)
 
