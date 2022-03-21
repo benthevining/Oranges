@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (ksh PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findksh")
+
 set (ksh_FOUND FALSE)
 
 find_program (KSH_PROGRAM NAMES ksh pdksh)

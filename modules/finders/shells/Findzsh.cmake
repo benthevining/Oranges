@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (zsh PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findzsh")
+
 set (zsh_FOUND FALSE)
 
 find_program (ZSH_PROGRAM zsh)

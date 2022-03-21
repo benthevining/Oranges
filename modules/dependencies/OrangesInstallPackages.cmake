@@ -41,6 +41,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 
+oranges_file_scoped_message_context ("OrangesInstallPackages")
+
 define_property (
 	GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME BRIEF_DOCS "System package manager being used"
 	FULL_DOCS "The name of the system package manager program being used")
@@ -61,6 +63,8 @@ find_package (asdf QUIET)
 #
 
 function(oranges_update_all_packages)
+	oranges_add_function_message_context ()
+
 	if(APPLE)
 		homebrew_update_all ()
 	elseif(WIN32)
@@ -79,6 +83,8 @@ endfunction()
 #
 
 function(oranges_install_packages)
+
+	oranges_add_function_message_context ()
 
 	set (options UPDATE_FIRST OPTIONAL)
 	set (multiValueArgs SYSTEM_PACKAGES PIP_PACKAGES)

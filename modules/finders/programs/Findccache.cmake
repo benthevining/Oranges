@@ -32,6 +32,12 @@ include (OrangesFindPackageHelpers)
 set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
 						DESCRIPTION "C/C++ compiler cache")
 
+#
+
+oranges_file_scoped_message_context ("Findccache")
+
+#
+
 define_property (
 	TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
 	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
@@ -75,6 +81,8 @@ list (JOIN CCACHE_OPTIONS "\n export " CCACHE_EXPORTS)
 #
 
 function(_lemons_configure_compiler_launcher language)
+
+	oranges_add_function_message_context ()
 
 	string (TOUPPER "${language}" lang_upper)
 

@@ -35,6 +35,10 @@ include (OrangesConfigurationPostfixes)
 
 #
 
+oranges_file_scoped_message_context ("OrangesDefaultCMakeSettings")
+
+#
+
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
 							  "${CMAKE_BINARY_DIR}/undefined_properties.log")
 
@@ -77,6 +81,8 @@ set (CMAKE_VERBOSE_MAKEFILE ON)
 #
 
 function(lemons_sort_target_sources target root_dir)
+
+	oranges_add_function_message_context ()
 
 	if(NOT IS_DIRECTORY "${root_dir}")
 		message (FATAL_ERROR "Source grouping root directory ${root_dir} does not exist!")

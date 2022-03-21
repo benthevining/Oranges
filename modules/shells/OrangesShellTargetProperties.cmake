@@ -40,6 +40,8 @@ define_property (
 
 function(oranges_set_shell_target_properties)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs TARGET NAME STARTUP_SCRIPT LOG_FILE)
 
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})

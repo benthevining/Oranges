@@ -32,6 +32,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (cppcheck PROPERTIES URL "https://cppcheck.sourceforge.io/"
 						DESCRIPTION "C++ code linter")
 
+oranges_file_scoped_message_context ("Findcppcheck")
+
 set (cppcheck_FOUND FALSE)
 
 find_program (CPPCHECK NAMES cppcheck)

@@ -32,6 +32,12 @@ include (OrangesFetchRepository)
 set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
 						DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
 
+#
+
+oranges_file_scoped_message_context ("FindMIPP")
+
+#
+
 if(MIPP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif()

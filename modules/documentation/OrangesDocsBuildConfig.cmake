@@ -22,6 +22,10 @@ Inclusion style: In each project
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
+oranges_file_scoped_message_context ("OrangesDocsBuildConfig")
+
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesGraphVizConfig)
 endif()

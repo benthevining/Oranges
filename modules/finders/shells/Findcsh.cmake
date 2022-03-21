@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (csh PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findcsh")
+
 set (csh_FOUND FALSE)
 
 find_program (CSH_PROGRAM NAMES tcsh csh)

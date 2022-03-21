@@ -63,6 +63,8 @@ include (OrangesSetUpCache)
 
 function(oranges_download_file)
 
+	oranges_add_function_message_context ()
+
 	macro(_oranges_copy_downloaded_file source_path dest_path)
 		if(NOT "${${source_path}}" STREQUAL "${dest_path}")
 			file (COPY_FILE "${${source_path}}" "${dest_path}")

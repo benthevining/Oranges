@@ -14,9 +14,13 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
 define_property (
 	GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
 	FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
+
+oranges_file_scoped_message_context ("OrangesSetUpCache")
 
 if(DEFINED ENV{CMAKE_CACHE})
 	set (default_cache "$ENV{CMAKE_CACHE}")
@@ -26,6 +30,8 @@ endif()
 
 set (FETCHCONTENT_BASE_DIR "${default_cache}"
 	 CACHE PATH "Directory in which to cache all downloaded git repos")
+
+message (DEBUG "cache dir: ${FETCHCONTENT_BASE_DIR}")
 
 unset (default_cache)
 

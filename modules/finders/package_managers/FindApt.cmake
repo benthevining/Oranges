@@ -49,12 +49,14 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-define_property (
-	GLOBAL PROPERTY SYSTEM_PACKAGE_MANAGER_NAME BRIEF_DOCS "System package manager being used"
-	FULL_DOCS "The name of the system package manager program being used")
-
 set_package_properties (Apt PROPERTIES URL "https://linux.die.net/man/8/apt-get"
 						DESCRIPTION "Linux package manager")
+
+#
+
+oranges_file_scoped_message_context ("FindApt")
+
+#
 
 set (Apt_FOUND FALSE)
 
@@ -99,6 +101,8 @@ endif()
 
 function(apt_update_all)
 
+	oranges_add_function_message_context ()
+
 	if(NOT apt_program)
 		message (FATAL_ERROR "Apt cannot be found!")
 	endif()
@@ -112,6 +116,8 @@ endfunction()
 #
 
 function(apt_install_packages)
+
+	oranges_add_function_message_context ()
 
 	if(NOT apt_program)
 		message (FATAL_ERROR "Apt cannot be found!")

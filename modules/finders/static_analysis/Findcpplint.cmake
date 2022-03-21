@@ -32,6 +32,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (cpplint PROPERTIES URL "https://github.com/google/styleguide"
 						DESCRIPTION "C++ code linter")
 
+oranges_file_scoped_message_context ("Findcpplint")
+
 set (cpplint_FOUND FALSE)
 
 find_program (CPPLINT NAMES cpplint)

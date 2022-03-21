@@ -54,6 +54,8 @@ include (LemonsCmakeDevTools)
 
 function(lemons_subdir_list)
 
+	oranges_add_function_message_context ()
+
 	set (options RECURSE FILES FULL_PATHS)
 	set (oneValueArgs RESULT DIR BASE_DIR)
 
@@ -121,6 +123,8 @@ endfunction()
 #
 
 function(lemons_make_path_absolute)
+
+	oranges_add_function_message_context ()
 
 	set (oneValueArgs VAR BASE_DIR)
 

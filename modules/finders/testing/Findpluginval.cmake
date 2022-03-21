@@ -75,6 +75,12 @@ include (LemonsCmakeDevTools)
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
 						DESCRIPTION "Audio plugin testing and validation tool")
 
+#
+
+oranges_file_scoped_message_context ("Findpluginval")
+
+#
+
 define_property (GLOBAL PROPERTY PLUGINVAL_LEVEL BRIEF_DOCS "pluginval testing intensity level"
 				 FULL_DOCS "pluginval testing intensity level, 1-10")
 
@@ -175,6 +181,8 @@ endif()
 # #########################################################################################################
 
 function(pluginval_add_plugin_test)
+
+	oranges_add_function_message_context ()
 
 	if(NOT TARGET Tracktion::pluginval)
 		message (WARNING "pluginval not found, cannot add tests!")
@@ -296,6 +304,8 @@ endfunction()
 #
 
 function(pluginval_add_all_plugin_tests)
+
+	oranges_add_function_message_context ()
 
 	set (options NO_GUI VERBOSE RANDOMIZE)
 	set (oneValueArgs TARGET LEVEL LOG_DIR REPEATS)

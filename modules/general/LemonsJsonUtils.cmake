@@ -62,6 +62,8 @@ include (LemonsCmakeDevTools)
 
 function(lemons_json_array_to_list)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs TEXT ARRAY OUT)
 
 	cmake_parse_arguments (LEMONS_JSON "" "${oneValueArgs}" "" ${ARGN})

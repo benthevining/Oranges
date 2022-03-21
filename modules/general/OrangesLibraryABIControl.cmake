@@ -50,6 +50,8 @@ include (GenerateExportHeader)
 
 function(oranges_add_library_abi_control)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs TARGET BASE_NAME HEADER)
 
 	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})

@@ -42,6 +42,8 @@ include (LemonsCmakeDevTools)
 
 function(call_for_each_plugin_format)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs TARGET FUNCTION)
 
 	cmake_parse_arguments (ORANGES_ARG "" "" "" ${ARGN})

@@ -54,6 +54,8 @@ include (FindUnixCommands)
 include (OrangesShellTargetProperties)
 include (LemonsCmakeDevTools)
 
+oranges_file_scoped_message_context ("OrangesFindUnixShell")
+
 #
 
 define_property (GLOBAL PROPERTY UNIX_SHELL_NAME BRIEF_DOCS "Name of the UNIX shell being used"
@@ -164,6 +166,8 @@ endif()
 #
 
 function(execute_unix_command)
+
+	oranges_add_function_message_context ()
 
 	set (options OPTIONAL)
 	set (oneValueArgs COMMAND DIR)

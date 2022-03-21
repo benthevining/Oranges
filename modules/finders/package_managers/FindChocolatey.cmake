@@ -56,6 +56,12 @@ include (OrangesFindPackageHelpers)
 set_package_properties (Chocolatey PROPERTIES URL "https://chocolatey.org/"
 						DESCRIPTION "Windows package manager")
 
+#
+
+oranges_file_scoped_message_context ("FindChocolatey")
+
+#
+
 option (CHOCO_NO_INSTALL "Don't attempt to install Chocolatey if it cannot be found" OFF)
 
 set (Chocolatey_FOUND FALSE)
@@ -98,6 +104,8 @@ endif()
 
 function(choclatey_update_all)
 
+	oranges_add_function_message_context ()
+
 	if(NOT TARGET Chocolatey::Chocolatey)
 		message (FATAL_ERROR "Chocolatey cannot be found!")
 	endif()
@@ -109,6 +117,8 @@ endfunction()
 #
 
 function(chocolatey_install_packages)
+
+	oranges_add_function_message_context ()
 
 	if(NOT TARGET Chocolatey::Chocolatey)
 		message (FATAL_ERROR "Chocolatey cannot be found!")

@@ -51,6 +51,9 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (LemonsCreateAAXSDKTarget)
 include (LemonsFileUtils)
 include (LemonsJuceUtilities)
+include (LemonsCmakeDevTools)
+
+oranges_file_scoped_message_context ("LemonsAAXUtils")
 
 if(TARGET Lemons::AAXSDK)
 	juce_set_aax_sdk_path ("${LEMONS_AAX_SDK_PATH}")
@@ -62,6 +65,8 @@ endif()
 #
 
 function(lemons_configure_aax_plugin)
+
+	oranges_add_function_message_context ()
 
 	set (oneValueArgs TARGET PAGETABLE_FILE)
 

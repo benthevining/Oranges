@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (fish PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findfish")
+
 set (fish_FOUND FALSE)
 
 find_program (FISH_PROGRAM fish)

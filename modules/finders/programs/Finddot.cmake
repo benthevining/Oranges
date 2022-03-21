@@ -31,6 +31,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (dot PROPERTIES URL "https://graphviz.org/"
 						DESCRIPTION "Graph image creation tool")
 
+oranges_file_scoped_message_context ("Finddot")
+
 set (dot_FOUND FALSE)
 
 find_program (ORANGES_DOT dot)

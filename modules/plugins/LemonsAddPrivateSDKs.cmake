@@ -29,6 +29,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
+oranges_file_scoped_message_context ("LemonsAddPrivateSDKs")
+
 include (OrangesFetchRepository)
 
 if(DEFINED ENV{LEMONS_PRIVATE_SDKS})
@@ -51,4 +55,4 @@ oranges_fetch_repository (
 	QUIET
 	NEVER_LOCAL)
 
-mark_as_advanced (LEMONS_AAX_SDK_PATH LEMONS_VST2_SDK_PATH)
+mark_as_advanced (FORCE LEMONS_AAX_SDK_PATH LEMONS_VST2_SDK_PATH)

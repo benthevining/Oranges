@@ -47,6 +47,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (wraptool PROPERTIES URL "https://paceap.com/pro-audio/"
 						DESCRIPTION "AAX plugin signing tool provided by PACE")
 
+oranges_file_scoped_message_context ("Findwraptool")
+
 define_property (GLOBAL PROPERTY WRAPTOOL_ACCOUNT BRIEF_DOCS "wraptool account ID"
 				 FULL_DOCS "wraptool account ID")
 
@@ -80,6 +82,8 @@ endif()
 #
 
 function(wraptool_configure_aax_plugin_signing)
+
+	oranges_add_function_message_context ()
 
 	set (oneValueArgs TARGET GUID ACCOUNT SIGNID KEYFILE KEYPASSWORD)
 

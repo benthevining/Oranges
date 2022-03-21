@@ -53,6 +53,8 @@ include (LemonsJuceUtilities)
 include (LemonsCmakeDevTools)
 include (lemons_AggregateTargets)
 
+oranges_file_scoped_message_context ("LemonsPluginUtilities")
+
 option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF)
 
 mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
@@ -117,6 +119,8 @@ message (STATUS "  -- Available plugin formats: ${formats_output}")
 #
 
 function(lemons_configure_juce_plugin)
+
+	oranges_add_function_message_context ()
 
 	lemons_configure_juce_target (${ARGN})
 

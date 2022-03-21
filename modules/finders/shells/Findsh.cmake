@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (sh PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findsh")
+
 set (sh_FOUND FALSE)
 
 find_program (SH_PROGRAM sh)

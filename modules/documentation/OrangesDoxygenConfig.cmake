@@ -45,6 +45,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (LemonsCmakeDevTools)
 include (LemonsFileUtils)
 
+oranges_file_scoped_message_context ("OrangesDoxygenConfig")
+
 set (ORANGES_DOXYFILE_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/Doxyfile" CACHE INTERNAL "")
 set (ORANGES_DOXYLAYOUT_INPUT "${CMAKE_CURRENT_LIST_DIR}/scripts/DoxygenLayout.xml" CACHE INTERNAL
 																						  "")
@@ -66,6 +68,8 @@ endif()
 #
 
 function(oranges_create_doxygen_target)
+
+	oranges_add_function_message_context ()
 
 	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR)
 	set (multiValueArgs INPUT_PATHS FILE_PATTERNS IMAGE_PATHS)

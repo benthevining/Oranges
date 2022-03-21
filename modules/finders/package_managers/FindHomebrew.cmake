@@ -57,6 +57,12 @@ include (OrangesDownloadFile)
 set_package_properties (Homebrew PROPERTIES URL "https://brew.sh/"
 						DESCRIPTION "MacOS package manager")
 
+#
+
+oranges_file_scoped_message_context ("FindHomebrew")
+
+#
+
 set (Homebrew_FOUND FALSE)
 
 option (HOMEBREW_NO_INSTALL "Don't attempt to install Homebrew if it cannot be found" OFF)
@@ -112,6 +118,8 @@ endif()
 
 function(homebrew_update_all)
 
+	oranges_add_function_message_context ()
+
 	if(NOT TARGET Homebrew::Homebrew)
 		message (FATAL_ERROR "Homebrew cannot be found!")
 	endif()
@@ -125,6 +133,8 @@ endfunction()
 #
 
 function(homebrew_install_packages)
+
+	oranges_add_function_message_context ()
 
 	if(NOT TARGET Homebrew::Homebrew)
 		message (FATAL_ERROR "Homebrew cannot be found!")

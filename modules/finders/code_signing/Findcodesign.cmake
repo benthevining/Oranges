@@ -51,6 +51,8 @@ set_package_properties (
 	URL "https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html"
 	DESCRIPTION "Apple's code signing tool")
 
+oranges_file_scoped_message_context ("Findcodesign")
+
 set (codesign_FOUND FALSE)
 
 find_program (CODESIGN_PROGRAM codesign)
@@ -72,6 +74,8 @@ endif()
 #
 
 function(codesign_sign_target)
+
+	oranges_add_function_message_context ()
 
 	cmake_parse_arguments (ORANGES_ARG "" "TARGET" "" ${ARGN})
 
@@ -105,6 +109,8 @@ endfunction()
 #
 
 function(codesign_sign_plugin_targets)
+
+	oranges_add_function_message_context ()
 
 	cmake_parse_arguments (ORANGES_ARG "" "TARGET" "" ${ARGN})
 

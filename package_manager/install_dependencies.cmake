@@ -10,6 +10,30 @@
 #
 # ======================================================================================
 
+#[[
+
+Inputs:
+- JSON_FILE
+- CACHE
+- [GENERATED_FIND_MODULES]
+- [SHIM_FILE]
+- UPDATE_ALL_PACKAGES
+- SYSTEM_PACKAGES_OPTIONAL
+- GIT_STRATEGY
+- GIT_OPTIONS
+- GIT_ALL_FULL
+- FILE_DOWNLOAD_TIMEOUT
+- PROJECT_NAME
+- PROJECT_ROOT
+
+for system packages:
+- optional_system_packages
+- optional_python_packages
+- required_system_packages
+- required_python_packages
+
+]]
+
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
@@ -86,8 +110,6 @@ endif()
 - git repos
 
 ]]
-
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/parse_system_packages.cmake")
 
 if(optional_system_packages)
 	_oranges_install_system_packages (SYSTEM_PACKAGES ${optional_system_packages} OPTIONAL)

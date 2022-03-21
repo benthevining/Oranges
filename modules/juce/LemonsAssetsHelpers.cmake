@@ -42,6 +42,8 @@ lemons_warn_if_not_processing_project ()
 
 function(lemons_add_resources_folder)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs TARGET ASSET_FOLDER OUTPUT_TARGET)
 
 	cmake_parse_arguments (LEMONS_RSRC_FLDR "SHIM" "${oneValueArgs}" "" ${ARGN})

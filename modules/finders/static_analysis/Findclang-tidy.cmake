@@ -32,6 +32,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (clang-tidy PROPERTIES URL "https://clang.llvm.org/extra/clang-tidy/"
 						DESCRIPTION "C++ code linter")
 
+oranges_file_scoped_message_context ("Findclang-tidy")
+
 set (clang-tidy_FOUND FALSE)
 
 find_program (CLANG_TIDY NAMES clang-tidy)

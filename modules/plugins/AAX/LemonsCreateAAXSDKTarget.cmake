@@ -32,6 +32,8 @@ include (LemonsCmakeDevTools)
 
 lemons_warn_if_not_processing_project ()
 
+oranges_file_scoped_message_context ("LemonsCreateAAXSDKTarget")
+
 # currently broken on windows...
 if(WIN32)
 	return ()

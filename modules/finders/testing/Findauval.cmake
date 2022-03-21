@@ -48,6 +48,12 @@ set_package_properties (
 	URL "https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html"
 	DESCRIPTION "AudioUnit plugin validation tool")
 
+#
+
+oranges_file_scoped_message_context ("Findauval")
+
+#
+
 set (auval_FOUND FALSE)
 
 find_program (AUVAL_PROGRAM auval)
@@ -67,6 +73,8 @@ endif()
 #
 
 function(auval_add_plugin_test)
+
+	oranges_add_function_message_context ()
 
 	if(NOT TARGET Apple::auval)
 		message (WARNING "auval not found, cannot add tests!")

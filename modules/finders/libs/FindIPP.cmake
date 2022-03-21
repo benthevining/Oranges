@@ -83,6 +83,10 @@ cmake_language (DEFER CALL _ipp_unset_vars)
 
 #
 
+oranges_file_scoped_message_context ("FindIPP")
+
+#
+
 find_package (PkgConfig QUIET)
 
 pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
@@ -148,6 +152,8 @@ set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
 
 function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 
+	list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_library")
+
 	if(TARGET ipp_lib_${IPP_COMPONENT})
 		return ()
 	endif()
@@ -192,6 +198,8 @@ endfunction()
 #
 
 function(_oranges_find_ipp_component IPP_COMPONENT comp_required)
+
+	list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_component")
 
 	if("${IPP_COMPONENT}" STREQUAL CC)
 		set (comp_dependencies CORE VM S I)

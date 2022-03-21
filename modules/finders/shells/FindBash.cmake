@@ -20,6 +20,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (Bash PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("FindBash")
+
 set (Bash_FOUND FALSE)
 
 if(BASH)

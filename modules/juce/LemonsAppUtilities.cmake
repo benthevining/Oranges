@@ -47,6 +47,8 @@ lemons_warn_if_not_processing_project ()
 #
 
 macro(_lemons_configure_app_internal)
+	oranges_add_function_message_context ()
+
 	lemons_configure_juce_target (${ARGN})
 
 	cmake_parse_arguments (LEMONS_APP "" "TARGET" "" ${ARGN})
@@ -57,12 +59,15 @@ endmacro()
 #
 
 function(lemons_configure_headless_app)
+	oranges_add_function_message_context ()
 	_lemons_configure_app_internal (${ARGN})
 endfunction()
 
 #
 
 function(lemons_configure_juce_app)
+	oranges_add_function_message_context ()
+
 	_lemons_configure_app_internal (${ARGN})
 
 	if(TARGET Lemons::LemonsAppModules)

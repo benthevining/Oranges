@@ -46,6 +46,8 @@ set (pc_file_input "${CMAKE_CURRENT_LIST_DIR}/scripts/config.pc" CACHE INTERNAL 
 
 function(oranges_create_pkgconfig_file)
 
+	oranges_add_function_message_context ()
+
 	set (options NO_INSTALL)
 	set (
 		oneValueArgs

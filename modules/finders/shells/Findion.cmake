@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (ion PROPERTIES URL "" DESCRIPTION "UNIX shell")
 
+oranges_file_scoped_message_context ("Findion")
+
 set (ion_FOUND FALSE)
 
 find_program (ION_PROGRAM ion)

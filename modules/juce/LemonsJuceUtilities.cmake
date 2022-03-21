@@ -79,6 +79,8 @@ endfunction()
 
 function(lemons_configure_juce_target)
 
+	oranges_add_function_message_context ()
+
 	set (options BROWSER PLUGIN_HOST CAMERA MICROPHONE TRANSLATIONS NO_MODULES)
 	set (oneValueArgs TARGET ASSET_FOLDER)
 

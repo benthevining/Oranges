@@ -46,6 +46,8 @@ set_package_properties (
 	URL "https://developer.apple.com/library/archive/technotes/tn2339/_index.html"
 	DESCRIPTION "Command-line build tool for XCode")
 
+oranges_file_scoped_message_context ("Findxcodebuild")
+
 set (xcodebuild_FOUND FALSE)
 
 find_program (XCODE_BUILD xcodebuild)
@@ -67,6 +69,8 @@ endif()
 #
 
 function(include_external_xcode_project)
+
+	oranges_add_function_message_context ()
 
 	set (oneValueArgs TARGET DIRECTORY SCHEME EXTRA_ARGS COMMENT)
 

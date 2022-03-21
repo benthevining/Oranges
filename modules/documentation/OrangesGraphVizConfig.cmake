@@ -30,6 +30,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
+oranges_file_scoped_message_context ("OrangesGraphVizConfig")
+
 if(NOT PROJECT_IS_TOP_LEVEL)
 	message (
 		WARNING "OrangesGraphVizConfig.cmake included from non-top-level project ${PROJECT_NAME}!")

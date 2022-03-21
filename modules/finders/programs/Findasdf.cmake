@@ -19,6 +19,12 @@ include (OrangesFindPackageHelpers)
 set_package_properties (asdf PROPERTIES URL "https://asdf-vm.com/"
 						DESCRIPTION "Tool version manager")
 
+#
+
+oranges_file_scoped_message_context ("Findasdf")
+
+#
+
 set (asdf_FOUND FALSE)
 
 find_program (ASDF_PROGRAM asdf)
@@ -40,6 +46,8 @@ endif()
 #
 
 function(asdf_install directory)
+	oranges_add_function_message_context ()
+
 	if(NOT TARGET asdf::asdf)
 		message (FATAL_ERROR "asdf program cannot be found!")
 	endif()
@@ -51,6 +59,8 @@ endfunction()
 #
 
 function(asdf_update directory)
+	oranges_add_function_message_context ()
+
 	if(NOT TARGET asdf::asdf)
 		message (FATAL_ERROR "asdf program cannot be found!")
 	endif()

@@ -57,6 +57,8 @@ define_property (
 
 function(lemons_add_juce_modules)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs DIR AGGREGATE ALIAS_NAMESPACE)
 
 	cmake_parse_arguments (LEMONS_MOD "" "${oneValueArgs}" "" ${ARGN})
@@ -106,6 +108,8 @@ endfunction()
 #
 
 function(_lemons_add_module_subcategory)
+
+	oranges_add_function_message_context ()
 
 	cmake_parse_arguments (LEMONS_SUBMOD "" "TARGET" "CATEGORY_DEPS" ${ARGN})
 

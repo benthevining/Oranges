@@ -32,6 +32,8 @@ include (OrangesFindPackageHelpers)
 set_package_properties (include-what-you-use PROPERTIES URL "https://include-what-you-use.org/"
 						DESCRIPTION "Static analysis for C++ includes")
 
+oranges_file_scoped_message_context ("Findinclude-what-you-use")
+
 set (include-what-you-use_FOUND FALSE)
 
 find_program (INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)

@@ -28,6 +28,8 @@ Targets:
 
 include_guard (GLOBAL)
 
+oranges_file_scoped_message_context ("OrangesAllIntegrations")
+
 find_package (ccache QUIET)
 find_package (clang-tidy QUIET)
 find_package (cppcheck QUIET)

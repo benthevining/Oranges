@@ -51,6 +51,12 @@ include (OrangesFindPackageHelpers)
 set_package_properties (Pip PROPERTIES URL "https://pypi.org/project/pip/"
 						DESCRIPTION "Python package manager")
 
+#
+
+oranges_file_scoped_message_context ("FindPip")
+
+#
+
 set (Pip_FOUND FALSE)
 
 find_package (Python3 COMPONENTS Interpreter)
@@ -91,6 +97,8 @@ endif()
 
 function(pip_upgrade_all)
 
+	oranges_add_function_message_context ()
+
 	if(NOT TARGET Python3::Pip)
 		message (FATAL_ERROR "Pip3 cannot be found!")
 	endif()
@@ -103,6 +111,8 @@ endfunction()
 #
 
 function(pip_install_packages)
+
+	oranges_add_function_message_context ()
 
 	if(NOT TARGET Python3::Pip)
 		message (FATAL_ERROR "Pip3 cannot be found!")

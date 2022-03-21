@@ -24,6 +24,10 @@ Inclusion style: In each project
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (LemonsCmakeDevTools)
+
+oranges_file_scoped_message_context ("OrangesDefaultInstallSettings")
+
 message (DEBUG "OrangesDefaultInstallSettings loaded - project name: ${PROJECT_NAME}")
 
 include (OrangesInstallSystemLibs)

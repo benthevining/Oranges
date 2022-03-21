@@ -69,6 +69,7 @@ modules/finders/Findclang-tidy.cmake benthevining
 modules/finders/Findcodesign.cmake benthevining
 modules/finders/Findinclude-what-you-use.cmake benthevining
 modules/finders/Findwraptool.cmake benthevining
+modules/finders/OrangesFindPackageHelpers.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
@@ -99,6 +100,7 @@ modules/finders/shells/FindBash.cmake benthevining
 modules/finders/shells/FindPowerShell.cmake benthevining
 modules/finders/shells/Findcsh.cmake benthevining
 modules/finders/shells/Findfish.cmake benthevining
+modules/finders/shells/Findion.cmake benthevining
 modules/finders/shells/Findsh.cmake benthevining
 modules/finders/static_analysis/Findclang-tidy.cmake benthevining
 modules/finders/static_analysis/Findcpplint.cmake benthevining
@@ -194,6 +196,8 @@ scripts/dependencies/download_file.cmake benthevining
 scripts/dependencies/download_repository.cmake benthevining
 scripts/dependencies/scripts/helper_functions.cmake benthevining
 scripts/dependencies/scripts/shim_template.cmake benthevining
+scripts/download_repository.cmake benthevining
+scripts/install_packages.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining

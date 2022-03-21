@@ -19,6 +19,8 @@ include (OrangesShellTargetProperties)
 
 set_package_properties (PowerShell PROPERTIES URL "" DESCRIPTION "Windows shell")
 
+oranges_file_scoped_message_context ("FindPowerShell")
+
 set (PowerShell_FOUND FALSE)
 
 find_program (POWERSHELL_PROGRAM PowerShell)

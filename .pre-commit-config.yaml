@@ -152,11 +152,10 @@ repos:
     hooks:
       - id: yapf
         args: [-i]
-  - repo: https://github.com/PyCQA/pylint
-    rev: v2.12.2
-    hooks:
-      - id: pylint
-        exclude: scripts/cpack/cpack_multi_config.py
+  # - repo: https://github.com/PyCQA/pylint
+  #   rev: v2.12.2
+  #   hooks:
+  #     - id: pylint
 
   # check editorconfig rules
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python

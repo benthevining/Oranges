@@ -34,6 +34,8 @@ endmacro()
 
 function(find_package_execute_process)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs WORKING_DIRECTORY)
 	set (multiValueArgs COMMAND)
 

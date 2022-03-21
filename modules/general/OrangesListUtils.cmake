@@ -20,6 +20,8 @@ include (LemonsCmakeDevTools)
 
 function(oranges_list_transform)
 
+	oranges_add_function_message_context ()
+
 	set (oneValueArgs LIST CALLBACK OUTPUT)
 
 	cmake_parse_arguments (ORANGES_ARG "REMOVE_DUPLICATES" "${oneValueArgs}" "" ${ARGN})

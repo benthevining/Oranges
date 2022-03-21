@@ -275,3 +275,15 @@ macro(lemons_error_if_not_processing_project)
 			)
 	endif()
 endmacro()
+
+#
+
+macro(oranges_add_function_message_context)
+	list (APPEND CMAKE_MESSAGE_CONTEXT "${CMAKE_CURRENT_FUNCTION}")
+endmacro()
+
+macro(oranges_file_scoped_message_context context_msg)
+	list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
+
+	cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
+endmacro()

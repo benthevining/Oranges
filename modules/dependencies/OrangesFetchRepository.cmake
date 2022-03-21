@@ -85,6 +85,8 @@ include (FetchContent)
 
 function(oranges_fetch_repository)
 
+	oranges_add_function_message_context ()
+
 	set (options DOWNLOAD_ONLY FULL QUIET EXCLUDE_FROM_ALL NEVER_LOCAL)
 	set (oneValueArgs NAME GIT_TAG GIT_REPOSITORY GITHUB_REPOSITORY CMAKE_SUBDIR GIT_STRATEGY)
 	set (multiValueArgs CMAKE_OPTIONS GIT_OPTIONS)
@@ -180,6 +182,8 @@ endfunction()
 #
 
 function(_oranges_populate_repository pkg_name download_only cmake_options cmake_subdir)
+
+	oranges_add_function_message_context ()
 
 	FetchContent_GetProperties ("${pkg_name}" POPULATED fc_populated SOURCE_DIR pkg_source_dir
 								BINARY_DIR pkg_bin_dir)
