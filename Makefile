@@ -27,13 +27,16 @@ query_cmake_file_api:
 	@$(call cmake_query_file_api,$(ORANGES_ROOT))
 
 config: query_cmake_file_api ## configure CMake
-	@cd $(ORANGES_ROOT) && $(call cmake_default_configure)
+	@cd $(ORANGES_ROOT) && $(CMAKE) --preset default
 
 build: config ## runs CMake build
-	@cd $(ORANGES_ROOT) && $(call cmake_default_build)
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset default
+
+test: build ## runs all tests
+	@cd $(ORANGES_ROOT) && ctest --preset default
 
 install: build ## runs CMake install
-	@cd $(ORANGES_ROOT) && $(call cmake_install)
+	@cd $(ORANGES_ROOT) && $(SUDO) $(CMAKE) --install $(BUILDS)
 
 pack: build ## Creates a CPack installer
 	@cd $(ORANGES_ROOT) && $(call cpack_create_installer)
@@ -41,10 +44,10 @@ pack: build ## Creates a CPack installer
 #
 
 deps_graph: config ## Generates a PNG image of the CMake dependency graph [requires graphviz's dot tool]
-	@cd $(ORANGES_ROOT) && $(call cmake_default_build) --target DependencyGraph
+	@cd $(ORANGES_ROOT) && cmake --build --preset deps_graph
 
 docs: config ## Builds the documentation
-	@cd $(ORANGES_ROOT) && $(call cmake_default_build) --target OrangesDoxygen
+	@cd $(ORANGES_ROOT) && cmake --build --preset docs
 
 #
 

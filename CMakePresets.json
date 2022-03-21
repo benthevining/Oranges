@@ -2,43 +2,21 @@
   "buildPresets": [
     {
       "cleanFirst": true,
-      "configuration": "${presetName}",
-      "hidden": true,
-      "jobs": 4,
-      "name": "base",
-      "verbose": true
+      "configurePreset": "default",
+      "name": "default"
     },
     {
-      "configurePreset": "${presetName}",
-      "inherits": "base",
-      "name": "Debug"
+      "configurePreset": "default",
+      "name": "deps_graph",
+      "targets": "DependencyGraph"
     },
     {
-      "configurePreset": "${presetName}",
-      "inherits": "base",
-      "name": "Release"
-    },
-    {
-      "hidden": true,
-      "inherits": "base",
-      "name": "ios_base",
-      "nativeToolOptions": [
-        "-allowProvisioningUpdates"
+      "configurePreset": "default",
+      "name": "docs",
+      "targets": [
+        "OrangesDoxygen",
+        "DependencyGraph"
       ]
-    },
-    {
-      "configurePreset": "${presetName}",
-      "inherits": "ios_base",
-      "name": "ios_simulator",
-      "nativeToolOptions": [
-        "-sdk",
-        "iphonesimulator"
-      ]
-    },
-    {
-      "configurePreset": "${presetName}",
-      "inherits": "ios_base",
-      "name": "ios"
     }
   ],
   "cmakeMinimumRequired": {
@@ -48,54 +26,33 @@
   },
   "configurePresets": [
     {
-      "binaryDir": "${sourceDir}/Builds/${presetName}",
-      "debug": {
-        "output": true
-      },
-      "hidden": true,
-      "name": "base",
+      "binaryDir": "${sourceDir}/Builds",
+      "name": "default",
       "warnings": {
-        "uninitialized": true,
+        "deprecated": true,
+        "dev": true,
         "unusedCli": false
       }
-    },
+    }
+  ],
+  "testPresets": [
     {
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "${presetName}"
+      "configurePreset": "default",
+      "execution": {
+        "noTestsAction": "error"
       },
-      "hidden": true,
-      "inherits": "base",
-      "name": "config_base"
-    },
-    {
-      "inherits": "config_base",
-      "name": "Debug"
-    },
-    {
-      "inherits": "config_base",
-      "name": "Release"
-    },
-    {
-      "cacheVariables": {
-        "CMAKE_OSX_DEPLOYMENT_TARGET": "9.3",
-        "CMAKE_SYSTEM_NAME": "iOS"
+      "filter": {
+        "include": {
+          "name": "Oranges."
+        }
       },
-      "hidden": true,
-      "inherits": "base",
-      "name": "ios_base"
-    },
-    {
-      "inherits": "ios_base",
-      "name": "ios_simulator",
-      "toolchainFile": "${sourceDir}/toolchains/ios_simulator.cmake"
-    },
-    {
-      "cacheVariables": {
-        "CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY": "\"iPhone Developer\""
-      },
-      "inherits": "ios_base",
-      "name": "ios",
-      "toolchainFile": "${sourceDir}/toolchains/ios.cmake"
+      "name": "ORANGES_ROOT",
+      "output": {
+        "outputLogFile": "${sourceDir}/Builds/test_log.log",
+        "outputOnFailure": true,
+        "shortProgress": true,
+        "verbosity": "verbose"
+      }
     }
   ],
   "version": 3
