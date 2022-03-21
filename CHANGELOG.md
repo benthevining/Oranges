@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.26.0](http://github.com/benthevining/Oranges/compare/v1.25.0...v1.26.0) (2022-03-21)
+
+
+### Features
+
+* added a module to update & install ruby gems ([4931d0a](http://github.com/benthevining/Oranges/commit/4931d0aa857087c4f03c5943eeac577f67af91e7))
+
 ## [1.25.0](http://github.com/benthevining/Oranges/compare/v1.24.0...v1.25.0) (2022-03-19)
 
 
