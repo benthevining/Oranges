@@ -64,8 +64,8 @@ include (OrangesSetUpCache)
 function(oranges_download_file)
 
 	macro(_oranges_copy_downloaded_file source_path dest_path)
-		if(NOT "${source_path}" STREQUAL "${dest_path}")
-			file (COPY_FILE "${source_path}" "${dest_path}")
+		if(NOT "${${source_path}}" STREQUAL "${dest_path}")
+			file (COPY_FILE "${${source_path}}" "${dest_path}")
 		endif()
 	endmacro()
 
@@ -91,7 +91,7 @@ function(oranges_download_file)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(ORANGES_ARG_COPY_TO)
-		cmake_language (DEFER CALL _oranges_copy_downloaded_file "${${ORANGES_ARG_PATH_OUTPUT}}"
+		cmake_language (DEFER CALL _oranges_copy_downloaded_file "${ORANGES_ARG_PATH_OUTPUT}"
 						"${ORANGES_ARG_COPY_TO}")
 	endif()
 
@@ -104,6 +104,8 @@ function(oranges_download_file)
 
 		if(EXISTS "${local_file_location}")
 			set (${ORANGES_ARG_PATH_OUTPUT} "${local_file_location}" PARENT_SCOPE)
+			message (DEBUG
+					 " -- file ${ORANGES_ARG_FILENAME} found locally at ${local_file_location}")
 			return ()
 		endif()
 	endif()
@@ -117,6 +119,7 @@ function(oranges_download_file)
 	set (${ORANGES_ARG_PATH_OUTPUT} "${cached_file_location}" PARENT_SCOPE)
 
 	if(EXISTS "${cached_file_location}")
+		message (DEBUG " -- file ${ORANGES_ARG_FILENAME} found in cache at ${cached_file_location}")
 		return ()
 	endif()
 
@@ -137,6 +140,10 @@ function(oranges_download_file)
 
 					if(EXISTS "${git_repo_file_location}")
 						set (${ORANGES_ARG_PATH_OUTPUT} "${git_repo_file_location}" PARENT_SCOPE)
+						message (
+							DEBUG
+							" -- file ${ORANGES_ARG_FILENAME} found in downloaded git repo ${ORANGES_ARG_PACKAGE_NAME} at ${git_repo_file_location}"
+							)
 						return ()
 					endif()
 				endif()

@@ -63,17 +63,11 @@ function(oranges_create_pkgconfig_file)
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
+	oranges_assert_target_argument_is_target (ORANGES_ARG)
 
 	if(ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_DEST)
 		message (
 			"NO_INSTALL and INSTALL_DEST cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
-			)
-	endif()
-
-	if(NOT TARGET ${ORANGES_ARG_TARGET})
-		message (
-			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} called with target ${ORANGES_ARG_TARGET} that does not exist!"
 			)
 	endif()
 

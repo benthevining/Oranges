@@ -28,6 +28,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 include (OrangesDefaultWarnings)
 include (LemonsCmakeDevTools)
 include (OrangesGeneratorExpressions)
+include (OrangesConfigurationPostfixes)
 
 add_library (OrangesDefaultTarget INTERFACE)
 
@@ -71,9 +72,10 @@ define_property (
 
 set_target_properties (
 	OrangesDefaultTarget
-	PROPERTIES DEBUG_POSTFIX -d
-			   RELWITHDEBINFO_POSTFIX -rd
-			   MINSIZEREL_POSTFIX -mr
+	PROPERTIES DEBUG_POSTFIX "${ORANGES_DEBUG_POSTFIX}"
+			   RELEASE_POSTFIX "${ORANGES_RELEASE_POSTFIX}"
+			   RELWITHDEBINFO_POSTFIX "${ORANGES_RELWITHDEBINFO_POSTFIX}"
+			   MINSIZEREL_POSTFIX "${ORANGES_MINSIZEREL_POSTFIX}"
 			   CXX_STANDARD 20
 			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON

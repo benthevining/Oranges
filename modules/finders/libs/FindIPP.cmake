@@ -60,8 +60,6 @@ Output variables:
 
 ]]
 
-include_guard (GLOBAL)
-
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
@@ -93,6 +91,7 @@ if(IPP_FOUND AND TARGET PkgConfig::IPP)
 	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
 
 	set (IPP_FOUND TRUE)
+	find_package_message (IPP "Found IPP - via pkgconfig" "IPP - pkgconfig")
 	return ()
 endif()
 
@@ -149,6 +148,10 @@ set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
 
 function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 
+	if(TARGET ipp_lib_${IPP_COMPONENT})
+		return ()
+	endif()
+
 	string (TOLOWER "${IPP_COMPONENT}" IPP_COMPONENT_LOWER)
 
 	set (baseName "ipp${IPP_COMPONENT_LOWER}")
@@ -168,6 +171,9 @@ function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 			find_package_warning_or_error ("IPP component ${IPP_COMPONENT} could not be found!")
 		endif()
 	endif()
+
+	find_package_message (IPP "IPP - found component library ${IPP_COMPONENT}"
+						  "IPP - ${IPP_COMPONENT} - ${IPP_LIBTYPE_PREFIX} - ${IPP_LIBTYPE_SUFFIX}")
 
 	add_library (ipp_lib_${IPP_COMPONENT} IMPORTED ${IPP_LIB_TYPE})
 
@@ -279,3 +285,5 @@ target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_D
 oranges_export_alias_target (IntelIPP Intel)
 
 set (IPP_FOUND TRUE)
+
+find_package_message (IPP "Found IPP - installed on system" "IPP - system")

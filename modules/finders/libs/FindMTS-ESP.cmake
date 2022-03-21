@@ -31,8 +31,6 @@ Output variables:
 
 ]]
 
-include_guard (GLOBAL)
-
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
@@ -63,108 +61,126 @@ set (MTS-ESP_FOUND FALSE)
 # Client
 
 # editorconfig-checker-disable
-if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
-   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
-	# editorconfig-checker-enable
+if(NOT TARGET MTSClient)
+	if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
+	   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
+		# editorconfig-checker-enable
 
-	find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
-			   DOC "MTS-ESP client sources directory")
+		find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
+				   DOC "MTS-ESP client sources directory")
 
-	mark_as_advanced (FORCE MTS_ESP_CLIENT_DIR)
+		mark_as_advanced (FORCE MTS_ESP_CLIENT_DIR)
 
-	if(MTS_ESP_CLIENT_DIR AND IS_DIRECTORY "${MTS_ESP_CLIENT_DIR}")
+		if(MTS_ESP_CLIENT_DIR AND IS_DIRECTORY "${MTS_ESP_CLIENT_DIR}")
 
-		add_library (MTSClient STATIC)
+			find_package_message (MTS-ESP "MTS-ESP client lib - building from source"
+								  "MTS-ESP client - source")
 
-		target_sources (
-			MTSClient
-			PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
-					$<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
-					$<INSTALL_INTERFACE:include/MTSClient/libMTSClient.h>)
+			add_library (MTSClient STATIC)
 
-		target_include_directories (MTSClient PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
-													 $<INSTALL_INTERFACE:include/MTSClient>)
+			target_sources (
+				MTSClient
+				PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
+						$<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
+						$<INSTALL_INTERFACE:include/MTSClient/libMTSClient.h>)
 
-		oranges_export_alias_target (MTSClient ODDSound)
-	else()
-		find_package_warning_or_error ("MTS-ESP component 'Client' could not be found!")
+			target_include_directories (MTSClient PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
+														 $<INSTALL_INTERFACE:include/MTSClient>)
+
+			oranges_export_alias_target (MTSClient ODDSound)
+		else()
+			find_package_warning_or_error ("MTS-ESP component 'Client' could not be found!")
+		endif()
 	endif()
 endif()
 
 # Master
 
 # editorconfig-checker-disable
-if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
-   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
-	# editorconfig-checker-enable
+if(NOT TARGET MTSMaster)
+	if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
+	   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
+		# editorconfig-checker-enable
 
-	find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
-			   DOC "MTS-ESP master sources directory")
+		find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
+				   DOC "MTS-ESP master sources directory")
 
-	mark_as_advanced (FORCE MTS_ESP_MASTER_DIR)
+		mark_as_advanced (FORCE MTS_ESP_MASTER_DIR)
 
-	if(MTS_ESP_MASTER_DIR AND IS_DIRECTORY "${MTS_ESP_MASTER_DIR}")
+		if(MTS_ESP_MASTER_DIR AND IS_DIRECTORY "${MTS_ESP_MASTER_DIR}")
 
-		# locate the libMTS dynamic library
-		if(WIN32)
-			set (libMTS_name libMTS.dll)
+			# locate the libMTS dynamic library
+			if(NOT TARGET lib_mts)
+				if(WIN32)
+					set (libMTS_name libMTS.dll)
 
-			if(CMAKE_SIZEOF_VOID_P EQUAL 4) # 32-bit
-				set (libMTS_paths "Program Files (x86)\\Common Files\\MTS-ESP"
-								  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/32bit")
-			elseif(CMAKE_SIZEOF_VOID_P EQUAL 8) # 64-bit
-				set (libMTS_paths "Program Files\\Common Files\\MTS-ESP"
-								  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit")
-			else()
-				message (FATAL_ERROR "Neither 32-bit nor 64-bit architecture could be detected!")
+					if(CMAKE_SIZEOF_VOID_P EQUAL 4) # 32-bit
+						set (libMTS_paths "Program Files (x86)\\Common Files\\MTS-ESP"
+										  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/32bit")
+					elseif(CMAKE_SIZEOF_VOID_P EQUAL 8) # 64-bit
+						set (libMTS_paths "Program Files\\Common Files\\MTS-ESP"
+										  "${MTS-ESP_SOURCE_DIR}/libMTS/Win/64bit")
+					else()
+						message (
+							FATAL_ERROR "Neither 32-bit nor 64-bit architecture could be detected!")
+					endif()
+				elseif(APPLE)
+					set (libMTS_name libMTS.dylib)
+					set (
+						libMTS_paths
+						"/Library/Application Support/MTS-ESP"
+						"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/i386_x86_64"
+						"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/x86_64_ARM")
+				else() # Linux
+					set (libMTS_name libMTS.so)
+					set (libMTS_paths "/usr/local/lib" "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64")
+				endif()
+
+				find_library (libMTS NAMES "${libMTS_name}" PATHS "${libMTS_paths}"
+							  DOC "MTS-ESP master dynamic library")
+
+				mark_as_advanced (FORCE libMTS)
+
+				unset (libMTS_name)
+				unset (libMTS_paths)
+
+				if(libMTS)
+					find_package_message (MTS-ESP "MTS-ESP master - found libMTS"
+										  "MTS-ESP master - ${libMTS}")
+
+					add_library (lib_mts IMPORTED UNKNOWN)
+
+					set_target_properties (lib_mts PROPERTIES IMPORTED_LOCATION "${libMTS}")
+				endif()
 			endif()
-		elseif(APPLE)
-			set (libMTS_name libMTS.dylib)
-			set (
-				libMTS_paths
-				"/Library/Application Support/MTS-ESP"
-				"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/i386_x86_64"
-				"${MTS-ESP_SOURCE_DIR}/libMTS/Mac/x86_64_ARM")
-		else() # Linux
-			set (libMTS_name libMTS.so)
-			set (libMTS_paths "/usr/local/lib" "${MTS-ESP_SOURCE_DIR}/libMTS/Linux/x86_64")
+
+			if(TARGET lib_mts)
+				find_package_message (MTS-ESP "MTS-ESP master - building master lib from source"
+									  "MTS-ESP master - source")
+
+				add_library (MTSMaster STATIC)
+
+				target_link_libraries (MTSMaster PRIVATE lib_mts)
+
+				target_sources (
+					MTSMaster
+					PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
+							$<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
+							$<INSTALL_INTERFACE:include/MTS-ESP_Master/libMTSMaster.h>)
+
+				target_include_directories (
+					MTSMaster PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
+									 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
+
+				oranges_export_alias_target (MTSMaster ODDSound)
+			else()
+				find_package_warning_or_error ("libMTS could not be found!")
+			endif()
 		endif()
 
-		find_library (libMTS NAMES "${libMTS_name}" PATHS "${libMTS_paths}"
-					  DOC "MTS-ESP master dynamic library")
-
-		mark_as_advanced (FORCE libMTS)
-
-		unset (libMTS_name)
-		unset (libMTS_paths)
-
-		if(libMTS)
-			add_library (lib_mts IMPORTED UNKNOWN)
-
-			set_target_properties (lib_mts PROPERTIES IMPORTED_LOCATION "${libMTS}")
-
-			add_library (MTSMaster STATIC)
-
-			target_link_libraries (MTSMaster PRIVATE lib_mts)
-
-			target_sources (
-				MTSMaster
-				PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
-						$<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
-						$<INSTALL_INTERFACE:include/MTS-ESP_Master/libMTSMaster.h>)
-
-			target_include_directories (
-				MTSMaster PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
-								 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
-
-			oranges_export_alias_target (MTSMaster ODDSound)
-		else()
-			find_package_warning_or_error ("libMTS could not be found!")
+		if(NOT TARGET ODDSound::MTSMaster)
+			find_package_warning_or_error ("MTS-ESP component 'Master' could not be found!")
 		endif()
-	endif()
-
-	if(NOT TARGET ODDSound::MTSMaster)
-		find_package_warning_or_error ("MTS-ESP component 'Master' could not be found!")
 	endif()
 endif()
 

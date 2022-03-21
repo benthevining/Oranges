@@ -31,6 +31,7 @@ include (OrangesDefaultTarget)
 include (CMakePackageConfigHelpers)
 include (GNUInstallDirs)
 include (OrangesDeprecateDirectoryScopedCommands)
+include (OrangesConfigurationPostfixes)
 
 #
 
@@ -55,10 +56,6 @@ set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
 set (CMAKE_CXX_VISIBILITY_PRESET hidden)
 set (CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
-set (CMAKE_DEBUG_POSTFIX -d)
-set (CMAKE_RELWITHDEBINFO_POSTFIX -rd)
-set (CMAKE_MINSIZEREL_POSTFIX -mr)
-
 if(NOT APPLE)
 	set (CMAKE_INSTALL_RPATH $ORIGIN)
 
@@ -76,16 +73,6 @@ endif()
 
 set (CMAKE_COLOR_MAKEFILE ON)
 set (CMAKE_VERBOSE_MAKEFILE ON)
-
-#
-
-add_library (OrangesUnityBuild INTERFACE)
-
-set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
-
-oranges_export_alias_target (OrangesUnityBuild Oranges)
-
-oranges_install_targets (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
 
 #
 

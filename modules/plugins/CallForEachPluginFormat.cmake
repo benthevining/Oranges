@@ -47,12 +47,7 @@ function(call_for_each_plugin_format)
 	cmake_parse_arguments (ORANGES_ARG "" "" "" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET FUNCTION)
-
-	if(NOT TARGET "${ORANGES_ARG_TARGET}")
-		message (
-			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
-	endif()
+	oranges_assert_target_argument_is_target (ORANGES_ARG)
 
 	if(NOT COMMAND "${ORANGES_ARG_FUNCTION}")
 		message (

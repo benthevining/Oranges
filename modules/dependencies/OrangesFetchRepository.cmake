@@ -99,6 +99,7 @@ function(oranges_fetch_repository)
 
 		if(${ORANGES_ARG_NAME}_FOUND)
 			set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${${ORANGES_ARG_NAME}_DIR}" PARENT_SCOPE)
+			message (VERBOSE " -- package ${ORANGES_ARG_NAME} found using find_package()")
 			return ()
 		endif()
 	endif()
@@ -187,8 +188,12 @@ function(_oranges_populate_repository pkg_name download_only cmake_options cmake
 		set (pkg_source_dir "${pkg_source_dir}" PARENT_SCOPE)
 		set (pkg_bin_dir "${pkg_bin_dir}" PARENT_SCOPE)
 
+		message (VERBOSE " -- package ${pkg_name} already populated")
+
 		return ()
 	endif()
+
+	message (VERBOSE " -- populating package ${pkg_name} to ${pkg_source_dir}...")
 
 	FetchContent_Populate ("${pkg_name}")
 
@@ -210,11 +215,15 @@ function(_oranges_populate_repository pkg_name download_only cmake_options cmake
 	foreach(option ${cmake_options})
 		_oranges_parse_package_option ("${option}")
 		set ("${OPTION_KEY}" "${OPTION_VALUE}")
+		message (TRACE
+				 " -- package ${pkg_name}: setting CMake option ${OPTION_KEY} to ${OPTION_VALUE}")
 	endforeach()
 
 	if(ORANGES_ARG_EXCLUDE_FROM_ALL)
 		set (exclude_flag EXCLUDE_FROM_ALL)
 	endif()
+
+	message (VERBOSE " -- package ${pkg_name} - adding as subdirectory...")
 
 	add_subdirectory ("${pkg_source_dir}" "${pkg_bin_dir}" ${exclude_flag})
 

@@ -123,6 +123,8 @@ function(lemons_configure_juce_plugin)
 	set (oneValueArgs TARGET AAX_PAGETABLE_FILE AAX_GUID)
 	cmake_parse_arguments (LEMONS_PLUGIN "" "${oneValueArgs}" "" ${ARGN})
 
+	oranges_assert_target_argument_is_target (LEMONS_PLUGIN)
+
 	set (aax_target "${LEMONS_PLUGIN_TARGET}_AAX")
 	if(TARGET ${aax_target})
 		message (DEBUG "Configuring AAX plugin target...")

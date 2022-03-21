@@ -50,6 +50,14 @@ macro(lemons_check_for_unparsed_args prefix)
 	endif()
 endmacro()
 
+macro(oranges_assert_target_argument_is_target prefix)
+	if(NOT TARGET "${${prefix}_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${${prefix}_TARGET}!")
+	endif()
+endmacro()
+
 function(oranges_forward_function_argument)
 
 	set (oneValueArgs PREFIX ARG KIND)
@@ -104,6 +112,10 @@ endfunction()
 #
 
 function(get_required_target_property output target property)
+	if(NOT TARGET ${target})
+		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!")
+	endif()
+
 	get_target_property (property_value "${target}" "${property}")
 
 	if(NOT property_value)
@@ -164,33 +176,23 @@ function(oranges_install_targets)
 		set (install_command ${install_command} OPTIONAL)
 	endif()
 
-	if(ORANGES_ARG_REL_PATH)
-		set (lib_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
-		set (archive_dest "${CMAKE_INSTALL_LIBDIR}/${ORANGES_ARG_REL_PATH}")
-		set (runtime_dest "${CMAKE_INSTALL_BINDIR}/${ORANGES_ARG_REL_PATH}")
-	else()
-		set (lib_dest "${CMAKE_INSTALL_LIBDIR}")
-		set (archive_dest "${CMAKE_INSTALL_LIBDIR}")
-		set (runtime_dest "${CMAKE_INSTALL_BINDIR}")
-	endif()
-
 	install (
 		${install_command}
 		LIBRARY
 		DESTINATION
-		"${lib_dest}"
+		"${CMAKE_INSTALL_LIBDIR}"
 		COMPONENT
 		"${ORANGES_ARG_RUNTIME_COMPONENT}"
 		NAMELINK_COMPONENT
 		"${ORANGES_ARG_DEV_COMPONENT}"
 		ARCHIVE
 		DESTINATION
-		"${archive_dest}"
+		"${CMAKE_INSTALL_LIBDIR}"
 		COMPONENT
 		"${ORANGES_ARG_DEV_COMPONENT}"
 		RUNTIME
 		DESTINATION
-		"${runtime_dest}"
+		"${CMAKE_INSTALL_BINDIR}"
 		COMPONENT
 		"${ORANGES_ARG_RUNTIME_COMPONENT}"
 		INCLUDES
@@ -208,13 +210,7 @@ function(oranges_add_target_headers)
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET SCOPE)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
-
-	if(NOT TARGET "${ORANGES_ARG_TARGET}")
-		message (
-			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} given target name ${ORANGES_ARG_TARGET}, but target does not exist!"
-			)
-	endif()
+	oranges_assert_target_argument_is_target (ORANGES_ARG)
 
 	foreach(headerFile ${ORANGES_ARG_FILES})
 
@@ -263,7 +259,19 @@ endfunction()
 #
 
 macro(lemons_warn_if_not_processing_project)
-	# if (NOT CMAKE_ROLE STREQUAL "PROJECT") message (AUTHOR_WARNING "This module
-	# (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some
-	# commands may not be available.") endif()
+	if(NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
+		message (
+			AUTHOR_WARNING
+				"This module (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some commands may not be available."
+			)
+	endif()
+endmacro()
+
+macro(lemons_error_if_not_processing_project)
+	if(NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
+		message (
+			FATAL_ERROR
+				"This module (${CMAKE_CURRENT_LIST_FILE}) cannot be used outside of project configurations!"
+			)
+	endif()
 endmacro()
