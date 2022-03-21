@@ -29,7 +29,7 @@ function(oranges_generate_platform_header)
 
 	oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH)
+	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE)
 
 	cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
 
@@ -54,14 +54,16 @@ function(oranges_generate_platform_header)
 		set (ORANGES_ARG_REL_PATH "${ORANGES_ARG_TARGET}")
 	endif()
 
+	if(NOT ORANGES_ARG_LANGUAGE)
+		set (ORANGES_ARG_LANGUAGE CXX)
+	endif()
+
 	#[[
 	ORANGES_POSIX
 	ORANGES_LINUX
 	ORANGES_BSD
 	ORANGES_ARM
 	ORANGES_INTEL
-	ORANGES_BIG_ENDIAN
-	ORANGES_LITTLE_ENDIAN
 	ORANGES_DEBUG
 	]]
 
@@ -101,25 +103,27 @@ function(oranges_generate_platform_header)
 		set (ORANGES_MACOSX 0)
 	endif()
 
-	if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang|AppleClang")
+	set (compilerID "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}")
+
+	if("${compilerID}" MATCHES "Clang|AppleClang")
 		set (ORANGES_CLANG 1)
 	else()
 		set (ORANGES_CLANG 0)
 	endif()
 
-	if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU|GCC")
+	if("${compilerID}" MATCHES "GNU|GCC")
 		set (ORANGES_GCC 1)
 	else()
 		set (ORANGES_GCC 0)
 	endif()
 
-	if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+	if("${compilerID}" MATCHES "MSVC")
 		set (ORANGES_MSVC 1)
 	else()
 		set (ORANGES_MSVC 0)
 	endif()
 
-	if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
+	if("${compilerID}" MATCHES "Intel")
 		set (ORANGES_INTEL_COMPILER 1)
 	else()
 		set (ORANGES_INTEL_COMPILER 0)
@@ -142,6 +146,26 @@ function(oranges_generate_platform_header)
 		set (ORANGES_SSE 0)
 	else()
 
+	endif()
+
+	if(CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER)
+		set (byte_order "${CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER}")
+
+		if("${byte_order}" STREQUAL "BIG_ENDIAN")
+			set (ORANGES_BIG_ENDIAN 1)
+			set (ORANGES_LITTLE_ENDIAN 0)
+		elseif("${byte_order}" STREQUAL "LITTLE_ENDIAN")
+			set (ORANGES_BIG_ENDIAN 0)
+			set (ORANGES_LITTLE_ENDIAN 1)
+		else()
+			message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
+			set (ORANGES_BIG_ENDIAN 1)
+			set (ORANGES_LITTLE_ENDIAN 0)
+		endif()
+	else()
+		message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
+		set (ORANGES_BIG_ENDIAN 1)
+		set (ORANGES_LITTLE_ENDIAN 0)
 	endif()
 
 	configure_file ("${platform_header_input}" "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
