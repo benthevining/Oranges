@@ -38,6 +38,7 @@ README.md benthevining
 age.cmake benthevining
 evining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
+modules/code_generation/scripts/platform_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsDefaultCPackSettings.cmake benthevining
@@ -193,6 +194,7 @@ ning
 package.json benthevining
 package_manager/scripts/parse_json_file.cmake benthevining
 package_manager/scripts/parse_system_packages.cmake benthevining
+package_manager/scripts/shim_template.cmake benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining

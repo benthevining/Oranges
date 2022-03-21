@@ -79,6 +79,12 @@ function(oranges_generate_platform_header)
 		set (ORANGES_WIN 0)
 	endif()
 
+	if(MINGW)
+		set (ORANGES_MINGW 1)
+	else()
+		set (ORANGES_MINGW 0)
+	endif()
+
 	if(ANDROID)
 		set (ORANGES_ANDROID 1)
 	else()
