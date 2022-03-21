@@ -96,19 +96,7 @@ mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
 
 #
 
-if(FIND_PACKAGE_TRY_PKGCONFIG)
-	find_package (PkgConfig QUIET)
-
-	pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
-
-	if(TARGET PkgConfig::IPP)
-		add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
-
-		set (IPP_FOUND TRUE)
-		find_package_message (IPP "Found IPP - via pkgconfig" "IPP - pkgconfig")
-		return ()
-	endif()
-endif()
+find_package_try_pkgconfig (Intel::IntelIPP IntelIPP)
 
 #
 

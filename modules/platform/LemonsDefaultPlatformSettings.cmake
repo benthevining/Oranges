@@ -24,16 +24,25 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+#
+
+if(IOS)
+	option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
+	option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
+elseif(APPLE)
+	option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+endif()
+
+mark_as_advanced (FORCE ORANGES_IOS_SIMULATOR LEMONS_IOS_COMBINED ORANGES_MAC_UNIVERSAL_BINARY)
+
+#
+
 if(APPLE)
 	if(IOS)
 		set (CMAKE_OSX_DEPLOYMENT_TARGET "9.3" CACHE STRING "Minimum iOS deployment target")
 
 		enable_language (OBJCXX)
 		enable_language (OBJC)
-
-		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
-
-		mark_as_advanced (FORCE ORANGES_IOS_SIMULATOR)
 
 		if(ORANGES_IOS_SIMULATOR)
 			set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")

@@ -87,3 +87,7 @@ install (
 	DESTINATION "${ORANGES_INSTALL_DEST}")
 
 export (PACKAGE Oranges)
+
+#
+
+add_subdirectory (tests)

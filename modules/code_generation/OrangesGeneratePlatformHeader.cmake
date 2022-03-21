@@ -25,6 +25,97 @@ set (platform_header_input "${CMAKE_CURRENT_LIST_DIR}/scripts/platform_header.h"
 
 #
 
+macro(_oranges_plat_header_set_option inVar cacheVar)
+	if(${inVar})
+		set (${cacheVar} 1 CACHE INTERNAL "")
+	else()
+		set (${cacheVar} 0 CACHE INTERNAL "")
+	endif()
+endmacro()
+
+_oranges_plat_header_set_option (UNIX ORANGES_UNIX)
+_oranges_plat_header_set_option (WIN32 ORANGES_WIN)
+_oranges_plat_header_set_option (MINGW ORANGES_MINGW)
+_oranges_plat_header_set_option (ANDROID ORANGES_ANDROID)
+_oranges_plat_header_set_option (APPLE ORANGES_APPLE)
+_oranges_plat_header_set_option (IOS ORANGES_IOS)
+
+if(APPLE AND NOT IOS)
+	set (ORANGES_MACOSX 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_MACOSX 0 CACHE INTERNAL "")
+endif()
+
+if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+	set (ORANGES_LINUX 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_LINUX 0 CACHE INTERNAL "")
+endif()
+
+cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)
+
+if(is_64_bit)
+	set (ORANGES_64BIT 1 CACHE INTERNAL "")
+	set (ORANGES_32BIT 0 CACHE INTERNAL "")
+else()
+	set (ORANGES_64BIT 0 CACHE INTERNAL "")
+	set (ORANGES_32BIT 1 CACHE INTERNAL "")
+endif()
+
+if(ORANGES_DISABLE_SIMD)
+	set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
+	set (ORANGES_AVX 0 CACHE INTERNAL "")
+	set (ORANGES_AVX512 0 CACHE INTERNAL "")
+	set (ORANGES_SSE 0 CACHE INTERNAL "")
+else()
+	#[[
+ORANGES_ARM_NEON
+ORANGES_AVX
+ORANGES_AVX512
+ORANGES_SSE
+]]
+endif()
+
+if(WIN32)
+	if("${CMAKE_HOST_SYSTEM_PROCESSOR}" MATCHES "ARM64")
+		set (ORANGES_ARM 1 CACHE INTERNAL "")
+		set (ORANGES_INTEL 0 CACHE INTERNAL "")
+	else()
+		set (ORANGES_ARM 0 CACHE INTERNAL "")
+		set (ORANGES_INTEL 1 CACHE INTERNAL "")
+	endif()
+elseif(APPLE)
+	if(CMAKE_APPLE_SILICON_PROCESSOR)
+		set (_apple_plat_var_to_check CMAKE_APPLE_SILICON_PROCESSOR)
+	else()
+		set (_apple_plat_var_to_check CMAKE_HOST_SYSTEM_PROCESSOR)
+	endif()
+
+	if("${${_apple_plat_var_to_check}}" MATCHES "arm64")
+		set (ORANGES_ARM 1 CACHE INTERNAL "")
+		set (ORANGES_INTEL 0 CACHE INTERNAL "")
+	elseif("${${_apple_plat_var_to_check}}" MATCHES "x86_64")
+		set (ORANGES_ARM 0 CACHE INTERNAL "")
+		set (ORANGES_INTEL 1 CACHE INTERNAL "")
+	endif()
+
+	unset (_apple_plat_var_to_check)
+else()
+	# ORANGES_ARM, ORANGES_INTEL
+endif()
+
+if(APPLE OR ANDROID OR MINGW OR ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux"))
+	set (ORANGES_POSIX 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_POSIX 0 CACHE INTERNAL "")
+endif()
+
+#[[
+ORANGES_DEBUG
+]]
+
+#
+
 function(oranges_generate_platform_header)
 
 	oranges_add_function_message_context ()
@@ -58,101 +149,20 @@ function(oranges_generate_platform_header)
 		set (ORANGES_ARG_LANGUAGE CXX)
 	endif()
 
-	#[[
-	ORANGES_POSIX
-	ORANGES_LINUX
-	ORANGES_BSD
-	ORANGES_ARM
-	ORANGES_INTEL
-	ORANGES_DEBUG
-	]]
-
-	if(UNIX)
-		set (ORANGES_UNIX 1)
-	else()
-		set (ORANGES_UNIX 0)
-	endif()
-
-	if(WIN32)
-		set (ORANGES_WIN 1)
-	else()
-		set (ORANGES_WIN 0)
-	endif()
-
-	if(MINGW)
-		set (ORANGES_MINGW 1)
-	else()
-		set (ORANGES_MINGW 0)
-	endif()
-
-	if(ANDROID)
-		set (ORANGES_ANDROID 1)
-	else()
-		set (ORANGES_ANDROID 0)
-	endif()
-
-	if(APPLE)
-		set (ORANGES_APPLE 1)
-	else()
-		set (ORANGES_APPLE 0)
-	endif()
-
-	if(IOS)
-		set (ORANGES_IOS 1)
-	else()
-		set (ORANGES_IOS 0)
-	endif()
-
-	if(APPLE AND NOT IOS)
-		set (ORANGES_MACOSX 1)
-	else()
-		set (ORANGES_MACOSX 0)
-	endif()
-
 	set (compilerID "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}")
 
-	if("${compilerID}" MATCHES "Clang|AppleClang")
-		set (ORANGES_CLANG 1)
-	else()
-		set (ORANGES_CLANG 0)
-	endif()
+	macro(_oranges_plat_header_compiler_id_opt compiler cacheVar)
+		if("${compilerID}" MATCHES "${compiler}")
+			set (${cacheVar} 1)
+		else()
+			set (${cacheVar} 0)
+		endif()
+	endmacro()
 
-	if("${compilerID}" MATCHES "GNU|GCC")
-		set (ORANGES_GCC 1)
-	else()
-		set (ORANGES_GCC 0)
-	endif()
-
-	if("${compilerID}" MATCHES "MSVC")
-		set (ORANGES_MSVC 1)
-	else()
-		set (ORANGES_MSVC 0)
-	endif()
-
-	if("${compilerID}" MATCHES "Intel")
-		set (ORANGES_INTEL_COMPILER 1)
-	else()
-		set (ORANGES_INTEL_COMPILER 0)
-	endif()
-
-	cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)
-
-	if(is_64_bit)
-		set (ORANGES_64BIT 1)
-		set (ORANGES_32BIT 0)
-	else()
-		set (ORANGES_64BIT 0)
-		set (ORANGES_32BIT 1)
-	endif()
-
-	if(ORANGES_DISABLE_SIMD)
-		set (ORANGES_ARM_NEON 0)
-		set (ORANGES_AVX 0)
-		set (ORANGES_AVX512 0)
-		set (ORANGES_SSE 0)
-	else()
-
-	endif()
+	_oranges_plat_header_compiler_id_opt ("Clang" ORANGES_CLANG)
+	_oranges_plat_header_compiler_id_opt ("GNU|GCC" ORANGES_GCC)
+	_oranges_plat_header_compiler_id_opt ("MSVC" ORANGES_MSVC)
+	_oranges_plat_header_compiler_id_opt ("Intel" ORANGES_INTEL_COMPILER)
 
 	if(CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER)
 		set (byte_order "${CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER}")

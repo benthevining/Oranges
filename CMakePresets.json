@@ -2,6 +2,7 @@
   "buildPresets": [
     {
       "cleanFirst": true,
+      "configuration": "Debug",
       "configurePreset": "default",
       "name": "default"
     },
@@ -37,6 +38,7 @@
   ],
   "testPresets": [
     {
+      "configuration": "Debug",
       "configurePreset": "default",
       "execution": {
         "noTestsAction": "error"
@@ -46,7 +48,7 @@
           "name": "Oranges."
         }
       },
-      "name": "ORANGES_ROOT",
+      "name": "default",
       "output": {
         "outputLogFile": "${sourceDir}/Builds/test_log.log",
         "outputOnFailure": true,

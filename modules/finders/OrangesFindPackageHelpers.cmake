@@ -62,3 +62,24 @@ function(find_package_execute_process)
 	execute_process (COMMAND ${ORANGES_ARG_COMMAND} ${dir_flag} ${quiet_flag} ${error_flag})
 
 endfunction()
+
+#
+
+macro(find_package_try_pkgconfig outputTarget)
+	if(FIND_PACKAGE_TRY_PKGCONFIG)
+		find_package (PkgConfig QUIET)
+
+		pkg_search_module ("${CMAKE_FIND_PACKAGE_NAME}" QUIET IMPORTED_TARGET
+						   "${CMAKE_FIND_PACKAGE_NAME}" ${ARGN})
+
+		if(TARGET PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
+			add_library (outputTarget ALIAS PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
+
+			set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
+			find_package_message (
+				${CMAKE_FIND_PACKAGE_NAME} "Found ${CMAKE_FIND_PACKAGE_NAME} - via pkgconfig"
+				"${CMAKE_FIND_PACKAGE_NAME} - pkgconfig")
+			return ()
+		endif()
+	endif()
+endmacro()

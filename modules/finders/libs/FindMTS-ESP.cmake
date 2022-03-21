@@ -47,19 +47,7 @@ set (MTS-ESP_FOUND FALSE)
 
 #
 
-if(FIND_PACKAGE_TRY_PKGCONFIG)
-	find_package (PkgConfig QUIET)
-
-	pkg_search_module (MTS-ESP QUIET IMPORTED_TARGET MTS-ESP)
-
-	if(TARGET PkgConfig::MTS-ESP)
-		add_library (ODDSound::MTS-ESP ALIAS PkgConfig::MTS-ESP)
-
-		set (MTS-ESP_FOUND TRUE)
-		find_package_message (MIPP "Found MTS-ESP - via pkgconfig" "MTS-ESP - pkgconfig")
-		return ()
-	endif()
-endif()
+find_package_try_pkgconfig (ODDSound::MTS-ESP)
 
 #
 

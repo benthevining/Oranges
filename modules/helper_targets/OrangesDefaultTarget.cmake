@@ -29,6 +29,17 @@ include (OrangesDefaultWarnings)
 include (LemonsCmakeDevTools)
 include (OrangesGeneratorExpressions)
 include (OrangesConfigurationPostfixes)
+include (LemonsDefaultPlatformSettings)
+
+#
+
+option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
+option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
+option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
+
+mark_as_advanced (FORCE ORANGES_IGNORE_IPO ORANGES_IGNORE_WARNINGS ORANGES_COVERAGE_FLAGS)
+
+#
 
 add_library (OrangesDefaultTarget INTERFACE)
 
@@ -121,10 +132,6 @@ set_target_properties (
 #
 # IPO
 
-option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
-
-mark_as_advanced (ORANGES_IGNORE_IPO FORCE)
-
 if(ORANGES_IGNORE_IPO)
 	set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 else()
@@ -184,9 +191,6 @@ if(APPLE)
 	unset (macos_min_deployment_target)
 
 	if(IOS)
-		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
-		option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
-
 		if(LEMONS_IOS_COMBINED)
 			set (ORANGES_IOS_SIMULATOR ON)
 		endif()
@@ -225,10 +229,7 @@ if(APPLE)
 		if(LEMONS_IOS_COMBINED)
 			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED ON)
 		endif()
-	else() # if (IOS)
-
-		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
-
+	else()
 		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
@@ -266,10 +267,6 @@ target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegra
 # Warnings
 
 if(PROJECT_IS_TOP_LEVEL)
-	option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
-
-	mark_as_advanced (ORANGES_IGNORE_WARNINGS FORCE)
-
 	if(NOT ORANGES_IGNORE_WARNINGS)
 		target_link_libraries (OrangesDefaultTarget
 							   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesDefaultWarnings>)
@@ -278,8 +275,6 @@ endif()
 
 #
 # Coverage flags
-
-option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
 
 if(ORANGES_COVERAGE_FLAGS)
 	include (OrangesCoverageFlags)

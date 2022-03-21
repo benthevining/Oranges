@@ -55,6 +55,7 @@ modules/cpack/scripts/set_default_generator.cmake benthevining
 modules/cpack/xd.cmake benthevining
 modules/dependencies/OrangesDownloadFile.cmake benthevining
 modules/dependencies/OrangesFetchRepository.cmake benthevining
+modules/dependencies/OrangesFindSystemPackageManager.cmake benthevining
 modules/dependencies/OrangesInstallPackages.cmake benthevining
 modules/dependencies/OrangesWipeCacheTarget.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
@@ -101,6 +102,7 @@ modules/finders/programs/scripts/launcher.in benthevining
 modules/finders/programs/static_analysis/Findcpplint.cmake benthevining
 modules/finders/shells/FindBash.cmake benthevining
 modules/finders/shells/FindPowerShell.cmake benthevining
+modules/finders/shells/Findcmd.cmake benthevining
 modules/finders/shells/Findcsh.cmake benthevining
 modules/finders/shells/Findfish.cmake benthevining
 modules/finders/shells/Findion.cmake benthevining
@@ -192,6 +194,7 @@ modules/shells/OrangesShellTargetProperties.cmake benthevining
 modules/testing/OrangesCTestConfig.cmake benthevining
 ning
 package.json benthevining
+package_manager/scripts/helper_functions.cmake benthevining
 package_manager/scripts/parse_json_file.cmake benthevining
 package_manager/scripts/parse_system_packages.cmake benthevining
 package_manager/scripts/shim_template.cmake benthevining
