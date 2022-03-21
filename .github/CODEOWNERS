@@ -165,6 +165,7 @@ modules/integrations/OrangesIncludeWhatYouUse.cmake benthevining
 modules/integrations/scripts/launcher.in benthevining
 modules/internal/BVBrandFlags.cmake benthevining
 modules/internal/LemonsCmakeDevTools.cmake benthevining
+modules/internal/OrangesConfigurationPostfixes.cmake benthevining
 modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
@@ -195,6 +196,7 @@ scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining
 scripts/cmake_file_api/query.json benthevining
 scripts/cpack/CPackConfig.cmake benthevining
+scripts/cpack/cpack_multi_config.py benthevining
 scripts/dependencies/download_file.cmake benthevining
 scripts/dependencies/download_repository.cmake benthevining
 scripts/dependencies/scripts/helper_functions.cmake benthevining

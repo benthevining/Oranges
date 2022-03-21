@@ -38,7 +38,7 @@ Supported shells (in searching order):
 
 ### execute_unix_command
 ```
-execute_unix_command (COMMAND <CP|GZIP|MV|RM|TAR>
+execute_unix_command (COMMAND <BASH|CP|GZIP|MV|RM|TAR>
 					  [ARGS <commandArgs...>]
 					  [DIR <workingDirectory>]
 					  [OPTIONAL])
@@ -85,39 +85,6 @@ define_property (
 	FULL_DOCS
 		"A UNIX shell command line that includes any specified shell-specific flags and can be used as the COMMAND in add_custom_target, etc"
 	)
-
-#
-
-function(_oranges_set_unix_shell_global_properties)
-
-	if(NOT TARGET Oranges::UnixShell)
-		return ()
-	endif()
-
-	get_target_property (shell_name Oranges::UnixShell SHELL_NAME)
-	set_property (GLOBAL PROPERTY UNIX_SHELL_NAME "${shell_name}")
-
-	get_target_property (startup_script Oranges::UnixShell SHELL_STARTUP_SCRIPT)
-	if(startup_script)
-		set_property (GLOBAL PROPERTY UNIX_SHELL_STARTUP_SCRIPT "${startup_script}")
-	endif()
-
-	get_target_property (log_file Oranges::UnixShell SHELL_LOG_FILE)
-	if(log_file)
-		set_property (GLOBAL PROPERTY UNIX_SHELL_LOG_FILE "${log_file}")
-	endif()
-
-	get_target_property (shell_flags Oranges::UnixShell SHELL_FLAGS)
-	if(shell_flags)
-		set_property (GLOBAL PROPERTY UNIX_SHELL_FLAGS "${shell_flags}")
-	endif()
-
-	set_property (GLOBAL PROPERTY UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags})
-	set (UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags} PARENT_SCOPE)
-
-endfunction()
-
-cmake_language (DEFER CALL _oranges_set_unix_shell_global_properties)
 
 #
 
@@ -177,6 +144,31 @@ function(execute_unix_command)
 
 	lemons_require_function_arguments (ORANGES_ARG COMMAND)
 
+	if(ORANGES_ARG_ARGS)
+		list (JOIN ${ORANGES_ARG_ARGS} " " command_args)
+	endif()
+
+	if(ORANGES_ARG_DIR)
+		set (dir_flag WORKING_DIRECTORY "${ORANGES_ARG_DIR}")
+	endif()
+
+	if(NOT ORANGES_ARG_OPTIONAL)
+		set (fatal_flag COMMAND_ERROR_IS_FATAL ANY)
+	endif()
+
+	if("${ORANGES_ARG_COMMAND}" STREQUAL "BASH")
+		if(TARGET Bash::Bash)
+			execute_process (COMMAND Bash::Bash ${command_args} ${dir_flag} ${fatal_flag}
+									 COMMAND_ECHO STDOUT)
+		else()
+			if(NOT ORANGES_ARG_OPTIONAL)
+				message (FATAL_ERROR "bash command not found!")
+			endif()
+		endif()
+
+		return ()
+	endif()
+
 	if("${ORANGES_ARG_COMMAND}" STREQUAL "CP")
 		set (target_name Unix::cp)
 	elseif("${ORANGES_ARG_COMMAND}" STREQUAL "GZIP")
@@ -203,22 +195,60 @@ function(execute_unix_command)
 		endif()
 	endif()
 
-	if(NOT ORANGES_ARG_OPTIONAL)
-		set (fatal_flag COMMAND_ERROR_IS_FATAL ANY)
-	endif()
-
-	if(ORANGES_ARG_DIR)
-		set (dir_flag WORKING_DIRECTORY "${ORANGES_ARG_DIR}")
-	endif()
-
-	if(ORANGES_ARG_ARGS)
-		list (JOIN ${ORANGES_ARG_ARGS} " " command_args)
-	endif()
-
 	execute_process (COMMAND "${target_name}" ${command_args} ${dir_flag} ${fatal_flag}
 							 COMMAND_ECHO STDOUT)
 
 endfunction()
+
+#
+
+if(UNIX_SHELL_EXECUTABLE)
+	add_executable (unix_shell IMPORTED GLOBAL)
+
+	set_target_properties (unix_shell PROPERTIES IMPORTED_LOCATION "${UNIX_SHELL_EXECUTABLE}")
+
+	add_executable (Oranges::UnixShell ALIAS unix_shell)
+
+	set_property (GLOBAL PROPERTY UNIX_SHELL_COMMAND "${UNIX_SHELL_EXECUTABLE}")
+	set_property (GLOBAL PROPERTY UNIX_SHELL_NAME custom)
+
+	message (DEBUG "Using custom unix shell executable: ${UNIX_SHELL_EXECUTABLE}")
+
+	return ()
+endif()
+
+#
+
+function(_oranges_set_unix_shell_global_properties)
+
+	if(NOT TARGET Oranges::UnixShell)
+		return ()
+	endif()
+
+	get_target_property (shell_name Oranges::UnixShell SHELL_NAME)
+	set_property (GLOBAL PROPERTY UNIX_SHELL_NAME "${shell_name}")
+
+	get_target_property (startup_script Oranges::UnixShell SHELL_STARTUP_SCRIPT)
+	if(startup_script)
+		set_property (GLOBAL PROPERTY UNIX_SHELL_STARTUP_SCRIPT "${startup_script}")
+	endif()
+
+	get_target_property (log_file Oranges::UnixShell SHELL_LOG_FILE)
+	if(log_file)
+		set_property (GLOBAL PROPERTY UNIX_SHELL_LOG_FILE "${log_file}")
+	endif()
+
+	get_target_property (shell_flags Oranges::UnixShell SHELL_FLAGS)
+	if(shell_flags)
+		set_property (GLOBAL PROPERTY UNIX_SHELL_FLAGS "${shell_flags}")
+	endif()
+
+	set_property (GLOBAL PROPERTY UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags})
+	set (UNIX_SHELL_COMMAND Oranges::UnixShell ${shell_flags} PARENT_SCOPE)
+
+endfunction()
+
+cmake_language (DEFER CALL _oranges_set_unix_shell_global_properties)
 
 #
 

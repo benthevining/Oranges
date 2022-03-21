@@ -68,6 +68,23 @@ define_property (
 
 #
 
+if(WINDOWS_SHELL_EXECUTABLE)
+	add_executable (windows_shell IMPORTED GLOBAL)
+
+	set_target_properties (windows_shell PROPERTIES IMPORTED_LOCATION "${WINDOWS_SHELL_EXECUTABLE}")
+
+	add_executable (Oranges::WindowsShell ALIAS windows_shell)
+
+	set_property (GLOBAL PROPERTY WINDOWS_SHELL_COMMAND "${WINDOWS_SHELL_EXECUTABLE}")
+	set_property (GLOBAL PROPERTY WINDOWS_SHELL_NAME custom)
+
+	message (DEBUG "Using custom windows shell executable: ${WINDOWS_SHELL_EXECUTABLE}")
+
+	return ()
+endif()
+
+#
+
 function(_oranges_set_windows_shell_global_properties)
 
 	if(NOT TARGET Oranges::WindowsShell)
