@@ -292,6 +292,8 @@ target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_D
 
 oranges_export_alias_target (IntelIPP Intel)
 
+oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
+
 set (IPP_FOUND TRUE)
 
 find_package_message (IPP "Found IPP - installed on system" "IPP - system")

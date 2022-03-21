@@ -79,6 +79,7 @@ modules/finders/package_managers/FindApt.cmake benthevining
 modules/finders/package_managers/FindChocolatey.cmake benthevining
 modules/finders/package_managers/FindHomebrew.cmake benthevining
 modules/finders/package_managers/FindPip.cmake benthevining
+modules/finders/package_managers/FindRubyGems.cmake benthevining
 modules/finders/programs/Findasdf.cmake benthevining
 modules/finders/programs/Findauval.cmake benthevining
 modules/finders/programs/Findccache.cmake benthevining
