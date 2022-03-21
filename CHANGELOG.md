@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.27.0](http://github.com/benthevining/Oranges/compare/v1.26.1...v1.27.0) (2022-03-21)
+
+
+### Features
+
+* added a module to generate a header with platform macros ([a2d13bd](http://github.com/benthevining/Oranges/commit/a2d13bdc2d5d03ae3ab2696746968f1fdfbd6546))
+
 ### [1.26.1](http://github.com/benthevining/Oranges/compare/v1.26.0...v1.26.1) (2022-03-21)
 
 
