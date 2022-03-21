@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [1.28.0](http://github.com/benthevining/Oranges/compare/v1.27.0...v1.28.0) (2022-03-21)
+
+
+### Features
+
+* added option to find modules to try pkgconfig first ([2528bd8](http://github.com/benthevining/Oranges/commit/2528bd837aff6124f184e49cbd98f23fb51fc8ef))
+
 ## [1.27.0](http://github.com/benthevining/Oranges/compare/v1.26.1...v1.27.0) (2022-03-21)
 
 
