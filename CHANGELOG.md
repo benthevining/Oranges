@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.26.1](http://github.com/benthevining/Oranges/compare/v1.26.0...v1.26.1) (2022-03-21)
+
+
+### Bug Fixes
+
+* fixed bug with include modules ([e11a273](http://github.com/benthevining/Oranges/commit/e11a27370ed25dd3b881f80074e4d56eaaaffb6b))
+
 ## [1.26.0](http://github.com/benthevining/Oranges/compare/v1.25.0...v1.26.0) (2022-03-21)
 
 
