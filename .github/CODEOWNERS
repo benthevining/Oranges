@@ -137,6 +137,7 @@ modules/helper_targets/OrangesAllIntegrations.cmake benthevining
 modules/helper_targets/OrangesCoverageFlags.cmake benthevining
 modules/helper_targets/OrangesDefaultTarget.cmake benthevining
 modules/helper_targets/OrangesDefaultWarnings.cmake benthevining
+modules/helper_targets/OrangesUnityBuild.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining
 modules/installing/OrangesDefaultCPackSettings.cmake benthevining
@@ -166,6 +167,7 @@ modules/integrations/scripts/launcher.in benthevining
 modules/internal/BVBrandFlags.cmake benthevining
 modules/internal/LemonsCmakeDevTools.cmake benthevining
 modules/internal/OrangesConfigurationPostfixes.cmake benthevining
+modules/internal/OrangesSetUpCache.cmake benthevining
 modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining

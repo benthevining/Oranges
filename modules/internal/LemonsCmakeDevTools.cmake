@@ -189,7 +189,9 @@ macro(oranges_add_function_message_context)
 endmacro()
 
 macro(oranges_file_scoped_message_context context_msg)
-	list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
+	if("${CMAKE_ROLE}" STREQUAL "PROJECT")
+		list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
 
-	cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
+		cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
+	endif()
 endmacro()

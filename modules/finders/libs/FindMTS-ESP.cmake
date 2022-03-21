@@ -73,7 +73,7 @@ if(NOT TARGET MTSClient)
 		# editorconfig-checker-enable
 
 		find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
-				   DOC "MTS-ESP client sources directory")
+				   DOC "MTS-ESP client sources directory" NO_DEFAULT_PATH)
 
 		mark_as_advanced (FORCE MTS_ESP_CLIENT_DIR)
 
@@ -109,7 +109,7 @@ if(NOT TARGET MTSMaster)
 		# editorconfig-checker-enable
 
 		find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
-				   DOC "MTS-ESP master sources directory")
+				   DOC "MTS-ESP master sources directory" NO_DEFAULT_PATH)
 
 		mark_as_advanced (FORCE MTS_ESP_MASTER_DIR)
 

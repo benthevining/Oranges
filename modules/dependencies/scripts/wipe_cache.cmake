@@ -27,14 +27,20 @@ endfunction()
 
 #
 
+# FETCHCONTENT_BASE_DIR
 if(NOT "@FETCHCONTENT_BASE_DIR@" STREQUAL "")
 	_oranges_remove_directory ("@FETCHCONTENT_BASE_DIR@")
 endif()
 
+# ORANGES_FILE_DOWNLOAD_CACHE
 if(NOT "@ORANGES_FILE_DOWNLOAD_CACHE@" STREQUAL "")
 	_oranges_remove_directory ("@ORANGES_FILE_DOWNLOAD_CACHE@")
 endif()
 
-_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/Cache")
-_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/.cache")
-_oranges_remove_directory ("@CMAKE_BINARY_DIR@/_deps")
+_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/Cache") # @CMAKE_SOURCE_DIR@/Cache
+_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/.cache") # @CMAKE_SOURCE_DIR@/.cache
+_oranges_remove_directory ("@CMAKE_BINARY_DIR@/_deps") # @CMAKE_BINARY_DIR@/_deps
+
+if(DEFINED ENV{CPM_SOURCE_CACHE})
+	_oranges_remove_directory ("$ENV{CPM_SOURCE_CACHE}")
+endif()

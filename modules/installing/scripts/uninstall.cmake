@@ -14,7 +14,8 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 set (files_to_uninstall "")
 
-file (GLOB manifest_files RELATIVE "@CMAKE_BINARY_DIR@" @CMAKE_BINARY_DIR@/install_manifest_*.txt)
+file (GLOB manifest_files RELATIVE "@CMAKE_BINARY_DIR@" @CMAKE_BINARY_DIR@/install_manifest_*.txt
+	  )# @CMAKE_BINARY_DIR@
 
 foreach(manifest_file install_manifest.txt ${manifest_files})
 	set (file_path "@CMAKE_BINARY_DIR@/${manifest_file}")

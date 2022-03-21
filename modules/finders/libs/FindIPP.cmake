@@ -111,7 +111,7 @@ set (IPP_FOUND FALSE)
 find_path (
 	IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
 								/opt/intel/oneapi/ipp/include "${IPP_ROOT}/include"
-	DOC "Intel IPP root directory")
+	DOC "Intel IPP root directory" NO_DEFAULT_PATH)
 
 mark_as_advanced (FORCE IPP_INCLUDE_DIR)
 
@@ -168,7 +168,8 @@ function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 			  "${IPP_LIBTYPE_PREFIX}${baseName}${IPP_LIBTYPE_SUFFIX}"
 			  "${baseName}${IPP_LIBTYPE_SUFFIX}"
 		PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
-		DOC "Intel IPP ${IPP_COMPONENT} library")
+		DOC "Intel IPP ${IPP_COMPONENT} library"
+		NO_DEFAULT_PATH)
 
 	mark_as_advanced (FORCE IPP_LIB_${IPP_COMPONENT})
 

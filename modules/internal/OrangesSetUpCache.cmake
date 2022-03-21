@@ -16,11 +16,13 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 
-define_property (
-	GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
-	FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
+if("${CMAKE_ROLE}" STREQUAL "PROJECT")
+	define_property (
+		GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
+		FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
 
-oranges_file_scoped_message_context ("OrangesSetUpCache")
+	oranges_file_scoped_message_context ("OrangesSetUpCache")
+endif()
 
 if(DEFINED ENV{CMAKE_CACHE})
 	set (default_cache "$ENV{CMAKE_CACHE}")

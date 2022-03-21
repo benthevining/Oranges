@@ -20,25 +20,4 @@ include (OrangesInstallPackages)
 
 #
 
-if(SYSTEM_PACKAGES)
-	set (system_packages_flag SYSTEM_PACKAGES "${SYSTEM_PACKAGES}")
-endif()
-
-if(PIP_PACKAGES)
-	set (pip_packages_flag PIP_PACKAGES "${PIP_PACKAGES}")
-endif()
-
-if(RUBY_GEMS)
-	set (ruby_gems_flag RUBY_GEMS "${RUBY_GEMS}")
-endif()
-
-if(UPDATE_FIRST)
-	set (update_flag UPDATE_FIRST)
-endif()
-
-if(OPTIONAL)
-	set (optional_flag OPTIONAL)
-endif()
-
-oranges_install_packages (${system_packages_flag} ${pip_packages_flag} ${ruby_gems_flag}
-						  ${update_flag} ${optional_flag})
+oranges_update_all_packages ()
