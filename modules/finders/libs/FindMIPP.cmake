@@ -36,6 +36,24 @@ set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
 
 oranges_file_scoped_message_context ("FindMIPP")
 
+set (MIPP_FOUND FALSE)
+
+#
+
+if(FIND_PACKAGE_TRY_PKGCONFIG)
+	find_package (PkgConfig QUIET)
+
+	pkg_search_module (MIPP QUIET IMPORTED_TARGET MIPP mipp)
+
+	if(TARGET PkgConfig::MIPP)
+		add_library (aff3ct::MIPP ALIAS PkgConfig::MIPP)
+
+		set (MIPP_FOUND TRUE)
+		find_package_message (MIPP "Found MIPP - via pkgconfig" "MIPP - pkgconfig")
+		return ()
+	endif()
+endif()
+
 #
 
 if(MIPP_FIND_QUIETLY)

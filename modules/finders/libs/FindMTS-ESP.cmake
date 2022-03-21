@@ -43,6 +43,24 @@ set_package_properties (MTS-ESP PROPERTIES URL "https://oddsound.com/index.php"
 
 oranges_file_scoped_message_context ("FindMTS-ESP")
 
+set (MTS-ESP_FOUND FALSE)
+
+#
+
+if(FIND_PACKAGE_TRY_PKGCONFIG)
+	find_package (PkgConfig QUIET)
+
+	pkg_search_module (MTS-ESP QUIET IMPORTED_TARGET MTS-ESP)
+
+	if(TARGET PkgConfig::MTS-ESP)
+		add_library (ODDSound::MTS-ESP ALIAS PkgConfig::MTS-ESP)
+
+		set (MTS-ESP_FOUND TRUE)
+		find_package_message (MIPP "Found MTS-ESP - via pkgconfig" "MTS-ESP - pkgconfig")
+		return ()
+	endif()
+endif()
+
 #
 
 if(MTS-ESP_FIND_QUIETLY)

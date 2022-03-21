@@ -85,19 +85,9 @@ cmake_language (DEFER CALL _ipp_unset_vars)
 
 oranges_file_scoped_message_context ("FindIPP")
 
+set (IPP_FOUND FALSE)
+
 #
-
-find_package (PkgConfig QUIET)
-
-pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
-
-if(IPP_FOUND AND TARGET PkgConfig::IPP)
-	add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
-
-	set (IPP_FOUND TRUE)
-	find_package_message (IPP "Found IPP - via pkgconfig" "IPP - pkgconfig")
-	return ()
-endif()
 
 option (IPP_STATIC "Use static IPP libraries" ON)
 option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
@@ -106,7 +96,21 @@ mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
 
 #
 
-set (IPP_FOUND FALSE)
+if(FIND_PACKAGE_TRY_PKGCONFIG)
+	find_package (PkgConfig QUIET)
+
+	pkg_search_module (IPP QUIET IMPORTED_TARGET IPP IntelIPP)
+
+	if(TARGET PkgConfig::IPP)
+		add_library (Intel::IntelIPP ALIAS PkgConfig::IPP)
+
+		set (IPP_FOUND TRUE)
+		find_package_message (IPP "Found IPP - via pkgconfig" "IPP - pkgconfig")
+		return ()
+	endif()
+endif()
+
+#
 
 find_path (
 	IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
@@ -141,7 +145,6 @@ if(IPP_STATIC)
 	set (IPP_LIB_TYPE STATIC)
 else()
 	set (IPP_LIBNAME_SUFFIX "")
-
 	set (IPP_LIB_TYPE SHARED)
 endif()
 

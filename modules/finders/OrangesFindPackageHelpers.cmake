@@ -18,6 +18,8 @@ include (FeatureSummary)
 include (FindPackageMessage)
 include (LemonsCmakeDevTools)
 
+option (FIND_PACKAGE_TRY_PKGCONFIG "Try using pkgconfig to locate libraries" ON)
+
 #
 
 macro(find_package_warning_or_error message_text)
