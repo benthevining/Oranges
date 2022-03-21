@@ -32,6 +32,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
+include (GenerateExportHeader)
 
 add_library (OrangesABIControlledLibrary INTERFACE)
 
@@ -40,37 +41,45 @@ set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRE
 
 oranges_export_alias_target (OrangesABIControlledLibrary Oranges)
 
+oranges_install_targets (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
+
 option (ORANGES_REMOVE_DEPRECATED_CODE "Removes deprecated code from preprocessed output" OFF)
 
 mark_as_advanced (FORCE ORANGES_REMOVE_DEPRECATED_CODE)
 
-include (GenerateExportHeader)
-
 #
 
-function(oranges_add_library_abi_control)
+function(oranges_generate_export_header)
 
 	oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET BASE_NAME HEADER)
+	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
 
-	lemons_require_function_arguments (ORANGES_ARG TARGET)
-	lemons_check_for_unparsed_args (ORANGES_ARG)
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
-
-	if(NOT ORANGES_ARG_HEADER)
-		set (ORANGES_ARG_HEADER "${ORANGES_ARG_TARGET}_export.h")
-	endif()
+	lemons_check_for_unparsed_args (ORANGES_ARG)
 
 	if(NOT ORANGES_ARG_BASE_NAME)
 		set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
 	endif()
 
+	if(NOT ORANGES_ARG_HEADER)
+		set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_export.h")
+	endif()
+
 	string (TOUPPER "${ORANGES_ARG_BASE_NAME}" upperBaseName)
 
-	target_link_libraries ("${ORANGES_ARG_TARGET}" PRIVATE Oranges::OrangesABIControlledLibrary)
+	if(ORANGES_ARG_INTERFACE)
+		set (public_vis INTERFACE)
+		set (private_vis INTERFACE)
+	else()
+		set (public_vis PUBLIC)
+		set (private_vis PRIVATE)
+	endif()
+
+	target_link_libraries ("${ORANGES_ARG_TARGET}" "${private_vis}"
+						   Oranges::OrangesABIControlledLibrary)
 
 	set_target_properties (
 		"${ORANGES_ARG_TARGET}" PROPERTIES COMPILE_FLAGS
@@ -82,5 +91,24 @@ function(oranges_add_library_abi_control)
 
 	generate_export_header ("${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
 							EXPORT_FILE_NAME "${ORANGES_ARG_HEADER}" ${no_build_deprecated})
+
+	if(NOT ORANGES_ARG_REL_PATH)
+		set (ORANGES_ARG_REL_PATH Limes/limes_core)
+	endif()
+
+	oranges_add_target_headers (
+		TARGET
+		"${ORANGES_ARG_TARGET}"
+		SCOPE
+		"${public_vis}"
+		REL_PATH
+		"${ORANGES_ARG_REL_PATH}"
+		FILES
+		"${ORANGES_ARG_HEADER}"
+		BINARY_DIR)
+
+	target_include_directories (
+		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction()

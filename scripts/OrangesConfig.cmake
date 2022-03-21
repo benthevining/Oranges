@@ -30,4 +30,8 @@ include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 
 #
 
+set (Oranges_INCLUDED TRUE)
+
+#
+
 check_required_components ("@PROJECT_NAME@")
