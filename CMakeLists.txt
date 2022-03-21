@@ -70,20 +70,20 @@ write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJEC
 
 configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
-	INSTALL_DESTINATION "${Oranges_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
+	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
 
-install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${Oranges_INSTALL_DEST}"
+install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
 		 EXPORT_LINK_INTERFACE_LIBRARIES)
 
 export (EXPORT OrangesTargets NAMESPACE Oranges:: FILE OrangesTargets.cmake)
 
-install (DIRECTORY modules toolchains DESTINATION "${Oranges_INSTALL_DEST}" PATTERN .DS_Store
+install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" PATTERN .DS_Store
 																					EXCLUDE)
 
 install (
 	FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
 		  "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
 		  "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
-	DESTINATION "${Oranges_INSTALL_DEST}")
+	DESTINATION "${ORANGES_INSTALL_DEST}")
 
 export (PACKAGE Oranges)

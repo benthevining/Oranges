@@ -36,11 +36,11 @@ oranges_file_scoped_message_context ("Findclang-tidy")
 
 set (clang-tidy_FOUND FALSE)
 
-find_program (CLANG_TIDY NAMES clang-tidy)
+find_program (PROGRAM_CLANG_TIDY "clang-tidy")
 
-mark_as_advanced (FORCE CLANG_TIDY)
+mark_as_advanced (FORCE PROGRAM_CLANG_TIDY)
 
-if(NOT CLANG_TIDY)
+if(NOT PROGRAM_CLANG_TIDY)
 	find_package_warning_or_error ("clang-tidy program cannot be found!")
 	return ()
 endif()
@@ -51,13 +51,13 @@ endif()
 
 add_executable (clang-tidy IMPORTED GLOBAL)
 
-set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${CLANG_TIDY}")
+set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${PROGRAM_CLANG_TIDY}")
 
 add_executable (Clang::clang-tidy ALIAS clang-tidy)
 
 set (clang-tidy_FOUND TRUE)
 
-set (CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY}" CACHE STRING "")
+set (CMAKE_CXX_CLANG_TIDY "${PROGRAM_CLANG_TIDY}" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_CLANG_TIDY)
 

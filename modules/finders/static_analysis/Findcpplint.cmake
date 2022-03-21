@@ -36,11 +36,11 @@ oranges_file_scoped_message_context ("Findcpplint")
 
 set (cpplint_FOUND FALSE)
 
-find_program (CPPLINT NAMES cpplint)
+find_program (PROGRAM_CPPLINT NAMES cpplint)
 
-mark_as_advanced (FORCE CPPLINT)
+mark_as_advanced (FORCE PROGRAM_CPPLINT)
 
-if(NOT CPPLINT)
+if(NOT PROGRAM_CPPLINT)
 	find_package_warning_or_error ("cpplint program cannot be found!")
 	return ()
 endif()
@@ -51,14 +51,14 @@ endif()
 
 add_executable (cpplint IMPORTED GLOBAL)
 
-set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${CPPLINT}")
+set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPLINT}")
 
 add_executable (Google::cpplint ALIAS cpplint)
 
 set (cpplint_FOUND TRUE)
 
-set (CMAKE_CXX_CPPLINT "${CPPLINT}" CACHE STRING "")
-set (CMAKE_C_CPPLINT "${CPPLINT}" CACHE STRING "")
+set (CMAKE_CXX_CPPLINT "${PROGRAM_CPPLINT}" CACHE STRING "")
+set (CMAKE_C_CPPLINT "${PROGRAM_CPPLINT}" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_CPPLINT CMAKE_C_CPPLINT)
 

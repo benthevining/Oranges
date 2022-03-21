@@ -36,11 +36,11 @@ oranges_file_scoped_message_context ("Findinclude-what-you-use")
 
 set (include-what-you-use_FOUND FALSE)
 
-find_program (INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
+find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
 
-mark_as_advanced (FORCE INCLUDE_WHAT_YOU_USE)
+mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
 
-if(NOT INCLUDE_WHAT_YOU_USE)
+if(NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
 	find_package_warning_or_error ("include-what-you-use program cannot be found!")
 	return ()
 endif()
@@ -51,13 +51,14 @@ endif()
 
 add_executable (include-what-you-use IMPORTED GLOBAL)
 
-set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION "${INCLUDE_WHAT_YOU_USE}")
+set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION
+													   "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
 
 add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
 set (include-what-you-use_FOUND TRUE)
 
-set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${INCLUDE_WHAT_YOU_USE}" CACHE STRING "")
+set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${PROGRAM_INCLUDE_WHAT_YOU_USE}" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
 

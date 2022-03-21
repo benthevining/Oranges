@@ -36,11 +36,11 @@ oranges_file_scoped_message_context ("Findcppcheck")
 
 set (cppcheck_FOUND FALSE)
 
-find_program (CPPCHECK NAMES cppcheck)
+find_program (PROGRAM_CPPCHECK NAMES cppcheck)
 
-mark_as_advanced (FORCE CPPCHECK)
+mark_as_advanced (FORCE PROGRAM_CPPCHECK)
 
-if(NOT CPPCHECK)
+if(NOT PROGRAM_CPPCHECK)
 	find_package_warning_or_error ("cppcheck program cannot be found!")
 	return ()
 endif()
@@ -51,13 +51,13 @@ endif()
 
 add_executable (cppcheck IMPORTED GLOBAL)
 
-set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${CPPCHECK}")
+set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPCHECK}")
 
 add_executable (cppcheck::cppcheck ALIAS cppcheck)
 
 set (cppcheck_FOUND TRUE)
 
-set (CMAKE_CXX_CPPCHECK "${CPPCHECK};--suppress=preprocessorErrorDirective" CACHE STRING "")
+set (CMAKE_CXX_CPPCHECK "${PROGRAM_CPPCHECK};--suppress=preprocessorErrorDirective" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_CPPCHECK)
 

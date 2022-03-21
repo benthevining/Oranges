@@ -45,11 +45,11 @@ define_property (
 
 set (ccache_FOUND FALSE)
 
-find_program (CCACHE ccache)
+find_program (CCACHE_PROGRAM ccache)
 
-mark_as_advanced (FORCE CCACHE)
+mark_as_advanced (FORCE CCACHE_PROGRAM)
 
-if(NOT CCACHE)
+if(NOT CCACHE_PROGRAM)
 	find_package_warning_or_error ("ccache program cannot be found!")
 	return ()
 endif()
@@ -60,7 +60,7 @@ endif()
 
 add_executable (ccache IMPORTED GLOBAL)
 
-set_target_properties (ccache PROPERTIES IMPORTED_LOCATION "${CCACHE}")
+set_target_properties (ccache PROPERTIES IMPORTED_LOCATION "${CCACHE_PROGRAM}")
 
 add_executable (ccache::ccache ALIAS ccache)
 

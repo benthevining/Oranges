@@ -91,7 +91,7 @@ function(oranges_install_targets)
 		 "Installs all available development artifacts")
 
 	if(ORANGES_ARG_OPTIONAL)
-		set (optional_flag ${install_command} OPTIONAL)
+		set (optional_flag OPTIONAL)
 	endif()
 
 	install (
@@ -189,9 +189,9 @@ macro(oranges_add_function_message_context)
 endmacro()
 
 macro(oranges_file_scoped_message_context context_msg)
-	if("${CMAKE_ROLE}" STREQUAL "PROJECT")
-		list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
+	# if("${CMAKE_ROLE}" STREQUAL "PROJECT")
+	list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
 
-		cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
-	endif()
+	cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
+	# endif()
 endmacro()
