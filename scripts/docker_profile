@@ -1,0 +1,6 @@
+[tool_requires]
+# clang
+
+[settings]
+compiler=clang
+compiler.version=13

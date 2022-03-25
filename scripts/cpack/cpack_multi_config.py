@@ -61,4 +61,4 @@ def main(source_dir, configs):
 #
 
 if __name__ == '__main__':
-	main(source_dir, ['Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'])
+	main('Source', ['Debug', 'Release', 'RelWithDebInfo', 'MinSizeRel'])

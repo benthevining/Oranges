@@ -97,6 +97,13 @@ repos:
         args: [--in-place]
       #- id: cmake-lint
 
+  # Dockerfile
+  - repo: https://github.com/AleksaC/hadolint-py
+    rev: v2.9.2
+    hooks:
+      - id: hadolint
+        args: [--ignore, DL4006, --ignore, DL3008]
+
   # YAML
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.26.3
@@ -142,19 +149,29 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
-  - repo: https://github.com/asottile/dead
-    rev: v1.4.0
-    hooks:
-      - id: dead
+  # - repo: https://github.com/asottile/dead
+  #   rev: v1.4.0
+  #   hooks:
+  #     - id: dead
   - repo: https://github.com/pre-commit/mirrors-yapf
     rev: v0.32.0
     hooks:
       - id: yapf
         args: [-i]
-  # - repo: https://github.com/PyCQA/pylint
-  #   rev: v2.12.2
-  #   hooks:
-  #     - id: pylint
+  - repo: https://github.com/PyCQA/pylint
+    rev: v2.12.2
+    hooks:
+      - id: pylint
+        args: [--disable=import-error,
+               --disable=bad-indentation,
+               --disable=invalid-name,
+               --disable=line-too-long,
+               --disable=missing-docstring,
+               --disable=unspecified-encoding,
+               --disable=unused-argument,
+               --check-quote-consistency=yes,
+               --max-args=5,
+               --max-branches=10]
 
   # check editorconfig rules
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python

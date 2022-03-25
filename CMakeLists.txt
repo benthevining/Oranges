@@ -71,14 +71,14 @@ oranges_create_doxygen_target (
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
 								  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
-configure_package_config_file (
-	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
-	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
-
 install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
 		 EXPORT_LINK_INTERFACE_LIBRARIES)
 
 export (EXPORT OrangesTargets NAMESPACE Oranges:: FILE OrangesTargets.cmake)
+
+configure_package_config_file (
+	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
+	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
 
 install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" PATTERN .DS_Store
 																					EXCLUDE)
