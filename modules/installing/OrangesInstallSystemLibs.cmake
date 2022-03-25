@@ -10,16 +10,18 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module configures installation of system libraries.
+OrangesInstallSystemLibs
+-------------------------
 
-Inclusion style: Once globally
+When this modules is included, it configures installation of system libraries, unless the `ORANGES_IGNORE_SYSTEM_LIBS` option is set to ON.
 
-Options:
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ORANGES_IGNORE_SYSTEM_LIBS : if set to ON, including this module will do nothing. Defaults to OFF.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

@@ -13,8 +13,6 @@
 #[[
 Utilities for adding custom JUCE modules to projects.
 
-Inclusion style: once globally
-
 ## Function:
 
 ### lemons_add_juce_modules

@@ -10,18 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the cpplint static analysis tool.
+Findcpplint
+-------------------------
 
-Targets:
+Find the cpplint static analysis tool.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- cpplint_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Google::cpplint : the cpplint executable
 - Google::cpplint-interface : interface library that can be linked against to enable cpplint integrations for a target
 
-Output variables:
-- cpplint_FOUND
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

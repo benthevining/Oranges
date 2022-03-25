@@ -10,42 +10,50 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the Homebrew package manager.
+FindHomebrew
+-------------------------
+
+Find the Homebrew package manager.
 
 Options:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - HOMEBREW_NO_INSTALL : if set to OFF and Homebrew cannot be found, then it will be installed at configure time.
 If set to ON and Homebrew cannot be found, then Homebrew will not be installed and this module's functions will produce fatal errors.
 Defaults to OFF.
 
-Targets:
-- Homebrew::Homebrew : the Homebrew executable
-
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Homebrew_FOUND
 
-## Functions:
+Targets:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Homebrew::Homebrew : the Homebrew executable
 
-### homebrew_update_all
-```
-homebrew_update_all()
-```
+Update installed packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Updates all installed packages.
+.. command:: homebrew_update_all
+
+	homebrew_update_all()
+
+Updates all installed Homebrew packages.
 
 
-### homebrew_install_packages
-```
-homebrew_install_packages (PACKAGES <packageNames>
-						   [UPDATE_FIRST] [OPTIONAL])
-```
+Install packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: homebrew_install_packages
+
+	homebrew_install_packages (PACKAGES <packageNames>
+							   [UPDATE_FIRST] [OPTIONAL])
 
 Installs the list of packages using Homebrew.
 If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
 If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

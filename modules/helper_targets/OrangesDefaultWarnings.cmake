@@ -10,16 +10,19 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module creates the target Oranges::OrangesDefaultWarnings.
+OrangesDefaultWarnings
+-------------------------
 
-Inclusion style: once globally
+Provides a helper target for configuring some default compiler warnings.
 
-Targets:
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesDefaultWarnings
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

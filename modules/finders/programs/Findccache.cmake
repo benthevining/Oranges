@@ -10,18 +10,23 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the ccache compiler cache.
+Findccache
+-------------------------
 
-Targets:
+Find the ccache compiler cache.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ccache_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ccache::ccache : The ccache executable.
 - ccache::ccache-interface : Interface library that can be linked against to enable ccache for a target
 
-Output variables:
-- ccache_FOUND
-
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

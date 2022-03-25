@@ -10,33 +10,47 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for PACE's wraptool code signing program.
+Findwraptool
+-------------------------
 
-Targets:
-- PACE::wraptool : the wraptool executable.
+Find PACE's wraptool code signing program.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - wraptool_FOUND
 
-## Functions:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- PACE::wraptool : the wraptool executable.
 
-### wraptool_configure_aax_plugin_signing
-```
-wraptool_configure_aax_plugin_signing (TARGET <targetName>
-									   GUID <guid>
-									   [ACCOUNT <accountID>]
-									   [SIGNID <signID>]
-									   [KEYFILE <keyfilePath>]
-									   [KEYPASSWORD <password>])
-```
+
+Configure AAX signing with wraptool
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: wraptool_configure_aax_plugin_signing
+
+	wraptool_configure_aax_plugin_signing (TARGET <targetName>
+										   GUID <guid>
+										   [ACCOUNT <accountID>]
+										   [SIGNID <signID>]
+										   [KEYFILE <keyfilePath>]
+										   [KEYPASSWORD <password>])
 
 Configures signing of an AAX plugin target. Does nothing on Linux.
 
 The `ACCOUNT`, `SIGNID`, `KEYFILE`, and `KEYPASSWORD` options set the cache variables `WRAPTOOL_ACCOUNT`, `WRAPTOOL_SIGNID`, `WRAPTOOL_KEYFILE`, and `WRAPTOOL_KEYPASSWORD`, respectively.
 
-]]
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- WRAPTOOL_ACCOUNT
+- WRAPTOOL_SIGNID
+- WRAPTOOL_KEYFILE
+- WRAPTOOL_KEYPASSWORD
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

@@ -10,13 +10,16 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesDocsBuildConfig
+-------------------------
 
 An aggregate helper module that includes OrangesDoxygenConfig and, if the including project is the top level project, also includes OrangesGraphVizConfig.
 
 Inclusion style: In each project
 
-]]
+#]=======================================================================]
 
 # NO include_guard here - by design!
 

@@ -10,6 +10,38 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesFindSystemPackageManager
+-------------------------
+
+This module finds an appropriate system package manager program, and provides functions to update and install packages.
+
+
+Update all packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command::oranges_update_all_system_packages
+
+	oranges_update_all_system_packages()
+
+Updates all installed system packages.
+
+
+Install new packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: oranges_install_system_packages
+
+	oranges_install_system_packages (PACKAGES <packageNames...>
+									 [UPDATE_FIRST] [OPTIONAL])
+
+Cache variables:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- SYSTEM_PACKAGE_MANAGER_EXECUTABLE: this can be used to override the system package manager executable.
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)

@@ -10,7 +10,10 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesDefaultInstallSettings
+-------------------------
 
 An aggregate helper module that includes OrangesInstallSystemLibs, OrangesDefaultCPackSettings, OrangesGeneratePkgConfig, and, if the including project is the top level project, also includes OrangesUninstallTarget.
 
@@ -18,7 +21,7 @@ If there is a target named `${PROJECT_NAME}` and the variable `${PROJECT_NAME}_S
 
 Inclusion style: In each project
 
-]]
+#]=======================================================================]
 
 # NO include_guard here - by design!
 

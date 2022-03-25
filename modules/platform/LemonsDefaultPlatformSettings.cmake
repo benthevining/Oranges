@@ -10,15 +10,21 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+LemonsDefaultPlatformSettings
+-------------------------
+
 Default settings and configuration for a CMake build on the OS you're currently running.
 
-Inclusion style: once globally
 
-## Include-time actions:
-Sets appropriate platform-specific settings for the current build.
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ORANGES_IOS_SIMULATOR (iOS only)
+- LEMONS_IOS_COMBINED (iOS only)
+- ORANGES_MAC_UNIVERSAL_BINARY (macOS only)
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

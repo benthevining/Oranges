@@ -10,18 +10,28 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesGraphVizConfig
+-------------------------
 
 When this module is included, it creates a target that generates a png image of the CMake dependency graph for the current project.
 
-Inclusion style: Once globally, preferably from top-level project
+Inclusion style: Once globally, preferably from the top-level project
 
-Cache variables:
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE : if set, the generated png image will be copied to this folder.
 The use case is to commit the dependency graph image to the source tree. Defaults to ${CMAKE_SOURCE_DIR}/util.
 - ORANGES_DOC_OUTPUT_DIR : The directory where the image will be generated. Defaults to ${CMAKE_SOURCE_DIR}/doc.
 
-]]
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- DependencyGraph
+
+#]=======================================================================]
 
 # NB. becuase cmake only outputs a dependency graph for the top-level project, I use variables
 # CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.

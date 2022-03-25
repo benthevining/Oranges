@@ -10,16 +10,19 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module creates the target Oranges::OrangesCoverageFlags.
+OrangesCoverageFlags
+-------------------------
 
-Inclusion style: once globally
+Provides a helper target for configuring coverage flags.
 
-Targets:
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesCoverageFlags
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

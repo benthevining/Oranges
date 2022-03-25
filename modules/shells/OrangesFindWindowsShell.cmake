@@ -10,21 +10,35 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Attempts to locate a Windows shell in approximate order of preference.
+OrangesFindWindowsShell
+-------------------------
 
-Targets:
-- Oranges::WindowsShell : the located shell executable
-
-Output variables:
-- WINDOWS_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
+Attempts to locate a Windows shell executable, in approximate order of preference.
 
 Supported shells (in searching order):
 - PowerShell
 - CMD.EXE
 
-]]
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- WINDOWS_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::WindowsShell : the located shell executable
+
+
+Global properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- WINDOWS_SHELL_NAME
+- WINDOWS_SHELL_STARTUP_SCRIPT
+- WINDOWS_SHELL_LOG_FILE
+- WINDOWS_SHELL_FLAGS
+- WINDOWS_SHELL_COMMAND
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

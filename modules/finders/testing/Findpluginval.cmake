@@ -10,34 +10,40 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the pluginval plugin testing tool.
+Findpluginval
+-------------------------
 
-Options:
+Find the pluginval plugin testing tool.
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - PLUGINVAL_BUILD_AT_CONFIGURE_TIME : If this is ON and pluginval cannot be found on the system, then it will be built from source at configure time.
 Defaults to ON.
 
-Targets:
-- Tracktion::pluginval : The pluginval executable
-
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - pluginval_FOUND
 
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Tracktion::pluginval : The pluginval executable
 
-## Functions:
 
-### pluginval_add_plugin_test
-```
-pluginval_add_plugin_test (TARGET <targetName>
-						   [NAME <testname>]
-						   [LEVEL <testingLevel>]
-						   [LOG_DIR <logOutputDir>]
-						   [REPEATS <numRepeats>]
-						   [SAMPLERATES <testingSamplerates>]
-						   [BLOCKSIZES <testingBlocksizes>]
-						   [NO_GUI] [VERBOSE] [RANDOMIZE])
-```
+Add pluginval tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: pluginval_add_plugin_test
+
+	pluginval_add_plugin_test (TARGET <targetName>
+							   [NAME <testname>]
+							   [LEVEL <testingLevel>]
+							   [LOG_DIR <logOutputDir>]
+							   [REPEATS <numRepeats>]
+							   [SAMPLERATES <testingSamplerates>]
+							   [BLOCKSIZES <testingBlocksizes>]
+							   [NO_GUI] [VERBOSE] [RANDOMIZE])
 
 Adds a test that executes pluginval on the passed plugin target.
 
@@ -45,23 +51,32 @@ Adds a test that executes pluginval on the passed plugin target.
 
 `LEVEL` defaults to 5.
 
-All the options except TARGET and NAME set cache variables prefixed with PLUGINVAL_.
 
+Add tests for every individual plugin format
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-### pluginval_add_all_plugin_tests
-```
-pluginval_add_all_plugin_tests (TARGET <pluginTarget>
-								[LEVEL <testingLevel>]
-								[LOG_DIR <logOutputDir>]
-								[REPEATS <numRepeats>]
-								[SAMPLERATES <testingSamplerates>]
-								[BLOCKSIZES <testingBlocksizes>]
-								[NO_GUI] [VERBOSE] [RANDOMIZE])
-```
+.. command:: pluginval_add_all_plugin_tests
+
+	pluginval_add_all_plugin_tests (TARGET <pluginTarget>
+									[LEVEL <testingLevel>]
+									[LOG_DIR <logOutputDir>]
+									[REPEATS <numRepeats>]
+									[SAMPLERATES <testingSamplerates>]
+									[BLOCKSIZES <testingBlocksizes>]
+									[NO_GUI] [VERBOSE] [RANDOMIZE])
 
 Creates pluginval tests for each plugin format (by calling pluginval_add_plugin_test for each one).
 
-]]
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- PLUGINVAL_LEVEL
+- PLUGINVAL_VERBOSE
+- PLUGINVAL_SAMPLERATES
+- PLUGINVAL_BLOCKSIZES
+- PLUGINVAL_DISABLE_GUI
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

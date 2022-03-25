@@ -10,38 +10,43 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the apt package manager.
+FindApt
+-------------------------
 
-This module first tries to find apt-get, then falls back to apt if apt-get cannot be found.
+Find the apt package manager.
 
-Note that sudo is used on Linux.
+This module first searches for the `apt-get` command, and if it cannot be found, falls back to searching for the `apt` command.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Apt_FOUND
 
-## Functions:
 
-### apt_update_all
-```
-apt_update_all()
-```
+Update installed packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Updates all installed packages.
+.. command:: apt_update_all
+
+	apt_update_all()
+
+Updates all installed apt packages.
 
 
-### apt_install_packages
-```
-apt_install_packages (PACKAGES <packageNames>
-					  [UPDATE_FIRST] [OPTIONAL])
-```
+Install packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: apt_install_packages
+
+	apt_install_packages (PACKAGES <packageNames>
+						  [UPDATE_FIRST] [OPTIONAL])
 
 Installs the list of packages using apt.
 If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
 If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

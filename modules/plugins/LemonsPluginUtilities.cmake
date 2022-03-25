@@ -10,40 +10,42 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+LemonsPluginUtilities
+-------------------------
+
 Utilities for audio plugins.
+This module provides the function :command:`lemons_configure_juce_plugin()`.
 
-Inclusion style: once globally
 
-## Include-time actions:
-Determines the list of all available plugin formats.
-
-## Output variables:
-- LEMONS_PLUGIN_FORMATS: list of all available plugin formats
-
-## Options:
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - LEMONS_INCLUDE_PRIVATE_SDKS
-- LEMONS_VST2_SDK_PATH: if you have access to the VST2 SDK, you can define this variable to the absolute path of the VST2 SDK root to enable compiling VST2 plugins.
+- LEMONS_VST2_SDK_PATH
 - LEMONS_AAX_SDK_PATH
-
-## Environment variables:
-- LEMONS_PRIVATE_SDKS
+- environment variable: LEMONS_PRIVATE_SDKS
 
 
-## Function:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- LEMONS_PLUGIN_FORMATS
 
-### lemons_configure_juce_plugin
-```
-lemons_configure_juce_plugin (TARGET <target>
-							 [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>])
-```
-Forwards `${ARGN}` to [lemons_configure_juce_target](@ref lemons_configure_juce_target).
+
+Configure a JUCE plugin target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: lemons_configure_juce_plugin
+
+	lemons_configure_juce_plugin (TARGET <target>
+								  [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>])
+
+Forwards `${ARGN}` to lemons_configure_juce_target.
 
 If an AAX-format target exists for this plugin, then [lemons_configure_aax_plugin()](@ref lemons_configure_aax_plugin) will be called for you. The `AAX_PAGETABLE_FILE` and `AAX_GUID` options will be forwarded, if present.
 
-If the `LEMONS_BUILD_TESTS` option is set to ON, then [lemons_configure_pluginval_tests()](@ref lemons_configure_pluginval_tests) will be called for you.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

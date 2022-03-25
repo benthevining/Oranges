@@ -10,26 +10,30 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+FindMTS-ESP
+-------------------------
 
 A find module for the MTS-ESP MIDI tuning library.
 
-Components that may be specified:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- MTS-ESP_FOUND
+
+Components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Client
 - Master
 - All
 
-If no component(s) are specified, this module will default to finding both the client and master components.
-
-Targets:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ODDSound::MTSClient : static library build of the MTS-ESP client library
 - ODDSound::MTSMaster : static library build of the MTS-ESP master library
 - ODDSound::MTS-ESP   : interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
 
-Output variables:
-- MTS-ESP_FOUND
-
-]]
+#]=======================================================================]
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
@@ -70,14 +74,12 @@ unset (quiet_flag)
 
 set (MTS-ESP_FOUND FALSE)
 
+find_package_default_component_list (Client Master)
+
 # Client
 
-# editorconfig-checker-disable
 if(NOT TARGET MTSClient)
-	if((NOT MTS-ESP_FIND_COMPONENTS) OR (Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
-	   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
-		# editorconfig-checker-enable
-
+	if(Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 		find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
 				   DOC "MTS-ESP client sources directory" NO_DEFAULT_PATH)
 
@@ -108,12 +110,8 @@ endif()
 
 # Master
 
-# editorconfig-checker-disable
 if(NOT TARGET MTSMaster)
-	if((NOT MTS-ESP_FIND_COMPONENTS) OR (Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
-	   OR (All IN LISTS ${MTS-ESP_FIND_COMPONENTS}))
-		# editorconfig-checker-enable
-
+	if(Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
 		find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
 				   DOC "MTS-ESP master sources directory" NO_DEFAULT_PATH)
 

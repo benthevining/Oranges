@@ -10,32 +10,26 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides the function oranges_fetch_repository.
+OrangesFetchRepository
+-------------------------
 
-Inclusion style: once globally
+This module is a light wrapper around CMake's FetchContent, and provides the function :command:`oranges_fetch_repository()`.
 
-## Cache variables:
-- ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST : if ON, oranges_fetch_repository will first try find_package(<packageName>) before resorting to actually downloading the repository. Defaults to OFF.
-- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored.
-I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
-Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+Download and cache a git repository at configure time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. command:: oranges_fetch_repository
 
-## Functions:
-
-### oranges_fetch_repository
-```
-oranges_fetch_repository (NAME <name>
-						  [GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>]
-						  [GIT_TAG <ref>]
-						  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
-						  [CMAKE_SUBDIR <rel_path>]
-						  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
-						  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
-						  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
-```
+	oranges_fetch_repository (NAME <name>
+							  [GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>]
+							  [GIT_TAG <ref>]
+							  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
+							  [CMAKE_SUBDIR <rel_path>]
+							  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
+							  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
+							  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
 
 Fetches a git repository, with options for routing the call to `find_package()` or a local location.
 
@@ -68,7 +62,25 @@ If the `NEVER_LOCAL` option is present, then this function will never be routed 
 
 `GIT_OPTIONS` is an optional list of "key=value" pairs that will be passed to the git pull's command line with --config.
 
-]]
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST - when ON, the function `oranges_fetch_repository()` will first try a normal `find_package()` call. Defaults to OFF.
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored.
+I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
+Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- GITHUB_USERNAME
+- GITHUB_ACCESS_TOKEN
+- BITBUCKET_USERNAME
+- BITBUCKET_PASSWORD
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 
@@ -109,10 +121,10 @@ function(oranges_fetch_repository)
 	if(ORANGES_ARG_GIT_REPOSITORY)
 		set (git_repo_flag "${ORANGES_ARG_GIT_REPOSITORY}")
 	elseif(ORANGES_ARG_GITHUB_REPOSITORY)
-		if(GITHUB_USERNAME AND GITHUB_ACCESS_TOKEN)
+		if(DEFINED ENV{GITHUB_USERNAME} AND DEFINED ENV{GITHUB_ACCESS_TOKEN})
 			set (
 				git_repo_flag
-				"https://${GITHUB_USERNAME}:${GITHUB_ACCESS_TOKEN}@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git"
+				"https://$ENV{GITHUB_USERNAME}:$ENV{GITHUB_ACCESS_TOKEN}@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git"
 				)
 		else()
 			set (git_repo_flag "https://git@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git")
@@ -120,10 +132,10 @@ function(oranges_fetch_repository)
 	elseif(ORANGES_ARG_GITLAB_REPOSITORY)
 		set (git_repo_flag "https://gitlab.com/${ORANGES_ARG_GITLAB_REPOSITORY}.git")
 	elseif(ORANGES_ARG_BITBUCKET_REPOSITORY)
-		if(BITBUCKET_USERNAME AND BITBUCKET_PASSWORD)
+		if(DEFINED ENV{BITBUCKET_USERNAME} AND DEFINED ENV{BITBUCKET_PASSWORD})
 			set (
 				git_repo_flag
-				"https://${BITBUCKET_USERNAME}:${BITBUCKET_PASSWORD}@bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git"
+				"https://$ENV{BITBUCKET_USERNAME}:$ENV{BITBUCKET_PASSWORD}@bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git"
 				)
 		else()
 			set (git_repo_flag "https://bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git")

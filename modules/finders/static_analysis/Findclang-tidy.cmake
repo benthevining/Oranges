@@ -10,18 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the clang-tidy static analysis tool.
+Findclang-tidy
+-------------------------
 
-Targets:
+Find the clang-tidy static analysis tool.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- clang-tidy_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Clang::clang-tidy : The clang-tidy executable.
 - Clang::clang-tidy-interface : Interface library that can be linked against to enable clang-tidy integrations for a target.
 
-Output variables:
-- clang-tidy_FOUND
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

@@ -10,20 +10,22 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the JUCE library. This module fetches the JUCE sources from GitHub.
+FindJUCE
+-------------------------
 
-Options:
+A find module for the JUCE library. This module fetches the JUCE sources from GitHub using oranges_fetch_repository().
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - LEMONS_JUCE_BRANCH: the branch of the GitHub repository to use; develop or master. Defaults to develop.
 
-Targets:
-- all of JUCE's targets (the JUCE modules, etc)
-
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - JUCE_FOUND
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

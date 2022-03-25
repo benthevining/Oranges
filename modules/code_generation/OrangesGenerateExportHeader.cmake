@@ -10,22 +10,23 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module is a thin wrapper around CMake's generate_export_header.
+OrangesGenerateExportHeader
+-------------------------
 
-Inclusion style: once globally
+This module is a thin wrapper around CMake's generate_export_header, and adds the :command:`oranges_generate_export_header()` command.
 
-## Functions:
+Generating an export header for a target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-### oranges_add_library_abi_control
-```
-oranges_add_library_abi_control (TARGET <targetName>
-								 [BASE_NAME <baseName>]
-								 [HEADER <exportHeaderName>])
-```
+.. command:: oranges_generate_export_header
 
-]]
+	oranges_generate_export_header (TARGET <targetName>
+									[BASE_NAME <baseName>]
+									[HEADER <exportHeaderName>])
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

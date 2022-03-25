@@ -10,13 +10,20 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesDefaultProjectSettings
+-------------------------
 
 This module sets up some project-specific defaults, and includes a basic set of modules used in most CMake projects.
 
 Inclusion style: In each project
 
-]]
+Cache variables:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- <upperProjectName>_INSTALL_DEST
+
+#]=======================================================================]
 
 # NO include_guard here - by design!
 

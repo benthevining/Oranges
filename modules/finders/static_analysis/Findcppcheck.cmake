@@ -10,18 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the cppcheck static analysis tool.
+Findcppcheck
+-------------------------
 
-Targets:
+Find the cppcheck static analysis tool.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- cppcheck_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - cppcheck::cppcheck : The cppcheck executable.
 - cppcheck::cppcheck-interface : Interface library that can be linked against to enable cppcheck integrations for a target
 
-Output variables:
-- cppcheck_FOUND
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

@@ -10,16 +10,21 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesUninstallTarget
+-------------------------
 
 When this module is included, it creates a target that uninstalls all of the project's installed files.
 
-Inclusion style: Once globally, preferably from top-level project.
+Inclusion style: Once globally, preferably from top-level project
 
-Targets:
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - uninstall
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

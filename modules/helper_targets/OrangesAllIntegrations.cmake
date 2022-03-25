@@ -10,21 +10,25 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module creates the target Oranges::OrangesAllIntegrations and searches for the following packages:
+OrangesAllIntegrations
+-------------------------
+
+Searches for all static analysis integration programs and enables the ones that are available.
+
+This module searches for the following packages:
 - ccache
 - clang-tidy
 - cppcheck
 - cpplint
 - include-what-you-use
 
-Inclusion style: once globally
-
-Targets:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesAllIntegrations
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

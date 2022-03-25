@@ -10,34 +10,39 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for Apple's codesign program.
+Findcodesign
+-------------------------
 
-Targets:
-- Apple::codesign : the codesign executable.
+Find Apple's codesign program.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - codesign_FOUND
 
-## Functions:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Apple::codesign : the codesign executable.
 
-### codesign_sign_target
-```
-codesign_sign_target (TARGET <target>)
-```
+
+Configure code signing for a target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: codesign_sign_target
+
+	codesign_sign_target (TARGET <targetName>)
+
 
 Adds a post-build command to the specified target to run codesign on the target's bundle.
 
+.. command:: codesign_sign_plugin_targets
 
-### codesign_sign_plugin_targets
-```
-codesign_sign_plugin_targets (TARGET <pluginTarget>)
-```
+	codesign_sign_plugin_targets (TARGET <pluginTarget>)
 
 Configures code signing for every individual format target of a plugin.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

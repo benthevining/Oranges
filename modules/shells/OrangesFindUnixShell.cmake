@@ -10,20 +10,12 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Attempts to locate a UNIX shell in approximate order of preference.
+OrangesFindUnixShell
+-------------------------
 
-Targets:
-- Oranges::UnixShell : the located shell executable
-- Unix::cp
-- Unix::gzip
-- Unix::mv
-- Unix::rm
-- Unix::tar
-
-Output variables:
-- UNIX_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
+Attempts to locate a UNIX shell executable, in approximate order of preference.
 
 Supported shells (in searching order):
 - bash
@@ -34,17 +26,40 @@ Supported shells (in searching order):
 - tcsh (csh)
 - Bourne shell (sh)
 
-## Functions:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- UNIX_SHELL_COMMAND : a command line that includes any specified shell-specific flags that can be used as the COMMAND in add_custom_target, etc
 
-### execute_unix_command
-```
-execute_unix_command (COMMAND <BASH|CP|GZIP|MV|RM|TAR>
-					  [ARGS <commandArgs...>]
-					  [DIR <workingDirectory>]
-					  [OPTIONAL])
-```
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::UnixShell : the located shell executable
+- Unix::cp
+- Unix::gzip
+- Unix::mv
+- Unix::rm
+- Unix::tar
 
-]]
+
+Global properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- UNIX_SHELL_NAME
+- UNIX_SHELL_STARTUP_SCRIPT
+- UNIX_SHELL_LOG_FILE
+- UNIX_SHELL_FLAGS
+- UNIX_SHELL_COMMAND
+
+
+Execute a UNIX command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: execute_unix_command
+
+	execute_unix_command (COMMAND <BASH|CP|GZIP|MV|RM|TAR>
+						  [ARGS <commandArgs...>]
+						  [DIR <workingDirectory>]
+						  [OPTIONAL])
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

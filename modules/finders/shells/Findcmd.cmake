@@ -10,6 +10,23 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+Findcmd
+-------------------------
+
+Find the CMD.EXE shell.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- cmd_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- cmd::cmd : the CMD.EXE executable
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -23,7 +40,7 @@ oranges_file_scoped_message_context ("Findcmd")
 
 set (cmd_FOUND FALSE)
 
-find_program (CMD_PROGRAM PowerShell)
+find_program (CMD_PROGRAM NAMES cmd.exe cmd)
 
 mark_as_advanced (FORCE CMD_PROGRAM)
 

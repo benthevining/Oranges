@@ -10,22 +10,16 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesDefaultCPackSettings
+-------------------------
 
 Sets up some default configuration settings for CPack.
 
 Inclusion style: once globally, ideally from the top-level project.
 
-## USER INPUTS:
-- CPACK_PACKAGE_EXECUTABLES
-- CPACK_PROJECT_CONFIG_FILE
-- CPACK_RESOURCE_FILE_WELCOME
-- CPACK_PACKAGE_ICON
-- CPACK_NSIS_MUI_FINISHPAGE_RUN
-- CPACK_BUNDLE_PLIST
-- CPACK_BUNDLE_STARTUP_COMMAND (program to run when user opens the bundle)
-
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

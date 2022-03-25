@@ -65,6 +65,16 @@ endfunction()
 
 #
 
+macro(find_package_default_component_list)
+	if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
+	elseif(All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
+	endif()
+endmacro()
+
+#
+
 macro(find_package_try_pkgconfig outputTarget)
 	if(FIND_PACKAGE_TRY_PKGCONFIG)
 		find_package (PkgConfig QUIET)

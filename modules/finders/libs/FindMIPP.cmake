@@ -10,17 +10,22 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the MIPP intrinsics library. This module fetches the MIPP sources from GitHub.
+FindMipp
+-------------------------
 
-Targets:
-- aff3ct::MIPP : MIPP interface library
+A find module for the MIPP library. This module fetches the JUCE sources from GitHub using oranges_fetch_repository().
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - MIPP_FOUND
 
-]]
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- aff3ct::MIPP : MIPP library (INTERFACE)
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

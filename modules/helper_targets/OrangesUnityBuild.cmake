@@ -10,6 +10,20 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesUnityBuild
+-------------------------
+
+Provides a helper target for configuring a target as a unity build.
+
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::OrangesUnityBuild
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

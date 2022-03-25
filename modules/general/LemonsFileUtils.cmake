@@ -10,19 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesFileUtils
+-------------------------
+
 General filesystem utilities.
+This module provides the functions :command:`lemons_subdir_list()` and :command:`lemons_make_path_absolute()`.
 
-Inclusion style: once globally
 
-## Functions:
+Get a list of files and/or subdirectories in a directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-### lemons_subdir_list
-```
-lemons_subdir_list (DIR <directory> RESULT <out_var>
-					[RECURSE] [FILES]
-					[FULL_PATHS]|[BASE_DIR <baseDirectory>])
-```
+.. command:: lemons_subdir_list
+
+	lemons_subdir_list (DIR <directory> RESULT <out_var>
+						[RECURSE] [FILES]
+						[FULL_PATHS]|[BASE_DIR <baseDirectory>])
+
 Returns a list of subdirectories within the specified directory.
 
 `DIR` is required and must be the absolute path to the directory to be searched.
@@ -35,16 +40,19 @@ If the `FILES` option is present, the function returns a list of files that are 
 If the `FULL_PATHS` option is present, the returned paths will be full absolute paths; otherwise, the `BASE_DIR` option must be specified and all paths will be calculated relative to that directory.
 
 
-### lemons_make_path_absolute
-```
-lemons_make_path_absolute (VAR <pathVariable>
-						   [BASE_DIR <baseDirectory>])
-```
+Make a path absolute, relative to a base directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command::lemons_make_path_absolute
+
+	lemons_make_path_absolute (VAR <pathVariable>
+							   [BASE_DIR <baseDirectory>])
+
 `VAR` is the name of a variable that should be set to a path in the calling scope, and will also be used for the output in the calling scope.
 
 If the path in `VAR` is not absolute, it will be made absolute, relative to BASE_DIR.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

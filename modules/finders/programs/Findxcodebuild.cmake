@@ -10,30 +10,36 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for xcodebuild.
+Findxcodebuild
+-------------------------
 
-Targets:
-- Apple::xcodebuild : xcodebuild executable
+Find Apple's xcodebuild program.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - xcodebuild_FOUND
 
-## Functions:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Apple::xcodebuild : xcodebuild executable
 
-### include_external_xcode_project
-```
-include_external_xcode_project (TARGET <targetName>
-								DIRECTORY <dirOfXcodeProject>
-								SCHEME <nameOfScheme>
-								[EXTRA_ARGS <extraXcodebuildArgs>]
-								[COMMENT <buildComment>])
-```
+
+Include an external XCode project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: include_external_xcode_project
+
+	include_external_xcode_project (TARGET <targetName>
+									DIRECTORY <dirOfXcodeProject>
+									SCHEME <nameOfScheme>
+									[EXTRA_ARGS <extraXcodebuildArgs>]
+									[COMMENT <buildComment>])
 
 Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

@@ -10,61 +10,30 @@
 #
 # ======================================================================================
 
-# ======================================================================================
-# ____  _____            _   _  _____ ______  _____ / __ \|  __ \     /\   | \ | |/ ____|  ____|/
-# ____| | |  | | |__) |   /  \  |  \| | |  __| |__  | (___ | |  | |  _  /   / /\ \ | . ` | | |_ |
-# __|  \___ \ | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) | \____/|_|  \_\/_/    \_\_|
-# \_|\_____|______|_____/
-#
-# This file is part of the Oranges open source CMake library and is licensed under the terms of the
-# GNU Public License.
-#
-# ======================================================================================
+#[=======================================================================[.rst:
 
-# ======================================================================================
-# ____  _____            _   _  _____ ______  _____ / __ \|  __ \     /\   | \ | |/ ____|  ____|/
-# ____| | |  | | |__) |   /  \  |  \| | |  __| |__  | (___ | |  | |  _  /   / /\ \ | . ` | | |_ |
-# __|  \___ \ | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) | \____/|_|  \_\/_/    \_\_|
-# \_|\_____|______|_____/
-#
-# This file is part of the Oranges open source CMake library and is licensed under the terms of the
-# GNU Public License.
-#
-# ======================================================================================
+LemonsAAXUtils
+-------------------------
 
-#[[
 Utilities for AAX plugins.
 
-Inclusion style: once globally
+Configure an AAX plugin target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-## Include-time actions:
-Attempts to configure a target to build the AAX SDK based on the path you've provided to LEMONS_AAX_SDK_PATH.
-This module may return early if the AAXSDK target cannot be configured correctly, in which case the AAXSDK target will not exist and the functions provided by this module may not exist.
-If the AAXSDK target is configured successfully, this module will call juce_set_aax_sdk_path() for you.
+.. command:: lemons_configure_aax_plugin
 
-## Targets:
-- AAXSDK
+	lemons_configure_aax_plugin (TARGET <target>
+								 [PAGETABLE_FILE <file>]
+								 [GUID <guid>])
 
-## Options:
-- LEMONS_AAX_SDK_PATH: the absolute path of the AAX SDK root.
-
-
-## Functions:
-
-### lemons_configure_aax_plugin {#lemons_configure_aax_plugin}
-
-```
-lemons_configure_aax_plugin (TARGET <target>
-							[PAGETABLE_FILE <file>]
-							[GUID <guid>])
-```
 Configures default settings for the specified AAX plugin target. Note that `<target>` is the *literal* name of this plugin target, not the shared plugin target name!
 
 `PAGETABLE_FILE` is optional and specifies the name of an AAX pagetable file within your resources target to use.
 
 If `GUID` is present, `${ARGN}` will be forwarded to lemons_configure_aax_plugin_signing.
 
-]]
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

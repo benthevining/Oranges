@@ -10,16 +10,21 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesWipeCacheTarget
+-------------------------
 
 When this module is included, it creates a target that wipes all persistent caches of downloaded dependencies.
 
-Inclusion style: Once globally, preferably from top-level project.
+Inclusion style: Once globally, preferably from the top-level project
 
-Targets:
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - wipe_cache
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

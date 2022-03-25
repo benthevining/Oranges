@@ -10,31 +10,35 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides functions that wrap platform-specific package managers, as well as Python's pip.
+OrangesInstallPackages
+-------------------------
 
-Inclusion style: once globally
-
-## Functions:
-
-### oranges_update_all_packages
-```
-oranges_update_all_packages()
-```
-
-Updates all installed system packages.
+This module provides a wrapper around an appropriate system package manager, as well as Python's pip and Ruby gems.
 
 
-### oranges_install_packages
-```
-oranges_install_packages ([SYSTEM_PACKAGES <packageNames...>]
-						  [PIP_PACKAGES <packageNames...>]
-						  [RUBY_GEMS <gems...>]
-						  [UPDATE_FIRST] [OPTIONAL])
-```
+Update all packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-]]
+.. command::oranges_update_all_packages
+
+	oranges_update_all_packages()
+
+Updates all installed system packages, Python packages, and Ruby gems.
+
+
+Install new packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: oranges_install_packages
+
+	oranges_install_packages ([SYSTEM_PACKAGES <packageNames...>]
+							  [PIP_PACKAGES <packageNames...>]
+							  [RUBY_GEMS <gems...>]
+							  [UPDATE_FIRST] [OPTIONAL])
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

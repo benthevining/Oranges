@@ -10,28 +10,29 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides the function oranges_create_pkgconfig_file.
+OrangesGeneratePkgConfig
+-------------------------
 
-Inclusion style: once globally
+This module provides the function :command:`oranges_create_pkgconfig_file()`.
 
-## Functions:
+Generating a pkgconfig file for a target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-### oranges_create_pkgconfig_file
-```
-oranges_create_pkgconfig_file (TARGET <targetName>
-							   [OUTPUT_DIR <outputDir>]
-							   [NAME <projectName>]
-							   [INCLUDE_REL_PATH <basePath>]
-							   [DESCRIPTION <projectDescription>]
-							   [URL <projectURL>]
-							   [VERSION <projectVersion>]
-							   [NO_INSTALL]|[INSTALL_DEST <installDestination>]
-							   [REQUIRES <requiredPackages...>])
-```
+.. command:: oranges_create_pkgconfig_file
 
-]]
+	oranges_create_pkgconfig_file (TARGET <targetName>
+								   [OUTPUT_DIR <outputDir>]
+								   [NAME <packageName>]
+								   [INCLUDE_REL_PATH <basePath>]
+								   [DESCRIPTION <projectDescription>]
+								   [URL <projectURL>]
+								   [VERSION <projectVersion>]
+								   [NO_INSTALL]|[INSTALL_DEST <installDestination>]
+								   [REQUIRES <requiredPackages...>])
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

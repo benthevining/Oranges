@@ -10,6 +10,27 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesGeneratePlatformHeader
+-------------------------
+
+This module provides the function :command:`oranges_generate_platform_header()`.
+
+Generating a platform header for a target
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: oranges_generate_platform_header
+
+	oranges_generate_platform_header (TARGET <targetName>
+									  [BASE_NAME <baseName>]
+									  [HEADER <headerName>]
+									  [REL_PATH <installRelPath>]
+									  [LANGUAGE <languageToUseForTestFeastures>]
+									  [INTERFACE])
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

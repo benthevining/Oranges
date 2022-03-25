@@ -10,16 +10,26 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module creates the target Oranges::OrangesDefaultTarget.
+OrangesDefaultTarget
+-------------------------
 
-Inclusion style: once globally
+Provides a helper "default target" with some sensible defaults configured.
 
-Targets:
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesDefaultTarget
 
-]]
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ORANGES_IGNORE_IPO
+- ORANGES_IGNORE_WARNINGS
+- ORANGES_COVERAGE_FLAGS
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 
@@ -232,8 +242,6 @@ if(APPLE)
 	else()
 		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-		set (osx_native_arch "${osx_native_arch}" CACHE INTERNAL "")
 
 		message (DEBUG "Mac native arch: ${osx_native_arch}")
 

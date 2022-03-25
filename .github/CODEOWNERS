@@ -37,6 +37,7 @@ Makefile benthevining
 README.md benthevining
 age.cmake benthevining
 evining
+modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
 modules/code_generation/scripts/platform_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
@@ -58,6 +59,7 @@ modules/dependencies/OrangesFetchRepository.cmake benthevining
 modules/dependencies/OrangesFindSystemPackageManager.cmake benthevining
 modules/dependencies/OrangesInstallPackages.cmake benthevining
 modules/dependencies/OrangesWipeCacheTarget.cmake benthevining
+modules/dependencies/scripts/wipe_cache.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
 modules/documentation/OrangesGraphVizConfig.cmake benthevining
@@ -208,6 +210,7 @@ scripts/dependencies/download_file.cmake benthevining
 scripts/dependencies/download_repository.cmake benthevining
 scripts/dependencies/scripts/helper_functions.cmake benthevining
 scripts/dependencies/scripts/shim_template.cmake benthevining
+scripts/download_file.cmake benthevining
 scripts/download_repository.cmake benthevining
 scripts/install_packages.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining

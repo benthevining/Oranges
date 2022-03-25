@@ -10,33 +10,28 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides the function oranges_download_file.
+OrangesDownloadFile
+-------------------------
 
-Inclusion style: once globally
+This module provides the function :command:`oranges_download_file()`.
 
-Cache variables:
-- ORANGES_FILE_DOWNLOAD_CACHE : defines the directory where downloaded files will be stored.
-I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
-If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR.
-Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
+Download and cache a file at configure time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-## Functions:
+.. command:: oranges_download_file
 
-### oranges_download_file
-```
-oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot> [GIT_BRANCH <branchName>] ]
-					   [PATH_OUTPUT <outputVar>]
-					   [NO_CACHE] [QUIET] [NEVER_LOCAL]
-					   [COPY_TO <path>]
-					   [TIMEOUT <timeoutSeconds>]
-					   [USERNAME <username>]
-					   [PASSWORD <password>]
-					   [EXPECTED_HASH <alg=expectedHash>])
-```
+	oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot>] [GIT_BRANCH <branchName>]
+						   [PATH_OUTPUT <outputVar>]
+						   [NO_CACHE] [QUIET] [NEVER_LOCAL]
+						   [COPY_TO <path>]
+						   [TIMEOUT <timeoutSeconds>]
+						   [USERNAME <username>]
+						   [PASSWORD <password>]
+						   [EXPECTED_HASH <alg=expectedHash>])
 
-`URL` and `FILENAME` are required.
+If the `URL` argument is not given, then you must specify the GitHub repository, branch, and relative path to the file from the root of the repository.
 
 `PATH_OUTPUT` may name a variable that will be set with the absolute path of the downloaded file, in the scope of the caller.
 If `PATH_OUTPUT` isn't specified, the variable `${FILENAME}_PATH` will be set to the absolute path of the downloaded file in the scope of the caller.
@@ -50,7 +45,14 @@ If the `NO_CACHE` option is present, the file will downloaded into the binary tr
 
 If the `COPY_TO` argument is present, the downloaded file will be copied to the specified path once it has been fetched.
 
-]]
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ORANGES_FILE_DOWNLOAD_CACHE : defines the directory where downloaded files will be stored.
+I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
+If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR.
+Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

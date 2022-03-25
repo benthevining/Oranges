@@ -10,20 +10,23 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides the function lemons_json_array_to_list.
+OrangesJsonUtils
+-------------------------
 
-Inclusion style: once globally
+JSON parsing utilities.
+This module provides the function :command:`lemons_json_array_to_list()`.
 
-## Functions:
 
-### lemons_json_array_to_list
-```
-lemons_json_array_to_list (TEXT <jsonString>
-						   ARRAY <nameOfArray>
-						   OUT <outputVar>)
-```
+Convert a JSON array to a CMake list
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: lemons_json_array_to_list
+
+	lemons_json_array_to_list (TEXT <jsonString>
+							   ARRAY <nameOfArray>
+							   OUT <outputVar>)
 
 Populate a list variable in the calling scope with all the values from a an array of a JSON object.
 
@@ -32,13 +35,13 @@ If the array is not present in the passed JSON string, the output variable will 
 Example usage:
 
 in myJson.json:
-```
+```json
 {
 	"Names": [ "Bob", "Harry", "Sally" ]
 }
 ```
 
-```
+```cmake
 file (READ myJson.json jsonContents)
 
 lemons_json_array_to_list (TEXT ${jsonContents} ARRAY "Names" OUT jsonNames)
@@ -52,7 +55,7 @@ if (NOT jsonAges)
 endif()
 ```
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

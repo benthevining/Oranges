@@ -10,19 +10,22 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+LemonsCreateAAXSDKTarget
+-------------------------
 
 This module creates a target to build the AAX SDK.
 
-Inclusion style: once globally
-
-Targets:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - AAXSDK
 
-Input variables:
+Input variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - LEMONS_AAX_SDK_PATH
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

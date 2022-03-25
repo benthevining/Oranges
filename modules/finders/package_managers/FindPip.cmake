@@ -10,37 +10,44 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the pip Python package manager. This module finds pip3.
+FindPip
+-------------------------
 
-Targets:
-- Python3::Pip : the pip executable.
+Find the Pip Python package manager.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Pip_FOUND
 
-## Functions:
+Targets:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Python3::Pip : the pip executable.
 
-### pip_upgrade_all
-```
-pip_upgrade_all()
-```
+Update installed packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Upgrades all installed packages.
+.. command:: pip_upgrade_all
+
+	pip_upgrade_all()
+
+Updates all installed Pip packages.
 
 
-### pip_install_packages
-```
-pip_install_packages (PACKAGES <packageNames>
-					  [UPDATE_FIRST] [OPTIONAL])
-```
+Install packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: pip_install_packages
+
+	pip_install_packages (PACKAGES <packageNames>
+						  [UPDATE_FIRST] [OPTIONAL])
 
 Installs the list of packages using pip.
 If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
 If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

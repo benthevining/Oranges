@@ -10,16 +10,28 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Finds the Intel IPP libraries for signal processing.
+FindIPP
+-------------------------
 
-Options:
+A find module for the Intel IPP signal processing libraries.
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - IPP_STATIC - defaults to on
 - IPP_MULTI_THREADED - defaults to off
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - IPP_ROOT : this can be manually overridden to provide the path to the root of the IPP installation.
 
-Components:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- IPP_FOUND
+
+Components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - All
 - CORE
 - AC : audio coding
@@ -41,6 +53,8 @@ Components:
 - VM : vector math
 Each one produces an imported target named Intel::ipp_lib_<Component>.
 
+Each component imports its dependencies as well:
+
 Domain             Domain Code  Depends on
 ----------------------------------------------
 Color Conversion   CC           Core, VM, S, I
@@ -51,14 +65,11 @@ Image Processing   I            Core, VM, S
 Signal Processing  S            Core, VM
 Vector Math        VM           Core
 
-
-Targets:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Intel::IntelIPP : interface library that links to all found component libraries
 
-Output variables:
-- IPP_FOUND
-
-]]
+#]=======================================================================]
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
@@ -234,28 +245,25 @@ endfunction()
 
 #
 
-if(All IN_LIST IPP_FIND_COMPONENTS)
-	set (
-		IPP_FIND_COMPONENTS
-		CORE
-		AC
-		CC
-		CH
-		CP
-		CV
-		DC
-		DI
-		GEN
-		I
-		J
-		R
-		M
-		S
-		SC
-		SR
-		VC
-		VM)
-endif()
+find_package_default_component_list (
+	CORE
+	AC
+	CC
+	CH
+	CP
+	CV
+	DC
+	DI
+	GEN
+	I
+	J
+	R
+	M
+	S
+	SC
+	SR
+	VC
+	VM)
 
 foreach(ipp_component ${IPP_FIND_COMPONENTS})
 

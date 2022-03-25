@@ -10,18 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-A find module for the include-what-you-use static analysis tool.
+Findinclude-what-you-use
+-------------------------
 
-Targets:
+Find the include-what-you-use static analysis tool.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- include-what-you-use_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Google::include-what-you-use : include-what-you-use executable
 - Google::include-what-you-use-interface : interface library that can be linked against to enable include-what-you-use integrations for a target
 
-Output variables:
-- include-what-you-use_FOUND
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

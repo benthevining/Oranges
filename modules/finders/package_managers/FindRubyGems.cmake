@@ -10,6 +10,45 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+FindRubyGems
+-------------------------
+
+Find the gems Ruby package manager.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- RubyGems_FOUND
+
+Targets:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Ruby::gem : the gem executable.
+
+Update installed gems
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: ruby_update_all_gems
+
+	ruby_update_all_gems()
+
+Updates all installed Ruby gems.
+
+
+Install gems
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: ruby_install_gems
+
+	ruby_install_gems (GEMS <gemNames>
+					   [UPDATE_FIRST] [OPTIONAL])
+
+Installs the list of Ruby gems.
+If the `UPDATE_FIRST` first option is present, all installed gems will be updated before installing new gems.
+If the `OPTIONAL` option is present, it is not an error for a gems to fail to install.
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)

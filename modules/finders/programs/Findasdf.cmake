@@ -10,6 +10,39 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+Findasdf
+-------------------------
+
+Find the asdf tool version manager.
+
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- asdf_FOUND
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- asdf::asdf : The asdf executable.
+
+
+Install all tools from a .tool-versions file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: asdf_install
+
+	asdf_install (directory)
+
+
+Update a directory's .tool-versions file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: asdf_update
+
+	asdf_update (directory)
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)

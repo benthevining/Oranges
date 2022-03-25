@@ -10,24 +10,30 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module locates the auval tool and provides the function auval_add_plugin_test.
+Findauval
+-------------------------
 
-Targets:
-- Apple::auval : the auval executable.
+Find the auval AudioUnit plugin testing tool.
 
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - auval_FOUND
 
-## Functions:
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Apple::auval : the auval executable.
 
-### auval_add_plugin_test
-```
-auval_add_plugin_test (TARGET <targetName>
-					   [NAME <testName>]
-					   [REPEATS <numRepeats>])
-```
+
+Add auval tests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: auval_add_plugin_test
+
+	auval_add_plugin_test (TARGET <targetName>
+						   [NAME <testName>]
+						   [REPEATS <numRepeats>])
 
 Creates a test that executes auval on the given AudioUnit plugin target.
 
@@ -35,7 +41,7 @@ Creates a test that executes auval on the given AudioUnit plugin target.
 
 `REPEATS` may specify a number of times for validation to be repeated.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

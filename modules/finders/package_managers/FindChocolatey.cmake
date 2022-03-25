@@ -10,42 +10,50 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Find module for the Chocolatey package manager.
+FindChocolatey
+-------------------------
+
+Find the Chocolatey package manager.
 
 Options:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - CHOCO_NO_INSTALL : if set to OFF and Chocolatey cannot be found, then it will be installed at configure time.
 If set to ON and Chocolatey cannot be found, then Chocolatey will not be installed and this module's functions will produce fatal errors.
 Defaults to OFF.
 
-Targets:
-- Chocolatey::Chocolatey : The Chocolatey executable.
-
-Output variables:
+Output variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Chocolatey_FOUND
 
-## Functions:
+Targets:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Chocolatey::Chocolatey : The Chocolatey executable.
 
-### choclatey_update_all
-```
-choclatey_update_all()
-```
+Update installed packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Updates all installed packages.
+.. command:: chocolatey_update_all
+
+	chocolatey_update_all()
+
+Updates all installed Chocolatey packages.
 
 
-### chocolatey_install_packages
-```
-chocolatey_install_packages (PACKAGES <packageNames>
-						     [UPDATE_FIRST] [OPTIONAL])
-```
+Install packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: chocolatey_install_packages
+
+	chocolatey_install_packages (PACKAGES <packageNames>
+								 [UPDATE_FIRST] [OPTIONAL])
 
 Installs the list of packages using Chocolatey.
 If the `UPDATE_FIRST` first option is present, all installed packages will be updated before installing new packages.
 If the `OPTIONAL` option is present, it is not an error for a package to fail to install.
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 
@@ -102,7 +110,7 @@ endif()
 
 #
 
-function(choclatey_update_all)
+function(chocolatey_update_all)
 
 	oranges_add_function_message_context ()
 

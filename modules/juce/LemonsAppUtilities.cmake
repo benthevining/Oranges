@@ -10,29 +10,35 @@
 #
 # ======================================================================================
 
-#[[
-Utilities for configuring JUCE GUI apps.
+#[=======================================================================[.rst:
 
-Inclusion style: once globally
+LemonsAppUtilities
+-------------------------
 
-## Functions:
-
-### lemons_configure_headless_app
-```
-lemons_configure_headless_app (TARGET <>)
-```
-
-Forwards `${ARGN}` to [lemons_configure_juce_target](@ref lemons_configure_juce_target).
+Utilities for configuring JUCE apps.
+This module provides the functions :command:`lemons_configure_headless_app()` and :command:`lemons_configure_juce_app()`.
 
 
-### lemons_configure_juce_app
-```
-lemons_configure_juce_app (TARGET <>)
-```
+Configure a headless application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forwards `${ARGN`} to [lemons_configure_juce_target](@ref lemons_configure_juce_target).
+.. command:: lemons_configure_headless_app
 
-]]
+	lemons_configure_headless_app ()
+
+	Forwards `${ARGN}` to lemons_configure_juce_target.
+
+
+Configure a GUI application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: lemons_configure_juce_app
+
+	lemons_configure_juce_app ()
+
+	Forwards `${ARGN}` to lemons_configure_juce_target.
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

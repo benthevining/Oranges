@@ -10,19 +10,20 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-This module provides the function call_for_each_plugin_format.
+CallForEachPluginFormat
+-------------------------
 
-Inclusion style: once globally
+This module provides the function :command:`call_for_each_plugin_format()`.
 
-## Function:
+Calling a function for each plugin format
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-### call_for_each_plugin_format
-```
-call_for_each_plugin_format (TARGET <pluginTarget>
-							 FUNCTION <functionName>)
-```
+.. command:: call_for_each_plugin_format
+
+	call_for_each_plugin_format (TARGET <pluginTarget>
+								 FUNCTION <functionName>)
 
 This function calls a given command for each plugin format of the given plugin base target.
 
@@ -32,7 +33,8 @@ your_callback (targetName formatName)
 ```
 where `targetName` is the name of the plugin format's specific target, that has already been checked for existence, and `formatName` is the name of the plugin format (eg, 'AAX' or 'VST3').
 
-]]
+
+#]=======================================================================]
 
 include_guard (GLOBAL)
 
