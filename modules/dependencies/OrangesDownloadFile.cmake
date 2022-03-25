@@ -51,6 +51,7 @@ Cache variables
 I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
 If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR.
 Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
+- ORANGES_FILE_DOWNLOAD_DISCONNECTED: if ON, this function will not attempt to download any files.
 
 #]=======================================================================]
 
@@ -125,6 +126,14 @@ function(oranges_download_file)
 	if(EXISTS "${cached_file_location}")
 		message (DEBUG " -- file ${ORANGES_ARG_FILENAME} found in cache at ${cached_file_location}")
 		return ()
+	else()
+		if(ORANGES_FILE_DOWNLOAD_DISCONNECTED)
+			message (
+				WARNING
+					"ORANGES_FILE_DOWNLOAD_DISCONNECTED is on, and file ${ORANGES_ARG_FILENAME} was not found in the cache!"
+				)
+			return ()
+		endif()
 	endif()
 
 	if(ORANGES_ARG_GITHUB_REPOSITORY OR ORANGES_ARG_REPO_REL_PATH)
@@ -134,9 +143,7 @@ function(oranges_download_file)
 					"${CMAKE_CURRENT_FUNCTION} - GITHUB_REPOSITORY and REPO_REL_PATH must both be specified!"
 				)
 		else()
-			# check if this repository has been downloaded via OrangesFetchRepository... TO DO -
-			# check branch...?
-
+			# check if this repository has been downloaded via OrangesFetchRepository...
 			if(ORANGES_ARG_PACKAGE_NAME)
 				if(${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR)
 					set (git_repo_file_location

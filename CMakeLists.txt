@@ -32,6 +32,7 @@ set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
 set (Oranges_SKIP_PKGCONFIG ON)
+set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
 
 include (OrangesDefaultProjectSettings)
 
@@ -53,6 +54,8 @@ target_link_libraries (Oranges INTERFACE Oranges::OrangesDefaultTarget)
 oranges_export_alias_target (Oranges Oranges)
 
 #
+
+include (OrangesDefaultInstallSettings)
 
 oranges_create_doxygen_target (
 	TARGET

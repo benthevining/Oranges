@@ -77,6 +77,8 @@ Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - GITHUB_USERNAME
 - GITHUB_ACCESS_TOKEN
+- GITLAB_USERNAME
+- GITLAB_PASSWORD
 - BITBUCKET_USERNAME
 - BITBUCKET_PASSWORD
 
@@ -121,25 +123,11 @@ function(oranges_fetch_repository)
 	if(ORANGES_ARG_GIT_REPOSITORY)
 		set (git_repo_flag "${ORANGES_ARG_GIT_REPOSITORY}")
 	elseif(ORANGES_ARG_GITHUB_REPOSITORY)
-		if(DEFINED ENV{GITHUB_USERNAME} AND DEFINED ENV{GITHUB_ACCESS_TOKEN})
-			set (
-				git_repo_flag
-				"https://$ENV{GITHUB_USERNAME}:$ENV{GITHUB_ACCESS_TOKEN}@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git"
-				)
-		else()
-			set (git_repo_flag "https://git@github.com/${ORANGES_ARG_GITHUB_REPOSITORY}.git")
-		endif()
+		_oranges_set_git_repo_flag (GITHUB github.com "${ORANGES_ARG_GITHUB_REPOSITORY}")
 	elseif(ORANGES_ARG_GITLAB_REPOSITORY)
-		set (git_repo_flag "https://gitlab.com/${ORANGES_ARG_GITLAB_REPOSITORY}.git")
+		_oranges_set_git_repo_flag (GITLAB gitlab.com "${ORANGES_ARG_GITHUB_REPOSITORY}")
 	elseif(ORANGES_ARG_BITBUCKET_REPOSITORY)
-		if(DEFINED ENV{BITBUCKET_USERNAME} AND DEFINED ENV{BITBUCKET_PASSWORD})
-			set (
-				git_repo_flag
-				"https://$ENV{BITBUCKET_USERNAME}:$ENV{BITBUCKET_PASSWORD}@bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git"
-				)
-		else()
-			set (git_repo_flag "https://bitbucket.org/${ORANGES_ARG_BITBUCKET_REPOSITORY}.git")
-		endif()
+		_oranges_set_git_repo_flag (BITBUCKET bitbucket.org "${ORANGES_ARG_GITHUB_REPOSITORY}")
 	else()
 		message (
 			FATAL_ERROR
@@ -190,6 +178,17 @@ function(oranges_fetch_repository)
 	set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${pkg_source_dir}" PARENT_SCOPE)
 	set ("${ORANGES_ARG_NAME}_BINARY_DIR" "${pkg_bin_dir}" PARENT_SCOPE)
 endfunction()
+
+#
+
+macro(_oranges_set_git_repo_flag kind baseUrl repoID)
+	if(DEFINED ENV{${kind}_USERNAME} AND DEFINED ENV{${kind}_PASSWORD})
+		set (git_repo_flag
+			 "https://$ENV{${kind}_USERNAME}:$ENV{${kind}_PASSWORD}@${baseUrl}/${repoID}.git")
+	else()
+		set (git_repo_flag "https://${baseUrl}/${repoID}.git")
+	endif()
+endmacro()
 
 #
 

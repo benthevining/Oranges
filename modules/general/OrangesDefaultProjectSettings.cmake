@@ -31,7 +31,6 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesDefaultCMakeSettings)
 include (OrangesDocsBuildConfig)
-include (OrangesDefaultInstallSettings)
 
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesWipeCacheTarget)

@@ -19,11 +19,12 @@ When this module is included, it creates a target that generates a png image of 
 
 Inclusion style: Once globally, preferably from the top-level project
 
+Input variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE : if set, the generated png image will be copied to this folder.
-The use case is to commit the dependency graph image to the source tree. Defaults to ${CMAKE_SOURCE_DIR}/util.
 - ORANGES_DOC_OUTPUT_DIR : The directory where the image will be generated. Defaults to ${CMAKE_SOURCE_DIR}/doc.
 
 
@@ -41,6 +42,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
+include (LemonsFileUtils)
 
 oranges_file_scoped_message_context ("OrangesGraphVizConfig")
 
@@ -59,11 +61,13 @@ if(NOT ORANGES_DOT)
 	return ()
 endif()
 
-set (ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE "${CMAKE_SOURCE_DIR}/util"
-	 CACHE PATH "Location within the source tree to store the generated dependency graph image")
-
-set (ORANGES_DOC_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/doc"
-	 CACHE PATH "Location to output the generated documentation files")
+if("${${PROJECT_NAME}_DOC_OUTPUT_DIR}" STREQUAL "")
+	set (ORANGES_DOC_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/doc"
+		 CACHE PATH "Location to output the generated documentation files")
+else()
+	set (ORANGES_DOC_OUTPUT_DIR "${${PROJECT_NAME}_DOC_OUTPUT_DIR}"
+		 CACHE PATH "Location to output the generated documentation files")
+endif()
 
 set (dot_file_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot")
 set (graph_image_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
@@ -90,16 +94,22 @@ add_custom_command (
 
 set_target_properties (DependencyGraph PROPERTIES ADDITIONAL_CLEAN_FILES "${dot_file_output}")
 
-if(ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE)
+if(NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
+
+	set (image_dest "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}")
+
+	lemons_make_path_absolute (VAR image_dest BASE_DIR "${PROJECT_SOURCE_DIR}")
+
 	add_custom_command (
 		TARGET DependencyGraph
 		POST_BUILD
-		COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${graph_image_output}"
-				"${ORANGES_DEPS_GRAPH_OUTPUT_TO_SOURCE}"
+		COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${graph_image_output}" "${image_dest}"
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 		DEPENDS "${graph_image_output}"
 		COMMENT "Copying generated dependency graph image to source tree..."
 		VERBATIM USES_TERMINAL)
+
+	unset (image_dest)
 endif()
 
 install (FILES "${graph_image_output}" "${dot_file_output}" TYPE INFO OPTIONAL
