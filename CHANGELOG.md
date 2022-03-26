@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [1.28.3](http://github.com/benthevining/Oranges/compare/v1.28.2...v1.28.3) (2022-03-26)
+
+
+### Bug Fixes
+
+* fixing bumpversion config ([a435422](http://github.com/benthevining/Oranges/commit/a435422c4e3127944f132610b0edd39947b34e70))
+
 ### [1.28.2](http://github.com/benthevining/Oranges/compare/v1.28.1...v1.28.2) (2022-03-26)
 
 
