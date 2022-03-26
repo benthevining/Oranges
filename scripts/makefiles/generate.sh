@@ -17,8 +17,4 @@ ORANGES_ROOT="$SCRIPT_DIR/../.."
 
 OUTPUT_FILE="$ORANGES_ROOT/Makefile"
 
-if [ -f "$OUTPUT_FILE" ]; then
-	rm -rf "$OUTPUT_FILE"
-fi
-
 cmake -D PROJECT_NAME=ORANGES -D "OUT_FILE=$OUTPUT_FILE" -P "$SCRIPT_DIR/generate_makefile.cmake"

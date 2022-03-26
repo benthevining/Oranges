@@ -14,13 +14,9 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 #
 
-function(require_script_argument inputVar)
-	if(NOT inputVar)
-		message (FATAL_ERROR "Required input variable ${inputVar} is not defined!")
-	endif()
-endfunction()
-
-require_script_argument (PROJECT_NAME)
+if(NOT PROJECT_NAME)
+	message (FATAL_ERROR "Required input variable PROJECT_NAME is not defined!")
+endif()
 
 if(OUT_FILE)
 	cmake_path (IS_ABSOLUTE OUT_FILE is_abs_path)
@@ -30,6 +26,10 @@ if(OUT_FILE)
 	endif()
 else()
 	set (OUT_FILE "${CMAKE_CURRENT_LIST_DIR}/Makefile")
+endif()
+
+if(EXISTS "${OUT_FILE}")
+	file (REMOVE "${OUT_FILE}")
 endif()
 
 #
