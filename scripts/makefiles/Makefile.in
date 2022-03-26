@@ -16,7 +16,7 @@ export VERBOSE ?= 1
 # program aliases
 CMAKE ?= cmake
 CTEST ?= ctest
-RM ?= $(CMAKE) -E rm -rf
+RM = $(CMAKE) -E rm -rf # force this one to use CMake
 PRECOMMIT ?= pre-commit
 GIT ?= git
 CONAN ?= conan
