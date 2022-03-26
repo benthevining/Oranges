@@ -1,5 +1,13 @@
 # Oranges changelog
 
+### [1.28.1](http://github.com/benthevining/Oranges/compare/v1.28.0...v1.28.1) (2022-03-26)
+
+
+### Bug Fixes
+
+* fixed bug in makefile template ([092f039](http://github.com/benthevining/Oranges/commit/092f039e45ff1ba91f70ead7c77fbf4a63e01a55))
+* fixing makefile script ([65cfd96](http://github.com/benthevining/Oranges/commit/65cfd96254f701e62cf9ba5adb83dbdab14eb442))
+
 ## [1.28.0](http://github.com/benthevining/Oranges/compare/v1.27.0...v1.28.0) (2022-03-21)
 
 
