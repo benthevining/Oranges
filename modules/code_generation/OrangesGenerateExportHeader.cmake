@@ -33,7 +33,6 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
-include (GenerateExportHeader)
 
 add_library (OrangesABIControlledLibrary INTERFACE)
 
@@ -51,6 +50,10 @@ mark_as_advanced (FORCE ORANGES_REMOVE_DEPRECATED_CODE)
 #
 
 function(oranges_generate_export_header)
+
+	# NB this include must be in this function's scope, to prevent bugs with this module's
+	# variables!
+	include (GenerateExportHeader)
 
 	oranges_add_function_message_context ()
 
