@@ -1,5 +1,13 @@
 # Oranges changelog
 
+### [1.28.2](http://github.com/benthevining/Oranges/compare/v1.28.1...v1.28.2) (2022-03-26)
+
+
+### Bug Fixes
+
+* fixed GenerateExportHeader issue ([b57f649](http://github.com/benthevining/Oranges/commit/b57f649c42c83490c80ecf9f2fc0e234c94e63e7))
+* fixing bumpversion regex ([35dfd30](http://github.com/benthevining/Oranges/commit/35dfd306c5d3860a763af90aa5244d3ebd94e027))
+
 ### [1.28.1](http://github.com/benthevining/Oranges/compare/v1.28.0...v1.28.1) (2022-03-26)
 
 
