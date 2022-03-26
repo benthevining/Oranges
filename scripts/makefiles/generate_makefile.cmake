@@ -34,15 +34,6 @@ endif()
 
 #
 
-#[[
-OPTIONS TO ADD:
-- turn precommit, conan, docs tasks on/off
-- CMake use presets (specify names) or default cmd line (specify target(s))
-- custom init step(s)
-]]
-
-#
-
 set (input_file "${CMAKE_CURRENT_LIST_DIR}/Makefile.in")
 
 if(NOT EXISTS "${input_file}")

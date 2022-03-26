@@ -13,9 +13,10 @@
 # ======================================================================================
 
 BASEDIR=$(dirname "$0")
+ORANGES_ROOT="$BASEDIR/../.."
 
 CMAKE_SCRIPT="$BASEDIR/generate_makefile.cmake"
-OUTPUT_FILE="$BASEDIR/../../Makefile"
+OUTPUT_FILE="$ORANGES_ROOT/Makefile"
 
 if ! [ -f "$CMAKE_SCRIPT" ]; then
 	curl -o "$CMAKE_SCRIPT" "https://raw.githubusercontent.com/benthevining/Oranges/main/scripts/makefiles/generate_makefile.cmake"

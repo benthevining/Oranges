@@ -216,7 +216,9 @@ scripts/dependencies/scripts/shim_template.cmake benthevining
 scripts/download_file.cmake benthevining
 scripts/download_repository.cmake benthevining
 scripts/install_packages.cmake benthevining
+scripts/makefiles/Makefile.in benthevining
 scripts/makefiles/generate.sh benthevining
+scripts/makefiles/generate_makefile.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 toolchains/android.cmake benthevining

@@ -15,7 +15,8 @@ export VERBOSE ?= 1
 
 # program aliases
 CMAKE ?= cmake
-RM = $(CMAKE) -E rm -rf
+CTEST ?= ctest
+RM ?= $(CMAKE) -E rm -rf
 PRECOMMIT ?= pre-commit
 GIT ?= git
 CONAN ?= conan
@@ -39,7 +40,7 @@ else # Linux
 	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell grep -c ^processor /proc/cpuinfo)
 	SUDO ?= sudo
 
-	# use GCC 10+ on Linux
+	# use GCC 10 on Linux
 	export CC=gcc-10
 	export CXX=g++-10
 endif
@@ -63,9 +64,11 @@ init:  ## Initializes the workspace and installs all dependencies
 
 #
 
-.PHONY: config
-config: ## configure CMake
+$(BUILDS):
 	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --preset default
+
+.PHONY: config
+config: $(BUILDS) ## configure CMake
 
 #
 
@@ -91,7 +94,7 @@ pack: build ## Creates a CPack installer
 
 .PHONY: test
 test: build ## runs all tests
-	@cd $(@PROJECT_NAME@_ROOT) && ctest --preset default
+	@cd $(@PROJECT_NAME@_ROOT) && $(CTEST) --preset default
 
 #
 
