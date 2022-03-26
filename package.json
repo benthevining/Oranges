@@ -114,7 +114,8 @@
           "assets": [
             "CHANGELOG.md",
             ".bumpversion.cfg",
-            "CMakeLists.txt"
+            "CMakeLists.txt",
+            "conanfile.py"
           ]
         }
       ],
