@@ -16,13 +16,15 @@ export VERBOSE ?= 1
 # program aliases
 CMAKE ?= cmake
 CTEST ?= ctest
-RM = $(CMAKE) -E rm -rf # force this one to use CMake
+RM = $(CMAKE) -E rm -rf  # force this one to use CMake
 PRECOMMIT ?= pre-commit
 GIT ?= git
+ASDF ?= asdf
 CONAN ?= conan
 
 # directory aliases
 BUILDS ?= Builds
+BUILD_DIR ?= $(@PROJECT_NAME@_ROOT)/$(BUILDS)
 DOCS ?= doc
 CACHE ?= Cache
 DEPS_GRAPH ?= deps_graph
@@ -60,7 +62,10 @@ help:  ## Print this message
 .PHONY: init
 init:  ## Initializes the workspace and installs all dependencies
 	@chmod +x $(@PROJECT_NAME@_ROOT)/scripts/alphabetize_codeowners.py
-	@cd $(@PROJECT_NAME@_ROOT) && $(PRECOMMIT) install --install-hooks --overwrite && $(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg
+	@cd $(@PROJECT_NAME@_ROOT) && \
+		$(PRECOMMIT) install --install-hooks --overwrite && \
+		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg && \
+		$(ASDF) install
 
 #
 
@@ -84,11 +89,11 @@ conan: ## Builds the Conan package
 
 .PHONY: install
 install: build ## runs CMake install
-	@cd $(@PROJECT_NAME@_ROOT) && $(SUDO) $(CMAKE) --install $(BUILDS)
+	$(SUDO) $(CMAKE) --install $(BUILD_DIR)
 
 .PHONY: pack
 pack: build ## Creates a CPack installer
-	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --build $(BUILDS) --target package
+	@$(CMAKE) --build $(BUILD_DIR) --target package
 
 #
 
@@ -116,14 +121,22 @@ docs: config ## Builds the documentation
 
 .PHONY: uninstall
 uninstall: ## Runs uninstall script
-	@cd $(@PROJECT_NAME@_ROOT) && $(SUDO) $(CMAKE) -P $(BUILDS)/uninstall.cmake
+	@if [ -d $(BUILD_DIR) ]; then \
+		echo "Uninstalling..."; \
+		$(SUDO) $(CMAKE) -P $(BUILD_DIR)/uninstall.cmake; \
+	else \
+		echo "Cannot uninstall, builds directory doesn't exist!"; \
+	fi
 
 .PHONY: clean
 clean: ## Cleans the source tree
 	@echo "Cleaning..."
+	@if [ -d $(BUILD_DIR) ]; then $(CMAKE) --build $(BUILD_DIR) --target clean; fi
 	@cd $(@PROJECT_NAME@_ROOT) && $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
 
 .PHONY: wipe
-wipe: ## Wipes the cache of downloaded dependencies
+wipe: clean ## Wipes the cache of downloaded dependencies
 	@echo "Wiping cache..."
-	@cd $(@PROJECT_NAME@_ROOT) && $(SUDO) $(CMAKE) -P $(BUILDS)/wipe_cache.cmake
+	@if [ -d $(BUILD_DIR) ]; then \
+		$(SUDO) $(CMAKE) -P $(BUILD_DIR)/wipe_cache.cmake; \
+	fi

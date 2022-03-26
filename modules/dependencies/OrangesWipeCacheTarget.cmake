@@ -51,9 +51,13 @@ set (configured_script "${CMAKE_BINARY_DIR}/wipe_cache.cmake")
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/wipe_cache.cmake" "${configured_script}" @ONLY)
 
+find_program (PROGRAM_SUDO sudo)
+
+mark_as_advanced (FORCE PROGRAM_SUDO)
+
 add_custom_target (
 	wipe_cache
-	COMMAND "${CMAKE_COMMAND} -P ${configured_script}"
+	COMMAND "${PROGRAM_SUDO}" "${CMAKE_COMMAND} -P ${configured_script}"
 	COMMENT "Wiping cache..."
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM USES_TERMINAL)
