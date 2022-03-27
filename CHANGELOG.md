@@ -1,5 +1,16 @@
 # Oranges changelog
 
+## [2.0.0](http://github.com/benthevining/Oranges/compare/v1.28.3...v2.0.0) (2022-03-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* all modules have been renamed with Oranges prefix, for consistency
+
+Precommit-Verified: 3339c30f14b92f30409ce83a43cc890165b54daf43819ad99c490924fd73ffde
+
+* renaming all modules with Oranges prefix ([c0336dc](http://github.com/benthevining/Oranges/commit/c0336dc5770b28132948d8fed4b3a92263efd2c5))
+
 ### [1.28.3](http://github.com/benthevining/Oranges/compare/v1.28.2...v1.28.3) (2022-03-26)
 
 
