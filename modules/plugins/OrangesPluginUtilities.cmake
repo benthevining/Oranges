@@ -38,7 +38,8 @@ Configure a JUCE plugin target
 .. command:: lemons_configure_juce_plugin
 
 	lemons_configure_juce_plugin (TARGET <target>
-								  [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>])
+								  [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>]
+								  [CLAP_FORMAT] [CLAP_FEATURES <features...>])
 
 Forwards `${ARGN}` to lemons_configure_juce_target.
 
@@ -55,7 +56,7 @@ include (OrangesJuceUtilities)
 include (OrangesCmakeDevTools)
 include (lemons_AggregateTargets)
 
-oranges_file_scoped_message_context ("LemonsPluginUtilities")
+oranges_file_scoped_message_context ("OrangesPluginUtilities")
 
 option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF)
 
@@ -127,7 +128,7 @@ function(lemons_configure_juce_plugin)
 	lemons_configure_juce_target (${ARGN})
 
 	set (oneValueArgs TARGET AAX_PAGETABLE_FILE AAX_GUID)
-	cmake_parse_arguments (LEMONS_PLUGIN "" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (LEMONS_PLUGIN "CLAP_FORMAT" "${oneValueArgs}" "CLAP_FEATURES" ${ARGN})
 
 	oranges_assert_target_argument_is_target (LEMONS_PLUGIN)
 
@@ -162,5 +163,14 @@ function(lemons_configure_juce_plugin)
 
 	_lemons_add_extra_pluginformat_modules (${LEMONS_PLUGIN_TARGET}_Standalone)
 	_lemons_add_extra_pluginformat_modules (${LEMONS_PLUGIN_TARGET}_AUv3)
+
+	if(LEMONS_PLUGIN_CLAP_FORMAT OR LEMONS_PLUGIN_CLAP_FEATURES)
+		include (OrangesClapFormat)
+
+		get_required_target_property (clapID "${LEMONS_PLUGIN_TARGET}" BUNDLE_ID)
+
+		clap_juce_extensions_plugin (TARGET "${LEMONS_PLUGIN_TARGET}" CLAP_ID "${clapID}"
+									 CLAP_FEATURES "${LEMONS_PLUGIN_CLAP_FEATURES}")
+	endif()
 
 endfunction()
