@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsDefaultPlatformSettings
+OrangesDefaultPlatformSettings
 -------------------------
 
 Default settings and configuration for a CMake build on the OS you're currently running.

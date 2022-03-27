@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsJUCEUtilities
+OrangesJUCEUtilities
 -------------------------
 
 General JUCE CMake utilities.
@@ -51,15 +51,15 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsDefaultProjectSettings)
+include (OrangesDefaultProjectSettings)
 include (OrangesDefaultTarget)
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 #
 
 find_package (JUCE REQUIRED)
 
-include (LemonsAssetsHelpers)
+include (OrangesAssetsHelpers)
 
 #
 

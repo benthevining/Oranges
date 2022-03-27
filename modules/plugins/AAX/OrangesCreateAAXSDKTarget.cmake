@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsCreateAAXSDKTarget
+OrangesCreateAAXSDKTarget
 -------------------------
 
 This module creates a target to build the AAX SDK.
@@ -31,7 +31,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 lemons_warn_if_not_processing_project ()
 

@@ -29,9 +29,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsFileUtils)
-include (LemonsJuceUtilities)
-include (LemonsCmakeDevTools)
+include (OrangesFileUtils)
+include (OrangesJuceUtilities)
+include (OrangesCmakeDevTools)
 
 #
 

@@ -36,7 +36,8 @@
       "C0301",
       "C0307",
       "E1126",
-      "R0915"
+      "R0915",
+      "E1120"
     ],
     "function_pattern": ".*",
     "global_var_pattern": ".*",
@@ -45,7 +46,7 @@
     "local_var_pattern": ".*",
     "macro_pattern": ".*",
     "max_arguments": 5,
-    "max_branches": 20,
+    "max_branches": 25,
     "max_conditionals_custom_parser": 2,
     "max_localvars": 15,
     "max_returns": 6,

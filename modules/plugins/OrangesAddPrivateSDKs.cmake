@@ -29,11 +29,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
+include (OrangesFetchRepository)
 
 oranges_file_scoped_message_context ("LemonsAddPrivateSDKs")
-
-include (OrangesFetchRepository)
 
 if(DEFINED ENV{LEMONS_PRIVATE_SDKS})
 	file (REAL_PATH "$ENV{LEMONS_PRIVATE_SDKS}" FETCHCONTENT_SOURCE_DIR_PrivateSDKs EXPAND_TILDE)

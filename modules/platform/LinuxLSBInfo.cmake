@@ -25,7 +25,7 @@ Output variables
 
 include_guard (GLOBAL)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 oranges_file_scoped_message_context ("LinuxLSBInfo")
 

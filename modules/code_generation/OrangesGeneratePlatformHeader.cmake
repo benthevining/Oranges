@@ -35,7 +35,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 option (ORANGES_DISABLE_SIMD
 		"Disable all SIMD macros in generated platform headers (ie, set them all to 0)" OFF)

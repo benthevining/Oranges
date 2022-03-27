@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsAAXUtils
+OrangesAAXUtils
 -------------------------
 
 Utilities for AAX plugins.
@@ -39,10 +39,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCreateAAXSDKTarget)
-include (LemonsFileUtils)
-include (LemonsJuceUtilities)
-include (LemonsCmakeDevTools)
+include (OrangesCreateAAXSDKTarget)
+include (OrangesFileUtils)
+include (OrangesJuceUtilities)
+include (OrangesCmakeDevTools)
 
 oranges_file_scoped_message_context ("LemonsAAXUtils")
 

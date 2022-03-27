@@ -61,7 +61,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 function(lemons_json_array_to_list)
 

@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsAssetsHelpers
+OrangesAssetsHelpers
 -------------------------
 
 Utilities for adding binary data targets to JUCE projects.
@@ -38,9 +38,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsJuceUtilities)
-include (LemonsFileUtils)
-include (LemonsCmakeDevTools)
+include (OrangesJuceUtilities)
+include (OrangesFileUtils)
+include (OrangesCmakeDevTools)
 
 lemons_warn_if_not_processing_project ()
 

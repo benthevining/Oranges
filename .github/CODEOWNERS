@@ -174,12 +174,14 @@ modules/internal/BVBrandFlags.cmake benthevining
 modules/internal/LemonsCmakeDevTools.cmake benthevining
 modules/internal/LemonsDeprecations.cmake benthevining
 modules/internal/OrangesConfigurationPostfixes.cmake benthevining
+modules/internal/OrangesDeprecations.cmake benthevining
 modules/internal/OrangesSetUpCache.cmake benthevining
 modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
 modules/juce/LemonsAssetsHelpers.cmake benthevining
 modules/juce/LemonsJuceModuleUtilities.cmake benthevining
 modules/juce/LemonsJuceUtilities.cmake benthevining
+modules/juce/OrangesAppUtilities.cmake benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
 modules/platform/LinuxLSBInfo.cmake benthevining
 modules/platform/scripts/lemons_ios_settings.cmake benthevining
@@ -189,6 +191,7 @@ modules/platform/scripts/lemons_windows_settings.cmake benthevining
 modules/plugins/AAX/LemonsAAXSigning.cmake benthevining
 modules/plugins/AAX/LemonsAAXUtils.cmake benthevining
 modules/plugins/AAX/LemonsCreateAAXSDKTarget.cmake benthevining
+modules/plugins/AAX/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/plugins/CallForEachPluginFormat.cmake benthevining
 modules/plugins/LemonsAddPrivateSDKs.cmake benthevining
 modules/plugins/LemonsPluginSigning.cmake benthevining

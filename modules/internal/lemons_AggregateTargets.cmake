@@ -14,7 +14,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 add_custom_target (LEMONS_ALL_APPS COMMENT "Building all apps...")
 add_custom_target (LEMONS_ALL_PLUGINS COMMENT "Building all plugins...")

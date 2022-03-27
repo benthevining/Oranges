@@ -91,7 +91,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 option (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
 		"Try local find_package before fetching dependencies from git" OFF)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 include (OrangesSetUpCache)
 include (FetchContent)
 

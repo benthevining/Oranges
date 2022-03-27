@@ -14,7 +14,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 # if("${CMAKE_ROLE}" STREQUAL "PROJECT")
 define_property (

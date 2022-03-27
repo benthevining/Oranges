@@ -43,8 +43,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
-include (LemonsFileUtils)
+include (OrangesCmakeDevTools)
+include (OrangesFileUtils)
 
 oranges_file_scoped_message_context ("OrangesDoxygenConfig")
 

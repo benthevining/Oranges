@@ -16,7 +16,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (FeatureSummary)
 include (FindPackageMessage)
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 option (FIND_PACKAGE_TRY_PKGCONFIG "Try using pkgconfig to locate libraries" ON)
 

@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsPluginUtilities
+OrangesPluginUtilities
 -------------------------
 
 Utilities for audio plugins.
@@ -51,8 +51,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsJuceUtilities)
-include (LemonsCmakeDevTools)
+include (OrangesJuceUtilities)
+include (OrangesCmakeDevTools)
 include (lemons_AggregateTargets)
 
 oranges_file_scoped_message_context ("LemonsPluginUtilities")
@@ -63,11 +63,11 @@ mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
 
 if(LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs OR DEFINED
 																		 ENV{LEMONS_PRIVATE_SDKS})
-	include (LemonsAddPrivateSDKs)
+	include (OrangesAddPrivateSDKs)
 endif()
 
 if(LEMONS_AAX_SDK_PATH)
-	include (LemonsAAXUtils)
+	include (OrangesAAXUtils)
 endif()
 
 lemons_warn_if_not_processing_project ()

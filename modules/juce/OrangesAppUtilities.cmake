@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-LemonsAppUtilities
+OrangesAppUtilities
 -------------------------
 
 Utilities for configuring JUCE apps.
@@ -44,9 +44,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (LemonsJuceUtilities)
+include (OrangesJuceUtilities)
 include (lemons_AggregateTargets)
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 
 lemons_warn_if_not_processing_project ()
 

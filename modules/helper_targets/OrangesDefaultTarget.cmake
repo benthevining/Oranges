@@ -36,10 +36,10 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesDefaultWarnings)
-include (LemonsCmakeDevTools)
+include (OrangesCmakeDevTools)
 include (OrangesGeneratorExpressions)
 include (OrangesConfigurationPostfixes)
-include (LemonsDefaultPlatformSettings)
+include (OrangesDefaultPlatformSettings)
 
 #
 

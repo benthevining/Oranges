@@ -23,8 +23,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (LemonsDefaultPlatformSettings)
-include (LemonsCmakeDevTools)
+include (OrangesDefaultPlatformSettings)
+include (OrangesCmakeDevTools)
 include (OrangesDefaultTarget)
 include (CMakePackageConfigHelpers)
 include (GNUInstallDirs)
