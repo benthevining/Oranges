@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.1.0](http://github.com/benthevining/Oranges/compare/v2.0.0...v2.1.0) (2022-03-27)
+
+
+### Features
+
+* added CLAP plugin format integration ([e51a70f](http://github.com/benthevining/Oranges/commit/e51a70fbea5eff39274f04ff5be4cff943e4a810))
+
 ## [2.0.0](http://github.com/benthevining/Oranges/compare/v1.28.3...v2.0.0) (2022-03-27)
 
 

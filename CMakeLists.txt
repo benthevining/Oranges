@@ -16,7 +16,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 project (
 	Oranges
-	VERSION 2.0.0
+	VERSION 2.1.0
 	DESCRIPTION "CMake modules, scripts, and utilities"
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)
