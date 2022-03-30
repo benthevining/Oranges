@@ -1,4 +1,4 @@
-FROM ubuntu:bionic AS base
+FROM ubuntu:focal AS base
 
 FROM base AS dev_machine
 
