@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.3.0](http://github.com/benthevining/Oranges/compare/v2.2.0...v2.3.0) (2022-03-30)
+
+
+### Features
+
+* added a find module for ableton link ([f37f876](http://github.com/benthevining/Oranges/commit/f37f876fbbb4fe82d4f8753e421d4fea7c4ce7d8))
+
 ## [2.2.0](http://github.com/benthevining/Oranges/compare/v2.1.1...v2.2.0) (2022-03-30)
 
 
