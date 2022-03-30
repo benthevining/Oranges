@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.2.0](http://github.com/benthevining/Oranges/compare/v2.1.1...v2.2.0) (2022-03-30)
+
+
+### Features
+
+* added a find module for FFTW ([2d0dde1](http://github.com/benthevining/Oranges/commit/2d0dde1379fa8bedc54685623c8ae8b2524cd0d3))
+
 ### [2.1.1](http://github.com/benthevining/Oranges/compare/v2.1.0...v2.1.1) (2022-03-30)
 
 
