@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.1.1](http://github.com/benthevining/Oranges/compare/v2.1.0...v2.1.1) (2022-03-30)
+
+
+### Bug Fixes
+
+* **deps:** pin dependencies ([2e35d18](http://github.com/benthevining/Oranges/commit/2e35d188dff62300b6f7baaeab2456262fa11f07))
+
 ## [2.1.0](http://github.com/benthevining/Oranges/compare/v2.0.0...v2.1.0) (2022-03-27)
 
 
