@@ -57,15 +57,6 @@ oranges_export_alias_target (Oranges Oranges)
 
 include (OrangesDefaultInstallSettings)
 
-oranges_create_doxygen_target (
-	TARGET
-	OrangesDoxygen
-	INPUT_PATHS
-	modules
-	toolchains
-	FILE_PATTERNS
-	*.cmake)
-
 #
 
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"

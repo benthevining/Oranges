@@ -15,7 +15,6 @@
       "configurePreset": "default",
       "name": "docs",
       "targets": [
-        "OrangesDoxygen",
         "DependencyGraph"
       ]
     }

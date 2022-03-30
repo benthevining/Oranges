@@ -29,6 +29,47 @@ Generating a platform header for a target
 									  [LANGUAGE <languageToUseForTestFeastures>]
 									  [INTERFACE])
 
+Generates a header file containing various platform identifying macros for the current target platform.
+
+The generated file will contain the following macros, where `baseName` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
+
+OS type macros:
+<baseName>_UNIX
+<baseName>_POSIX
+<baseName>_WINDOWS
+<baseName>_MINGW
+<baseName>_LINUX
+<baseName>_APPLE
+<baseName>_OSX
+<baseName>_IOS
+<baseName>_ANDROID
+<baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'Windows', 'Linux', or 'Android'
+
+Compiler type macros:
+<baseName>_CLANG
+<baseName>_GCC
+<baseName>_MSVC
+<baseName>_INTEL_COMPILER
+<baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
+
+Processor and architecture macros:
+<baseName>_ARM
+<baseName>_INTEL
+<baseName>_CPU_TYPE - a string literal describing the CPU. Either 'ARM', 'Intel', or 'Unknown'
+<baseName>_32BIT
+<baseName>_64BIT
+<baseName>_BIG_ENDIAN
+<baseName>_LITTLE_ENDIAN
+
+SIMD instruction capabilities
+<baseName>_ARM_NEON
+<baseName>_AVX
+<baseName>_AVX512
+<baseName>_SSE
+
+Build type
+<baseName>_DEBUG
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
@@ -55,22 +96,42 @@ macro(_oranges_plat_header_set_option inVar cacheVar)
 endmacro()
 
 _oranges_plat_header_set_option (UNIX ORANGES_UNIX)
-_oranges_plat_header_set_option (WIN32 ORANGES_WIN)
 _oranges_plat_header_set_option (MINGW ORANGES_MINGW)
-_oranges_plat_header_set_option (ANDROID ORANGES_ANDROID)
 _oranges_plat_header_set_option (APPLE ORANGES_APPLE)
-_oranges_plat_header_set_option (IOS ORANGES_IOS)
 
 if(APPLE AND NOT IOS)
 	set (ORANGES_MACOSX 1 CACHE INTERNAL "")
+	set (ORANGES_OS_TYPE MacOSX CACHE INTERNAL "")
 else()
 	set (ORANGES_MACOSX 0 CACHE INTERNAL "")
 endif()
 
+if(WIN32)
+	set (ORANGES_WIN 1 CACHE INTERNAL "")
+	set (ORANGES_OS_TYPE Windows CACHE INTERNAL "")
+else()
+	set (ORANGES_WIN 0 CACHE INTERNAL "")
+endif()
+
 if("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
 	set (ORANGES_LINUX 1 CACHE INTERNAL "")
+	set (ORANGES_OS_TYPE Linux CACHE INTERNAL "")
 else()
 	set (ORANGES_LINUX 0 CACHE INTERNAL "")
+endif()
+
+if(ANDROID)
+	set (ORANGES_ANDROID 1 CACHE INTERNAL "")
+	set (ORANGES_OS_TYPE Android CACHE INTERNAL "")
+else()
+	set (ORANGES_ANDROID 0 CACHE INTERNAL "")
+endif()
+
+if(IOS)
+	set (ORANGES_IOS 1 CACHE INTERNAL "")
+	set (ORANGES_OS_TYPE iOS CACHE INTERNAL "")
+else()
+	set (ORANGES_IOS 0 CACHE INTERNAL "")
 endif()
 
 cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)
@@ -125,6 +186,14 @@ else()
 	# ORANGES_ARM, ORANGES_INTEL
 endif()
 
+if(ORANGES_ARM)
+	set (ORANGES_CPU_TYPE "ARM" CACHE INTERNAL "")
+elseif(ORANGES_INTEL)
+	set (ORANGES_CPU_TYPE "Intel" CACHE INTERNAL "")
+else()
+	set (ORANGES_CPU_TYPE "Unknown" CACHE INTERNAL "")
+endif()
+
 if(APPLE OR ANDROID OR MINGW OR ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux"))
 	set (ORANGES_POSIX 1 CACHE INTERNAL "")
 else()
@@ -152,6 +221,8 @@ function(oranges_generate_platform_header)
 		set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
 	endif()
 
+	string (TOUPPER "${ORANGES_ARG_BASE_NAME}" ORANGES_ARG_BASE_NAME)
+
 	if(NOT ORANGES_ARG_HEADER)
 		set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_platform.h")
 	endif()
@@ -175,15 +246,21 @@ function(oranges_generate_platform_header)
 	macro(_oranges_plat_header_compiler_id_opt compiler cacheVar)
 		if("${compilerID}" MATCHES "${compiler}")
 			set (${cacheVar} 1)
+			set (ORANGES_COMPILER_TYPE "${compiler}")
 		else()
 			set (${cacheVar} 0)
 		endif()
 	endmacro()
 
 	_oranges_plat_header_compiler_id_opt ("Clang" ORANGES_CLANG)
-	_oranges_plat_header_compiler_id_opt ("GNU|GCC" ORANGES_GCC)
+	_oranges_plat_header_compiler_id_opt ("GNU" ORANGES_GCC)
+	_oranges_plat_header_compiler_id_opt ("GCC" ORANGES_GCC)
 	_oranges_plat_header_compiler_id_opt ("MSVC" ORANGES_MSVC)
 	_oranges_plat_header_compiler_id_opt ("Intel" ORANGES_INTEL_COMPILER)
+
+	if(NOT ORANGES_COMPILER_TYPE)
+		set (ORANGES_COMPILER_TYPE "Unknown")
+	endif()
 
 	if(CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER)
 		set (byte_order "${CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER}")
