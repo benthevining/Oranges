@@ -35,6 +35,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+if(TARGET Oranges::OrangesDefaultTarget)
+	return ()
+endif()
+
 include (OrangesDefaultWarnings)
 include (OrangesCmakeDevTools)
 include (OrangesGeneratorExpressions)

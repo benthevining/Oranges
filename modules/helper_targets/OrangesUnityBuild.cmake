@@ -28,6 +28,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+if(TARGET Oranges::OrangesUnityBuild)
+	return ()
+endif()
+
 include (OrangesCmakeDevTools)
 
 add_library (OrangesUnityBuild INTERFACE)

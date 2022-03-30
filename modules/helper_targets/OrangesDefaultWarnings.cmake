@@ -28,6 +28,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+if(TARGET Oranges::OrangesDefaultWarnings)
+	return ()
+endif()
+
 add_library (OrangesDefaultWarnings INTERFACE)
 
 target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
@@ -38,6 +42,7 @@ target_compile_options (
 			  -Wcast-align
 			  -Wno-ignored-qualifiers
 			  -Wno-missing-field-initializers
+			  -Woverloaded-virtual
 			  -Wpedantic
 			  -Wuninitialized
 			  -Wunreachable-code
@@ -52,9 +57,8 @@ target_compile_options (
 	INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
 			  -Wno-strict-overflow -Wredundant-decls -Wshadow>>)
 
-target_compile_options (
-	OrangesDefaultWarnings
-	INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:Woverloaded-virtual,-Wzero-as-null-pointer-constant>)
+target_compile_options (OrangesDefaultWarnings
+						INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>)
 
 target_compile_options (
 	OrangesDefaultWarnings
@@ -64,7 +68,10 @@ target_compile_options (
 			  -Wconstant-conversion
 			  -Wextra-semi
 			  -Wint-conversion
+			  -Wnon-virtual-dtor
 			  -Wnullable-to-nonnull-conversion
+			  -Wunused-variable
+			  -Wshadow
 			  -Wshadow-all
 			  -Wshift-sign-overflow
 			  -Wshorten-64-to-32>>)
@@ -72,11 +79,10 @@ target_compile_options (
 set (clang_cxx_flags -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual
 					 -Winconsistent-missing-destructor-override)
 
-target_compile_options (OrangesDefaultWarnings
-						INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_flags}>)
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_flags}>)
+	INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_flags}>
+			  $<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_flags}>)
 
 unset (clang_cxx_flags)
 

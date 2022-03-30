@@ -32,6 +32,12 @@ Targets
 
 include_guard (GLOBAL)
 
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+if(TARGET Oranges::OrangesAllIntegrations)
+	return ()
+endif()
+
 oranges_file_scoped_message_context ("OrangesAllIntegrations")
 
 find_package (ccache QUIET)
