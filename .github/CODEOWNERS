@@ -79,6 +79,7 @@ modules/finders/OrangesFindPackageHelpers.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
+modules/finders/libs/FindJUCE.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
 modules/finders/libs/FindMTS-ESP.cmake benthevining
 modules/finders/package_managers/FindApt.cmake benthevining
