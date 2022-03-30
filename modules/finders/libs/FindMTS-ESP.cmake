@@ -72,8 +72,6 @@ oranges_fetch_repository (
 
 unset (quiet_flag)
 
-set (MTS-ESP_FOUND FALSE)
-
 find_package_default_component_list (Client Master)
 
 # Client
