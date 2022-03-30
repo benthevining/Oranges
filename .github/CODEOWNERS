@@ -134,6 +134,7 @@ modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesFetchRepository.cmake benthevining
 modules/general/OrangesInstallPackages.cmake benthevining
+modules/general/OrangesJsonUtils.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining
 modules/general/OrangesListUtils.cmake benthevining
 modules/general/OrangesUninstallTarget.cmake benthevining
@@ -182,6 +183,7 @@ modules/juce/LemonsAssetsHelpers.cmake benthevining
 modules/juce/LemonsJuceModuleUtilities.cmake benthevining
 modules/juce/LemonsJuceUtilities.cmake benthevining
 modules/juce/OrangesAppUtilities.cmake benthevining
+modules/juce/OrangesAssetsHelpers.cmake benthevining
 modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining
@@ -228,6 +230,7 @@ scripts/makefiles/generate.sh benthevining
 scripts/makefiles/generate_makefile.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
+tests/CMakeLists.txt benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining
