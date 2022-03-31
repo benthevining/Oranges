@@ -208,11 +208,13 @@ function(_oranges_populate_repository pkg_name download_only cmake_options cmake
 		return ()
 	endif()
 
-	message (VERBOSE " -- populating package ${pkg_name} to ${pkg_source_dir}...")
+	message (VERBOSE " -- populating package ${pkg_name}...")
 
 	FetchContent_Populate ("${pkg_name}")
 
 	FetchContent_GetProperties ("${pkg_name}" SOURCE_DIR pkg_source_dir BINARY_DIR pkg_bin_dir)
+
+	message (DEBUG " -- package ${pkg_name} populated to ${pkg_source_dir}")
 
 	if(cmake_subdir)
 		set (pkg_cmakelists "${pkg_source_dir}/${cmake_subdir}/CMakeLists.txt")

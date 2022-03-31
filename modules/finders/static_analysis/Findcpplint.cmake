@@ -17,6 +17,11 @@ Findcpplint
 
 Find the cpplint static analysis tool.
 
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- CPPLINT_IGNORE - list of checks to ignore (accepts regex).
+- CPPLINT_VERBOSITY - verbosity level. Defaults to 0.
+
 Output variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - cpplint_FOUND
@@ -40,11 +45,17 @@ set_package_properties (cpplint PROPERTIES URL "https://github.com/google/styleg
 
 oranges_file_scoped_message_context ("Findcpplint")
 
-set (cpplint_FOUND FALSE)
+set (CPPLINT_IGNORE
+	 "-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo"
+	 CACHE STRING "List of cpplint checks to ignore")
+
+set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
 find_program (PROGRAM_CPPLINT NAMES cpplint)
 
-mark_as_advanced (FORCE PROGRAM_CPPLINT)
+mark_as_advanced (FORCE PROGRAM_CPPLINT CPPLINT_IGNORE CPPLINT_VERBOSITY)
+
+set (cpplint_FOUND FALSE)
 
 if(NOT PROGRAM_CPPLINT)
 	find_package_warning_or_error ("cpplint program cannot be found!")
@@ -63,8 +74,11 @@ add_executable (Google::cpplint ALIAS cpplint)
 
 set (cpplint_FOUND TRUE)
 
-set (CMAKE_CXX_CPPLINT "${PROGRAM_CPPLINT}" CACHE STRING "")
-set (CMAKE_C_CPPLINT "${PROGRAM_CPPLINT}" CACHE STRING "")
+list (JOIN CPPLINT_IGNORE "," CPPLINT_IGNORE)
+
+set (CMAKE_CXX_CPPLINT
+	 "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}" CACHE STRING "")
+set (CMAKE_C_CPPLINT "${CMAKE_CXX_CPPLINT}" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_CPPLINT CMAKE_C_CPPLINT)
 
