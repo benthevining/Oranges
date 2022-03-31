@@ -64,7 +64,8 @@ add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
 set (include-what-you-use_FOUND TRUE)
 
-set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${PROGRAM_INCLUDE_WHAT_YOU_USE}" CACHE STRING "")
+set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+	 "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns" CACHE STRING "")
 
 mark_as_advanced (FORCE CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
 
