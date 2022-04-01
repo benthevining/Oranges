@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.4.0](http://github.com/benthevining/Oranges/compare/v2.3.0...v2.4.0) (2022-04-01)
+
+
+### Features
+
+* added a module to wrap integration of any autotools project ([adf0dcd](http://github.com/benthevining/Oranges/commit/adf0dcd9121a6f9da21ec2c8e86d6c52fe17f607))
+
 ## [2.3.0](http://github.com/benthevining/Oranges/compare/v2.2.0...v2.3.0) (2022-03-30)
 
 
