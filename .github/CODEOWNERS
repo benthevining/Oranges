@@ -186,12 +186,14 @@ modules/juce/LemonsJuceModuleUtilities.cmake benthevining
 modules/juce/LemonsJuceUtilities.cmake benthevining
 modules/juce/OrangesAppUtilities.cmake benthevining
 modules/juce/OrangesAssetsHelpers.cmake benthevining
+modules/juce/OrangesJuceModuleUtilities.cmake benthevining
 modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/CallForEachPluginFormat.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
 modules/platform/LinuxLSBInfo.cmake benthevining
+modules/platform/OrangesDefaultPlatformSettings.cmake benthevining
 modules/platform/scripts/lemons_ios_settings.cmake benthevining
 modules/platform/scripts/lemons_linux_settings.cmake benthevining
 modules/platform/scripts/lemons_macos_settings.cmake benthevining
