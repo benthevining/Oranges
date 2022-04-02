@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.5.0](http://github.com/benthevining/Oranges/compare/v2.4.1...v2.5.0) (2022-04-02)
+
+
+### Features
+
+* added single and double precision components to FFTW find module ([fc85734](http://github.com/benthevining/Oranges/commit/fc857346a862b023a866f39604da3debc0f5c464))
+
 ### [2.4.1](http://github.com/benthevining/Oranges/compare/v2.4.0...v2.4.1) (2022-04-02)
 
 
