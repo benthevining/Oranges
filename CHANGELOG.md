@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.4.1](http://github.com/benthevining/Oranges/compare/v2.4.0...v2.4.1) (2022-04-02)
+
+
+### Bug Fixes
+
+* updating iOS toolchain files to use correct archs ([7f56226](http://github.com/benthevining/Oranges/commit/7f56226eaa1a8568e9e60082de1773d793d32033))
+
 ## [2.4.0](http://github.com/benthevining/Oranges/compare/v2.3.0...v2.4.0) (2022-04-01)
 
 
