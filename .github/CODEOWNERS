@@ -238,6 +238,7 @@ scripts/util.make benthevining
 tests/CMakeLists.txt benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/common/ios_common.cmake benthevining
+toolchains/ios/common/ios_simulator_common.cmake benthevining
 toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining
 toolchains/ios/ios_simulator.cmake benthevining

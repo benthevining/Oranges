@@ -77,7 +77,7 @@ find_package_default_component_list (Client Master)
 # Client
 
 if(NOT TARGET MTSClient)
-	if(Client IN LISTS ${MTS-ESP_FIND_COMPONENTS})
+	if(Client IN LISTS MTS-ESP_FIND_COMPONENTS)
 		find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
 				   DOC "MTS-ESP client sources directory" NO_DEFAULT_PATH)
 
@@ -109,7 +109,7 @@ endif()
 # Master
 
 if(NOT TARGET MTSMaster)
-	if(Master IN LISTS ${MTS-ESP_FIND_COMPONENTS})
+	if(Master IN LISTS MTS-ESP_FIND_COMPONENTS)
 		find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
 				   DOC "MTS-ESP master sources directory" NO_DEFAULT_PATH)
 
