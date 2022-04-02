@@ -15,8 +15,6 @@ set (CMAKE_SYSTEM_NAME iOS)
 set (IOS_PLATFORM_LOCATION "iPhoneSimulator.platform")
 set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-iphonesimulator")
 
-set (CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+set (CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
 
-set (LEMONS_IOS_SIMULATOR ON)
-
-include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")
+include ("${CMAKE_CURRENT_LIST_DIR}/common/ios_simulator_common.cmake")

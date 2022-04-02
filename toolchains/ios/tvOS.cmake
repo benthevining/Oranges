@@ -17,8 +17,4 @@ set (CMAKE_SYSTEM_NAME tvOS)
 set (IOS_PLATFORM_LOCATION "tvOS.platform")
 set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-appletvos")
 
-# set (CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64;i386;x86_64")
-
-set (LEMONS_IOS_SIMULATOR OFF)
-
-include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")
+include ("${CMAKE_CURRENT_LIST_DIR}/common/ios_real_device_common.cmake")

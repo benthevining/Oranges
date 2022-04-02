@@ -10,11 +10,6 @@
 #
 # ======================================================================================
 
-# set (CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "<10 character ID>")
+set (CMAKE_OSX_ARCHITECTURES "armv7;armv7s;arm64;x86_64")
 
-set (CMAKE_SYSTEM_NAME watchOS)
-
-set (IOS_PLATFORM_LOCATION "watchOS.platform")
-set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-watchos")
-
-include ("${CMAKE_CURRENT_LIST_DIR}/common/ios_real_device_common.cmake")
+include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")

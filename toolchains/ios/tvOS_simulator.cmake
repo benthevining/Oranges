@@ -15,8 +15,4 @@ set (CMAKE_SYSTEM_NAME tvOS)
 set (IOS_PLATFORM_LOCATION "tvOS.platform")
 set (CMAKE_XCODE_EFFECTIVE_PLATFORMS "-appletvsimulator")
 
-# set (CMAKE_OSX_ARCHITECTURES "i386;x86_64")
-
-set (LEMONS_IOS_SIMULATOR ON)
-
-include ("${CMAKE_CURRENT_LIST_DIR}/ios_common.cmake")
+include ("${CMAKE_CURRENT_LIST_DIR}/common/ios_simulator_common.cmake")

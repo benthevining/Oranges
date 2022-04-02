@@ -17,7 +17,6 @@ set (APPLE TRUE)
 
 set (CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
 
-# All iOS/Darwin specific settings - some may be redundant
 set (CMAKE_SHARED_LIBRARY_PREFIX lib)
 set (CMAKE_SHARED_LIBRARY_SUFFIX .dylib)
 set (CMAKE_SHARED_MODULE_PREFIX lib)
@@ -44,5 +43,4 @@ set (CMAKE_SHARED_MODULE_LOADER_C_FLAG "-Wl,-bundle_loader,")
 set (CMAKE_SHARED_MODULE_LOADER_CXX_FLAG "-Wl,-bundle_loader,")
 set (CMAKE_FIND_LIBRARY_SUFFIXES ".dylib;.so;.a")
 
-# default to searching for frameworks first
 set (CMAKE_FIND_FRAMEWORK FIRST)
