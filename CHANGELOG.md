@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.5.1](http://github.com/benthevining/Oranges/compare/v2.5.0...v2.5.1) (2022-04-03)
+
+
+### Bug Fixes
+
+* not erroring if sphynx not found ([73d498e](http://github.com/benthevining/Oranges/commit/73d498ef6b4ecb05d0f93d7ad0ed5d83eff9a03a))
+
 ## [2.5.0](http://github.com/benthevining/Oranges/compare/v2.4.1...v2.5.0) (2022-04-02)
 
 
