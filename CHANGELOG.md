@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.6.0](http://github.com/benthevining/Oranges/compare/v2.5.1...v2.6.0) (2022-04-03)
+
+
+### Features
+
+* added options to oranges_fetch_repository to ignore git submodules and not pull submodules recursively ([c48a6c3](http://github.com/benthevining/Oranges/commit/c48a6c30938b4671f73f36c505ef7814622ca3b2))
+
 ### [2.5.1](http://github.com/benthevining/Oranges/compare/v2.5.0...v2.5.1) (2022-04-03)
 
 
