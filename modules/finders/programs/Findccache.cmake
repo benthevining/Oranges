@@ -17,6 +17,10 @@ Findccache
 
 Find the ccache compiler cache.
 
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- CCACHE_OPTIONS - space-separated command line flags to pass to ccache
+
 Output variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ccache_FOUND
@@ -73,15 +77,17 @@ set (ccache_FOUND TRUE)
 
 #
 
-set (CCACHE_OPTIONS "CCACHE_COMPRESS=true;CCACHE_COMPRESSLEVEL=6;CCACHE_MAXSIZE=800M" CACHE STRING
+set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
 																							"")
 
 mark_as_advanced (FORCE CCACHE_OPTIONS)
 
-list (APPEND CCACHE_OPTIONS "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
-list (APPEND CCACHE_OPTIONS "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
+separate_arguments (ccache_options UNIX_COMMAND "${CCACHE_OPTIONS}")
 
-list (JOIN CCACHE_OPTIONS "\n export " CCACHE_EXPORTS)
+list (APPEND ccache_options "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
+list (APPEND ccache_options "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
+
+list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 
 #
 

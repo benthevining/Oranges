@@ -11,9 +11,9 @@
 #
 # ======================================================================================
 
-import glob
-import os
-import re
+#import glob
+#import os
+#import re
 import sys
 
 
@@ -32,47 +32,20 @@ language = 'en'
 primary_domain = 'cmake'
 highlight_language = 'none'
 
-exclude_patterns = [
-    'dev',  # ignore developer-only documentation
-]
+exclude_patterns = []
 
 extensions = ['cmake']
-templates_path = ['@conf_path@/templates']
+#templates_path = ['@conf_path@/templates']
 
 nitpicky = True
 smartquotes = False
-
-cmake_manuals = sorted(glob.glob(r'@conf_docs@/manual/*.rst'))
-cmake_manual_description = re.compile(r'^\.\. cmake-manual-description:(.*)$')
-man_pages = []
-
-for fpath in cmake_manuals:
-	try:
-		name, sec, rst = os.path.basename(fpath).split('.')
-		desc = None
-
-		with open(fpath, 'r') as f:
-			for l in f:
-				m = cmake_manual_description.match(l)
-				if m:
-					desc = m.group(1).strip()
-					break
-
-		if desc:
-			man_pages.append(
-			    (f'manual/{name}.{sec}', name, desc, [], int(sec)))
-		else:
-			sys.stderr.write(
-			    f"ERROR: No cmake-manual-description in '{fpath}'\n")
-	except Exception as e:  # pylint: disable=broad-except
-		sys.stderr.write(f'ERROR: {e}\n')
 
 man_show_urls = False
 man_make_section_directory = False
 
 html_show_sourcelink = True
-html_static_path = ['@conf_path@/static']
-html_style = 'cmake.css'
+#html_static_path = ['@conf_path@/static']
+#html_style = 'cmake.css'
 html_theme = 'default'
 html_theme_options = {
     'footerbgcolor': '#00182d',

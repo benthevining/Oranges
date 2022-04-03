@@ -1,0 +1,1 @@
+.. cmake-module:: @MODULE_FULL_PATH@

@@ -17,7 +17,17 @@ cmake_minimum_required (VERSION 3.13 FATAL_ERROR)
 project (OrangesDocs DESCRIPTION "Oranges documentation"
 		 HOMEPAGE_URL "www.github.com/benthevining/Oranges" LANGUAGES NONE)
 
+if(PROJECT_IS_TOP_LEVEL)
+	enable_language (CXX)
+endif()
+
+include (GNUInstallDirs)
+
 if(NOT Oranges_SOURCE_DIR)
+	set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
+
+	include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
+
 	set (CMakeHelp_STANDALONE 1)
 
 	get_filename_component (tmp "${CMAKE_CURRENT_SOURCE_DIR}" PATH)
@@ -31,11 +41,10 @@ if(NOT Oranges_SOURCE_DIR)
 	endmacro()
 endif()
 
-option (SPHINX_INFO "Build Info manual with Sphinx" OFF)
 option (SPHINX_MAN "Build man pages with Sphinx" ON)
 option (SPHINX_HTML "Build html help with Sphinx" ON)
+option (SPHINX_INFO "Build Info manual with Sphinx" OFF)
 option (SPHINX_SINGLEHTML "Build html single page help with Sphinx" OFF)
-option (SPHINX_QTHELP "Build Qt help with Sphinx" OFF)
 option (SPHINX_LATEXPDF "Build PDF help with Sphinx using LaTeX" OFF)
 option (SPHINX_TEXT "Build text help with Sphinx (not installed)" OFF)
 
@@ -52,7 +61,6 @@ mark_as_advanced (
 	SPHINX_MAN
 	SPHINX_HTML
 	SPHINX_SINGLEHTML
-	SPHINX_QTHELP
 	SPHINX_LATEXPDF
 	SPHINX_TEXT
 	SPHINX_FLAGS)
@@ -75,9 +83,39 @@ elseif(NOT SPHINX_EXECUTABLE)
 	endif()
 endif()
 
+#
+
+set (ORANGES_DOCS_BUILD_TREE "${CMAKE_BINARY_DIR}/OrangesDocs")
+
+file (COPY_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst" "${ORANGES_DOCS_BUILD_TREE}/index.rst")
+
+# Generate .rst files for each module
+
+include (OrangesFileUtils)
+
+lemons_subdir_list (
+	DIR
+	"${ORANGES_ROOT_DIR}/modules"
+	RESULT
+	module_files
+	RECURSE
+	FILES
+	FULL_PATHS)
+
+set (module_rst_template "${CMAKE_CURRENT_LIST_DIR}/module_rst_template.txt")
+set (module_rst_output "${ORANGES_DOCS_BUILD_TREE}/modules")
+
+foreach(MODULE_FULL_PATH IN LISTS module_files)
+	cmake_path (GET MODULE_FULL_PATH FILENAME moduleName)
+
+	configure_file ("${module_rst_template}" "${module_rst_output}/${moduleName}.rst" @ONLY)
+endforeach()
+
+#
+
 # conf_copyright
 
-set (conf_docs "${Oranges_SOURCE_DIR}/modules")
+# set (conf_docs "${Oranges_SOURCE_DIR}/modules")
 set (conf_path "${CMAKE_CURRENT_SOURCE_DIR}")
 set (conf_version "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}")
 
@@ -92,7 +130,7 @@ if(SPHINX_HTML)
 	# protocol schemes
 	set (
 		html_extra_commands
-		COMMAND ${CMAKE_COMMAND} -E echo
+		COMMAND "${CMAKE_COMMAND}" -E echo
 		"sphinx-build html: HTML documentation generated in file://${CMAKE_CURRENT_BINARY_DIR}/html/index.html"
 		)
 endif()
@@ -111,47 +149,20 @@ endif()
 
 if(SPHINX_INFO)
 	find_program (MAKEINFO_EXECUTABLE NAMES makeinfo DOC "makeinfo tool")
-	if(NOT MAKEINFO_EXECUTABLE)
-		message (FATAL_ERROR "MAKEINFO_EXECUTABLE (makeinfo) not found!")
+
+	if(MAKEINFO_EXECUTABLE)
+		list (APPEND doc_formats texinfo)
+
+		# Sphinx texinfo builder supports .info, .txt, .html and .pdf output. SPHINX_INFO controls
+		# the .info output.
+		set (
+			texinfo_extra_commands
+			COMMAND "${MAKEINFO_EXECUTABLE}" --no-split -o
+			"${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.info"
+			"${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.texi")
+	else()
+		message (WARNING "MAKEINFO_EXECUTABLE (makeinfo) not found!")
 	endif()
-	list (APPEND doc_formats texinfo)
-
-	# Sphinx texinfo builder supports .info, .txt, .html and .pdf output. SPHINX_INFO controls the
-	# .info output.
-	set (
-		texinfo_extra_commands
-		COMMAND ${MAKEINFO_EXECUTABLE} --no-split -o ${CMAKE_CURRENT_BINARY_DIR}/texinfo/cmake.info
-		${CMAKE_CURRENT_BINARY_DIR}/texinfo/cmake.texi)
-endif()
-
-if(SPHINX_QTHELP)
-	find_package (PythonInterp REQUIRED)
-
-	find_program (
-		QCOLLECTIONGENERATOR_EXECUTABLE NAMES qcollectiongenerator-qt5 qcollectiongenerator
-		DOC "qcollectiongenerator tool")
-
-	if(NOT QCOLLECTIONGENERATOR_EXECUTABLE)
-		message (FATAL_ERROR "QCOLLECTIONGENERATOR_EXECUTABLE (qcollectiongenerator) not found!")
-	endif()
-
-	list (APPEND doc_formats qthelp)
-
-	set (
-		qthelp_extra_commands
-		# Workaround for assistant prior to
-		# https://codereview.qt-project.org/#change,82250 in Qt 4.
-		COMMAND ${CMAKE_COMMAND} "-DCSS_DIR=${CMAKE_CURRENT_BINARY_DIR}/qthelp/_static" -P
-		"${CMAKE_CURRENT_SOURCE_DIR}/apply_qthelp_css_workaround.cmake"
-		# Workaround sphinx configurability:
-		# https://bitbucket.org/birkenfeld/sphinx/issue/1448/make-qthelp-more-configurable
-		COMMAND ${CMAKE_COMMAND} "-DQTHELP_DIR=${CMAKE_CURRENT_BINARY_DIR}/qthelp/" -P
-		"${CMAKE_CURRENT_SOURCE_DIR}/fixup_qthelp_names.cmake"
-		# Create proper identifiers. Workaround for
-		# https://bitbucket.org/birkenfeld/sphinx/issue/1491/qthelp-should-generate-identifiers-for
-		COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/create_identifiers.py"
-		"${CMAKE_CURRENT_BINARY_DIR}/qthelp/" COMMAND ${QCOLLECTIONGENERATOR_EXECUTABLE}
-		${CMAKE_CURRENT_BINARY_DIR}/qthelp/CMake.qhcp)
 endif()
 
 if(SPHINX_LATEXPDF)
@@ -163,103 +174,73 @@ set (doc_format_last "")
 
 foreach(format ${doc_formats})
 	set (doc_format_output "doc_format_${format}")
-	set (doc_format_log "build-${format}.log")
+	set (doc_format_log "${CMAKE_CURRENT_BINARY_DIR}/doctrees/logs/build-${format}.log")
 
 	if(format STREQUAL "latexpdf")
 		# This format does not use builder (-b) but make_mode (-M) which expects arguments in
 		# peculiar order
 		add_custom_command (
-			OUTPUT ${doc_format_output}
+			OUTPUT "${doc_format_output}"
 			COMMAND
-				${SPHINX_EXECUTABLE} -M ${format} ${CMake_SOURCE_DIR}/Help
-				${CMAKE_CURRENT_BINARY_DIR}/${format} -c ${CMAKE_CURRENT_BINARY_DIR} -d
-				${CMAKE_CURRENT_BINARY_DIR}/doctrees ${sphinx_flags} > ${doc_format_log} # log
-				# stdout, pass stderr
+				"${SPHINX_EXECUTABLE}" -M "${format}" "${ORANGES_DOCS_BUILD_TREE}"
+				"${CMAKE_CURRENT_BINARY_DIR}/${format}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
+				"${CMAKE_CURRENT_BINARY_DIR}/doctrees" ${sphinx_flags} > "${doc_format_log}"
 				${${format}_extra_commands}
 			DEPENDS ${doc_format_last}
-			COMMENT "sphinx-build ${format}: see Utilities/Sphinx/${doc_format_log}"
+			COMMENT "sphinx-build ${format}: see ${doc_format_log}"
 			VERBATIM)
 	else()
 		# other formats use standard builder (-b) mode
 		add_custom_command (
-			OUTPUT ${doc_format_output}
+			OUTPUT "${doc_format_output}"
 			COMMAND
-				${SPHINX_EXECUTABLE} -c ${CMAKE_CURRENT_BINARY_DIR} -d
-				${CMAKE_CURRENT_BINARY_DIR}/doctrees -b ${format} ${sphinx_flags}
-				${CMake_SOURCE_DIR}/Help ${CMAKE_CURRENT_BINARY_DIR}/${format} >
-				${doc_format_log} # log stdout, pass stderr
+				"${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
+				"${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}" ${sphinx_flags}
+				"${ORANGES_DOCS_BUILD_TREE}" "${CMAKE_CURRENT_BINARY_DIR}/${format}" >
+				"${doc_format_log}" # log stdout, pass stderr
 				${${format}_extra_commands}
 			DEPENDS ${doc_format_last}
-			COMMENT "sphinx-build ${format}: see Utilities/Sphinx/${doc_format_log}"
+			COMMENT "sphinx-build ${format}: see ${doc_format_log}"
 			VERBATIM)
 	endif()
 
-	set_property (SOURCE ${doc_format_output} PROPERTY SYMBOLIC 1)
-	list (APPEND doc_format_outputs ${doc_format_output})
-	set (doc_format_last ${doc_format_output})
+	set_property (SOURCE "${doc_format_output}" PROPERTY SYMBOLIC 1)
+	list (APPEND doc_format_outputs "${doc_format_output}")
+	set (doc_format_last "${doc_format_output}")
 endforeach()
+
+#
 
 if(PROJECT_IS_TOP_LEVEL OR Oranges_IS_TOP_LEVEL)
 	set (all_flag ALL)
 endif()
 
-add_custom_target (OrangesDocs ${all_flag} DEPENDS ${doc_format_outputs})
+add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}")
+
+#
 
 if(SPHINX_INFO)
 	CMake_OPTIONAL_COMPONENT (sphinx-info)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/texinfo/cmake.info DESTINATION ${CMAKE_INFO_DIR}
-			 ${COMPONENT})
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.info"
+			 DESTINATION "${CMAKE_INFO_DIR}" ${COMPONENT})
 endif()
 
-if(SPHINX_MAN)
-	file (GLOB man_rst RELATIVE ${CMake_SOURCE_DIR}/Help/manual
-		  ${CMake_SOURCE_DIR}/Help/manual/*.[1-9].rst)
-
-	foreach(m ${man_rst})
-		if("x${m}" MATCHES "^x(.+)\\.([1-9])\\.rst$")
-			set (name "${CMAKE_MATCH_1}")
-			set (sec "${CMAKE_MATCH_2}")
-			set (skip FALSE)
-
-			if(NOT CMakeHelp_STANDALONE)
-				if(name STREQUAL "ccmake" AND NOT BUILD_CursesDialog)
-					set (skip TRUE)
-				elseif(name STREQUAL "cmake-gui" AND NOT BUILD_QtDialog)
-					set (skip TRUE)
-				endif()
-			endif()
-
-			if(NOT skip)
-				CMake_OPTIONAL_COMPONENT (sphinx-man)
-				install (FILES ${CMAKE_CURRENT_BINARY_DIR}/man/${name}.${sec}
-						 DESTINATION ${CMAKE_MAN_DIR}/man${sec} ${COMPONENT})
-			endif()
-
-			unset (skip)
-		endif()
-	endforeach()
-endif()
+# TODO: install man pages
 
 if(SPHINX_HTML)
 	CMake_OPTIONAL_COMPONENT (sphinx-html)
-	install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${CMAKE_DOC_DIR} ${COMPONENT}
-			 PATTERN .buildinfo EXCLUDE)
+	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" DESTINATION "${CMAKE_DOC_DIR}"
+			 ${COMPONENT} PATTERN .buildinfo EXCLUDE)
 endif()
 
 if(SPHINX_SINGLEHTML)
 	CMake_OPTIONAL_COMPONENT (sphinx-singlehtml)
-	install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/singlehtml DESTINATION ${CMAKE_DOC_DIR}
+	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml" DESTINATION "${CMAKE_DOC_DIR}"
 			 ${COMPONENT} PATTERN .buildinfo EXCLUDE)
-endif()
-
-if(SPHINX_QTHELP)
-	CMake_OPTIONAL_COMPONENT (sphinx-qthelp)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qthelp/CMake.qch DESTINATION ${CMAKE_DOC_DIR}
-			 ${COMPONENT})
 endif()
 
 if(SPHINX_LATEXPDF)
 	CMake_OPTIONAL_COMPONENT (sphinx-latexpdf)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/CMake.pdf DESTINATION ${CMAKE_DOC_DIR}
-			 ${COMPONENT})
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
+			 DESTINATION "${CMAKE_DOC_DIR}" ${COMPONENT})
 endif()

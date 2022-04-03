@@ -39,6 +39,7 @@ README.md benthevining
 age.cmake benthevining
 conanfile.py benthevining
 docs/CMakeLists.txt benthevining
+docs/conf.py benthevining
 evining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
@@ -66,6 +67,7 @@ modules/dependencies/scripts/wipe_cache.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
 modules/documentation/OrangesGraphVizConfig.cmake benthevining
+modules/documentation/scripts/CMakeGraphVizOptions.cmake benthevining
 modules/documentation/scripts/Doxyfile benthevining
 modules/documentation/scripts/DoxygenLayout.xml benthevining
 modules/documentation/scripts/generate_deps_graph_image.cmake benthevining
