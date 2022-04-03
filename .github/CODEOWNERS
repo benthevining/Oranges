@@ -38,6 +38,7 @@ Makefile benthevining
 README.md benthevining
 age.cmake benthevining
 conanfile.py benthevining
+docs/CMakeLists.txt benthevining
 evining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining

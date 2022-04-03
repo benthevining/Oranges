@@ -67,7 +67,12 @@ if(NOT
 	OR SPHINX_LATEXPDF))
 	return ()
 elseif(NOT SPHINX_EXECUTABLE)
-	message (FATAL_ERROR "SPHINX_EXECUTABLE (sphinx-build) is not found!")
+	if(PROJECT_IS_TOP_LEVEL)
+		message (FATAL_ERROR "SPHINX_EXECUTABLE (sphinx-build) is not found!")
+	else()
+		message (WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found!")
+		return ()
+	endif()
 endif()
 
 # conf_copyright
