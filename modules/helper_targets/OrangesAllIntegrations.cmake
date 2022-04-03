@@ -40,11 +40,11 @@ endif()
 
 oranges_file_scoped_message_context ("OrangesAllIntegrations")
 
-find_package (ccache QUIET)
-find_package (clang-tidy QUIET)
-find_package (cppcheck QUIET)
-find_package (cpplint QUIET)
-find_package (include-what-you-use QUIET)
+find_package (ccache MODULE QUIET)
+find_package (clang-tidy MODULE QUIET)
+find_package (cppcheck MODULE QUIET)
+find_package (cpplint MODULE QUIET)
+find_package (include-what-you-use MODULE QUIET)
 
 add_library (OrangesAllIntegrations INTERFACE)
 

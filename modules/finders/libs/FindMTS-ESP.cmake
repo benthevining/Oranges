@@ -77,7 +77,7 @@ find_package_default_component_list (Client Master)
 # Client
 
 if(NOT TARGET MTSClient)
-	if(Client IN LISTS MTS-ESP_FIND_COMPONENTS)
+	if(Client IN_LIST MTS-ESP_FIND_COMPONENTS)
 		find_path (MTS_ESP_CLIENT_DIR libMTSClient.h PATHS "${MTS-ESP_SOURCE_DIR}/Client"
 				   DOC "MTS-ESP client sources directory" NO_DEFAULT_PATH)
 
@@ -109,7 +109,7 @@ endif()
 # Master
 
 if(NOT TARGET MTSMaster)
-	if(Master IN LISTS MTS-ESP_FIND_COMPONENTS)
+	if(Master IN_LIST MTS-ESP_FIND_COMPONENTS)
 		find_path (MTS_ESP_MASTER_DIR libMTSMaster.h PATHS "${MTS-ESP_SOURCE_DIR}/Master"
 				   DOC "MTS-ESP master sources directory" NO_DEFAULT_PATH)
 
@@ -199,11 +199,15 @@ endif()
 
 set (MTS-ESP_FOUND TRUE)
 
-add_library (MTS-ESP INTERFACE)
+if(NOT TARGET MTS-ESP)
+	add_library (MTS-ESP INTERFACE)
+endif()
 
 target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSClient>
 										 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
 
-oranges_export_alias_target (MTS-ESP ODDSound)
+if(NOT TARGET ODDSound::MTS-ESP)
+	add_library (ODDSound::MTS-ESP ALIAS MTS-ESP)
+endif()
 
 oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets COMPONENT_PREFIX ODDSound)

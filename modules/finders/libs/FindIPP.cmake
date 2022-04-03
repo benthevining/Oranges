@@ -290,7 +290,9 @@ endif()
 target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
 											   $<INSTALL_INTERFACE:include/IntelIPP>)
 
-oranges_export_alias_target (IntelIPP Intel)
+if(NOT TARGET Intel::IntelIPP)
+	add_library (Intel::IntelIPP ALIAS IntelIPP)
+endif()
 
 oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
 

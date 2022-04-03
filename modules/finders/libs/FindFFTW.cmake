@@ -57,10 +57,10 @@ find_package_default_component_list (fftw3 fftw3f)
 #
 
 if(NOT TARGET fftw3)
-	if(fftw3 IN LISTS FFTW_FIND_COMPONENTS)
-		find_path (FFTW_D_INCLUDES fftw3.h)
+	if(fftw3 IN_LIST FFTW_FIND_COMPONENTS)
+		find_path (FFTW_D_INCLUDES NAMES fftw3.h dfftw3.h)
 
-		find_library (FFTW_D_LIBRARIES NAMES fftw3)
+		find_library (FFTW_D_LIBRARIES NAMES fftw3 dfftw)
 
 		mark_as_advanced (FORCE FFTW_D_INCLUDES FFTW_D_LIBRARIES)
 
@@ -79,10 +79,10 @@ if(NOT TARGET fftw3)
 endif()
 
 if(NOT TARGET fftw3f)
-	if(fftw3f IN LISTS FFTW_FIND_COMPONENTS)
-		find_path (FFTW_F_INCLUDES fftw3f.h)
+	if(fftw3f IN_LIST FFTW_FIND_COMPONENTS)
+		find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h)
 
-		find_library (FFTW_F_LIBRARIES NAMES fftw3f)
+		find_library (FFTW_F_LIBRARIES NAMES fftw3f sfftw)
 
 		mark_as_advanced (FORCE FFTW_F_INCLUDES FFTW_F_LIBRARIES)
 
@@ -110,7 +110,9 @@ endif()
 
 #
 
-add_library (FFTW INTERFACE)
+if(NOT TARGET FFTW)
+	add_library (FFTW INTERFACE)
+endif()
 
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW::fftw3>
 									  $<TARGET_NAME_IF_EXISTS:FFTW::fftw3f>)
@@ -127,6 +129,8 @@ else()
 	target_compile_definitions (FFTW INTERFACE FFTW_SINGLE_ONLY=0)
 endif()
 
-add_library (FFTW::FFTW ALIAS FFTW)
+if(NOT TARGET FFTW::FFTW)
+	add_library (FFTW::FFTW ALIAS FFTW)
+endif()
 
 set (FFTW_FOUND TRUE)
