@@ -29,7 +29,7 @@ Generating a pkgconfig file for a target
 								   [DESCRIPTION <projectDescription>]
 								   [URL <projectURL>]
 								   [VERSION <projectVersion>]
-								   [NO_INSTALL]|[INSTALL_DEST <installDestination>]
+								   [NO_INSTALL]|[INSTALL_DEST <installDestination>] [INSTALL_COMPONENT <componentName>]
 								   [REQUIRES <requiredPackages...>])
 
 #]=======================================================================]
@@ -59,7 +59,8 @@ function(oranges_create_pkgconfig_file)
 		DESCRIPTION
 		URL
 		VERSION
-		INSTALL_DEST)
+		INSTALL_DEST
+		INSTALL_COMPONENT)
 	set (multiValueArgs REQUIRES)
 
 	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -118,7 +119,12 @@ function(oranges_create_pkgconfig_file)
 		  TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
 
 	if(NOT ORANGES_ARG_NO_INSTALL)
-		install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}")
+		if(ORANGES_ARG_INSTALL_COMPONENT)
+			set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+		endif()
+
+		install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}"
+				 ${component_flag})
 	endif()
 
 endfunction()

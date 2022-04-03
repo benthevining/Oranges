@@ -35,10 +35,6 @@ if(NOT Oranges_SOURCE_DIR)
 
 	unset (CMAKE_DATA_DIR)
 	unset (CMAKE_DATA_DIR CACHE)
-
-	macro(CMake_OPTIONAL_COMPONENT)
-		set (COMPONENT "")
-	endmacro()
 endif()
 
 option (SPHINX_MAN "Build man pages with Sphinx" ON)
@@ -220,27 +216,30 @@ add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}")
 #
 
 if(SPHINX_INFO)
-	CMake_OPTIONAL_COMPONENT (sphinx-info)
 	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.info"
-			 DESTINATION "${CMAKE_INFO_DIR}" ${COMPONENT})
+			 DESTINATION "${CMAKE_INFO_DIR}" COMPONENT OrangesDocs)
 endif()
 
 # TODO: install man pages
 
 if(SPHINX_HTML)
-	CMake_OPTIONAL_COMPONENT (sphinx-html)
 	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" DESTINATION "${CMAKE_DOC_DIR}"
-			 ${COMPONENT} PATTERN .buildinfo EXCLUDE)
+			 PATTERN .buildinfo EXCLUDE COMPONENT OrangesDocs)
 endif()
 
 if(SPHINX_SINGLEHTML)
 	CMake_OPTIONAL_COMPONENT (sphinx-singlehtml)
 	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml" DESTINATION "${CMAKE_DOC_DIR}"
-			 ${COMPONENT} PATTERN .buildinfo EXCLUDE)
+			 PATTERN .buildinfo EXCLUDE COMPONENT OrangesDocs)
 endif()
 
 if(SPHINX_LATEXPDF)
 	CMake_OPTIONAL_COMPONENT (sphinx-latexpdf)
 	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
-			 DESTINATION "${CMAKE_DOC_DIR}" ${COMPONENT})
+			 DESTINATION "${CMAKE_DOC_DIR}" COMPONENT OrangesDocs)
 endif()
+
+include (CPackComponent)
+
+cpack_add_component (OrangesDocs DISPLAY_NAME "Oranges documentation"
+					 DESCRIPTION "Installs all Oranges documentation" GROUP Oranges)

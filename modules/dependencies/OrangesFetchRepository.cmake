@@ -108,7 +108,15 @@ function(oranges_fetch_repository)
 
 	oranges_add_function_message_context ()
 
-	set (options DOWNLOAD_ONLY FULL QUIET EXCLUDE_FROM_ALL NEVER_LOCAL NO_GIT_SUBMODULES)
+	set (
+		options
+		DOWNLOAD_ONLY
+		FULL
+		QUIET
+		EXCLUDE_FROM_ALL
+		NEVER_LOCAL
+		NO_SUBMODULES
+		NO_RECURSE_SUBMODULES)
 	set (oneValueArgs NAME GIT_TAG GIT_REPOSITORY GITHUB_REPOSITORY CMAKE_SUBDIR GIT_STRATEGY)
 	set (multiValueArgs CMAKE_OPTIONS GIT_OPTIONS)
 

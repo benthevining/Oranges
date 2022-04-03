@@ -62,8 +62,12 @@ include (OrangesDefaultInstallSettings)
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
 								  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
-install (EXPORT OrangesTargets NAMESPACE Oranges:: DESTINATION "${ORANGES_INSTALL_DEST}"
-		 EXPORT_LINK_INTERFACE_LIBRARIES)
+install (
+	EXPORT OrangesTargets
+	NAMESPACE Oranges::
+	DESTINATION "${ORANGES_INSTALL_DEST}"
+	EXPORT_LINK_INTERFACE_LIBRARIES
+	COMPONENT OrangesModules)
 
 export (EXPORT OrangesTargets NAMESPACE Oranges:: FILE OrangesTargets.cmake)
 
@@ -71,16 +75,27 @@ configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
 	INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
 
-install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" PATTERN .DS_Store
-																					EXCLUDE)
+install (DIRECTORY modules toolchains DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT OrangesModules
+		 PATTERN .DS_Store EXCLUDE)
 
 install (
 	FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
 		  "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
 		  "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
-	DESTINATION "${ORANGES_INSTALL_DEST}")
+	DESTINATION "${ORANGES_INSTALL_DEST}"
+	COMPONENT OrangesModules)
 
 export (PACKAGE Oranges)
+
+cpack_add_component (OrangesModules DISPLAY_NAME "Oranges CMake modules"
+					 DESCRIPTION "Install the Oranges CMake modules" GROUP Oranges)
+
+cpack_add_component_group (
+	Oranges
+	DISPLAY_NAME Oranges
+	DESCRIPTION "Install all components of the Oranges library"
+	EXPANDED BOLD_TITLE
+	PARENT_GROUP Citrus)
 
 #
 

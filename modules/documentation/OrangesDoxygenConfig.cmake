@@ -29,7 +29,8 @@ Generating a Doxygen target
 								   [LOGO <logoFile>]
 								   [FILE_PATTERNS <filePatterns>]
 								   [IMAGE_PATHS <imagePaths>]
-								   [NO_VERSION_DISPLAY])
+								   [NO_VERSION_DISPLAY]
+								   [NO_INSTALL] | [INSTALL_COMPONENT <componentName>])
 
 Creates a target to execute Doxygen.
 
@@ -72,14 +73,21 @@ function(oranges_create_doxygen_target)
 
 	oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR)
+	set (options NO_VERSION_DISPLAY NO_INSTALL)
+	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR INSTALL_COMPONENT)
 	set (multiValueArgs INPUT_PATHS FILE_PATTERNS IMAGE_PATHS)
 
-	cmake_parse_arguments (ORANGES_ARG "NO_VERSION_DISPLAY" "${oneValueArgs}" "${multiValueArgs}"
-						   ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG INPUT_PATHS)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
+
+	if(ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_COMPONENT)
+		message (
+			WARNING
+				"Arguments NO_INSTALL and INSTALL_COMPONENT cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
+			)
+	endif()
 
 	foreach(input_path ${ORANGES_ARG_INPUT_PATHS})
 		lemons_make_path_absolute (VAR input_path BASE_DIR "${PROJECT_SOURCE_DIR}")
@@ -185,32 +193,29 @@ function(oranges_create_doxygen_target)
 	set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES ADDITIONAL_CLEAN_FILES
 															  "${ORANGES_DOC_OUTPUT_DIR}")
 
+	if(ORANGES_ARG_NO_INSTALL)
+		return ()
+	endif()
+
+	if(NOT ORANGES_ARG_INSTALL_COMPONENT)
+		set (ORANGES_ARG_INSTALL_COMPONENT "${PROJECT_NAME}_Documentation")
+	endif()
+
 	install (
 		DIRECTORY "${ORANGES_DOC_OUTPUT_DIR}/man3"
 		TYPE MAN
-		COMPONENT "${PROJECT_NAME}_Documentation"
+		COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}"
 		EXCLUDE_FROM_ALL OPTIONAL
 		PATTERN .DS_Store EXCLUDE)
 
 	install (
 		DIRECTORY "${ORANGES_DOC_OUTPUT_DIR}/html"
 		TYPE INFO
-		COMPONENT "${PROJECT_NAME}_Documentation"
+		COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}"
 		EXCLUDE_FROM_ALL OPTIONAL
 		PATTERN .DS_Store EXCLUDE)
 
 	install (FILES "${ORANGES_DOC_OUTPUT_DIR}/${PROJECT_NAME}.tag" TYPE INFO OPTIONAL
-			 COMPONENT "${PROJECT_NAME}_Documentation")
-
-	set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_DISPLAY_NAME"
-		 "${PROJECT_NAME} documentation")
-
-	set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_DESCRIPTION"
-		 "Installs HTML and man-page documentation for ${PROJECT_NAME}")
-
-	set ("CPACK_COMPONENT_${PROJECT_NAME}_Documentation_GROUP" Documentation)
-
-	set (CPACK_COMPONENT_GROUP_Documentation_DESCRIPTION
-		 "Installs all available sets of documentation")
+			 COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 
 endfunction()

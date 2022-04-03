@@ -33,6 +33,7 @@ oranges_file_scoped_message_context ("OrangesDefaultInstallSettings")
 
 message (DEBUG "OrangesDefaultInstallSettings loaded - project name: ${PROJECT_NAME}")
 
+include (CPackComponent)
 include (OrangesInstallSystemLibs)
 include (OrangesDefaultCPackSettings)
 include (OrangesGeneratePkgConfig)

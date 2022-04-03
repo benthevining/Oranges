@@ -112,18 +112,5 @@ if(NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 	unset (image_dest)
 endif()
 
-install (FILES "${graph_image_output}" "${dot_file_output}" TYPE INFO OPTIONAL
-		 COMPONENT "${CMAKE_PROJECT_NAME}_Documentation")
-
-set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DISPLAY_NAME"
-	 "${CMAKE_PROJECT_NAME} documentation")
-
-set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_DESCRIPTION"
-	 "Installs HTML and man-page documentation for ${CMAKE_PROJECT_NAME}")
-
-set ("CPACK_COMPONENT_${CMAKE_PROJECT_NAME}_Documentation_GROUP" Documentation)
-
-set (CPACK_COMPONENT_GROUP_Documentation_DESCRIPTION "Installs all available sets of documentation")
-
 unset (dot_file_output)
 unset (graph_image_output)

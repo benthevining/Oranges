@@ -27,6 +27,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
+include (CPackComponent)
+
 #
 
 option (ORANGES_IGNORE_SYSTEM_LIBS
@@ -47,9 +49,5 @@ set (CMAKE_INSTALL_SYSTEM_LIBS_RUNTIME_COMPONENT ${PROJECT_NAME}_SystemLibraries
 
 include (InstallRequiredSystemLibraries)
 
-set (CPACK_COMPONENT_SystemLibraries_DESCRIPTION "Installs all required system libraries")
-
-set (CPACK_COMPONENT_SystemLibraries_GROUP Runtime)
-
-set (CPACK_COMPONENT_GROUP_Runtime_DESCRIPTION
-	 "Installs all available runtime artifacts and executables")
+cpack_add_component (SystemLibraries DISPLAY_NAME "System libraries"
+					 DESCRIPTION "Installs all required system libraries")
