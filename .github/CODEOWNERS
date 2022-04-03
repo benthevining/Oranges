@@ -32,6 +32,7 @@
 CMakeLists.txt benthevining
 CMakePresets.json benthevining
 CPackConfig.cmake benthevining
+Dockerfile benthevining
 Doxyfile benthevining
 Makefile benthevining
 README.md benthevining
@@ -178,6 +179,7 @@ modules/internal/LemonsDeprecations.cmake benthevining
 modules/internal/OrangesCmakeDevTools.cmake benthevining
 modules/internal/OrangesConfigurationPostfixes.cmake benthevining
 modules/internal/OrangesDeprecations.cmake benthevining
+modules/internal/OrangesGeneratorExpressions.cmake benthevining
 modules/internal/OrangesSetUpCache.cmake benthevining
 modules/internal/lemons_AggregateTargets.cmake benthevining
 modules/juce/LemonsAppUtilities.cmake benthevining
@@ -236,6 +238,7 @@ scripts/makefiles/generate_makefile.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
 scripts/util.make benthevining
 tests/CMakeLists.txt benthevining
+tests/exportTestMain.cpp benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/common/ios_common.cmake benthevining
 toolchains/ios/common/ios_simulator_common.cmake benthevining

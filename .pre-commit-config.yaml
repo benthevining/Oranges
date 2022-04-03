@@ -149,6 +149,7 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
+        exclude: conf.py
   # - repo: https://github.com/asottile/dead
   #   rev: v1.4.0
   #   hooks:

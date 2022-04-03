@@ -85,3 +85,11 @@ export (PACKAGE Oranges)
 #
 
 add_subdirectory (tests)
+
+#
+
+option (ORANGES_BUILD_DOCS "Build the documentation (requires Sphynx)" OFF)
+
+if(PROJECT_IS_TOP_LEVEL OR ORANGES_BUILD_DOCS)
+	add_subdirectory (docs)
+endif()
