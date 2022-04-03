@@ -23,9 +23,12 @@ Download and cache a git repository at configure time
 .. command:: oranges_fetch_repository
 
 	oranges_fetch_repository (NAME <name>
-							  [GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>]
+							  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
 							  [GIT_TAG <ref>]
-							  [DOWNLOAD_ONLY] [FULL] [QUIET] [EXCLUDE_FROM_ALL] [NEVER_LOCAL]
+							  [NEVER_LOCAL]
+							  [QUIET]
+							  [DOWNLOAD_ONLY] [EXCLUDE_FROM_ALL]
+							  [FULL] [NO_SUBMODULES] [NO_RECURSE_SUBMODULES]
 							  [CMAKE_SUBDIR <rel_path>]
 							  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
 							  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
@@ -61,6 +64,10 @@ If the `NEVER_LOCAL` option is present, then this function will never be routed 
 `GIT_STRATEGY` may be one of `CHECKOUT`, `REBASE`, or `REBASE_CHECKOUT` and defines how the git repository is checked out and pulled.
 
 `GIT_OPTIONS` is an optional list of "key=value" pairs that will be passed to the git pull's command line with --config.
+
+If the `NO_SUBMODULES` option is present, no git submodules will be pulled or updated.
+If the `NO_RECURSE_SUBMODULES` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
+If neither option is given, all submodules will be updated recursively.
 
 
 Options
@@ -101,7 +108,7 @@ function(oranges_fetch_repository)
 
 	oranges_add_function_message_context ()
 
-	set (options DOWNLOAD_ONLY FULL QUIET EXCLUDE_FROM_ALL NEVER_LOCAL)
+	set (options DOWNLOAD_ONLY FULL QUIET EXCLUDE_FROM_ALL NEVER_LOCAL NO_GIT_SUBMODULES)
 	set (oneValueArgs NAME GIT_TAG GIT_REPOSITORY GITHUB_REPOSITORY CMAKE_SUBDIR GIT_STRATEGY)
 	set (multiValueArgs CMAKE_OPTIONS GIT_OPTIONS)
 
@@ -168,9 +175,25 @@ function(oranges_fetch_repository)
 		endif()
 	endif()
 
+	if(ORANGES_ARG_NO_SUBMODULES)
+		set (submodules_flag GIT_SUBMODULES "")
+	endif()
+
+	if(ORANGES_ARG_NO_RECURSE_SUBMODULES)
+		set (submodules_recurse_flag GIT_SUBMODULES_RECURSE OFF)
+	endif()
+
 	FetchContent_Declare (
-		"${ORANGES_ARG_NAME}" GIT_REPOSITORY "${git_repo_flag}"
-		${git_tag} ${shallow_flag} ${progress_flag} ${subdir_flag} ${git_options} ${git_strategy})
+		"${ORANGES_ARG_NAME}"
+		GIT_REPOSITORY "${git_repo_flag}"
+		${git_tag}
+		${shallow_flag}
+		${progress_flag}
+		${subdir_flag}
+		${git_options}
+		${git_strategy}
+		${submodules_flag}
+		${submodules_recurse_flag})
 
 	_oranges_populate_repository ("${ORANGES_ARG_NAME}" "${ORANGES_ARG_DOWNLOAD_ONLY}"
 								  "${ORANGES_ARG_CMAKE_OPTIONS}" "${ORANGES_ARG_CMAKE_SUBDIR}")
