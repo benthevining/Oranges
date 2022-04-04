@@ -57,7 +57,8 @@ endfunction()
 
 function(oranges_install_targets)
 
-	set (oneValueArgs EXPORT REL_PATH RUNTIME_COMPONENT DEV_COMPONENT COMPONENT_PREFIX)
+	set (oneValueArgs EXPORT REL_PATH RUNTIME_COMPONENT DEV_COMPONENT COMPONENT_PREFIX
+					  COMPONENT_GROUP)
 
 	cmake_parse_arguments (ORANGES_ARG "OPTIONAL" "${oneValueArgs}" "TARGETS" ${ARGN})
 
@@ -104,13 +105,22 @@ function(oranges_install_targets)
 		RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT "${ORANGES_ARG_RUNTIME_COMPONENT}"
 		INCLUDES
 		DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
+
+	if(ORANGES_ARG_COMPONENT_GROUP)
+		include (CPackComponent)
+
+		cpack_add_component ("${ORANGES_ARG_RUNTIME_COMPONENT}"
+							 GROUP "${ORANGES_ARG_COMPONENT_GROUP}")
+
+		cpack_add_component ("${ORANGES_ARG_DEV_COMPONENT}" GROUP "${ORANGES_ARG_COMPONENT_GROUP}")
+	endif()
 endfunction()
 
 #
 
 function(oranges_add_target_headers)
 
-	set (oneValueArgs TARGET SCOPE REL_PATH)
+	set (oneValueArgs TARGET SCOPE REL_PATH INSTALL_COMPONENT)
 
 	cmake_parse_arguments (ORANGES_ARG "BINARY_DIR" "${oneValueArgs}" "FILES" ${ARGN})
 
@@ -138,22 +148,19 @@ function(oranges_add_target_headers)
 												$<BUILD_INTERFACE:${header_file_abs_path}>)
 
 		if(ORANGES_ARG_REL_PATH)
-			target_sources (
-				"${ORANGES_ARG_TARGET}"
-				"${ORANGES_ARG_SCOPE}"
-				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${headerFile}>
-				)
-
-			install (FILES "${header_file_abs_path}"
-					 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
+			set (header_dir "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
 		else()
-			target_sources (
-				"${ORANGES_ARG_TARGET}"
-				"${ORANGES_ARG_SCOPE}"
-				$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${headerFile}>)
-
-			install (FILES "${header_file_abs_path}" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+			set (header_dir "${CMAKE_INSTALL_INCLUDEDIR}")
 		endif()
+
+		if(ORANGES_ARG_INSTALL_COMPONENT)
+			set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+		endif()
+
+		target_sources ("${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+												$<INSTALL_INTERFACE:${header_dir}/${headerFile}>)
+
+		install (FILES "${header_file_abs_path}" DESTINATION "${header_dir}" ${component_flag})
 	endforeach()
 
 	target_include_directories (

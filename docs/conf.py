@@ -11,18 +11,16 @@
 #
 # ======================================================================================
 
-#import glob
-#import os
-#import re
 import sys
 
 
 sys.path.insert(0, r'@conf_path@')
 
 source_suffix = '.rst'
-master_doc = 'index'
+root_doc = 'index'
 
 project = 'Oranges'
+author = 'Ben Vining'
 copyright = '@conf_copyright@'  # pylint: disable=redefined-builtin
 version = '@conf_version@'  # feature version
 release = '@conf_version@'  # full version string
@@ -32,6 +30,8 @@ language = 'en'
 primary_domain = 'cmake'
 highlight_language = 'none'
 
+# needs_sphinx = '1.1'
+
 exclude_patterns = []
 
 extensions = ['cmake']
@@ -39,6 +39,7 @@ extensions = ['cmake']
 
 nitpicky = True
 smartquotes = False
+numfig = True
 
 man_show_urls = False
 man_make_section_directory = False
