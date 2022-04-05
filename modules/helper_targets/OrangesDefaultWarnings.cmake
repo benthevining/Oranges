@@ -86,6 +86,6 @@ target_compile_options (
 
 unset (clang_cxx_flags)
 
-oranges_export_alias_target (OrangesDefaultWarnings Oranges)
+install (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets)
 
-oranges_install_targets (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets OPTIONAL)
+add_library (Oranges::OrangesDefaultWarnings ALIAS OrangesDefaultWarnings)

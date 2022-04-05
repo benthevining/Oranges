@@ -24,8 +24,6 @@ include ("${CMAKE_CURRENT_LIST_DIR}/OrangesMacros.cmake")
 
 list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
 
-#
-
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 
 #

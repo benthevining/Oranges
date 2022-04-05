@@ -19,23 +19,13 @@ project (OrangesDocs DESCRIPTION "Oranges documentation"
 
 if(PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
-endif()
 
-include (GNUInstallDirs)
-
-if(NOT Oranges_SOURCE_DIR)
 	set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
 
 	include ("${ORANGES_ROOT_DIR}/scripts/OrangesMacros.cmake")
-
-	set (CMakeHelp_STANDALONE 1)
-
-	get_filename_component (tmp "${CMAKE_CURRENT_SOURCE_DIR}" PATH)
-	get_filename_component (Oranges_SOURCE_DIR "${tmp}" PATH)
-
-	unset (CMAKE_DATA_DIR)
-	unset (CMAKE_DATA_DIR CACHE)
 endif()
+
+include (GNUInstallDirs)
 
 option (SPHINX_MAN "Build man pages with Sphinx" ON)
 option (SPHINX_HTML "Build html help with Sphinx" ON)

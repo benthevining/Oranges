@@ -56,6 +56,6 @@ target_link_libraries (
 			  $<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>
 			  $<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>)
 
-oranges_export_alias_target (OrangesAllIntegrations Oranges)
-
 install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets)
+
+add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)

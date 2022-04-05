@@ -299,6 +299,6 @@ endif()
 
 #
 
-oranges_export_alias_target (OrangesDefaultTarget Oranges)
+install (TARGETS OrangesDefaultTarget EXPORT OrangesTargets)
 
-oranges_install_targets (TARGETS OrangesDefaultTarget EXPORT OrangesTargets)
+add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)

@@ -43,6 +43,6 @@ target_compile_options (
 target_link_options (OrangesCoverageFlags INTERFACE
 					 $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:$<$<CONFIG:Debug>:--coverage>>)
 
-oranges_export_alias_target (OrangesCoverageFlags Oranges)
+install (TARGETS OrangesCoverageFlags EXPORT OrangesTargets)
 
-oranges_install_targets (TARGETS OrangesCoverageFlags EXPORT OrangesTargets OPTIONAL)
+add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)

@@ -39,9 +39,11 @@ add_library (OrangesABIControlledLibrary INTERFACE)
 set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRESET hidden
 															  VISIBILITY_INLINES_HIDDEN TRUE)
 
-oranges_export_alias_target (OrangesABIControlledLibrary Oranges)
+install (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
 
-oranges_install_targets (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
+if(NOT TARGET Oranges::OrangesABIControlledLibrary)
+	add_library (Oranges::OrangesABIControlledLibrary ALIAS OrangesABIControlledLibrary)
+endif()
 
 option (ORANGES_REMOVE_DEPRECATED_CODE "Removes deprecated code from preprocessed output" OFF)
 
