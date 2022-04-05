@@ -49,13 +49,11 @@ set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-set (Oranges_SKIP_PKGCONFIG ON)
 set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
 
 include (OrangesDefaultProjectSettings)
 include (OrangesDefaultInstallSettings)
 
-unset (Oranges_SKIP_PKGCONFIG)
 unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 
 #

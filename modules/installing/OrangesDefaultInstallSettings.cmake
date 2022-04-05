@@ -17,8 +17,6 @@ OrangesDefaultInstallSettings
 
 An aggregate helper module that includes OrangesInstallSystemLibs, OrangesDefaultCPackSettings, OrangesGeneratePkgConfig, and, if the including project is the top level project, also includes OrangesUninstallTarget.
 
-If there is a target named `${PROJECT_NAME}` and the variable `${PROJECT_NAME}_SKIP_PKGCONFIG` is not set to a truthy value, then including this module will also call `oranges_create_pkgconfig_file (TARGET ${PROJECT_NAME})`.
-
 Inclusion style: In each project
 
 #]=======================================================================]
@@ -40,9 +38,4 @@ include (OrangesGeneratePkgConfig)
 
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesUninstallTarget)
-endif()
-
-if(TARGET "${PROJECT_NAME}" AND (NOT ${PROJECT_NAME}_SKIP_PKGCONFIG))
-	message (DEBUG "Configuring pkgconfig file generation for target ${PROJECT_NAME}...")
-	oranges_create_pkgconfig_file (TARGET "${PROJECT_NAME}")
 endif()
