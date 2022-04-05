@@ -116,14 +116,16 @@ cpack_add_component (
 	DISPLAY_NAME "Oranges CMake modules"
 	DESCRIPTION "Install the Oranges CMake modules"
 	GROUP oranges
-	DEPENDS oranges_base)
+	DEPENDS oranges_base
+	INSTALL_TYPES Developer)
 
 cpack_add_component (
 	oranges_toolchains
 	DISPLAY_NAME "Oranges CMake toolchains"
 	DESCRIPTION "Install the Oranges CMake toolchain files"
 	GROUP oranges
-	DEPENDS oranges_base)
+	DEPENDS oranges_base
+	INSTALL_TYPES Developer)
 
 cpack_add_component_group (
 	oranges
@@ -132,7 +134,7 @@ cpack_add_component_group (
 	BOLD_TITLE
 	PARENT_GROUP Citrus)
 
-#
+cpack_add_install_type (Developer DISPLAY_NAME "Developer installation")
 
 export (PACKAGE Oranges)
 
