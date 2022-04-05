@@ -71,7 +71,9 @@ if(NOT TARGET fftw3)
 
 			target_include_directories (fftw3 PUBLIC "${FFTW_D_INCLUDES}")
 
-			add_library (FFTW::fftw3 ALIAS fftw3)
+			if(NOT TARGET FFTW::fftw3)
+				add_library (FFTW::fftw3 ALIAS fftw3)
+			endif()
 		else()
 			find_package_warning_or_error ("fftw3 could not be located!")
 		endif()
@@ -93,7 +95,9 @@ if(NOT TARGET fftw3f)
 
 			target_include_directories (fftw3f PUBLIC "${FFTW_F_INCLUDES}")
 
-			add_library (FFTW::fftw3f ALIAS fftw3f)
+			if(NOT TARGET FFTW::fftw3f)
+				add_library (FFTW::fftw3f ALIAS fftw3f)
+			endif()
 		else()
 			find_package_warning_or_error ("fftw3f could not be located!")
 		endif()

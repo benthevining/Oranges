@@ -60,7 +60,9 @@ if(ABLETONLINK_INCLUDES AND ABLETONLINK_LIBRARIES)
 
 	target_include_directories (AbletonLink PUBLIC "${ABLETONLINK_INCLUDES}")
 
-	add_library (Ableton::Link ALIAS AbletonLink)
+	if(NOT TARGET Ableton::Link)
+		add_library (Ableton::Link ALIAS AbletonLink)
+	endif()
 
 	set (AbletonLink_FOUND TRUE)
 

@@ -87,4 +87,6 @@ add_library (cpplint-interface INTERFACE)
 set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${CMAKE_CXX_CPPLINT}"
 													C_CPPLINT "${CMAKE_C_CPPLINT}")
 
-oranges_export_alias_target (cpplint-interface Google)
+if(NOT TARGET Google::cpplint-interface)
+	add_library (Google::cpplint-interface ALIAS cpplint-interface)
+endif()

@@ -74,4 +74,6 @@ add_library (include-what-you-use-interface INTERFACE)
 set_target_properties (include-what-you-use-interface
 					   PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}")
 
-oranges_export_alias_target (include-what-you-use-interface Google)
+if(NOT TARGET Google::include-what-you-use-interface)
+	add_library (Google::include-what-you-use-interface ALIAS include-what-you-use-interface)
+endif()

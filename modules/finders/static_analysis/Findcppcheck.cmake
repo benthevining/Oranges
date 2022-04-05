@@ -97,4 +97,6 @@ add_library (cppcheck-interface INTERFACE)
 set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
 													 CXX_CPPCHECK "${CMAKE_CXX_CPPCHECK}")
 
-oranges_export_alias_target (cppcheck-interface cppcheck)
+if(NOT TARGET cppcheck::cppcheck-interface)
+	add_library (cppcheck::cppcheck-interface ALIAS cppcheck-interface)
+endif()

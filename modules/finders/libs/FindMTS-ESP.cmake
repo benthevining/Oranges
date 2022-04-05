@@ -99,7 +99,9 @@ if(NOT TARGET MTSClient)
 			target_include_directories (MTSClient PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
 														 $<INSTALL_INTERFACE:include/MTSClient>)
 
-			oranges_export_alias_target (MTSClient ODDSound)
+			if(NOT TARGET ODDSound::MTSClient)
+				add_library (ODDSound::MTSClient ALIAS MTSClient)
+			endif()
 		else()
 			find_package_warning_or_error ("MTS-ESP component 'Client' could not be found!")
 		endif()
@@ -180,7 +182,9 @@ if(NOT TARGET MTSMaster)
 					MTSMaster PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
 									 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
 
-				oranges_export_alias_target (MTSMaster ODDSound)
+				if(NOT TARGET ODDSound::MTSMaster)
+					add_library (ODDSound::MTSMaster ALIAS MTSMaster)
+				endif()
 			else()
 				find_package_warning_or_error ("libMTS could not be found!")
 			endif()
@@ -210,4 +214,4 @@ if(NOT TARGET ODDSound::MTS-ESP)
 	add_library (ODDSound::MTS-ESP ALIAS MTS-ESP)
 endif()
 
-oranges_install_targets (TARGETS MTS-ESP EXPORT OrangesTargets COMPONENT_PREFIX ODDSound)
+install (TARGETS MTS-ESP EXPORT OrangesTargets)

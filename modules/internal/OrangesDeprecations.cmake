@@ -35,7 +35,7 @@ macro(lemons_deprecate_function functionName)
 
 	function("${functionName}")
 		message (DEPRECATION "Deprecated function ${functionName} called!")
-		cmake_language (CALL "_${functionName}" ${ARGV})
+		cmake_language (CALL "_${functionName}" ${ARGN})
 	endfunction()
 endmacro()
 

@@ -138,4 +138,6 @@ else()
 													   CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif()
 
-oranges_export_alias_target (ccache-interface ccache)
+if(NOT TARGET ccache::ccache-interface)
+	add_library (ccache::ccache-interface ALIAS ccache-interface)
+endif()

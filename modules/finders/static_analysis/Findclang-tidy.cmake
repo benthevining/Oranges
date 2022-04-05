@@ -74,4 +74,6 @@ add_library (clang-tidy-interface INTERFACE)
 set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
 													   CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}")
 
-oranges_export_alias_target (clang-tidy-interface Clang)
+if(NOT TARGET Clang::clang-tidy-interface)
+	add_library (Clang::clang-tidy-interface ALIAS clang-tidy-interface)
+endif()

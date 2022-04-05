@@ -25,9 +25,9 @@ Generating a platform header for a target
 	oranges_generate_platform_header (TARGET <targetName>
 									  [BASE_NAME <baseName>]
 									  [HEADER <headerName>]
-									  [REL_PATH <installRelPath>]
 									  [LANGUAGE <languageToUseForTestFeastures>]
-									  [INTERFACE])
+									  [INTERFACE]
+									  [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 Generates a header file containing various platform identifying macros for the current target platform.
 
@@ -210,7 +210,7 @@ function(oranges_generate_platform_header)
 
 	oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE)
+	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE INSTALL_COMPONENT)
 
 	cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
 
@@ -285,16 +285,19 @@ function(oranges_generate_platform_header)
 	configure_file ("${platform_header_input}" "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
 					@ONLY)
 
-	oranges_add_target_headers (
-		TARGET
+	target_sources (
 		"${ORANGES_ARG_TARGET}"
-		SCOPE
 		"${public_vis}"
-		REL_PATH
-		"${ORANGES_ARG_REL_PATH}"
-		FILES
-		"${ORANGES_ARG_HEADER}"
-		BINARY_DIR)
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
+		)
+
+	if(ORANGES_ARG_INSTALL_COMPONENT)
+		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+	endif()
+
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
+			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
 	target_include_directories (
 		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>

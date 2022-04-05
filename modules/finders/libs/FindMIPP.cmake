@@ -74,8 +74,10 @@ target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/
 target_sources (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
 							   $<INSTALL_INTERFACE:include/MIPP/mipp.h>)
 
-oranges_export_alias_target (MIPP aff3ct)
+if(NOT TARGET aff3ct::MIPP)
+	add_library (aff3ct::MIPP ALIAS MIPP)
+endif()
 
-oranges_install_targets (TARGETS MIPP EXPORT OrangesTargets COMPONENT_PREFIX aff3ct)
+install (TARGETS MIPP EXPORT OrangesTargets)
 
 set (MIPP_FOUND TRUE)

@@ -24,7 +24,8 @@ Generating an export header for a target
 
 	oranges_generate_export_header (TARGET <targetName>
 									[BASE_NAME <baseName>]
-									[HEADER <exportHeaderName>])
+									[HEADER <exportHeaderName>]
+									[INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 #]=======================================================================]
 
@@ -59,9 +60,10 @@ function(oranges_generate_export_header)
 
 	oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH)
+	set (options INTERFACE)
+	set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH INSTALL_COMPONENT)
 
-	cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
 
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -102,16 +104,19 @@ function(oranges_generate_export_header)
 		set (ORANGES_ARG_REL_PATH "${ORANGES_ARG_TARGET}")
 	endif()
 
-	oranges_add_target_headers (
-		TARGET
+	target_sources (
 		"${ORANGES_ARG_TARGET}"
-		SCOPE
 		"${public_vis}"
-		REL_PATH
-		"${ORANGES_ARG_REL_PATH}"
-		FILES
-		"${ORANGES_ARG_HEADER}"
-		BINARY_DIR)
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
+		)
+
+	if(ORANGES_ARG_INSTALL_COMPONENT)
+		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+	endif()
+
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
+			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
 	target_include_directories (
 		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>

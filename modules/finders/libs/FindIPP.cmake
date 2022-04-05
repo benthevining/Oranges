@@ -189,7 +189,9 @@ function(_oranges_find_ipp_library IPP_COMPONENT comp_required)
 	set_target_properties (ipp_lib_${IPP_COMPONENT} PROPERTIES IMPORTED_LOCATION
 															   "${IPP_LIB_${IPP_COMPONENT}}")
 
-	oranges_export_alias_target (ipp_lib_${IPP_COMPONENT} Intel)
+	if(NOT TARGET Intel::ipp_lib_${IPP_COMPONENT})
+		add_library (Intel::ipp_lib_${IPP_COMPONENT} ALIAS ipp_lib_${IPP_COMPONENT})
+	endif()
 
 	if(NOT TARGET IntelIPP)
 		add_library (IntelIPP INTERFACE)
@@ -294,7 +296,7 @@ if(NOT TARGET Intel::IntelIPP)
 	add_library (Intel::IntelIPP ALIAS IntelIPP)
 endif()
 
-oranges_install_targets (TARGETS IntelIPP EXPORT OrangesTargets COMPONENT_PREFIX Intel)
+install (TARGETS IntelIPP EXPORT OrangesTargets)
 
 set (IPP_FOUND TRUE)
 
