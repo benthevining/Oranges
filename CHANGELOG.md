@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.7.0](http://github.com/benthevining/Oranges/compare/v2.6.0...v2.7.0) (2022-04-05)
+
+
+### Features
+
+* added install types ([f846e37](http://github.com/benthevining/Oranges/commit/f846e3797905629ffae38507566ff29b454142d4))
+
 ## [2.6.0](http://github.com/benthevining/Oranges/compare/v2.5.1...v2.6.0) (2022-04-03)
 
 
