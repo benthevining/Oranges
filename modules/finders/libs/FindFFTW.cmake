@@ -48,7 +48,7 @@ set (FFTW_FOUND FALSE)
 
 #
 
-find_package_try_pkgconfig (FFTW::FFTW)
+find_package_try_pkgconfig (FFTW::FFTW fftw3)
 
 #
 

@@ -17,6 +17,10 @@ Findccache
 
 Find the ccache compiler cache.
 
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- CCACHE_DISABLE - when on, disables ccache for the entire build
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - CCACHE_OPTIONS - space-separated command line flags to pass to ccache
@@ -40,6 +44,12 @@ include (OrangesFindPackageHelpers)
 
 set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
 						DESCRIPTION "C/C++ compiler cache")
+
+option (CCACHE_DISABLE "Disable ccache for this build" OFF)
+
+if(CCACHE_DISABLE)
+	return ()
+endif()
 
 #
 

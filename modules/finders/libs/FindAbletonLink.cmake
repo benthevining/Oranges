@@ -48,7 +48,7 @@ set (AbletonLink_FOUND FALSE)
 
 #
 
-find_package_try_pkgconfig (Ableton::Link)
+find_package_try_pkgconfig (Ableton::Link link)
 
 #
 
