@@ -52,7 +52,6 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
 
 include (OrangesDefaultProjectSettings)
-include (OrangesDefaultInstallSettings)
 
 unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 
@@ -72,8 +71,6 @@ include (OrangesUnityBuild)
 include (OrangesGenerateExportHeader)
 
 #
-
-include (GNUInstallDirs)
 
 set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 	 CACHE STRING "Directory below INSTALL_PREFIX where ${PROJECT_NAME} will be installed to")
@@ -106,8 +103,6 @@ install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT orang
 
 install (DIRECTORY toolchains DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_toolchains
 		 PATTERN .DS_Store EXCLUDE)
-
-include (CPackComponent)
 
 cpack_add_component (oranges_base HIDDEN)
 

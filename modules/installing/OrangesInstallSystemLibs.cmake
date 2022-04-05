@@ -45,9 +45,13 @@ endif()
 set (CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
 set (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS TRUE)
 
-set (CMAKE_INSTALL_SYSTEM_LIBS_RUNTIME_COMPONENT ${PROJECT_NAME}_SystemLibraries)
+set (CMAKE_INSTALL_SYSTEM_LIBS_RUNTIME_COMPONENT SystemLibraries)
 
 include (InstallRequiredSystemLibraries)
 
-cpack_add_component (SystemLibraries DISPLAY_NAME "System libraries"
-					 DESCRIPTION "Installs all required system libraries")
+cpack_add_component (
+	SystemLibraries
+	DISPLAY_NAME "System libraries"
+	DESCRIPTION "Installs all required system libraries"
+	INSTALL_TYPES Developer
+	DISABLED)

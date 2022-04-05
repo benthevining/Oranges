@@ -26,10 +26,12 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 include (OrangesDefaultPlatformSettings)
 include (OrangesCmakeDevTools)
 include (OrangesDefaultTarget)
-include (CMakePackageConfigHelpers)
-include (GNUInstallDirs)
 include (OrangesDeprecateDirectoryScopedCommands)
 include (OrangesConfigurationPostfixes)
+
+include (GNUInstallDirs)
+include (CMakePackageConfigHelpers)
+include (CPackComponent)
 
 #
 
