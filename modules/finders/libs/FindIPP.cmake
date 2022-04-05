@@ -114,7 +114,7 @@ find_package_try_pkgconfig (Intel::IntelIPP IntelIPP)
 find_path (
 	IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
 								/opt/intel/oneapi/ipp/include "${IPP_ROOT}/include"
-	DOC "Intel IPP root directory" NO_DEFAULT_PATH)
+	DOC "Intel IPP root directory")
 
 mark_as_advanced (FORCE IPP_INCLUDE_DIR)
 
@@ -289,14 +289,22 @@ endif()
 
 #
 
-target_include_directories (IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
-											   $<INSTALL_INTERFACE:include/IntelIPP>)
+target_include_directories (
+	IntelIPP INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
+					   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP>)
+
+install (TARGETS IntelIPP EXPORT IntelIPPTargets)
+
+install (EXPORT IntelIPPTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP"
+		 NAMESPACE Intel:: COMPONENT IntelIPP)
+
+include (CPackComponent)
+
+cpack_add_component (IntelIPP DISPLAY_NAME "Intel IPP" DESCRIPTION "Intel IPP libraries")
 
 if(NOT TARGET Intel::IntelIPP)
 	add_library (Intel::IntelIPP ALIAS IntelIPP)
 endif()
-
-install (TARGETS IntelIPP EXPORT OrangesTargets)
 
 set (IPP_FOUND TRUE)
 

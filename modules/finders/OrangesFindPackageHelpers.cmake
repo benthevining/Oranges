@@ -17,6 +17,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (FeatureSummary)
 include (FindPackageMessage)
 include (OrangesCmakeDevTools)
+include (GNUInstallDirs)
 
 option (FIND_PACKAGE_TRY_PKGCONFIG "Try using pkgconfig to locate libraries" ON)
 

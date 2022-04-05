@@ -39,6 +39,11 @@ set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
 
 #
 
+if(TARGET aff3ct::MIPP)
+	set (MIPP_FOUND TRUE)
+	return ()
+endif()
+
 oranges_file_scoped_message_context ("FindMIPP")
 
 set (MIPP_FOUND FALSE)
@@ -69,15 +74,23 @@ unset (quiet_flag)
 add_library (MIPP INTERFACE)
 
 target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
-										   $<INSTALL_INTERFACE:include/MIPP>)
+										   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP>)
 
 target_sources (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
-							   $<INSTALL_INTERFACE:include/MIPP/mipp.h>)
+							   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP/mipp.h>)
 
-if(NOT TARGET aff3ct::MIPP)
-	add_library (aff3ct::MIPP ALIAS MIPP)
-endif()
+install (DIRECTORY "${MIPP_SOURCE_DIR}/src" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP"
+		 COMPONENT MIPP)
 
-install (TARGETS MIPP EXPORT OrangesTargets)
+install (TARGETS MIPP EXPORT MIPPTargets)
+
+install (EXPORT MIPPTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP" NAMESPACE aff3ct::
+		 COMPONENT MIPP)
+
+include (CPackComponent)
+
+cpack_add_component (MIPP DESCRIPTION "MIPP intrinsics library sources")
+
+add_library (aff3ct::MIPP ALIAS MIPP)
 
 set (MIPP_FOUND TRUE)

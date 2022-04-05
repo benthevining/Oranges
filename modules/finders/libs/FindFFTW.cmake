@@ -56,7 +56,7 @@ find_package_default_component_list (fftw3 fftw3f)
 
 #
 
-if(NOT TARGET fftw3)
+if(NOT TARGET FFTW::fftw3)
 	if(fftw3 IN_LIST FFTW_FIND_COMPONENTS)
 		find_path (FFTW_D_INCLUDES NAMES fftw3.h dfftw3.h)
 
@@ -71,16 +71,14 @@ if(NOT TARGET fftw3)
 
 			target_include_directories (fftw3 PUBLIC "${FFTW_D_INCLUDES}")
 
-			if(NOT TARGET FFTW::fftw3)
-				add_library (FFTW::fftw3 ALIAS fftw3)
-			endif()
+			add_library (FFTW::fftw3 ALIAS fftw3)
 		else()
 			find_package_warning_or_error ("fftw3 could not be located!")
 		endif()
 	endif()
 endif()
 
-if(NOT TARGET fftw3f)
+if(NOT TARGET FFTW::fftw3f)
 	if(fftw3f IN_LIST FFTW_FIND_COMPONENTS)
 		find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h)
 
@@ -95,9 +93,7 @@ if(NOT TARGET fftw3f)
 
 			target_include_directories (fftw3f PUBLIC "${FFTW_F_INCLUDES}")
 
-			if(NOT TARGET FFTW::fftw3f)
-				add_library (FFTW::fftw3f ALIAS fftw3f)
-			endif()
+			add_library (FFTW::fftw3f ALIAS fftw3f)
 		else()
 			find_package_warning_or_error ("fftw3f could not be located!")
 		endif()
@@ -121,6 +117,9 @@ endif()
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW::fftw3>
 									  $<TARGET_NAME_IF_EXISTS:FFTW::fftw3f>)
 
+# TO DO: this will break if this find module is loaded multiple times with different component
+# requirements...
+
 if(TARGET FFTW::fftw3 AND NOT TARGET FFTW::fftw3f)
 	target_compile_definitions (FFTW INTERFACE FFTW_DOUBLE_ONLY=1)
 else()
@@ -132,6 +131,12 @@ if(TARGET FFTW::fftw3f AND NOT TARGET FFTW::fftw3)
 else()
 	target_compile_definitions (FFTW INTERFACE FFTW_SINGLE_ONLY=0)
 endif()
+
+install (IMPORTED_RUNTIME_ARTIFACTS FFTW COMPONENT FFTW)
+
+include (CPackComponent)
+
+cpack_add_component (FFTW DESCRIPTION "FFTW FFT library")
 
 if(NOT TARGET FFTW::FFTW)
 	add_library (FFTW::FFTW ALIAS FFTW)

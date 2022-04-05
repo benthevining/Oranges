@@ -75,22 +75,28 @@ define_property (GLOBAL PROPERTY WRAPTOOL_KEYFILE BRIEF_DOCS "wraptool keyfile"
 define_property (GLOBAL PROPERTY WRAPTOOL_KEYPASSWORD BRIEF_DOCS "wraptool key password"
 				 FULL_DOCS "wraptool key password")
 
-set (wraptool_FOUND FALSE)
+#
 
-find_program (WRAPTOOL_PROGRAM wraptool)
-
-mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
-
-if(WRAPTOOL_PROGRAM)
-	add_executable (wraptool IMPORTED GLOBAL)
-
-	set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${WRAPTOOL_PROGRAM}")
-
-	add_executable (PACE::wraptool ALIAS wraptool)
-
+if(TARGET PACE::wraptool)
 	set (wraptool_FOUND TRUE)
 else()
-	find_package_warning_or_error ("wraptool program cannot be found!")
+	set (wraptool_FOUND FALSE)
+
+	find_program (WRAPTOOL_PROGRAM wraptool)
+
+	mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
+
+	if(WRAPTOOL_PROGRAM)
+		add_executable (wraptool IMPORTED GLOBAL)
+
+		set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${WRAPTOOL_PROGRAM}")
+
+		add_executable (PACE::wraptool ALIAS wraptool)
+
+		set (wraptool_FOUND TRUE)
+	else()
+		find_package_warning_or_error ("wraptool program cannot be found!")
+	endif()
 endif()
 
 #

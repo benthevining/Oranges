@@ -91,13 +91,15 @@ if(NOT TARGET MTSClient)
 			add_library (MTSClient STATIC)
 
 			target_sources (
-				MTSClient
-				PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
-						$<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
-						$<INSTALL_INTERFACE:include/MTSClient/libMTSClient.h>)
+				MTSClient PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.cpp>
+				PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}/libMTSClient.h>
+					   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MTS-ESP/libMTSClient.h>)
 
-			target_include_directories (MTSClient PUBLIC $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
-														 $<INSTALL_INTERFACE:include/MTSClient>)
+			target_include_directories (
+				MTSClient PRIVATE $<BUILD_INTERFACE:${MTS_ESP_CLIENT_DIR}>
+								  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MTS-ESP>)
+
+			install (TARGETS MTSClient EXPORT MTS_ESP_TARGETS)
 
 			if(NOT TARGET ODDSound::MTSClient)
 				add_library (ODDSound::MTSClient ALIAS MTSClient)
@@ -173,14 +175,15 @@ if(NOT TARGET MTSMaster)
 				target_link_libraries (MTSMaster PRIVATE lib_mts)
 
 				target_sources (
-					MTSMaster
-					PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
-							$<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
-							$<INSTALL_INTERFACE:include/MTS-ESP_Master/libMTSMaster.h>)
+					MTSMaster PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.cpp>
+					PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}/libMTSMaster.h>
+						   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MTS-ESP/libMTSMaster.h>)
 
 				target_include_directories (
-					MTSMaster PUBLIC $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
-									 $<INSTALL_INTERFACE:include/MTS-ESP_Master>)
+					MTSMaster PRIVATE $<BUILD_INTERFACE:${MTS_ESP_MASTER_DIR}>
+									  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MTS-ESP>)
+
+				install (TARGETS MTSMaster EXPORT MTS_ESP_TARGETS)
 
 				if(NOT TARGET ODDSound::MTSMaster)
 					add_library (ODDSound::MTSMaster ALIAS MTSMaster)
@@ -210,8 +213,13 @@ endif()
 target_link_libraries (MTS-ESP INTERFACE $<TARGET_NAME_IF_EXISTS:ODDSound::MTSClient>
 										 $<TARGET_NAME_IF_EXISTS:ODDSound::MTSMaster>)
 
+install (EXPORT MTS_ESP_TARGETS DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MTS-ESP"
+		 NAMESPACE ODDSound:: COMPONENT MTS-ESP)
+
+include (CPackComponent)
+
+cpack_add_component (MTS-ESP DISPLAY_NAME "MTS-ESP" DESCRIPTION "MTS-ESP MIDI tuning library")
+
 if(NOT TARGET ODDSound::MTS-ESP)
 	add_library (ODDSound::MTS-ESP ALIAS MTS-ESP)
 endif()
-
-install (TARGETS MTS-ESP EXPORT OrangesTargets)
