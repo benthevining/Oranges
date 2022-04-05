@@ -52,15 +52,3 @@ set (FETCHCONTENT_SOURCE_DIR_${PROJECT_NAME} "${PROJECT_SOURCE_DIR}" CACHE INTER
 set (${PROJECT_NAME}_FOUND TRUE)
 
 set (CMAKE_DISABLE_FIND_PACKAGE_${PROJECT_NAME} TRUE)
-
-#
-
-string (TOUPPER "${PROJECT_NAME}" _oranges_upper_project_name)
-
-set (${_oranges_upper_project_name}_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-	 CACHE STRING "Directory below INSTALL_PREFIX where ${PROJECT_NAME} will be installed to")
-
-mark_as_advanced (FORCE ${_oranges_upper_project_name}_INSTALL_DEST CPM_${PROJECT_NAME}_SOURCE
-				  FETCHCONTENT_SOURCE_DIR_${PROJECT_NAME})
-
-unset (_oranges_upper_project_name)
