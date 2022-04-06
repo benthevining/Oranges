@@ -279,7 +279,7 @@ if(APPLE)
 	endif()
 
 else() # not Apple platform
-	set_target_properties (OrangesDefaultTarget PROPERTIES "$ORIGIN")
+	set_target_properties (OrangesDefaultTarget PROPERTIES INSTALL_RPATH $ORIGIN)
 endif()
 
 #
