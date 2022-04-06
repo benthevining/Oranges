@@ -19,18 +19,34 @@ This module sets up some project-specific defaults, and includes a basic set of 
 
 Inclusion style: In each project
 
-Cache variables:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- <upperProjectName>_INSTALL_DEST
-
 #]=======================================================================]
 
 # NO include_guard here - by design!
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesDefaultCMakeSettings)
+set (CMAKE_CXX_VISIBILITY_PRESET hidden)
+set (CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+set (CMAKE_SUPPRESS_REGENERATION TRUE)
+set (CMAKE_INSTALL_MESSAGE LAZY)
+set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
+set (CMAKE_COLOR_MAKEFILE ON)
+set (CMAKE_VERBOSE_MAKEFILE ON)
+set (CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT)
+set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
+
+set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
+							  "${CMAKE_BINARY_DIR}/undefined_properties.log")
+
+set_property (GLOBAL PROPERTY USE_FOLDERS YES)
+set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
+
+include (GNUInstallDirs)
+include (CMakePackageConfigHelpers)
+include (CPackComponent)
+include (OrangesDefaultTarget)
 include (OrangesDocsBuildConfig)
+include (OrangesDeprecateDirectoryScopedCommands)
 
 if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesWipeCacheTarget)

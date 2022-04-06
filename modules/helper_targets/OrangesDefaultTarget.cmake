@@ -22,12 +22,18 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesDefaultTarget
 
-
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ORANGES_IGNORE_IPO
 - ORANGES_IGNORE_WARNINGS
 - ORANGES_COVERAGE_FLAGS
+- ORANGES_IOS_SIMULATOR (iOS only)
+- LEMONS_IOS_COMBINED (iOS only)
+- ORANGES_MAC_UNIVERSAL_BINARY (macOS only)
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- APPLE_DEV_ID
 
 #]=======================================================================]
 
@@ -43,7 +49,6 @@ include (OrangesDefaultWarnings)
 include (OrangesCmakeDevTools)
 include (OrangesGeneratorExpressions)
 include (OrangesConfigurationPostfixes)
-include (OrangesDefaultPlatformSettings)
 
 #
 
@@ -51,11 +56,41 @@ option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
 option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
 option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
 
-mark_as_advanced (FORCE ORANGES_IGNORE_IPO ORANGES_IGNORE_WARNINGS ORANGES_COVERAGE_FLAGS)
+if(APPLE)
+	if(IOS)
+		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
+		option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
 
-#
+		# if(LEMONS_IOS_COMBINED) set (ORANGES_IOS_SIMULATOR ON) endif()
 
-add_library (OrangesDefaultTarget INTERFACE)
+		set (CMAKE_OSX_DEPLOYMENT_TARGET 9.3 CACHE STRING "Minimum OSX version to build for")
+
+		enable_language (OBJCXX)
+		enable_language (OBJC)
+	else()
+		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+
+		set (CMAKE_OSX_DEPLOYMENT_TARGET 10.11 CACHE STRING "Minimum OSX version to build for")
+	endif()
+else()
+	set (CMAKE_INSTALL_RPATH $ORIGIN)
+
+	if(UNIX AND NOT WIN32)
+		set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
+		set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
+
+		include (LinuxLSBInfo)
+	endif()
+endif()
+
+mark_as_advanced (
+	FORCE
+	ORANGES_IGNORE_IPO
+	ORANGES_IGNORE_WARNINGS
+	ORANGES_COVERAGE_FLAGS
+	ORANGES_IOS_SIMULATOR
+	LEMONS_IOS_COMBINED
+	ORANGES_MAC_UNIVERSAL_BINARY)
 
 #
 
@@ -95,6 +130,8 @@ define_property (
 
 #
 
+add_library (OrangesDefaultTarget INTERFACE)
+
 set_target_properties (
 	OrangesDefaultTarget
 	PROPERTIES DEBUG_POSTFIX "${ORANGES_DEBUG_POSTFIX}"
@@ -132,17 +169,6 @@ target_compile_options (
 target_link_libraries (OrangesDefaultTarget
 					   INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,${GEN_ANY_REL_CONFIG}>:-LTCG>)
 
-set_target_properties (OrangesDefaultTarget PROPERTIES $<$<NOT:$<PLATFORM_ID:Darwin>>:INSTALL_RPATH
-													   $ORIGIN>)
-
-set_target_properties (OrangesDefaultTarget
-					   PROPERTIES $<$<NOT:$<PLATFORM_ID:IOS>>:ORANGES_IOS_SIMULATOR FALSE>)
-
-set_target_properties (
-	OrangesDefaultTarget
-	PROPERTIES $<$<OR:$<PLATFORM_ID:IOS>,$<NOT:$<PLATFORM_ID:Darwin>>>:ORANGES_MAC_UNIVERSAL_BINARY
-			   FALSE>)
-
 #
 # IPO
 
@@ -169,47 +195,26 @@ endif()
 # MacOS options
 
 if(APPLE)
+	target_compile_definitions (OrangesDefaultTarget INTERFACE JUCE_USE_VDSP_FRAMEWORK=1)
 
 	set_target_properties (
 		OrangesDefaultTarget
-		PROPERTIES $<$<PLATFORM_ID:IOS>:ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH
-																	$(LOCAL_APPS_DIR)
-				   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>)
+		PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
+				   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
-	target_compile_definitions (OrangesDefaultTarget
-								INTERFACE $<$<PLATFORM_ID:Darwin>:JUCE_USE_VDSP_FRAMEWORK=1>)
+	target_compile_options (OrangesDefaultTarget
+							INTERFACE "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
-	set (ios_min_deployment_target 9.3)
-	set (macos_min_deployment_target 10.11)
-
-	set_target_properties (
-		OrangesDefaultTarget
-		PROPERTIES
-			XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
-			XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET
-			$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>)
-
-	target_compile_options (
-		OrangesDefaultTarget
-		INTERFACE
-			-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
-		)
-
-	target_link_options (
-		OrangesDefaultTarget
-		INTERFACE
-		-mmacosx-version-min=$<IF:$<PLATFORM_ID:IOS>,${ios_min_deployment_target},${macos_min_deployment_target}>
-		)
-
-	unset (ios_min_deployment_target)
-	unset (macos_min_deployment_target)
+	target_link_options (OrangesDefaultTarget INTERFACE
+						 "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
 	if(IOS)
-		if(LEMONS_IOS_COMBINED)
-			set (ORANGES_IOS_SIMULATOR ON)
-		endif()
+		set_target_properties (
+			OrangesDefaultTarget
+			PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+					   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
 
-		if(ORANGES_IOS_SIMULATOR OR LEMONS_IOS_COMBINED)
+		if(ORANGES_IOS_SIMULATOR)
 			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR TRUE)
 		else()
 			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
@@ -220,7 +225,9 @@ if(APPLE)
 		else()
 			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
 																   "armv7;armv7s;arm64;i386;x86_64")
+		endif()
 
+		if(NOT ORANGES_IOS_SIMULATOR)
 			# cmake-lint: disable=W0106
 			if(DEFINED ENV{APPLE_DEV_ID})
 				set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
@@ -242,8 +249,12 @@ if(APPLE)
 
 		if(LEMONS_IOS_COMBINED)
 			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED ON)
+		else()
+			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED OFF)
 		endif()
-	else()
+
+	else() # MacOS
+
 		execute_process (COMMAND uname -m RESULT_VARIABLE result OUTPUT_VARIABLE osx_native_arch
 						 OUTPUT_STRIP_TRAILING_WHITESPACE)
 
@@ -266,6 +277,9 @@ if(APPLE)
 
 		unset (osx_native_arch)
 	endif()
+
+else() # not Apple platform
+	set_target_properties (OrangesDefaultTarget PROPERTIES $ORIGIN>)
 endif()
 
 #

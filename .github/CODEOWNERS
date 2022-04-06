@@ -82,6 +82,7 @@ modules/finders/Findwraptool.cmake benthevining
 modules/finders/OrangesFindPackageHelpers.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
+modules/finders/code_signing/Usecodesign.cmake benthevining
 modules/finders/libs/FindAbletonLink.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindJUCE.cmake benthevining
@@ -131,6 +132,7 @@ modules/general/LemonsFileUtils.cmake benthevining
 modules/general/LemonsGetCPM.cmake benthevining
 modules/general/LemonsJsonUtils.cmake benthevining
 modules/general/LemonsStaticLibraryHelpers.cmake benthevining
+modules/general/LinuxLSBInfo.cmake benthevining
 modules/general/OrangesAllIntegrations.cmake benthevining
 modules/general/OrangesCoverageFlags.cmake benthevining
 modules/general/OrangesCreateDefaultDocsTarget.cmake benthevining
