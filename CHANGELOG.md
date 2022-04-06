@@ -1,5 +1,13 @@
 # Oranges changelog
 
+### [2.7.1](http://github.com/benthevining/Oranges/compare/v2.7.0...v2.7.1) (2022-04-06)
+
+
+### Bug Fixes
+
+* CMake typo ([15a7217](http://github.com/benthevining/Oranges/commit/15a72174574e0d1bd6b7069dcace0a91d76a8188))
+* CMake typo ([a616c30](http://github.com/benthevining/Oranges/commit/a616c3072914317ca67c1d6e6f45f116d028347f))
+
 ## [2.7.0](http://github.com/benthevining/Oranges/compare/v2.6.0...v2.7.0) (2022-04-05)
 
 
