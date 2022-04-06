@@ -38,7 +38,8 @@ target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSV
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall
+	INTERFACE
+		"$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall
 			  -Wcast-align
 			  -Wno-ignored-qualifiers
 			  -Wno-missing-field-initializers
@@ -50,19 +51,20 @@ target_compile_options (
 			  -Wreorder
 			  -Wsign-conversion
 			  -Wstrict-aliasing
-			  -Wsign-compare>)
+			  -Wsign-compare>")
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
-			  -Wno-strict-overflow -Wredundant-decls -Wshadow>)
+	INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
+			  -Wno-strict-overflow -Wredundant-decls -Wshadow>")
 
 target_compile_options (OrangesDefaultWarnings
 						INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>)
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wbool-conversion
+	INTERFACE
+		"$<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wbool-conversion
 			  -Wconditional-uninitialized
 			  -Wconversion
 			  -Wconstant-conversion
@@ -74,15 +76,15 @@ target_compile_options (
 			  -Wshadow
 			  -Wshadow-all
 			  -Wshift-sign-overflow
-			  -Wshorten-64-to-32>)
+			  -Wshorten-64-to-32>")
 
 set (clang_cxx_flags -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual
 					 -Winconsistent-missing-destructor-override)
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_flags}>
-			  $<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_flags}>)
+	INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_flags}>"
+			  "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_flags}>")
 
 unset (clang_cxx_flags)
 

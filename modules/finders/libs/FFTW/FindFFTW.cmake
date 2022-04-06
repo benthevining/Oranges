@@ -16,6 +16,7 @@ FindFFTW
 -------------------------
 
 A find module for the FFTW FFT library.
+FFTW produces two separate CMake packages, fftw3 (double precision) and fftw3f (float precision); this find module searches for both and creates an interface target that links to whichever is found (or both).
 
 Output variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,8 +29,6 @@ Components
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FFTW::fftw3 - double precision library, if found
-- FFTW::fftw3f - single precision library, if found
 - FFTW::FFTW : interface library that links to both the single and/or double precision libraries, and has the macros FFTW_SINGLE_ONLY or FFTW_DOUBLE_ONLY defined, if applicable.
 
 #]=======================================================================]
@@ -40,82 +39,49 @@ include (OrangesFindPackageHelpers)
 
 set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org" DESCRIPTION "FFT library")
 
-#
-
 oranges_file_scoped_message_context ("FindFFTW")
 
 set (FFTW_FOUND FALSE)
 
-#
-
-find_package_try_pkgconfig (FFTW::FFTW fftw3)
-
-#
-
 find_package_default_component_list (fftw3 fftw3f)
 
-#
-
-if(NOT TARGET FFTW::fftw3)
-	if(fftw3 IN_LIST FFTW_FIND_COMPONENTS)
-		find_path (FFTW_D_INCLUDES NAMES fftw3.h dfftw3.h)
-
-		find_library (FFTW_D_LIBRARIES NAMES fftw3 dfftw)
-
-		mark_as_advanced (FORCE FFTW_D_INCLUDES FFTW_D_LIBRARIES)
-
-		if(FFTW_D_INCLUDES AND FFTW_D_LIBRARIES)
-			add_library (fftw3 IMPORTED UNKNOWN)
-
-			set_target_properties (fftw3 PROPERTIES IMPORTED_LOCATION "${FFTW_D_LIBRARIES}")
-
-			target_include_directories (fftw3 PUBLIC "${FFTW_D_INCLUDES}")
-
-			add_library (FFTW::fftw3 ALIAS fftw3)
-		else()
-			find_package_warning_or_error ("fftw3 could not be located!")
-		endif()
-	endif()
+if(FFTW_FIND_QUIETLY)
+	set (quiet_flag QUIET)
 endif()
 
-if(NOT TARGET FFTW::fftw3f)
-	if(fftw3f IN_LIST FFTW_FIND_COMPONENTS)
-		find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h)
-
-		find_library (FFTW_F_LIBRARIES NAMES fftw3f sfftw)
-
-		mark_as_advanced (FORCE FFTW_F_INCLUDES FFTW_F_LIBRARIES)
-
-		if(FFTW_F_INCLUDES AND FFTW_F_LIBRARIES)
-			add_library (fftw3f IMPORTED UNKNOWN)
-
-			set_target_properties (fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARIES}")
-
-			target_include_directories (fftw3f PUBLIC "${FFTW_F_INCLUDES}")
-
-			add_library (FFTW::fftw3f ALIAS fftw3f)
-		else()
-			find_package_warning_or_error ("fftw3f could not be located!")
-		endif()
+if(fftw3 IN_LIST FFTW_FIND_COMPONENTS)
+	if(FFTW_FIND_REQUIRED_fftw3)
+		set (required_flag REQUIRED)
 	endif()
+
+	find_package (fftw3 ${quiet_flag} ${required_flag})
+
+	unset (required_flag)
 endif()
 
-#
+if(fftw3f IN_LIST FFTW_FIND_COMPONENTS)
+	if(FFTW_FIND_REQUIRED_fftw3f)
+		set (required_flag REQUIRED)
+	endif()
 
-if(NOT (TARGET fftw3 OR TARGET fftw3f))
-	find_package_warning_or_error (
-		"Neither single or double precision FFTW library could be found!")
+	find_package (fftw3f ${quiet_flag} ${required_flag})
+
+	unset (required_flag)
+endif()
+
+unset (quiet_flag)
+
+if(NOT (TARGET FFTW3::fftw3 OR TARGET FFTW3::fftw3f))
+	find_package_warning_or_error ("FFTW could not be located!")
 	return ()
 endif()
-
-#
 
 if(NOT TARGET FFTW)
 	add_library (FFTW INTERFACE)
 endif()
 
-target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW::fftw3>
-									  $<TARGET_NAME_IF_EXISTS:FFTW::fftw3f>)
+target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
+									  $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
 
 # TO DO: this will break if this find module is loaded multiple times with different component
 # requirements...
@@ -132,7 +98,10 @@ else()
 	target_compile_definitions (FFTW INTERFACE FFTW_SINGLE_ONLY=0)
 endif()
 
-install (IMPORTED_RUNTIME_ARTIFACTS FFTW COMPONENT FFTW)
+install (TARGETS FFTW EXPORT FFTWTargets)
+
+install (EXPORT FFTWTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/FFTW" NAMESPACE FFTW::
+		 COMPONENT FFTW)
 
 include (CPackComponent)
 

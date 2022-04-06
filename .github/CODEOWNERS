@@ -83,6 +83,7 @@ modules/finders/OrangesFindPackageHelpers.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/code_signing/Usecodesign.cmake benthevining
+modules/finders/libs/FFTW/FindFFTW.cmake benthevining
 modules/finders/libs/FindAbletonLink.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindJUCE.cmake benthevining

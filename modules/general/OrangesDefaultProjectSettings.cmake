@@ -35,6 +35,11 @@ set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT)
 set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
 
+option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
+		"Prefer config files to find modules in find_package search" ON)
+
+mark_as_advanced (FORCE CMAKE_FIND_PACKAGE_PREFER_CONFIG)
+
 set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
 							  "${CMAKE_BINARY_DIR}/undefined_properties.log")
 

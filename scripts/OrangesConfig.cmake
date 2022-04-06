@@ -29,6 +29,12 @@ include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
 #
 
 set (Oranges_INCLUDED TRUE)
+set (Oranges_FOUND TRUE)
+
+include (FeatureSummary)
+
+set_package_properties (Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
+						DESCRIPTION "CMake modules and toolchains")
 
 #
 
