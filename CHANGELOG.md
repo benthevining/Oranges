@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.8.0](http://github.com/benthevining/Oranges/compare/v2.7.1...v2.8.0) (2022-04-06)
+
+
+### Features
+
+* added some more utility functions ([1797b95](http://github.com/benthevining/Oranges/commit/1797b954821d4a0a7b0022ad45375425d960e905))
+
 ### [2.7.1](http://github.com/benthevining/Oranges/compare/v2.7.0...v2.7.1) (2022-04-06)
 
 
