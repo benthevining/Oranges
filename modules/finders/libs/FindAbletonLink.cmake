@@ -87,15 +87,8 @@ if(AbletonLink_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif()
 
-oranges_fetch_repository (
-	NAME
-	AbletonLink
-	GITHUB_REPOSITORY
-	Ableton/link
-	GIT_TAG
-	origin/master
-	NEVER_LOCAL
-	${quiet_flag})
+oranges_fetch_repository (NAME AbletonLink GITHUB_REPOSITORY Ableton/link GIT_TAG origin/master
+						  NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 

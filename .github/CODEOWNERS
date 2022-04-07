@@ -105,6 +105,7 @@ modules/finders/programs/Findinclude-what-you-use.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
 modules/finders/programs/Findwraptool.cmake benthevining
 modules/finders/programs/Findxcodebuild.cmake benthevining
+modules/finders/programs/Usexcodebuild.cmake benthevining
 modules/finders/programs/package_managers/FindChocolatey.cmake benthevining
 modules/finders/programs/package_managers/FindHomebrew.cmake benthevining
 modules/finders/programs/package_managers/FindPip.cmake benthevining
@@ -197,6 +198,7 @@ modules/juce/OrangesAppUtilities.cmake benthevining
 modules/juce/OrangesAssetsHelpers.cmake benthevining
 modules/juce/OrangesJuceModuleUtilities.cmake benthevining
 modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
+modules/juce/plugins/AAX/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/CallForEachPluginFormat.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining

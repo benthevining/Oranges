@@ -42,8 +42,12 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (ccache PROPERTIES URL "https://ccache.dev/"
-						DESCRIPTION "C/C++ compiler cache")
+set_package_properties (
+	ccache PROPERTIES
+	URL "https://ccache.dev/"
+	DESCRIPTION "C/C++ compiler cache"
+	TYPE RECOMMENDED
+	PURPOSE "Speed up compilation with caching")
 
 option (CCACHE_DISABLE "Disable ccache for this build" OFF)
 

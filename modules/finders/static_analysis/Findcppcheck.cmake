@@ -40,8 +40,12 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (cppcheck PROPERTIES URL "https://cppcheck.sourceforge.io/"
-						DESCRIPTION "C++ code linter")
+set_package_properties (
+	cppcheck PROPERTIES
+	URL "https://cppcheck.sourceforge.io/"
+	DESCRIPTION "C++ code linter"
+	TYPE OPTIONAL
+	PURPOSE "Static analysis")
 
 oranges_file_scoped_message_context ("Findcppcheck")
 

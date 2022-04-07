@@ -72,16 +72,11 @@ if(APPLE)
 	find_package (xcodebuild REQUIRED QUIET)
 
 	include_external_xcode_project (
-		TARGET
-		AAXSDK
-		DIRECTORY
-		"${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild"
-		SCHEME
-		AAXLibrary_libcpp
-		EXTRA_ARGS
-		"-arch x86_64 ONLY_ACTIVE_ARCH=NO"
-		COMMENT
-		"Building AAX SDK...")
+		TARGET AAXSDK
+		DIRECTORY "${LEMONS_AAX_SDK_PATH}/Libs/AAXLibrary/MacBuild"
+		SCHEME AAXLibrary_libcpp
+		EXTRA_ARGS "-arch x86_64 ONLY_ACTIVE_ARCH=NO"
+		COMMENT "Building AAX SDK...")
 
 	set_target_properties (AAXSDK PROPERTIES OSX_ARCHITECTURES x86_64)
 

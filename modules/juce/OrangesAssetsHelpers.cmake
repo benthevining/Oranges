@@ -77,14 +77,8 @@ function(lemons_add_resources_folder)
 				)
 		endif()
 
-		lemons_subdir_list (
-			DIR
-			"${LEMONS_RSRC_FLDR_ASSET_FOLDER}"
-			FILES
-			FULL_PATHS
-			RECURSE
-			RESULT
-			files)
+		lemons_subdir_list (DIR "${LEMONS_RSRC_FLDR_ASSET_FOLDER}" FILES FULL_PATHS RECURSE
+							RESULT files)
 
 		if(NOT files)
 			message (AUTHOR_WARNING "No files found for inclusion in resources target!")

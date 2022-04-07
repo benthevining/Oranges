@@ -40,8 +40,12 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (cpplint PROPERTIES URL "https://github.com/google/styleguide"
-						DESCRIPTION "C++ code linter")
+set_package_properties (
+	cpplint PROPERTIES
+	URL "https://github.com/google/styleguide"
+	DESCRIPTION "C++ code linter"
+	TYPE OPTIONAL
+	PURPOSE "Static analysis")
 
 oranges_file_scoped_message_context ("Findcpplint")
 

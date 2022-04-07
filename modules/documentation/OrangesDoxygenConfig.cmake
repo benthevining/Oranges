@@ -22,13 +22,13 @@ Generating a Doxygen target
 
 .. command:: oranges_create_doxygen_target
 
-	oranges_create_doxygen_target (INPUT_PATHS <inputPaths>
+	oranges_create_doxygen_target (INPUT_PATHS <inputPaths...>
 								   [TARGET <docsTargetName>]
 								   [OUTPUT_DIR <docsOutputDir>]
 								   [MAIN_PAGE_MD_FILE <mainPageFile>]
 								   [LOGO <logoFile>]
-								   [FILE_PATTERNS <filePatterns>]
-								   [IMAGE_PATHS <imagePaths>]
+								   [FILE_PATTERNS <filePatterns...>]
+								   [IMAGE_PATHS <imagePaths...>]
 								   [NO_VERSION_DISPLAY]
 								   [NO_INSTALL] | [INSTALL_COMPONENT <componentName>])
 
@@ -99,8 +99,8 @@ function(oranges_create_doxygen_target)
 	list (JOIN ORANGES_DOXYGEN_INPUT_PATHS " " ORANGES_DOXYGEN_INPUT_PATHS)
 
 	if(ORANGES_ARG_MAIN_PAGE_MD_FILE)
-		lemons_make_path_absolute (VAR ORANGES_ARG_MAIN_PAGE_MD_FILE BASE_DIR
-								   "${PROJECT_SOURCE_DIR}")
+		lemons_make_path_absolute (VAR ORANGES_ARG_MAIN_PAGE_MD_FILE
+								   BASE_DIR "${PROJECT_SOURCE_DIR}")
 
 		if(EXISTS "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
 			set (ORANGES_DOXYGEN_MAIN_PAGE_MARKDOWN_FILE "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")

@@ -21,10 +21,5 @@ include (OrangesFetchRepository)
 oranges_file_scoped_message_context ("OrangesClapFormat")
 
 oranges_fetch_repository (
-	NAME
-	clap-juce-extensions
-	GITHUB_REPOSITORY
-	free-audio/clap-juce-extensions
-	GIT_TAG
-	origin/main
+	NAME clap-juce-extensions GITHUB_REPOSITORY free-audio/clap-juce-extensions GIT_TAG origin/main
 	EXCLUDE_FROM_ALL)

@@ -58,16 +58,8 @@ if(MIPP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif()
 
-oranges_fetch_repository (
-	NAME
-	MIPP
-	GITHUB_REPOSITORY
-	aff3ct/MIPP
-	GIT_TAG
-	origin/master
-	DOWNLOAD_ONLY
-	NEVER_LOCAL
-	${quiet_flag})
+oranges_fetch_repository (NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
+						  DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 

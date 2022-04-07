@@ -81,16 +81,8 @@ if(PLUGINVAL_BUILD_AT_CONFIGURE_TIME)
 	endif()
 
 	oranges_fetch_repository (
-		NAME
-		pluginval
-		GITHUB_REPOSITORY
-		Tracktion/pluginval
-		GIT_TAG
-		origin/master
-		DOWNLOAD_ONLY
-		EXCLUDE_FROM_ALL
-		NEVER_LOCAL
-		${quiet_flag})
+		NAME pluginval GITHUB_REPOSITORY Tracktion/pluginval GIT_TAG origin/master
+		DOWNLOAD_ONLY EXCLUDE_FROM_ALL NEVER_LOCAL ${quiet_flag})
 
 	unset (quiet_flag)
 

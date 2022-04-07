@@ -79,14 +79,7 @@ file (COPY_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst" "${ORANGES_DOCS_BUILD_TREE
 
 include (OrangesFileUtils)
 
-lemons_subdir_list (
-	DIR
-	"${ORANGES_ROOT_DIR}/modules"
-	RESULT
-	module_files
-	RECURSE
-	FILES
-	FULL_PATHS)
+lemons_subdir_list (DIR "${ORANGES_ROOT_DIR}/modules" RESULT module_files RECURSE FILES FULL_PATHS)
 
 set (module_rst_template "${CMAKE_CURRENT_LIST_DIR}/module_rst_template.txt")
 set (module_rst_output "${ORANGES_DOCS_BUILD_TREE}/modules")

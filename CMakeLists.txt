@@ -52,6 +52,7 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
 
 include (OrangesDefaultProjectSettings)
+include (FeatureSummary)
 
 unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 
@@ -130,6 +131,11 @@ cpack_add_component_group (
 	PARENT_GROUP Citrus)
 
 cpack_add_install_type (Developer DISPLAY_NAME "Developer installation")
+
+feature_summary (FILENAME "${CMAKE_BINARY_DIR}/package_features.txt" INCLUDE_QUIET_PACKAGES
+																	 DEFAULT_DESCRIPTION WHAT ALL)
+
+feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
 
 export (PACKAGE Oranges)
 

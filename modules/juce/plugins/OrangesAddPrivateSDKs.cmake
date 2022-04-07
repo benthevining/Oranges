@@ -44,14 +44,7 @@ if(NOT FETCHCONTENT_SOURCE_DIR_PrivateSDKs)
 	endif()
 endif()
 
-oranges_fetch_repository (
-	NAME
-	PrivateSDKs
-	GITHUB_REPOSITORY
-	benthevining/PrivateSDKs
-	GIT_TAG
-	origin/main
-	QUIET
-	NEVER_LOCAL)
+oranges_fetch_repository (NAME PrivateSDKs GITHUB_REPOSITORY benthevining/PrivateSDKs
+						  GIT_TAG origin/main QUIET NEVER_LOCAL)
 
 mark_as_advanced (FORCE LEMONS_AAX_SDK_PATH LEMONS_VST2_SDK_PATH)

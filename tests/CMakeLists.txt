@@ -24,8 +24,8 @@ add_library (oranges_export_header_test STATIC EXCLUDE_FROM_ALL )
 
 target_sources (oranges_export_header_test PRIVATE "${CMAKE_CURRENT_LIST_DIR}/exportTestMain.cpp")
 
-oranges_generate_export_header (TARGET oranges_export_header_test BASE_NAME test HEADER
-								test_export.h)
+oranges_generate_export_header (TARGET oranges_export_header_test BASE_NAME test
+								HEADER test_export.h)
 
 add_test (
 	NAME Oranges.ExportHeader
@@ -39,8 +39,8 @@ add_library (oranges_platform_header_test STATIC EXCLUDE_FROM_ALL )
 target_sources (oranges_platform_header_test
 				PRIVATE "${CMAKE_CURRENT_LIST_DIR}/platformTestMain.cpp")
 
-oranges_generate_platform_header (TARGET oranges_platform_header_test BASE_NAME test HEADER
-								  test_platform.h)
+oranges_generate_platform_header (TARGET oranges_platform_header_test BASE_NAME test
+								  HEADER test_platform.h)
 
 add_test (
 	NAME Oranges.PlatformHeader

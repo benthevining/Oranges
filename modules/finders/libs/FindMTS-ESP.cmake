@@ -59,16 +59,8 @@ if(MTS-ESP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif()
 
-oranges_fetch_repository (
-	NAME
-	MTS-ESP
-	GITHUB_REPOSITORY
-	ODDSound/MTS-ESP
-	GIT_TAG
-	origin/master
-	DOWNLOAD_ONLY
-	NEVER_LOCAL
-	${quiet_flag})
+oranges_fetch_repository (NAME MTS-ESP GITHUB_REPOSITORY ODDSound/MTS-ESP GIT_TAG origin/master
+						  DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 
