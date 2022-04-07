@@ -48,7 +48,7 @@ function(call_for_each_plugin_format)
 
 	set (oneValueArgs TARGET FUNCTION)
 
-	cmake_parse_arguments (ORANGES_ARG "" "" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET FUNCTION)
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
@@ -62,7 +62,7 @@ function(call_for_each_plugin_format)
 
 	get_required_target_property (plugin_formats "${ORANGES_ARG_TARGET}" JUCE_FORMATS)
 
-	foreach(format ${plugin_formats})
+	foreach(format IN LISTS plugin_formats)
 
 		set (targetName "${ORANGES_ARG_TARGET}_${format}")
 

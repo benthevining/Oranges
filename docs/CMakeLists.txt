@@ -194,7 +194,8 @@ if(PROJECT_IS_TOP_LEVEL OR Oranges_IS_TOP_LEVEL)
 	set (all_flag ALL)
 endif()
 
-add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}")
+add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
+				   COMMENT "Building Oranges documentation...")
 
 #
 

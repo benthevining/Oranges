@@ -40,7 +40,7 @@ set_package_properties (
 
 oranges_file_scoped_message_context ("Findxcodebuild")
 
-set (xcodebuild_FOUND FALSE)
+set (xcodebuild_FOUND FALSE) # cmake-lint: disable=W0105
 
 find_program (XCODE_BUILD xcodebuild)
 
@@ -53,7 +53,7 @@ if(XCODE_BUILD)
 
 	add_executable (Apple::xcodebuild ALIAS xcodebuild)
 
-	set (xcodebuild_FOUND TRUE)
+	set (xcodebuild_FOUND TRUE) # cmake-lint: disable=W0105
 else()
 	find_package_warning_or_error ("xcodebuild program cannot be found!")
 endif()

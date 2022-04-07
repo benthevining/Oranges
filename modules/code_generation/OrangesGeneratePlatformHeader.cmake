@@ -83,8 +83,6 @@ option (ORANGES_DISABLE_SIMD
 
 mark_as_advanced (FORCE ORANGES_DISABLE_SIMD)
 
-set (platform_header_input "${CMAKE_CURRENT_LIST_DIR}/scripts/platform_header.h" CACHE INTERNAL "")
-
 #
 
 macro(_oranges_plat_header_set_option inVar cacheVar)
@@ -282,8 +280,8 @@ function(oranges_generate_platform_header)
 		set (ORANGES_LITTLE_ENDIAN 0)
 	endif()
 
-	configure_file ("${platform_header_input}" "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
-					@ONLY)
+	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h"
+					"${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}" @ONLY)
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"

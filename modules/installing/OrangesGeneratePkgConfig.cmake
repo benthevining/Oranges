@@ -41,8 +41,6 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesCmakeDevTools)
 include (GNUInstallDirs)
 
-set (pc_file_input "${CMAKE_CURRENT_LIST_DIR}/scripts/config.pc" CACHE INTERNAL "")
-
 #
 
 function(oranges_create_pkgconfig_file)
@@ -111,7 +109,8 @@ function(oranges_create_pkgconfig_file)
 
 	set (pc_file_configured "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
 
-	configure_file ("${pc_file_input}" "${pc_file_configured}" @ONLY)
+	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc" "${pc_file_configured}"
+					@ONLY)
 
 	set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
