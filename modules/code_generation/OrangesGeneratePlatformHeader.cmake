@@ -67,8 +67,15 @@ SIMD instruction capabilities
 <baseName>_AVX512
 <baseName>_SSE
 
-Function force-inline macro
+Function inlining macros
 <baseName>_FORCE_INLINE
+<baseName>_NEVER_INLINE
+
+Pure function attribute macro
+<baseName>_PURE_FUNCTION
+
+Pointer anti-aliasing macro
+<baseName>_RESTRICT
 
 #]=======================================================================]
 
@@ -186,8 +193,10 @@ endif()
 
 if(MSVC)
 	set (ORANGES_FORCE_INLINE "__forceinline" CACHE INTERNAL "")
+	set (ORANGES_NEVER_INLINE "__declspec(noinline)" CACHE INTERNAL "")
 else()
 	set (ORANGES_FORCE_INLINE "inline __attribute__((always_inline))" CACHE INTERNAL "")
+	set (ORANGES_NEVER_INLINE "__attribute__((__noinline__))" CACHE INTERNAL "")
 endif()
 
 #[[
@@ -274,6 +283,15 @@ function(oranges_generate_platform_header)
 		message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
 		set (ORANGES_BIG_ENDIAN 1)
 		set (ORANGES_LITTLE_ENDIAN 0)
+	endif()
+
+	if(MSVC)
+		set (ORANGES_RESTRICT "__restrict" CACHE INTERNAL "")
+	elseif("${compilerID}" MATCHES "Clang|GNU")
+		set (ORANGES_RESTRICT "__restrict__" CACHE INTERNAL "")
+		set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
+	elseif("${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}" MATCHES "Intel")
+		set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
 	endif()
 
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h"

@@ -58,7 +58,6 @@ unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 
 #
 
-add_subdirectory (tests)
 add_subdirectory (docs)
 
 #

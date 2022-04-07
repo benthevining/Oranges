@@ -29,6 +29,11 @@ macro(lemons_make_variable_const variable)
 	variable_watch ("${variableName}" _lemons_const_variable_watch)
 endmacro()
 
+macro(oranges_set_const variable value)
+	set ("${variable}" "${value}")
+	lemons_make_variable_const ("${variable}")
+endmacro()
+
 #
 
 function(get_required_target_property output target property)
