@@ -67,8 +67,8 @@ SIMD instruction capabilities
 <baseName>_AVX512
 <baseName>_SSE
 
-Build type
-<baseName>_DEBUG
+Function force-inline macro
+<baseName>_FORCE_INLINE
 
 #]=======================================================================]
 
@@ -142,20 +142,6 @@ else()
 	set (ORANGES_32BIT 1 CACHE INTERNAL "")
 endif()
 
-if(ORANGES_DISABLE_SIMD)
-	set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
-	set (ORANGES_AVX 0 CACHE INTERNAL "")
-	set (ORANGES_AVX512 0 CACHE INTERNAL "")
-	set (ORANGES_SSE 0 CACHE INTERNAL "")
-else()
-	#[[
-ORANGES_ARM_NEON
-ORANGES_AVX
-ORANGES_AVX512
-ORANGES_SSE
-]]
-endif()
-
 if(WIN32)
 	if("${CMAKE_HOST_SYSTEM_PROCESSOR}" MATCHES "ARM64")
 		set (ORANGES_ARM 1 CACHE INTERNAL "")
@@ -198,8 +184,18 @@ else()
 	set (ORANGES_POSIX 0 CACHE INTERNAL "")
 endif()
 
+if(MSVC)
+	set (ORANGES_FORCE_INLINE "__forceinline" CACHE INTERNAL "")
+else()
+	set (ORANGES_FORCE_INLINE "inline __attribute__((always_inline))" CACHE INTERNAL "")
+endif()
+
 #[[
 ORANGES_DEBUG
+ORANGES_ARM_NEON
+ORANGES_AVX
+ORANGES_AVX512
+ORANGES_SSE
 ]]
 
 #
