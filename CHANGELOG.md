@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.9.0](http://github.com/benthevining/Oranges/compare/v2.8.0...v2.9.0) (2022-04-07)
+
+
+### Features
+
+* added FFTW installation script ([c8d713f](http://github.com/benthevining/Oranges/commit/c8d713f04ef8ee16c63aebab7ffe11dcf1cd4f45))
+
 ## [2.8.0](http://github.com/benthevining/Oranges/compare/v2.7.1...v2.8.0) (2022-04-06)
 
 
