@@ -16,8 +16,9 @@
 import argparse
 import os
 import sys
+from collections import defaultdict
 
-#
+# TO DO:
 # commands
 # properties
 # variables
@@ -28,7 +29,7 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 
 ORANGES_MODULES_DIR = os.path.join(os.path.dirname(script_dir), "modules")
 
-ORANGES_VERSION = "2.11.0"
+ORANGES_VERSION = "2.12.0"
 
 #
 
@@ -53,7 +54,7 @@ def get_module_list():
 				full_paths.append(os.path.join(child_dir_full_path,
 				                               child_file))
 
-	return full_paths
+	return list(set(full_paths))
 
 
 #
@@ -79,7 +80,7 @@ def get_finders_list():
 				full_paths.append(os.path.join(child_dir_full_path,
 				                               child_file))
 
-	return full_paths
+	return list(set(full_paths))
 
 
 #
@@ -94,7 +95,7 @@ def print_section_heading(text):
 #
 
 
-def print_cmake_doc_block(module_full_path, out_file):
+def print_cmake_doc_block(module_full_path, out_file=None):
 	""" Prints the contents of a .rst documentation block at the top of a CMake file.
 		If out_file is not None, then the output will be written to the given filepath; otherwise, output is printed to the terminal.
 	"""
@@ -134,12 +135,13 @@ def print_cmake_doc_block(module_full_path, out_file):
 
 	print_section_heading(doc_lines.pop(0))
 
+	heading_marker = "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+
 	for idx, line in enumerate(doc_lines):
-		if line.startswith("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"):
+		if line.startswith(heading_marker):
 			continue
 
-		if doc_lines[(idx+1) % len(doc_lines)].startswith(
-		    "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"):
+		if doc_lines[(idx+1) % len(doc_lines)].startswith(heading_marker):
 			print_section_heading(line)
 		else:
 			print(line)
@@ -148,16 +150,7 @@ def print_cmake_doc_block(module_full_path, out_file):
 #
 
 
-def print_error(error_msg):
-	""" Prints the given text to the terminal in bold red """
-
-	print(f"\033[1;31m {error_msg}\033[0m")
-
-
-#
-
-
-def print_module_help(module_name, out_file):
+def print_module_help(module_name, out_file, error_string, path_list):
 	""" Prints help for the specified module. module_name should be just the filename of the module. """
 
 	if not module_name.endswith(".cmake"):
@@ -167,15 +160,13 @@ def print_module_help(module_name, out_file):
 
 	module_full_path = None
 
-	for fullPath in get_module_list():
+	for fullPath in path_list:
 		if os.path.basename(fullPath) == module_name:
 			module_full_path = fullPath
 			break
 
 	if not module_full_path:
-		print_error(
-		    "Error - nonexistent module requested! Use --list-modules to get the list of valid module names."
-		)
+		print(f"\033[1;31m {error_string}\033[0m")
 		sys.exit(1)
 
 	print_cmake_doc_block(module_full_path, out_file)
@@ -184,72 +175,62 @@ def print_module_help(module_name, out_file):
 #
 
 
-def print_finder_help(module_name, out_file):
-	""" Prints help for the specified find module. module_name should be just the filename of the module. """
+def make_module_category_dict(module_paths):
+	""" Takes the list of full module paths and creates a dictionary where the keys are the category names and the values are a list of module names """
 
-	if not module_name.endswith(".cmake"):
-		if not module_name.endswith("."):
-			module_name += "."
-		module_name += "cmake"
+	module_categories = defaultdict(list)
 
-	module_full_path = None
+	for module_path in list(set(module_paths)):
+		folder_name = os.path.basename(os.path.dirname(module_path))
+		category_name = folder_name.replace("_", " ").strip().capitalize()
 
-	for fullPath in get_finders_list():
-		if os.path.basename(fullPath) == module_name:
-			module_full_path = fullPath
-			break
+		module_name = os.path.splitext(os.path.basename(module_path))[0]
 
-	if not module_full_path:
-		print_error(
-		    "Error - nonexistent find module requested! Use --list-find-modules to get the list of valid find module names."
-		)
-		sys.exit(1)
+		module_categories[category_name].append(module_name)
 
-	print_cmake_doc_block(module_full_path, out_file)
+	for cat in module_categories:
+		module_categories[cat].sort()
+
+	return dict(sorted(module_categories.items()))
 
 
 #
 
 
-def print_module_list(out_file):
-	""" Prints the list of CMake modules Oranges provides """
+def print_module_list(kind, out_file, path_list):
+	""" Prints the categorized list of CMake modules of the specified kind (either modules or finders) """
 
-	module_names = []
+	module_dict = make_module_category_dict(path_list)
 
-	for module_path in get_module_list():
-		module_names.append(os.path.splitext(os.path.basename(module_path))[0])
+	out_lines = []
 
-	module_names.sort()
+	out_lines.append(f"Oranges provides the following {kind} modules:")
+	out_lines.append("")
 
-	if out_file:
-		with open(out_file, "w") as f:
-			f.write("\n".join(module_names))
-		print(f"The list of CMake modules has been written to: {out_file}")
-	else:
-		for module_name in module_names:
-			print(module_name)
+	for category in module_dict:
+		out_lines.append(category)
 
+		for module in module_dict[category]:
+			out_lines.append(f"  * {module}")
 
-#
-
-
-def print_finders_list(out_file):
-	""" Prints the list of find modules Oranges provides """
-
-	module_names = []
-
-	for module_path in get_finders_list():
-		module_names.append(os.path.splitext(os.path.basename(module_path))[0])
-
-	module_names.sort()
+		out_lines.append("")
 
 	if out_file:
 		with open(out_file, "w") as f:
-			f.write("\n".join(module_names))
-		print(f"The list of find modules has been written to: {out_file}")
-	else:
-		for module_name in module_names:
-			print(module_name)
+			f.write("\n".join(out_lines))
+		print(f"The list of {kind} modules has been written to: {out_file}")
+		return
+
+	print("")
+	print(out_lines.pop(0))
+
+	for line in out_lines:
+		if line.startswith("  *"):
+			print(line)
+		elif line:
+			print_section_heading(line)
+		else:
+			print("")
 
 
 #
@@ -299,6 +280,7 @@ def print_basic_info(out_file):
 
 
 def main():
+
 	parser = argparse.ArgumentParser(
 	    description="Oranges help",
 	    epilog=
@@ -331,8 +313,8 @@ def main():
 	                    action="store_true",
 	                    dest="list_finders")
 
-	parser.add_argument("--finder",
-	                    "--find-module",
+	parser.add_argument("--find-module",
+	                    "--finder",
 	                    "-f",
 	                    help="View help for the named find module",
 	                    action="store",
@@ -360,19 +342,40 @@ def main():
 		sys.exit(0)
 
 	if args.list_modules:
-		print_module_list(args.out_file)
+		print_module_list(out_file=args.out_file,
+		                  kind="CMake",
+		                  path_list=get_module_list())
 		sys.exit(0)
 
 	if args.list_finders:
-		print_finders_list(args.out_file)
+		print_module_list(out_file=args.out_file,
+		                  kind="find",
+		                  path_list=get_finders_list())
 		sys.exit(0)
 
 	if args.help_module:
-		print_module_help(args.help_module, args.out_file)
+		print_module_help(
+		    module_name=args.help_module,
+		    out_file=args.out_file,
+		    path_list=get_module_list(),
+		    error_string=
+		    "Error - nonexistent module requested! Use --list-modules to get the list of valid module names."
+		)
 		sys.exit(0)
 
 	if args.find_module:
-		print_finder_help(args.find_module, args.out_file)
+		find_module_name = args.find_module
+
+		if not find_module_name.startswith("Find"):
+			find_module_name = f"Find{find_module_name}"
+
+		print_module_help(
+		    module_name=find_module_name,
+		    out_file=args.out_file,
+		    path_list=get_finders_list(),
+		    error_string=
+		    "Error - nonexistent find module requested! Use --list-find-modules to get the list of valid find module names."
+		)
 		sys.exit(0)
 
 
