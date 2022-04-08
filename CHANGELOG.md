@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.10.0](http://github.com/benthevining/Oranges/compare/v2.9.0...v2.10.0) (2022-04-08)
+
+
+### Features
+
+* added modules to generate a build type header, and an aggregate standard header ([2078a07](http://github.com/benthevining/Oranges/commit/2078a071643bca740230c7070a57674d3c77c742))
+
 ## [2.9.0](http://github.com/benthevining/Oranges/compare/v2.8.0...v2.9.0) (2022-04-07)
 
 
