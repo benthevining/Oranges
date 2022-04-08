@@ -91,6 +91,16 @@ set (ccache_FOUND TRUE)
 
 #
 
+if(NOT CMAKE_CXX_COMPILER)
+	enable_language (CXX)
+endif()
+
+if(NOT CMAKE_C_COMPILER)
+	enable_language (C)
+endif()
+
+#
+
 set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
 																							"")
 

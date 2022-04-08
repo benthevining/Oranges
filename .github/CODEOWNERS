@@ -41,8 +41,10 @@ conanfile.py benthevining
 docs/CMakeLists.txt benthevining
 docs/conf.py benthevining
 evining
+modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
+modules/code_generation/OrangesGenerateStandardHeaders.cmake benthevining
 modules/code_generation/scripts/platform_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
