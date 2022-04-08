@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.12.0](http://github.com/benthevining/Oranges/compare/v2.11.0...v2.12.0) (2022-04-08)
+
+
+### Features
+
+* added improvements to the command-line help script ([88339b2](http://github.com/benthevining/Oranges/commit/88339b23ad1356a3a906f71c127a5d42d90cdaae))
+
 ## [2.11.0](http://github.com/benthevining/Oranges/compare/v2.10.0...v2.11.0) (2022-04-08)
 
 
