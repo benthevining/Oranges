@@ -21,6 +21,7 @@ Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
 - oranges_toolchains
+- oranges_docs
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -58,6 +59,11 @@ unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 
 #
 
+set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
+
+#
+
 add_subdirectory (docs)
 
 #
@@ -71,13 +77,6 @@ include (OrangesUnityBuild)
 include (OrangesGenerateExportHeader)
 
 #
-
-set (
-	ORANGES_INSTALL_DEST
-	"${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-	CACHE
-		STRING
-		"Directory below INSTALL_PREFIX where the Oranges CMake package files will be installed to")
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 

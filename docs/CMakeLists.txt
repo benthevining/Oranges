@@ -27,6 +27,27 @@ endif()
 
 include (GNUInstallDirs)
 
+#
+
+# install the command line docs script
+
+file (READ "${CMAKE_CURRENT_LIST_DIR}/../scripts/help.py" help_script_text)
+
+string (REPLACE "script_dir = os.path.dirname(os.path.realpath(__file__))" "" help_script_text
+				"${help_script_text}")
+
+string (REPLACE "ORANGES_MODULES_DIR = os.path.join(os.path.dirname(script_dir), \"modules\")"
+				"ORANGES_MODULES_DIR = \"${CMAKE_INSTALL_PREFIX}/${ORANGES_INSTALL_DEST}/modules\""
+				help_script_text "${help_script_text}")
+
+file (WRITE "${CMAKE_BINARY_DIR}/help.py" "${help_script_text}")
+
+unset (help_script_text)
+
+install (PROGRAMS "${CMAKE_BINARY_DIR}/help.py" TYPE BIN COMPONENT oranges_docs RENAME "oranges")
+
+#
+
 option (SPHINX_MAN "Build man pages with Sphinx" ON)
 option (SPHINX_HTML "Build html help with Sphinx" ON)
 option (SPHINX_INFO "Build Info manual with Sphinx" OFF)
@@ -194,36 +215,34 @@ if(PROJECT_IS_TOP_LEVEL OR Oranges_IS_TOP_LEVEL)
 	set (all_flag ALL)
 endif()
 
-add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
+add_custom_target (oranges_docs ${all_flag} DEPENDS "${doc_format_outputs}"
 				   COMMENT "Building Oranges documentation...")
 
 #
 
 if(SPHINX_INFO)
 	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.info"
-			 DESTINATION "${CMAKE_INFO_DIR}" COMPONENT OrangesDocs)
+			 DESTINATION "${CMAKE_INFO_DIR}" COMPONENT oranges_docs)
 endif()
 
 # TODO: install man pages
 
 if(SPHINX_HTML)
 	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" DESTINATION "${CMAKE_DOC_DIR}"
-			 PATTERN .buildinfo EXCLUDE COMPONENT OrangesDocs)
+			 PATTERN .buildinfo EXCLUDE COMPONENT oranges_docs)
 endif()
 
 if(SPHINX_SINGLEHTML)
-	CMake_OPTIONAL_COMPONENT (sphinx-singlehtml)
 	install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml" DESTINATION "${CMAKE_DOC_DIR}"
-			 PATTERN .buildinfo EXCLUDE COMPONENT OrangesDocs)
+			 PATTERN .buildinfo EXCLUDE COMPONENT oranges_docs)
 endif()
 
 if(SPHINX_LATEXPDF)
-	CMake_OPTIONAL_COMPONENT (sphinx-latexpdf)
 	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
-			 DESTINATION "${CMAKE_DOC_DIR}" COMPONENT OrangesDocs)
+			 DESTINATION "${CMAKE_DOC_DIR}" COMPONENT oranges_docs)
 endif()
 
 include (CPackComponent)
 
-cpack_add_component (OrangesDocs DISPLAY_NAME "Oranges documentation"
+cpack_add_component (oranges_docs DISPLAY_NAME "Oranges documentation"
 					 DESCRIPTION "Installs all Oranges documentation" GROUP Oranges)
