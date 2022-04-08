@@ -295,7 +295,7 @@ function(oranges_generate_platform_header)
 	endif()
 
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h"
-					"${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}" @ONLY)
+					"${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}" @ONLY NEWLINE_STYLE UNIX)
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"

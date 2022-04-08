@@ -110,7 +110,7 @@ function(oranges_create_pkgconfig_file)
 	set (pc_file_configured "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
 
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc" "${pc_file_configured}"
-					@ONLY)
+					@ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
 	set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 

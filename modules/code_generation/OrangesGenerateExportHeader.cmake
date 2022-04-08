@@ -40,6 +40,8 @@ add_library (OrangesABIControlledLibrary INTERFACE)
 set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRESET hidden
 															  VISIBILITY_INLINES_HIDDEN TRUE)
 
+target_compile_definitions (OrangesABIControlledLibrary INTERFACE SHARED_AND_STATIC_STATIC_DEFINE=1)
+
 install (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
 
 if(NOT TARGET Oranges::OrangesABIControlledLibrary)
@@ -89,9 +91,7 @@ function(oranges_generate_export_header)
 	target_link_libraries ("${ORANGES_ARG_TARGET}" "${private_vis}"
 						   Oranges::OrangesABIControlledLibrary)
 
-	set_target_properties (
-		"${ORANGES_ARG_TARGET}" PROPERTIES COMPILE_FLAGS
-										   -D${upperBaseName}SHARED_AND_STATIC_STATIC_DEFINE)
+	target_compile_definitions ("${ORANGES_ARG_TARGET}" INTERFACE SHARED_AND_STATIC_STATIC_DEFINE=)
 
 	if(ORANGES_REMOVE_DEPRECATED_CODE)
 		set (no_build_deprecated DEFINE_NO_DEPRECATED)

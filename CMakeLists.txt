@@ -72,8 +72,12 @@ include (OrangesGenerateExportHeader)
 
 #
 
-set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-	 CACHE STRING "Directory below INSTALL_PREFIX where ${PROJECT_NAME} will be installed to")
+set (
+	ORANGES_INSTALL_DEST
+	"${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+	CACHE
+		STRING
+		"Directory below INSTALL_PREFIX where the Oranges CMake package files will be installed to")
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 

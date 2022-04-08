@@ -63,6 +63,7 @@ modules/dependencies/OrangesFetchRepository.cmake benthevining
 modules/dependencies/OrangesFindSystemPackageManager.cmake benthevining
 modules/dependencies/OrangesInstallPackages.cmake benthevining
 modules/dependencies/OrangesWipeCacheTarget.cmake benthevining
+modules/dependencies/OrangesWrapAutotoolsProject.cmake benthevining
 modules/dependencies/scripts/wipe_cache.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
@@ -84,6 +85,7 @@ modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/code_signing/Usecodesign.cmake benthevining
 modules/finders/libs/FFTW/FindFFTW.cmake benthevining
+modules/finders/libs/FFTW/Findfftw3f.cmake benthevining
 modules/finders/libs/FindAbletonLink.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindJUCE.cmake benthevining
