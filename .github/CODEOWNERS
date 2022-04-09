@@ -147,6 +147,7 @@ modules/general/OrangesDefaultProjectSettings.cmake benthevining
 modules/general/OrangesDefaultTarget.cmake benthevining
 modules/general/OrangesDefaultWarnings.cmake benthevining
 modules/general/OrangesFetchRepository.cmake benthevining
+modules/general/OrangesFileUtils.cmake benthevining
 modules/general/OrangesInstallPackages.cmake benthevining
 modules/general/OrangesJsonUtils.cmake benthevining
 modules/general/OrangesLibraryABIControl.cmake benthevining

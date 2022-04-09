@@ -43,7 +43,7 @@ If the `FULL_PATHS` option is present, the returned paths will be full absolute 
 Make a path absolute, relative to a base directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. command::lemons_make_path_absolute
+.. command:: lemons_make_path_absolute
 
 	lemons_make_path_absolute (VAR <pathVariable>
 							   [BASE_DIR <baseDirectory>])
