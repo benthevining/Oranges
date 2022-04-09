@@ -1,5 +1,17 @@
 # Oranges changelog
 
+## [2.14.0](http://github.com/benthevining/Oranges/compare/v2.13.0...v2.14.0) (2022-04-09)
+
+
+### Features
+
+* added targets to help script ([e6ad0a7](http://github.com/benthevining/Oranges/commit/e6ad0a79bc54739668730543c388643661eaaed1))
+
+
+### Bug Fixes
+
+* fixing bumpversion integration with help script ([4ddb646](http://github.com/benthevining/Oranges/commit/4ddb6467d90da84f69a8ff022b430ec1010be829))
+
 ## [2.13.0](http://github.com/benthevining/Oranges/compare/v2.12.0...v2.13.0) (2022-04-09)
 
 

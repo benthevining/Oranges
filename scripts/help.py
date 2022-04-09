@@ -35,7 +35,7 @@ ORANGES_MODULES_DIR: Final[str] = os.path.join(os.path.dirname(os.path.dirname(o
 
 ORANGES_FIND_MODULES_DIR: Final[str] = os.path.join(ORANGES_MODULES_DIR, "finders") # yapf: disable
 
-ORANGES_VERSION: Final[str] = "2.13.0"
+ORANGES_VERSION: Final[str] = "2.14.0"
 
 #
 
