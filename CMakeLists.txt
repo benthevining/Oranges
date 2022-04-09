@@ -65,6 +65,7 @@ set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 #
 
 add_subdirectory (docs)
+add_subdirectory (help)
 
 #
 

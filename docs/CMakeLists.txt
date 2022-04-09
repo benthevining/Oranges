@@ -29,25 +29,6 @@ include (GNUInstallDirs)
 
 #
 
-# install the command line docs script
-
-file (READ "${CMAKE_CURRENT_LIST_DIR}/../scripts/help.py" help_script_text)
-
-string (REPLACE "script_dir = os.path.dirname(os.path.realpath(__file__))" "" help_script_text
-				"${help_script_text}")
-
-string (REPLACE "ORANGES_MODULES_DIR = os.path.join(os.path.dirname(script_dir), \"modules\")"
-				"ORANGES_MODULES_DIR = \"${CMAKE_INSTALL_PREFIX}/${ORANGES_INSTALL_DEST}/modules\""
-				help_script_text "${help_script_text}")
-
-file (WRITE "${CMAKE_BINARY_DIR}/help.py" "${help_script_text}")
-
-unset (help_script_text)
-
-install (PROGRAMS "${CMAKE_BINARY_DIR}/help.py" TYPE BIN COMPONENT oranges_docs RENAME "oranges")
-
-#
-
 option (SPHINX_MAN "Build man pages with Sphinx" ON)
 option (SPHINX_HTML "Build html help with Sphinx" ON)
 option (SPHINX_INFO "Build Info manual with Sphinx" OFF)

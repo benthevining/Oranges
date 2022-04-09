@@ -165,6 +165,7 @@ repos:
       - id: pylint
         args: [--disable=bad-indentation,
                --disable=line-too-long,
+               --disable=duplicate-code,
                --check-quote-consistency=yes,
                --max-args=5,
                --max-branches=15,
