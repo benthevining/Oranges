@@ -45,6 +45,7 @@ modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
 modules/code_generation/OrangesGenerateStandardHeaders.cmake benthevining
+modules/code_generation/scripts/build_type_header.h benthevining
 modules/code_generation/scripts/platform_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
@@ -87,6 +88,7 @@ modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/code_signing/Usecodesign.cmake benthevining
 modules/finders/libs/FFTW/FindFFTW.cmake benthevining
+modules/finders/libs/FFTW/Findfftw3.cmake benthevining
 modules/finders/libs/FFTW/Findfftw3f.cmake benthevining
 modules/finders/libs/FindAbletonLink.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining

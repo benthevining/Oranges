@@ -163,16 +163,14 @@ repos:
     rev: v2.13.4
     hooks:
       - id: pylint
-        args: [--disable=import-error,
-               --disable=bad-indentation,
-               --disable=invalid-name,
+        args: [--disable=bad-indentation,
                --disable=line-too-long,
-               --disable=missing-docstring,
-               --disable=unspecified-encoding,
-               --disable=unused-argument,
                --check-quote-consistency=yes,
                --max-args=5,
-               --max-branches=10]
+               --max-branches=15,
+               --max-statements=55,
+               --good-names=f]
+        exclude: conf.py|alphabetize_codeowners.py|conanfile.py
 
   # check editorconfig rules
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
