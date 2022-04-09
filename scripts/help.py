@@ -1,5 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+""" Oranges help script
+
+This script is a simple command line interface providing quick reference for Oranges, similar to CMake's CLI help functionality.
+You can use this script to list or view help for modules and commands.
+Any output from this script can also be dumped to a file.
+"""
 
 # ======================================================================================
 #    ____  _____            _   _  _____ ______  _____
@@ -17,6 +23,7 @@ import argparse
 import os
 import sys
 from collections import defaultdict
+from typing import Final
 
 # TO DO:
 # properties
@@ -24,18 +31,18 @@ from collections import defaultdict
 
 #
 
-ORANGES_MODULES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "modules") # yapf: disable
+ORANGES_MODULES_DIR: Final[str] = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "modules") # yapf: disable
 
-ORANGES_VERSION = "2.12.0"
+ORANGES_VERSION: Final[str] = "2.13.0"
 
 #
 
-DOC_BLOCK_BEGIN = "#[=======================================================================[.rst:"
-DOC_BLOCK_END = "#]=======================================================================]"
+DOC_BLOCK_BEGIN: Final[str] = "#[=======================================================================[.rst:" # yapf: disable
+DOC_BLOCK_END: Final[str] = "#]=======================================================================]" # yapf: disable
 
-DOC_HEADING_MARKER = "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+DOC_HEADING_MARKER: Final[str] = "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 
-COMMAND_DOC_MARKER = ".. command::"
+COMMAND_DOC_MARKER: Final[str] = ".. command::"
 
 #
 
@@ -43,17 +50,18 @@ COMMAND_DOC_MARKER = ".. command::"
 def get_module_list() -> list[str]:
 	""" Returns an array containing all the full paths to the Oranges CMake modules """
 
-	child_dirs = next(os.walk(ORANGES_MODULES_DIR))[1]
+	child_dirs: list[str] = next(os.walk(ORANGES_MODULES_DIR))[1]
 
 	child_dirs.remove("finders")
 	child_dirs.remove("internal")
 
 	child_dirs.append(os.path.join("juce", "plugins"))
 
-	full_paths = []
+	full_paths: list[str] = []
 
 	for child_dir in child_dirs:
-		child_dir_full_path = os.path.join(ORANGES_MODULES_DIR, child_dir)
+		child_dir_full_path: Final[str] = os.path.join(ORANGES_MODULES_DIR,
+		                                               child_dir)
 
 		for child_file in next(os.walk(child_dir_full_path))[2]:
 			if os.path.splitext(child_file)[1] == ".cmake":
@@ -69,16 +77,16 @@ def get_module_list() -> list[str]:
 def get_finders_list() -> list[str]:
 	""" Returns an array containing all the full paths to the Oranges find modules """
 
-	finders_dir = os.path.join(ORANGES_MODULES_DIR, "finders")
+	finders_dir: Final[str] = os.path.join(ORANGES_MODULES_DIR, "finders")
 
-	child_dirs = next(os.walk(finders_dir))[1]
+	child_dirs: list[str] = next(os.walk(finders_dir))[1]
 
 	child_dirs.append(os.path.join("libs", "FFTW"))
 
-	full_paths = []
+	full_paths: list[str] = []
 
 	for child_dir in child_dirs:
-		child_dir_full_path = os.path.join(finders_dir, child_dir)
+		child_dir_full_path: Final[str] = os.path.join(finders_dir, child_dir)
 
 		for child_file in next(os.walk(child_dir_full_path))[2]:
 			if child_file.startswith("Find") and os.path.splitext(
@@ -112,14 +120,14 @@ def print_cmake_doc_block(module_full_path, out_file=None) -> None:
 		If out_file is not None, then the output will be written to the given filepath; otherwise, output is printed to the terminal.
 	"""
 
-	with open(module_full_path, "r") as f:
-		module_contents = f.readlines()
+	with open(module_full_path, "r", encoding="utf-8") as f:
+		module_contents: Final[list[str]] = f.readlines()
 
-	doc_lines = []
-	inDocBlock = False
+	doc_lines: list[str] = []
+	in_doc_block: bool = False
 
 	for line in module_contents:
-		if inDocBlock:
+		if in_doc_block:
 			if line.startswith(DOC_BLOCK_END):
 				break
 
@@ -130,15 +138,22 @@ def print_cmake_doc_block(module_full_path, out_file=None) -> None:
 			doc_lines.append(line)
 
 		elif line.startswith(DOC_BLOCK_BEGIN):
-			inDocBlock = True
+			in_doc_block = True
 
-	doc_lines = [line for line in doc_lines if line not in (None, "\n")]
+	del module_contents
+	del in_doc_block
+
+	doc_lines: Final[list[str]] = [
+	    line for line in doc_lines if line not in (None, "\n")
+	]
 
 	if out_file:
-		with open(out_file, "w") as f:
+		with open(out_file, "w", encoding="utf-8") as f:
 			f.write("\n".join(doc_lines))
 
-		module_name = os.path.splitext(os.path.basename(module_full_path))[0]
+		module_name: str = os.path.splitext(
+		    os.path.basename(module_full_path))[0]
+
 		print(f"Help for module {module_name} has been written to: {out_file}")
 
 		return
@@ -167,15 +182,17 @@ def print_module_help(module_name, error_string, out_file=None) -> None: # yapf:
 			module_name += "."
 		module_name += "cmake"
 
-	path_list = get_module_list()
+	path_list: list[str] = get_module_list()
 	path_list.extend(get_finders_list())
 
-	module_full_path = None
+	module_full_path: str = None
 
-	for fullPath in path_list:
-		if os.path.basename(fullPath) == module_name:
-			module_full_path = fullPath
+	for full_path in path_list:
+		if os.path.basename(full_path) == module_name:
+			module_full_path = full_path
 			break
+
+	del path_list
 
 	if not module_full_path:
 		print_error(error_string)
@@ -187,35 +204,36 @@ def print_module_help(module_name, error_string, out_file=None) -> None: # yapf:
 #
 
 
-def make_module_category_dict(module_paths) -> dict[list[str]]:
-	""" Takes the list of full module paths and creates a dictionary where the keys are the category names and the values are a list of module names """
-
-	module_categories = defaultdict(list)
-
-	for module_path in list(set(module_paths)):
-		folder_name = os.path.basename(os.path.dirname(module_path))
-		category_name = folder_name.replace("_", " ").strip().capitalize()
-
-		module_name = os.path.splitext(os.path.basename(module_path))[0]
-
-		module_categories[category_name].append(module_name)
-
-	for cat in module_categories:
-		module_categories[cat].sort()
-
-	return dict(sorted(module_categories.items()))
-
-
-#
-
-
-
 def print_module_list(kind, path_list, out_file=None, file_append=False) -> None: # yapf: disable
 	""" Prints the categorized list of CMake modules of the specified kind (either modules or finders) """
 
-	module_dict = make_module_category_dict(path_list)
+	def make_module_category_dict() -> dict[list[str]]:
+		""" Takes the list of full module paths and creates a dictionary where the keys are the category names and the values are a list of module names """
 
-	out_lines = []
+		module_categories: dict[list[str]] = defaultdict(list[str])
+
+		for module_path in list(set(path_list)):
+			folder_name: str = os.path.basename(os.path.dirname(module_path))
+			category_name: str = folder_name.replace("_",
+			                                         " ").strip().capitalize()
+
+			del folder_name
+
+			module_name: str = os.path.splitext(
+			    os.path.basename(module_path))[0]
+
+			module_categories[category_name].append(module_name)
+
+		for cat in module_categories:
+			module_categories[cat].sort()
+
+		return dict(sorted(module_categories.items()))
+
+	#
+
+	module_dict: Final[dict[list[str]]] = make_module_category_dict()
+
+	out_lines: list[str] = []
 
 	out_lines.append(f"Oranges provides the following {kind} modules:")
 	out_lines.append("")
@@ -228,13 +246,15 @@ def print_module_list(kind, path_list, out_file=None, file_append=False) -> None
 
 		out_lines.append("")
 
+	del module_dict
+
 	if out_file:
 		if file_append:
-			mode = "a"
+			mode: str = "a"
 		else:
-			mode = "w"
+			mode: str = "w"
 
-		with open(out_file, mode) as f:
+		with open(out_file, mode, encoding="utf-8") as f:
 			if file_append:
 				f.write("\n")
 
@@ -261,11 +281,11 @@ def print_module_list(kind, path_list, out_file=None, file_append=False) -> None
 def list_all_commands(out_file=None) -> None:
 	""" Prints the list of all commands provided by Oranges modules """
 
-	commands = []
+	commands: list[str] = []
 
 	for module in get_module_list():
-		with open(module, "r") as f:
-			module_lines = f.readlines()
+		with open(module, "r", encoding="utf-8") as f:
+			module_lines: list[str] = f.readlines()
 
 		for line in module_lines:
 			if line.startswith(COMMAND_DOC_MARKER):
@@ -274,15 +294,17 @@ def list_all_commands(out_file=None) -> None:
 
 	commands.sort()
 
-	out_lines = []
+	out_lines: list[str] = []
 
 	out_lines.append("Oranges provides the following CMake commands:")
 	out_lines.append("")
 
 	out_lines.extend(commands)
 
+	del commands
+
 	if out_file:
-		with open(out_file, "w") as f:
+		with open(out_file, "w", encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"The list of commands has been written to: {out_file}")
@@ -298,48 +320,48 @@ def list_all_commands(out_file=None) -> None:
 #
 
 
-def get_file_containing_command(command_name) -> [list[str], str]:
-	""" Finds the file containing the documentation for the given command, and returns its text and full path """
-
-	for module in get_module_list():
-		with open(module, "r") as f:
-			module_lines = f.readlines()
-
-		for line in module_lines:
-			if line.startswith(COMMAND_DOC_MARKER):
-				command = line.replace(COMMAND_DOC_MARKER, "").strip()
-
-				if command == command_name:
-					return module_lines, module
-
-	return None
-
-
-#
-
-
 def print_command_help(command_name, out_file=None) -> None:
 	""" Prints help for the given command """
 
-	module_lines, module_path = get_file_containing_command(command_name)
+	def get_file_containing_command() -> [list[str], str]:
+		""" Finds the file containing the documentation for the given command, and returns its text and full path """
 
-	if not module_lines or not module_path:
+		for module in get_module_list():
+			with open(module, "r", encoding="utf-8") as f:
+				module_lines: list[str] = f.readlines()
+
+			for line in module_lines:
+				if line.startswith(COMMAND_DOC_MARKER):
+					command: str = line.replace(COMMAND_DOC_MARKER, "").strip()
+
+					if command == command_name:
+						return module_lines, module
+
 		print_error(f"Error - invalid command name {command_name}")
 		sys.exit(1)
 
-	module_name = os.path.splitext(os.path.basename(module_path))[0]
+	#
 
-	out_lines = [command_name]
+	module_lines, module_path = get_file_containing_command()
+
+	module_name: Final[str] = os.path.splitext(
+	    os.path.basename(module_path))[0]
+
+	del module_path
+
+	out_lines: list[str] = [command_name]
 
 	out_lines.append("")
 	out_lines.append(f"Defined in module {module_name}")
 	out_lines.append("")
 
-	inDocBlock = False
+	del module_name
+
+	in_doc_block: bool = False
 
 	for idx, line in enumerate(module_lines):
-		if inDocBlock:
-			next_line = module_lines[(idx+1) % len(module_lines)]
+		if in_doc_block:
+			next_line: str = module_lines[(idx+1) % len(module_lines)]
 
 			if next_line.startswith(
 			    DOC_HEADING_MARKER) or next_line.startswith(DOC_BLOCK_END):
@@ -348,17 +370,21 @@ def print_command_help(command_name, out_file=None) -> None:
 			out_lines.append(line)
 
 		elif line.startswith(COMMAND_DOC_MARKER):
-			command = line.replace(COMMAND_DOC_MARKER, "").strip()
+			command: str = line.replace(COMMAND_DOC_MARKER, "").strip()
 
 			if command == command_name:
-				inDocBlock = True
+				in_doc_block = True
+
+	del module_lines
+	del in_doc_block
 
 	if out_file:
-		with open(out_file, "w") as f:
+		with open(out_file, "w", encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(
 		    f"Help for command {command_name} has been written to {out_file}")
+
 		return
 
 	print("")
@@ -374,7 +400,7 @@ def print_command_help(command_name, out_file=None) -> None:
 def print_basic_info(out_file=None) -> None:
 	""" Prints the version and other basic information """
 
-	out_lines = [
+	out_lines: list[str] = [
 	    "",
 	    " ======================================================================================",
 	    "    ____  _____            _   _  _____ ______  _____",
@@ -403,7 +429,7 @@ def print_basic_info(out_file=None) -> None:
 	out_lines.append("")
 
 	if out_file:
-		with open(out_file, "w") as f:
+		with open(out_file, "w", encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"The version info has been written to: {out_file}")
@@ -417,6 +443,7 @@ def print_basic_info(out_file=None) -> None:
 
 
 def main() -> None:
+	""" The main method """
 
 	parser = argparse.ArgumentParser(
 	    description="Oranges help",
@@ -495,7 +522,7 @@ def main() -> None:
 		parser.print_help(sys.stderr)
 		sys.exit(1)
 
-	args = parser.parse_args()
+	args: Final = parser.parse_args()
 
 	if args.print_info:
 		print_basic_info(args.out_file)
