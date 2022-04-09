@@ -20,9 +20,7 @@ from collections import defaultdict
 from os import path
 from typing import Final
 
-import doc_block
-import paths
-import printing
+from . import doc_block, paths, printing
 
 #
 

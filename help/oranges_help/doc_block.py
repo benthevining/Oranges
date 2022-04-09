@@ -18,8 +18,7 @@ This module contains functions for parsing .rst documentation blocks found in CM
 
 from typing import Final
 
-import paths
-import printing
+from . import paths, printing
 
 #
 

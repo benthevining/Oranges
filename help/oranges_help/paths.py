@@ -21,7 +21,7 @@ from typing import Final
 
 #
 
-MODULES_DIR: Final[str] = path.join(path.dirname(path.dirname(path.realpath(__file__))), "modules") # yapf: disable
+MODULES_DIR: Final[str] = path.join(path.dirname(path.dirname(path.dirname(path.realpath(__file__)))), "modules") # yapf: disable
 
 FIND_MODULES_DIR: Final[str] = path.join(MODULES_DIR, "finders") # yapf: disable
 

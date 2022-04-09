@@ -41,12 +41,14 @@ conanfile.py benthevining
 docs/CMakeLists.txt benthevining
 docs/conf.py benthevining
 evining
+help/oranges_help/targets.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
 modules/code_generation/OrangesGenerateStandardHeaders.cmake benthevining
 modules/code_generation/scripts/build_type_header.h benthevining
 modules/code_generation/scripts/platform_header.h benthevining
+modules/code_generation/scripts/standard_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
 modules/config_files/scripts/install_mac.cmake benthevining
 modules/cpack/LemonsDefaultCPackSettings.cmake benthevining
@@ -209,6 +211,7 @@ modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/AAX/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/CallForEachPluginFormat.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
+modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining
 modules/platform/LinuxLSBInfo.cmake benthevining
@@ -259,6 +262,7 @@ tests/CMakeLists.txt benthevining
 tests/exportTestMain.cpp benthevining
 toolchains/android.cmake benthevining
 toolchains/ios/common/ios_common.cmake benthevining
+toolchains/ios/common/ios_real_device_common.cmake benthevining
 toolchains/ios/common/ios_simulator_common.cmake benthevining
 toolchains/ios/ios.cmake benthevining
 toolchains/ios/ios_common.cmake benthevining

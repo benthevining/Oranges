@@ -115,7 +115,8 @@
             "CHANGELOG.md",
             ".bumpversion.cfg",
             "CMakeLists.txt",
-            "help/help.py",
+            "help/oranges_help/main.py",
+            "help/setup.py",
             "conanfile.py"
           ]
         }

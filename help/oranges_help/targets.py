@@ -18,9 +18,7 @@ This module contains functions for listing and printing help about targets.
 
 from typing import Final
 
-import doc_block
-import paths
-import printing
+from . import doc_block, paths, printing
 
 #
 

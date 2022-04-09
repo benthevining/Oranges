@@ -141,15 +141,6 @@ repos:
     rev: v1.4
     hooks:
       - id: autoflake
-  - repo: https://github.com/MarcoGorelli/absolufy-imports
-    rev: v0.3.1
-    hooks:
-      - id: absolufy-imports
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
-        exclude: conf.py
   # - repo: https://github.com/asottile/dead
   #   rev: v1.4.0
   #   hooks:
