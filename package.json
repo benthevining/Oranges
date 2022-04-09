@@ -115,6 +115,7 @@
             "CHANGELOG.md",
             ".bumpversion.cfg",
             "CMakeLists.txt",
+            "scripts/help.py",
             "conanfile.py"
           ]
         }
