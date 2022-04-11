@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.14.1](http://github.com/benthevining/Oranges/compare/v2.14.0...v2.14.1) (2022-04-11)
+
+
+### Bug Fixes
+
+* putting placeholder values in all platform header fields ([61deca3](http://github.com/benthevining/Oranges/commit/61deca384e061ba78c527f43b6b850a7d4cd81fb))
+
 ## [2.14.0](http://github.com/benthevining/Oranges/compare/v2.13.0...v2.14.0) (2022-04-09)
 
 
