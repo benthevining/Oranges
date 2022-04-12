@@ -174,8 +174,26 @@ elseif(APPLE)
 
 	unset (_apple_plat_var_to_check)
 else()
-	set (ORANGES_ARM 1 CACHE INTERNAL "")
-	set (ORANGES_INTEL 0 CACHE INTERNAL "")
+	try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+				 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm.cpp" OUTPUT_VARIABLE compile_output)
+
+	string (REGEX REPLACE ".*ORANGES_ARM ([a-zA-Z0-9_-]*).*" "\\1" is_arm "${compile_output}")
+
+	if(is_arm)
+		set (ORANGES_ARM 1 CACHE INTERNAL "")
+	else()
+		set (ORANGES_ARM 0 CACHE INTERNAL "")
+	endif()
+
+	unset (compile_result)
+	unset (compile_output)
+	unset (is_arm)
+
+	if(ORANGES_ARM)
+		set (ORANGES_INTEL 0 CACHE INTERNAL "")
+	else()
+		set (ORANGES_INTEL 1 CACHE INTERNAL "")
+	endif()
 endif()
 
 if(ORANGES_ARM)
@@ -200,13 +218,71 @@ else()
 	set (ORANGES_NEVER_INLINE "__attribute__((__noinline__))" CACHE INTERNAL "")
 endif()
 
-#[[
-ORANGES_DEBUG
-ORANGES_ARM_NEON
-ORANGES_AVX
-ORANGES_AVX512
-ORANGES_SSE
-]]
+if(ORANGES_ARM)
+	try_compile (
+		compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+		"${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm_neon.cpp" OUTPUT_VARIABLE compile_output)
+
+	string (REGEX REPLACE ".*ORANGES_ARM_NEON ([a-zA-Z0-9_-]*).*" "\\1" has_arm_neon
+						  "${compile_output}")
+
+	if(has_arm_neon)
+		set (ORANGES_ARM_NEON 1 CACHE INTERNAL "")
+	else()
+		set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
+	endif()
+
+	unset (compile_result)
+	unset (compile_output)
+	unset (has_arm_neon)
+else()
+	set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
+endif()
+
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+			 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_sse.cpp" OUTPUT_VARIABLE compile_output)
+
+string (REGEX REPLACE ".*ORANGES_SSE ([a-zA-Z0-9_-]*).*" "\\1" has_sse "${compile_output}")
+
+if(has_sse)
+	set (ORANGES_SSE 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_SSE 0 CACHE INTERNAL "")
+endif()
+
+unset (compile_result)
+unset (compile_output)
+unset (has_sse)
+
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+			 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx.cpp" OUTPUT_VARIABLE compile_output)
+
+string (REGEX REPLACE ".*ORANGES_AVX ([a-zA-Z0-9_-]*).*" "\\1" has_avx "${compile_output}")
+
+if(has_avx)
+	set (ORANGES_AVX 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_AVX 0 CACHE INTERNAL "")
+endif()
+
+unset (compile_result)
+unset (compile_output)
+unset (has_avx)
+
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+			 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx512.cpp" OUTPUT_VARIABLE compile_output)
+
+string (REGEX REPLACE ".*ORANGES_AVX512 ([a-zA-Z0-9_-]*).*" "\\1" has_avx512 "${compile_output}")
+
+if(has_avx512)
+	set (ORANGES_AVX512 1 CACHE INTERNAL "")
+else()
+	set (ORANGES_AVX512 0 CACHE INTERNAL "")
+endif()
+
+unset (compile_result)
+unset (compile_output)
+unset (has_avx512)
 
 #
 
