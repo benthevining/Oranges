@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.15.0](http://github.com/benthevining/Oranges/compare/v2.14.2...v2.15.0) (2022-04-12)
+
+
+### Features
+
+* making platform header generation more robust ([78b3906](http://github.com/benthevining/Oranges/commit/78b39069135255c0787468714c61d9ceb0771506))
+
 ### [2.14.2](http://github.com/benthevining/Oranges/compare/v2.14.1...v2.14.2) (2022-04-12)
 
 
