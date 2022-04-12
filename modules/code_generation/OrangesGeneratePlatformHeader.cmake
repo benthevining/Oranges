@@ -174,7 +174,8 @@ elseif(APPLE)
 
 	unset (_apple_plat_var_to_check)
 else()
-	# ORANGES_ARM, ORANGES_INTEL
+	set (ORANGES_ARM 1 CACHE INTERNAL "")
+	set (ORANGES_INTEL 0 CACHE INTERNAL "")
 endif()
 
 if(ORANGES_ARM)
