@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.14.2](http://github.com/benthevining/Oranges/compare/v2.14.1...v2.14.2) (2022-04-12)
+
+
+### Bug Fixes
+
+* making sure intel & arm options are always defined for platform header ([a3255f9](http://github.com/benthevining/Oranges/commit/a3255f973d494c9689bdf472abdaf5fe68e29f5e))
+
 ### [2.14.1](http://github.com/benthevining/Oranges/compare/v2.14.0...v2.14.1) (2022-04-11)
 
 

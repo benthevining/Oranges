@@ -4,7 +4,7 @@ from conans import CMake, ConanFile
 
 class OrangesConan(ConanFile):
 	name = "Oranges"
-	version = "2.14.1"
+	version = "2.14.2"
 	license = "GPL3"
 	url = "https://github.com/benthevining/Oranges"
 	description = "CMake modules, scripts, and utilities"
