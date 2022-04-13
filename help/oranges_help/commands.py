@@ -23,7 +23,7 @@ from . import doc_block, paths, printing
 #
 
 
-def print_help(command_name, out_file=None) -> None:
+def print_help(command_name: str, out_file: str = None) -> None:
 	""" Prints help for the given command """
 
 	def get_file_containing_command() -> [list[str], str]:
@@ -98,7 +98,7 @@ def print_help(command_name, out_file=None) -> None:
 #
 
 
-def print_list(out_file=None) -> None:
+def print_list(out_file: str = None) -> None:
 	""" Prints the list of all commands provided by Oranges modules """
 
 	commands: list[str] = []

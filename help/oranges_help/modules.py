@@ -24,7 +24,7 @@ from . import doc_block, paths, printing
 
 #
 
-def print_finder_help(module_name, out_file=None) -> None: # yapf: disable
+def print_finder_help(module_name: str, out_file: str=None) -> None: # yapf: disable
 	""" Prints help for the specified find module. """
 
 	if not module_name.startswith("Find"):
@@ -43,9 +43,10 @@ def print_finder_help(module_name, out_file=None) -> None: # yapf: disable
 
 # editorconfig-checker-disable
 def print_help(
-    module_name,
-    out_file=None,
-    error_string="Error - nonexistent module requested! Use --list-modules to get the list of valid module names."
+    module_name: str,
+    out_file: str = None,
+    error_string:
+    str = "Error - nonexistent module requested! Use --list-modules to get the list of valid module names."
 ) -> None:
 	""" Prints help for the specified module. """
 	# editorconfig-checker-enable
@@ -67,7 +68,7 @@ def print_help(
 
 #
 
-def print_list(kind, path_list, out_file=None, file_append=False) -> None: # yapf: disable
+def print_list(kind: str, path_list: list[str], out_file: str=None, file_append: bool=False) -> None: # yapf: disable
 	""" Prints the categorized list of CMake modules of the specified kind (either modules or finders) """
 
 	def make_module_category_dict() -> dict[list[str]]:
@@ -140,7 +141,7 @@ def print_list(kind, path_list, out_file=None, file_append=False) -> None: # yap
 #
 
 
-def print_full_list(out_file=None) -> None:
+def print_full_list(out_file: str = None) -> None:
 	""" Prints the full list of CMake modules and find modules that Oranges provides """
 
 	print_list(out_file=out_file,

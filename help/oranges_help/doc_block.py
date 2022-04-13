@@ -33,7 +33,7 @@ COMMAND_MARKER: Final[str] = ".. command::"
 #
 
 
-def parse(module_full_path) -> list[str]:
+def parse(module_full_path: str) -> list[str]:
 	""" Parses the given CMake module for lines contained within a .rst documentation block """
 
 	with open(module_full_path, "r", encoding="utf-8") as f:
@@ -62,7 +62,7 @@ def parse(module_full_path) -> list[str]:
 #
 
 
-def output(module_full_path, out_file=None, file_append=False) -> None: # yapf: disable
+def output(module_full_path: str, out_file: str=None, file_append: bool=False) -> None: # yapf: disable
 	""" Prints the contents of a .rst documentation block at the top of a CMake file.
 		If out_file is not None, then the output will be written to the given filepath; otherwise, output is printed to the terminal.
 	"""
@@ -100,7 +100,7 @@ def output(module_full_path, out_file=None, file_append=False) -> None: # yapf: 
 #
 
 
-def get_section(section_heading, module_lines) -> list[str]:
+def get_section(section_heading: str, module_lines: list[str]) -> list[str]:
 	""" Parses a documentation block for a subsection with the given heading """
 
 	if not module_lines:

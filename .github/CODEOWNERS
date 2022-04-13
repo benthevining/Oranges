@@ -43,6 +43,8 @@ docs/conf.py benthevining
 evining
 help/CMakeLists.txt benthevining
 help/oranges_help/__init__.py benthevining
+help/oranges_help/commands.py benthevining
+help/oranges_help/doc_block.py benthevining
 help/oranges_help/targets.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining

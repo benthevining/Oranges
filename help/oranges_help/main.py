@@ -28,7 +28,7 @@ ORANGES_VERSION: Final[str] = "2.16.0"
 #
 
 
-def print_basic_info(out_file=None) -> None:
+def print_basic_info(out_file: str = None) -> None:
 	""" Prints the version and other basic information """
 
 	out_lines: list[str] = [

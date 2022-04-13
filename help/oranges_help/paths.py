@@ -28,13 +28,13 @@ FIND_MODULES_DIR: Final[str] = path.join(MODULES_DIR, "finders") # yapf: disable
 #
 
 
-def module_name_from_path(full_path) -> str:
+def module_name_from_path(full_path: str) -> str:
 	""" Returns the name of a module from its full filepath """
 
 	return path.splitext(path.basename(full_path))[0]
 
 
-def module_path_from_name(module_name) -> str:
+def module_path_from_name(module_name: str) -> str:
 	""" Returns the full path of a module from its name """
 
 	path_list: list[str] = get_module_list()

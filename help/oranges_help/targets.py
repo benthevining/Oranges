@@ -23,7 +23,7 @@ from . import doc_block, paths, printing
 #
 
 
-def print_help(target_name, out_file=None) -> None:
+def print_help(target_name: str, out_file: str = None) -> None:
 	""" Prints help for the given target """
 
 	if target_name.startswith(
@@ -80,7 +80,7 @@ def print_help(target_name, out_file=None) -> None:
 #
 
 
-def print_list(out_file=None) -> None:
+def print_list(out_file: str = None) -> None:
 	""" Prints a list of all targets defined by Oranges modules """
 
 	targets: list[str] = []
