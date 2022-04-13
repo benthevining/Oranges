@@ -146,6 +146,9 @@ set_target_properties (
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
+# suppress "unknown pragma" warnings in MSVC
+target_compile_options (OrangesDefaultTarget INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/wd4068>)
+
 target_compile_features (OrangesDefaultTarget INTERFACE cxx_std_20)
 
 target_compile_definitions (OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windows>:NOMINMAX
