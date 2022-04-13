@@ -41,4 +41,4 @@ find_package_message (Oranges "Oranges package found -- installed on system"
 
 #
 
-check_required_components ("@PROJECT_NAME@")
+check_required_components (Oranges)

@@ -35,7 +35,7 @@ function(_oranges_add_cmake_module_dir directory parent)
 
 	list (REMOVE_ITEM dirChildren scripts)
 
-	foreach(child ${dirChildren})
+	foreach(child IN LISTS dirChildren)
 		_oranges_add_cmake_module_dir ("${child}" "${_abs_path}")
 	endforeach()
 
@@ -44,11 +44,9 @@ endfunction()
 
 #
 
-set (orangesModulePaths "")
-
 file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
 
-foreach(child ${children})
+foreach(child IN LISTS children)
 	_oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
 endforeach()
 
@@ -62,3 +60,5 @@ set (ORANGES_CMAKE_MODULE_PATH "${orangesModulePaths}" CACHE INTERNAL "")
 list (APPEND CMAKE_MODULE_PATH "${orangesModulePaths}")
 
 list (REMOVE_DUPLICATES CMAKE_MODULE_PATH)
+
+unset (orangesModulePaths)

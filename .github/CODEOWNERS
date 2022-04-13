@@ -42,6 +42,7 @@ docs/CMakeLists.txt benthevining
 docs/conf.py benthevining
 evining
 help/CMakeLists.txt benthevining
+help/oranges_help/__init__.py benthevining
 help/oranges_help/targets.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
@@ -211,6 +212,7 @@ modules/juce/OrangesJuceModuleUtilities.cmake benthevining
 modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/AAX/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/CallForEachPluginFormat.cmake benthevining
+modules/juce/plugins/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
 modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining
