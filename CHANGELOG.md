@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.16.0](http://github.com/benthevining/Oranges/compare/v2.15.0...v2.16.0) (2022-04-13)
+
+
+### Features
+
+* added a find module for Accelerate ([fe1e3f3](http://github.com/benthevining/Oranges/commit/fe1e3f36393a13cb7dc8d2e6a90bc99779cf0e09))
+
 ## [2.15.0](http://github.com/benthevining/Oranges/compare/v2.14.2...v2.15.0) (2022-04-12)
 
 
