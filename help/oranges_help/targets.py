@@ -23,7 +23,7 @@ from . import doc_block, paths, printing
 #
 
 
-def print_help(target_name: str, out_file: str = None) -> None:
+def print_help(target_name: str, out_file: str = None, file_append: bool = False) -> None:  # yapf: disable
 	""" Prints help for the given target """
 
 	if target_name.startswith(
@@ -59,7 +59,12 @@ def print_help(target_name: str, out_file: str = None) -> None:
 	del module_name
 
 	if out_file:
-		with open(out_file, "w", encoding="utf-8") as f:
+		if file_append:
+			mode: Final[str] = "a"
+		else:
+			mode: Final[str] = "w"
+
+		with open(out_file, mode, encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"Help for target {target_name} has been written to {out_file}")
@@ -80,7 +85,7 @@ def print_help(target_name: str, out_file: str = None) -> None:
 #
 
 
-def print_list(out_file: str = None) -> None:
+def print_list(out_file: str = None, file_append: bool = False) -> None:
 	""" Prints a list of all targets defined by Oranges modules """
 
 	targets: list[str] = []
@@ -131,7 +136,12 @@ def print_list(out_file: str = None) -> None:
 	del proj_targets
 
 	if out_file:
-		with open(out_file, "w", encoding="utf-8") as f:
+		if file_append:
+			mode: Final[str] = "a"
+		else:
+			mode: Final[str] = "w"
+
+		with open(out_file, mode, encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"The list of targets has been written to: {out_file}")

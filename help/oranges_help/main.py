@@ -28,7 +28,7 @@ ORANGES_VERSION: Final[str] = "2.16.0"
 #
 
 
-def print_basic_info(out_file: str = None) -> None:
+def print_basic_info(out_file: str = None, file_append: bool = False) -> None:
 	""" Prints the version and other basic information """
 
 	out_lines: list[str] = [
@@ -67,7 +67,12 @@ def print_basic_info(out_file: str = None) -> None:
 	out_lines.append("")
 
 	if out_file:
-		with open(out_file, "w", encoding="utf-8") as f:
+		if file_append:
+			mode: Final[str] = "a"
+		else:
+			mode: Final[str] = "w"
+
+		with open(out_file, mode, encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"The version info has been written to: {out_file}")
@@ -172,6 +177,13 @@ def main() -> None:
 	                    type=str,
 	                    dest="out_file")
 
+	parser.add_argument(
+	    "--file-append",
+	    "--append",
+	    help="Append to the output file instead of overwriting it",
+	    action="store_true",
+	    dest="file_append")
+
 	if len(sys.argv) == 1:
 		parser.print_help(sys.stderr)
 		sys.exit(1)
@@ -179,52 +191,60 @@ def main() -> None:
 	args: Final = parser.parse_args()
 
 	if args.print_info:
-		print_basic_info(args.out_file)
+		print_basic_info(out_file=args.out_file, file_append=args.file_append)
 		return
 
 	if args.list_all:
-		modules.print_full_list(out_file=args.out_file)
-
+		modules.print_full_list(out_file=args.out_file,
+		                        file_append=args.file_append)
 		return
 
 	if args.list_modules:
 		modules.print_list(out_file=args.out_file,
 		                   kind="CMake",
-		                   path_list=paths.get_module_list())
+		                   path_list=paths.get_module_list(),
+		                   file_append=args.file_append)
 		return
 
 	if args.list_finders:
 		modules.print_list(out_file=args.out_file,
 		                   kind="find",
-		                   path_list=paths.get_finders_list())
+		                   path_list=paths.get_finders_list(),
+		                   file_append=args.file_append)
 		return
 
 	if args.help_module:
 		modules.print_help(module_name=args.help_module,
-		                   out_file=args.out_file)
+		                   out_file=args.out_file,
+		                   file_append=args.file_append)
 		return
 
 	if args.find_module:
 		modules.print_finder_help(module_name=args.find_module,
-		                          out_file=args.out_file)
+		                          out_file=args.out_file,
+		                          file_append=args.file_append)
 		return
 
 	if args.list_commands:
-		commands.print_list(out_file=args.out_file)
+		commands.print_list(out_file=args.out_file,
+		                    file_append=args.file_append)
 		return
 
 	if args.help_command:
 		commands.print_help(command_name=args.help_command,
-		                    out_file=args.out_file)
+		                    out_file=args.out_file,
+		                    file_append=args.file_append)
 		return
 
 	if args.list_targets:
-		targets.print_list(out_file=args.out_file)
+		targets.print_list(out_file=args.out_file,
+		                   file_append=args.file_append)
 		return
 
 	if args.help_target:
 		targets.print_help(target_name=args.help_target,
-		                   out_file=args.out_file)
+		                   out_file=args.out_file,
+		                   file_append=args.file_append)
 		return
 
 

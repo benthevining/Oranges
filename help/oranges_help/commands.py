@@ -23,7 +23,7 @@ from . import doc_block, paths, printing
 #
 
 
-def print_help(command_name: str, out_file: str = None) -> None:
+def print_help(command_name: str, out_file: str = None, file_append: bool = False) -> None:  # yapf: disable
 	""" Prints help for the given command """
 
 	def get_file_containing_command() -> [list[str], str]:
@@ -80,7 +80,12 @@ def print_help(command_name: str, out_file: str = None) -> None:
 	del in_doc_block
 
 	if out_file:
-		with open(out_file, "w", encoding="utf-8") as f:
+		if file_append:
+			mode: Final[str] = "a"
+		else:
+			mode: Final[str] = "w"
+
+		with open(out_file, mode, encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(
@@ -98,7 +103,7 @@ def print_help(command_name: str, out_file: str = None) -> None:
 #
 
 
-def print_list(out_file: str = None) -> None:
+def print_list(out_file: str = None, file_append: bool = False) -> None:
 	""" Prints the list of all commands provided by Oranges modules """
 
 	commands: list[str] = []
@@ -124,7 +129,12 @@ def print_list(out_file: str = None) -> None:
 	del commands
 
 	if out_file:
-		with open(out_file, "w", encoding="utf-8") as f:
+		if file_append:
+			mode: Final[str] = "a"
+		else:
+			mode: Final[str] = "w"
+
+		with open(out_file, mode, encoding="utf-8") as f:
 			f.write("\n".join(out_lines))
 
 		print(f"The list of commands has been written to: {out_file}")
