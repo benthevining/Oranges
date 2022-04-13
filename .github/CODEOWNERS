@@ -41,6 +41,7 @@ conanfile.py benthevining
 docs/CMakeLists.txt benthevining
 docs/conf.py benthevining
 evining
+help/CMakeLists.txt benthevining
 help/oranges_help/targets.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining

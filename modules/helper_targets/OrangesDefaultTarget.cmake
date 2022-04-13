@@ -202,12 +202,6 @@ if(APPLE)
 		PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
 				   XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}")
 
-	target_compile_options (OrangesDefaultTarget
-							INTERFACE "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-
-	target_link_options (OrangesDefaultTarget INTERFACE
-						 "-mmacosx-version-min=${CMAKE_OSX_DEPLOYMENT_TARGET}")
-
 	if(IOS)
 		set_target_properties (
 			OrangesDefaultTarget

@@ -24,7 +24,7 @@ Generating some standard headers for a target
 
 	oranges_generate_standard_headers (TARGET <targetName>
 									   [BASE_NAME <baseName>]
-									   [HEADER <mainHeaderName>]
+									   [HEADER <mainHeaderName>] | [NO_AGGREGATE_HEADER]
 									   [FEATURE_TEST_LANGUAGE <lang>]
 									   [BUILD_TYPE_HEADER <buildTypeHeaderName>]
 									   [EXPORT_HEADER <exportHeaderName>]
@@ -52,6 +52,8 @@ function(oranges_generate_standard_headers)
 
 	oranges_add_function_message_context ()
 
+	set (options INTERFACE NO_AGGREGATE_HEADER)
+
 	set (
 		oneValueArgs
 		TARGET
@@ -64,7 +66,7 @@ function(oranges_generate_standard_headers)
 		REL_PATH
 		FEATURE_TEST_LANGUAGE)
 
-	cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
 
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -116,6 +118,10 @@ function(oranges_generate_standard_headers)
 		TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
 		HEADER "${ORANGES_ARG_PLATFORM_HEADER}" LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}"
 														 ${ORANGES_FORWARDED_ARGUMENTS})
+
+	if(ORANGES_ARG_NO_AGGREGATE_HEADER)
+		return ()
+	endif()
 
 	set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 

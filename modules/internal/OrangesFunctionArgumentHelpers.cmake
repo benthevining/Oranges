@@ -97,8 +97,6 @@ function(oranges_forward_function_arguments)
 										   "${ORANGES_ARG_KIND}")
 	endforeach()
 
-	if(ORANGES_FORWARDED_ARGUMENTS)
-		set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
-	endif()
+	set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
 
 endfunction()
