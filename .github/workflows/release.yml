@@ -41,6 +41,11 @@ jobs:
               run: cmake --build --preset maintainer
 
             - name: Run install
+              if: runner.os != 'Windows'
+              run: sudo cmake --install Builds
+
+            - name: Run install
+              if: runner.os == 'Windows'
               run: cmake --install Builds
 
 
