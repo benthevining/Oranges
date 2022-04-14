@@ -6,6 +6,8 @@ on:
     push:
         branches:
             - main
+    schedule:
+        - chron: '0 0 * * 1'
 
 defaults:
     run:
@@ -25,28 +27,22 @@ jobs:
         if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
 
         steps:
+
             - name: Checkout code
               uses: actions/checkout@v3
               with:
                   submodules: recursive
                   fetch-depth: 1
 
-            - name: Set up cache
-              uses: actions/cache@v3
-              with:
-                  path: Cache
-                  key: ${{ runner.os }}.tests.${{ hashFiles('**/') }}
-                  restore-keys: ${{ runner.os }}.tests.
+            - name: Configure CMake
+              run: cmake --preset maintainer
 
-            - name: Install dependencies
-              if: runner.os == 'Linux'
-              run: sudo apt-get install ninja-build
+            - name: Run build
+              run: cmake --build --preset maintainer
 
-            - name: Generate Makefile
-              run: scripts/makefiles/generate.sh
+            - name: Run install
+              run: sudo cmake --install Builds
 
-            - name: Build and install
-              run: make install
 
     Release:
 

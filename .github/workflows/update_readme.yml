@@ -1,0 +1,40 @@
+---
+name: Update readme
+
+on:
+    workflow_dispatch:
+    schedule:
+        - chron: '0 0 * * 1'
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+
+    UpdateReadme:
+
+        name: Update readme
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  submodules: recursive
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Configure CMake
+              run: cmake --preset default
+
+            - name: Run build
+              run: cmake --build --preset readme
+
+            - name: Commit & Push changes
+              uses: actions-js/push@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  message: 'chore: autoupdate readme'
