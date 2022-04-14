@@ -48,6 +48,8 @@ html_show_sourcelink = True
 #html_static_path = ['@conf_path@/static']
 #html_style = 'cmake.css'
 html_theme = 'default'
+
+# editorconfig-checker-disable
 html_theme_options = {
     'footerbgcolor': '#00182d',
     'footertextcolor': '#ffffff',
@@ -68,6 +70,7 @@ html_theme_options = {
     'codebgcolor': '#eeeeee',
     'codetextcolor': '#333333',
 }
+# editorconfig-checker-enable
 
 html_title = f'Oranges {release} Documentation'
 html_short_title = f'{release} Documentation'

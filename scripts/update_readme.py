@@ -23,7 +23,7 @@ MODULE_LIST: Final[str] = "@modules_output@"
 README: Final[str] = "@readme@"
 
 MODULES_SECTION_START: Final[str] = "## What's here"
-MODULES_SECTION_END: Final[str] = "## Dependency graph"
+MODULES_SECTION_END: Final[str] = "## Using Oranges"
 
 if __name__ == "__main__":
 	with open(README, "r", encoding="utf-8") as f:

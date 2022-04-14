@@ -1,6 +1,5 @@
-<!-- markdownlint-disable first-line-h1 -->
+<!-- markdownlint-disable -->
 <!-- editorconfig-checker-disable -->
-<!-- markdownlint-disable fenced-code-language -->
 ```
    ____  _____            _   _  _____ ______  _____
   / __ \|  __ \     /\   | \ | |/ ____|  ____|/ ____|
@@ -9,7 +8,6 @@
  | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) |
   \____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
 ```
-<!-- markdownlint-enable fenced-code-language -->
 <!-- editorconfig-checker-enable -->
 
 [![Create release](https://github.com/benthevining/Oranges/actions/workflows/release.yml/badge.svg)](https://github.com/benthevining/Oranges/actions/workflows/release.yml)
@@ -20,109 +18,105 @@ A library of CMake modules, scripts, and toolchains.
 
 For quick CLI reference, run the `help.py` script in the `help/` directory.
 
+<!-- editorconfig-checker-disable -->
 ## What's here
 
-### Oranges provides the following CMake modules
+### Oranges provides the following CMake modules:
 
 Code generation
-
-* OrangesGenerateBuildTypeHeader
-* OrangesGenerateExportHeader
-* OrangesGeneratePlatformHeader
-* OrangesGenerateStandardHeaders
+  * OrangesGenerateBuildTypeHeader
+  * OrangesGenerateExportHeader
+  * OrangesGeneratePlatformHeader
+  * OrangesGenerateStandardHeaders
 
 Dependencies
-
-* OrangesDownloadFile
-* OrangesFetchRepository
-* OrangesWipeCacheTarget
-* OrangesWrapAutotoolsProject
+  * OrangesDownloadFile
+  * OrangesFetchRepository
+  * OrangesWipeCacheTarget
+  * OrangesWrapAutotoolsProject
 
 Documentation
-
-* OrangesDocsBuildConfig
-* OrangesDoxygenConfig
-* OrangesGraphVizConfig
+  * OrangesDocsBuildConfig
+  * OrangesDoxygenConfig
+  * OrangesGraphVizConfig
 
 General
-
-* LinuxLSBInfo
-* OrangesDefaultProjectSettings
-* OrangesFileUtils
-* OrangesListUtils
+  * LinuxLSBInfo
+  * OrangesDefaultProjectSettings
+  * OrangesFileUtils
+  * OrangesListUtils
 
 Helper targets
-
-* OrangesAllIntegrations
-* OrangesCoverageFlags
-* OrangesDefaultTarget
-* OrangesDefaultWarnings
-* OrangesUnityBuild
+  * OrangesAllIntegrations
+  * OrangesCoverageFlags
+  * OrangesDefaultTarget
+  * OrangesDefaultWarnings
+  * OrangesUnityBuild
 
 Installing
-
-* OrangesDefaultCPackSettings
-* OrangesDefaultInstallSettings
-* OrangesGeneratePkgConfig
-* OrangesInstallSystemLibs
-* OrangesSetDefaultCpackGenerator
-* OrangesUninstallTarget
+  * OrangesDefaultCPackSettings
+  * OrangesDefaultInstallSettings
+  * OrangesGeneratePkgConfig
+  * OrangesInstallSystemLibs
+  * OrangesSetDefaultCpackGenerator
+  * OrangesUninstallTarget
 
 Juce
-
-* OrangesAppUtilities
-* OrangesAssetsHelpers
-* OrangesJuceModuleUtilities
-* OrangesJuceUtilities
+  * OrangesAppUtilities
+  * OrangesAssetsHelpers
+  * OrangesJuceModuleUtilities
+  * OrangesJuceUtilities
 
 Plugins
+  * CallForEachPluginFormat
+  * OrangesAAXUtils
+  * OrangesAddPrivateSDKs
+  * OrangesClapFormat
+  * OrangesCreateAAXSDKTarget
+  * OrangesPluginUtilities
 
-* CallForEachPluginFormat
-* OrangesAAXUtils
-* OrangesAddPrivateSDKs
-* OrangesClapFormat
-* OrangesCreateAAXSDKTarget
-* OrangesPluginUtilities
-
-### Oranges provides the following find modules
+### Oranges provides the following find modules:
 
 Code signing
-
-* Findcodesign
-* Findwraptool
+  * Findcodesign
+  * Findwraptool
 
 Fftw
-
-* FindFFTW
-* Findfftw3
-* Findfftw3f
+  * FindFFTW
+  * Findfftw3
+  * Findfftw3f
 
 Libs
-
-* FindAbletonLink
-* FindAccelerate
-* FindIPP
-* FindJUCE
-* FindMIPP
-* FindMTS-ESP
+  * FindAbletonLink
+  * FindAccelerate
+  * FindIPP
+  * FindJUCE
+  * FindMIPP
+  * FindMTS-ESP
 
 Programs
-
-* Findccache
-* Finddot
-* Findxcodebuild
+  * Findccache
+  * Finddot
+  * Findxcodebuild
 
 Static analysis
-
-* Findclang-tidy
-* Findcppcheck
-* Findcpplint
-* Findinclude-what-you-use
+  * Findclang-tidy
+  * Findcppcheck
+  * Findcpplint
+  * Findinclude-what-you-use
 
 Testing
+  * Findauval
+  * Findpluginval
 
-* Findauval
-* Findpluginval
+## Using Oranges
+<!-- editorconfig-checker-enable -->
+
+Even though Oranges is a library of CMake modules, it is fully usable as an installable package.
+You can run `cmake --install`, and then call `find_package (Oranges)` from any consuming CMake project.
+
+If your project depends on Oranges, I recommend copying the `FindOranges` script from the `scripts/` directory into your project's source tree (and adding its location to the `CMAKE_MODULE_PATH` before calling `find_package (Oranges)`), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
+See the `FindOranges` file for more documentation on what it does.
 
 ## Dependency graph
 

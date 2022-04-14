@@ -1,5 +1,4 @@
 {
 	"IgnoreDefaults": true,
-	"SpacesAftertabs": true,
-	"Exclude": [".pre-commit-config.yaml", "LICENSE", "CODE_OF_CONDUCT.md", "oranges_header.txt", "conf.py"]
+	"SpacesAftertabs": true
 }
