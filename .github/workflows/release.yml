@@ -41,7 +41,7 @@ jobs:
               run: cmake --build --preset maintainer
 
             - name: Run install
-              run: sudo cmake --install Builds
+              run: cmake --install Builds
 
 
     Release:
