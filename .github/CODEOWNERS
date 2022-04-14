@@ -47,6 +47,8 @@ help/oranges_help/commands.py benthevining
 help/oranges_help/doc_block.py benthevining
 help/oranges_help/main.py benthevining
 help/oranges_help/modules.py benthevining
+help/oranges_help/paths.py benthevining
+help/oranges_help/printing.py benthevining
 help/oranges_help/targets.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining

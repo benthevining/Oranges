@@ -98,13 +98,6 @@ repos:
         args: [--in-place]
       #- id: cmake-lint
 
-  # Dockerfile
-  - repo: https://github.com/AleksaC/hadolint-py
-    rev: v2.10.0
-    hooks:
-      - id: hadolint
-        args: [--ignore, DL4006, --ignore, DL3008]
-
   # YAML
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.26.3

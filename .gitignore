@@ -1,13 +1,11 @@
-**/.DS_Store
+.DS_Store
 Makefile
 Builds/
 Cache/
 .cache/
 Testing/
 doc/
-logs/
 __pycache__/
 CMakeUserPresets.json
 node_modules/
 package-lock.json
-deps_graph.dot

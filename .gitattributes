@@ -1,1 +1,12 @@
-* text=auto eol=lf
+* text=auto eol=lf encoding=utf-8 whitespace=tab-in-indent
+
+.git*                 export-ignore
+.bumpversion.cfg      export-ignore
+.cmake-format.json    export-ignore
+.ecrc                 export-ignore
+.editorconfig         export-ignore
+.markdownlint.json    export-ignore
+.nitpick.toml         export-ignore
+.pre-commit-config    export-ignore
+.style.yapf           export-ignore
+.tool-versions        export-ignore
