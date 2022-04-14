@@ -67,9 +67,11 @@ set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 add_subdirectory (docs)
 add_subdirectory (help)
 
+include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
+
 #
 
-# include any modules that create targets
+# include any modules that create targets (for installing)
 include (OrangesAllIntegrations)
 include (OrangesCoverageFlags)
 include (OrangesDefaultTarget)

@@ -201,6 +201,7 @@ modules/internal/LemonsCmakeDevTools.cmake benthevining
 modules/internal/LemonsDeprecations.cmake benthevining
 modules/internal/OrangesCmakeDevTools.cmake benthevining
 modules/internal/OrangesConfigurationPostfixes.cmake benthevining
+modules/internal/OrangesDeprecateDirectoryScopedCommands.cmake benthevining
 modules/internal/OrangesDeprecations.cmake benthevining
 modules/internal/OrangesFunctionArgumentHelpers.cmake benthevining
 modules/internal/OrangesGeneratorExpressions.cmake benthevining

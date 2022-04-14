@@ -19,6 +19,16 @@
       "inherits": "default",
       "name": "maintainer",
       "verbose": true
+    },
+    {
+      "cleanFirst": true,
+      "configurePreset": "maintainer",
+      "displayName": "Update the ReadMe with the list of all modules",
+      "name": "readme",
+      "targets": [
+        "OrangesReadme",
+        "DependencyGraph"
+      ]
     }
   ],
   "cmakeMinimumRequired": {
