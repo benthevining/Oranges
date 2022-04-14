@@ -172,6 +172,6 @@ repos:
         always_run: true
 
 ci:
-  skip: [gitown]
+  skip: [gitown, pylint]
   autofix_commit_msg: 'style: pre-commit autofixes [skip ci]'
   autoupdate_commit_msg: 'chore: pre-commit autoupdate [skip ci]'

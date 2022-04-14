@@ -51,7 +51,11 @@ if __name__ == "__main__":
 	del inModulesSection
 
 	with open(MODULE_LIST, "r", encoding="utf-8") as f:
-		MODULE_LIST: Final[list[str]] = f.readlines()
+		module_lines: list[str] = f.readlines()
+
+	for idx, line in enumerate(module_lines):
+		if line.startswith("Oranges provides"):
+			module_lines[idx] = f"### {line}"
 
 	output_lines: list[str] = []
 
@@ -59,7 +63,8 @@ if __name__ == "__main__":
 		output_lines.append(line)
 
 		if line.startswith(MODULES_SECTION_START):
-			output_lines.extend(MODULE_LIST)
+			output_lines.append("\n")
+			output_lines.extend(module_lines)
 			output_lines.append("\n")
 
 	with open(README, "w", encoding="utf-8") as f:

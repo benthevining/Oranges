@@ -18,9 +18,11 @@
 
 A library of CMake modules, scripts, and toolchains.
 
+For quick CLI reference, run the `help.py` script in the `help/` directory.
+
 ## What's here
 
-Oranges provides the following CMake modules:
+### Oranges provides the following CMake modules
 
 Code generation
 
@@ -82,7 +84,7 @@ Plugins
 * OrangesCreateAAXSDKTarget
 * OrangesPluginUtilities
 
-Oranges provides the following find modules:
+### Oranges provides the following find modules
 
 Code signing
 
