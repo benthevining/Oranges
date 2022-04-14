@@ -147,10 +147,6 @@ repos:
       rev: v1.4
       hooks:
           - id: autoflake
-  # - repo: https://github.com/asottile/dead
-  #   rev: v1.4.0
-  #   hooks:
-  #     - id: dead
     - repo: https://github.com/pre-commit/mirrors-yapf
       rev: v0.32.0
       hooks:
@@ -161,7 +157,6 @@ repos:
       hooks:
           - id: pylint
             args: [--disable=bad-indentation, --disable=line-too-long, --disable=duplicate-code, --check-quote-consistency=yes, --max-args=5, --max-branches=15, --max-statements=55, --good-names=f]
-            exclude: conf.py|alphabetize_codeowners.py|conanfile.py
     - repo: https://github.com/PyCQA/docformatter
       rev: v1.4
       hooks:

@@ -8,7 +8,6 @@
  | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) |
   \____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
 ```
-<!-- editorconfig-checker-enable -->
 
 [![Create release](https://github.com/benthevining/Oranges/actions/workflows/release.yml/badge.svg)](https://github.com/benthevining/Oranges/actions/workflows/release.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/benthevining/Oranges/main.svg)](https://results.pre-commit.ci/latest/github/benthevining/Oranges/main)
@@ -18,7 +17,6 @@ A library of CMake modules, scripts, and toolchains.
 
 For quick CLI reference, run the `help.py` script in the `help/` directory.
 
-<!-- editorconfig-checker-disable -->
 ## What's here
 
 ### Oranges provides the following CMake modules:
@@ -110,7 +108,6 @@ Testing
   * Findpluginval
 
 ## Using Oranges
-<!-- editorconfig-checker-enable -->
 
 Even though Oranges is a library of CMake modules, it is fully usable as an installable package.
 You can run `cmake --install`, and then call `find_package (Oranges)` from any consuming CMake project.
@@ -118,10 +115,14 @@ You can run `cmake --install`, and then call `find_package (Oranges)` from any c
 If your project depends on Oranges, I recommend copying the `FindOranges` script from the `scripts/` directory into your project's source tree (and adding its location to the `CMAKE_MODULE_PATH` before calling `find_package (Oranges)`), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
 See the `FindOranges` file for more documentation on what it does.
 
+## CMake install components
+  * oranges_modules
+  * oranges_toolchains
+  * oranges_docs
+  * oranges - installs all Oranges components
+
 ## Dependency graph
 
-<!-- editorconfig-checker-disable -->
 <p align="center">
   <img src="https://github.com/benthevining/Oranges/blob/main/util/deps_graph.png" alt="Oranges dependency graph"/>
 </p>
-<!-- editorconfig-checker-enable -->
