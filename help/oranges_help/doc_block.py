@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" doc_block.py
+"""
 This module contains functions for parsing .rst documentation blocks found in CMake modules.
 """
 
@@ -34,7 +34,9 @@ COMMAND_MARKER: Final[str] = ".. command::"
 
 
 def parse(module_full_path: str) -> list[str]:
-	""" Parses the given CMake module for lines contained within a .rst documentation block """
+	"""
+	Parses the given CMake module for lines contained within a .rst documentation block.
+	"""
 
 	with open(module_full_path, "r", encoding="utf-8") as f:
 		module_contents: Final[list[str]] = f.readlines()
@@ -63,8 +65,10 @@ def parse(module_full_path: str) -> list[str]:
 
 
 def output(module_full_path: str, out_file: str=None, file_append: bool=False) -> None: # yapf: disable
-	""" Prints the contents of a .rst documentation block at the top of a CMake file.
-		If out_file is not None, then the output will be written to the given filepath; otherwise, output is printed to the terminal.
+	"""
+	Prints the contents of a .rst documentation block at the top of a CMake file.
+
+	If out_file is not None, then the output will be written to the given filepath; otherwise, output is printed to the terminal.
 	"""
 
 	doc_lines: Final[list[str]] = parse(module_full_path)
@@ -101,7 +105,9 @@ def output(module_full_path: str, out_file: str=None, file_append: bool=False) -
 
 
 def get_section(section_heading: str, module_lines: list[str]) -> list[str]:
-	""" Parses a documentation block for a subsection with the given heading """
+	"""
+	Parses a documentation block for a subsection with the given heading.
+	"""
 
 	if not module_lines:
 		return None

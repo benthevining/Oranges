@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" modules.py
+"""
 This module contains functions for listing and printing help about CMake modules.
 """
 
@@ -25,7 +25,9 @@ from . import doc_block, paths, printing
 #
 
 def print_finder_help(module_name: str, out_file: str=None, file_append: bool=False) -> None: # yapf: disable
-	""" Prints help for the specified find module. """
+	"""
+	Prints help for the specified find module.
+	"""
 
 	if not module_name.startswith("Find"):
 		module_name = f"Find{module_name}"
@@ -50,7 +52,9 @@ def print_help(
     error_string:
     str = "Error - nonexistent module requested! Use --list-modules to get the list of valid module names."
 ) -> None:
-	""" Prints help for the specified module. """
+	"""
+	Prints help for the specified module.
+	"""
 	# editorconfig-checker-enable
 
 	if not module_name.endswith(".cmake"):
@@ -73,10 +77,14 @@ def print_help(
 #
 
 def print_list(kind: str, path_list: list[str], out_file: str=None, file_append: bool=False) -> None: # yapf: disable
-	""" Prints the categorized list of CMake modules of the specified kind (either modules or finders) """
+	"""
+	Prints the categorized list of CMake modules of the specified kind (either modules or finders)
+	"""
 
 	def make_module_category_dict() -> dict[list[str]]:
-		""" Takes the list of full module paths and creates a dictionary where the keys are the category names and the values are a list of module names """
+		"""
+		Takes the list of full module paths and creates a dictionary where the keys are the category names and the values are a list of module names.
+		"""
 
 		module_categories: dict[list[str]] = defaultdict(list[str])
 
@@ -146,7 +154,9 @@ def print_list(kind: str, path_list: list[str], out_file: str=None, file_append:
 
 
 def print_full_list(out_file: str = None, file_append: bool = False) -> None:
-	""" Prints the full list of CMake modules and find modules that Oranges provides """
+	"""
+	Prints the full list of CMake modules and find modules that Oranges provides.
+	"""
 
 	print_list(out_file=out_file,
 	           kind="CMake",

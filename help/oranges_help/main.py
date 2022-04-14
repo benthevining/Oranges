@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" main.py
+"""
 This script is the main entrypoint for the Oranges command line help tool.
 """
 
@@ -29,7 +29,9 @@ ORANGES_VERSION: Final[str] = "2.16.0"
 
 
 def print_basic_info(out_file: str = None, file_append: bool = False) -> None:
-	""" Prints the version and other basic information """
+	"""
+	Prints the version and other basic information.
+	"""
 
 	out_lines: list[str] = [
 	    "",
@@ -86,7 +88,9 @@ def print_basic_info(out_file: str = None, file_append: bool = False) -> None:
 
 
 def main() -> None:
-	""" The main method. """
+	"""
+	The main method.
+	"""
 
 	# pylint: disable=too-many-return-statements
 

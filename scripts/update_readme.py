@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Simple script that inserts the list of CMake modules (output by the help script) into the appropriate section of the readme.
-	This script is meant to be configured and invoked by CMake.
+"""
+Simple script that inserts the list of CMake modules (output by the help script) into the appropriate section of the readme.
+
+This script is meant to be configured and invoked by CMake.
 """
 
 # ======================================================================================

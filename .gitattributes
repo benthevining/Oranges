@@ -10,3 +10,6 @@
 .pre-commit-config    export-ignore
 .style.yapf           export-ignore
 .tool-versions        export-ignore
+
+*.png binary
+*.jpg binary

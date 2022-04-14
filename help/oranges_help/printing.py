@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" printing.py
+"""
 This module contains some basic printing helper functions.
 """
 
@@ -18,12 +18,16 @@ This module contains some basic printing helper functions.
 
 
 def section_heading(text: str) -> None:
-	""" Prints the line of text to the terminal, with ANSI bold and underline color codes applied """
+	"""
+	Prints the line of text to the terminal, with ANSI bold and underline color codes applied.
+	"""
 
 	print(f"\033[1;30m\033[04m {text}\033[0m")
 
 
 def error(text: str) -> None:
-	""" Prints the line of text to the terminal, with ANSI bold and red color codes applied """
+	"""
+	Prints the line of text to the terminal, with ANSI bold and red color codes applied.
+	"""
 
 	print(f"\033[1;31m {text}\033[0m")

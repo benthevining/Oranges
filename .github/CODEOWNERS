@@ -50,6 +50,7 @@ help/oranges_help/modules.py benthevining
 help/oranges_help/paths.py benthevining
 help/oranges_help/printing.py benthevining
 help/oranges_help/targets.py benthevining
+help/setup.py benthevining
 modules/code_generation/OrangesGenerateBuildTypeHeader.cmake benthevining
 modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
@@ -267,6 +268,7 @@ scripts/makefiles/Makefile.in benthevining
 scripts/makefiles/generate.sh benthevining
 scripts/makefiles/generate_makefile.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
+scripts/update_readme.py benthevining
 scripts/util.make benthevining
 tests/CMakeLists.txt benthevining
 tests/exportTestMain.cpp benthevining

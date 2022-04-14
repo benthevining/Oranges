@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" Oranges help script
+"""
+Oranges help script.
 
-This script is a simple command line interface providing quick reference for Oranges, similar to CMake's CLI help functionality.
-You can use this script to list or view help for Oranges modules, commands, or targets.
-Any output from this script can also be dumped to a file.
+This script is a simple command line interface providing quick reference for Oranges, similar to CMake's CLI help functionality. You can use this
+script to list or view help for Oranges modules, commands, or targets. Any output from this script can also be dumped to a file.
 """
 
 # ======================================================================================

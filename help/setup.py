@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" setup.py
-A simple setup script for packaging the help tool.
+"""
+setup.py A simple setup script for packaging the help tool.
 """
 
 # ======================================================================================

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" commands.py
+"""
 This module contains functions for listing and printing help about CMake commands.
 """
 
@@ -24,10 +24,14 @@ from . import doc_block, paths, printing
 
 
 def print_help(command_name: str, out_file: str = None, file_append: bool = False) -> None:  # yapf: disable
-	""" Prints help for the given command """
+	"""
+	Prints help for the given command.
+	"""
 
 	def get_file_containing_command() -> [list[str], str]:
-		""" Finds the file containing the documentation for the given command, and returns its text and full path """
+		"""
+		Finds the file containing the documentation for the given command, and returns its text and full path.
+		"""
 
 		for module in paths.get_module_list():
 			with open(module, "r", encoding="utf-8") as f:
@@ -104,7 +108,9 @@ def print_help(command_name: str, out_file: str = None, file_append: bool = Fals
 
 
 def print_list(out_file: str = None, file_append: bool = False) -> None:
-	""" Prints the list of all commands provided by Oranges modules """
+	"""
+	Prints the list of all commands provided by Oranges modules.
+	"""
 
 	commands: list[str] = []
 

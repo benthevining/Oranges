@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-""" paths.py
+"""
 This module contains functions for working with paths of Oranges CMake modules.
 """
 
@@ -29,13 +29,17 @@ FIND_MODULES_DIR: Final[str] = path.join(MODULES_DIR, "finders") # yapf: disable
 
 
 def module_name_from_path(full_path: str) -> str:
-	""" Returns the name of a module from its full filepath """
+	"""
+	Returns the name of a module from its full filepath.
+	"""
 
 	return path.splitext(path.basename(full_path))[0]
 
 
 def module_path_from_name(module_name: str) -> str:
-	""" Returns the full path of a module from its name """
+	"""
+	Returns the full path of a module from its name.
+	"""
 
 	path_list: list[str] = get_module_list()
 	path_list.extend(get_finders_list())
@@ -51,7 +55,9 @@ def module_path_from_name(module_name: str) -> str:
 
 
 def get_module_list() -> list[str]:
-	""" Returns an array containing all the full paths to the Oranges CMake modules """
+	"""
+	Returns an array containing all the full paths to the Oranges CMake modules.
+	"""
 
 	child_dirs: list[str] = next(walk(MODULES_DIR))[1]
 
@@ -76,7 +82,9 @@ def get_module_list() -> list[str]:
 
 
 def get_finders_list() -> list[str]:
-	""" Returns an array containing all the full paths to the Oranges find modules """
+	"""
+	Returns an array containing all the full paths to the Oranges find modules.
+	"""
 
 	child_dirs: list[str] = next(walk(FIND_MODULES_DIR))[1]
 

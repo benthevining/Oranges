@@ -1,11 +1,11 @@
 .DS_Store
 Makefile
+CMakeUserPresets.json
+package-lock.json
 Builds/
 Cache/
 .cache/
 Testing/
 doc/
 __pycache__/
-CMakeUserPresets.json
 node_modules/
-package-lock.json
