@@ -177,6 +177,6 @@ repos:
             exclude: oranges_header.txt|LICENSE
 
 ci:
-    skip: [gitown, pylint]
+    skip: [gitown, check-jsonschema, pylint]
     autofix_commit_msg: 'style: pre-commit autofixes [skip ci]'
     autoupdate_commit_msg: 'chore: pre-commit autoupdate [skip ci]'
