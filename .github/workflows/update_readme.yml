@@ -4,7 +4,7 @@ name: Update readme
 on:
     workflow_dispatch:
     schedule:
-        - chron: '0 0 * * 1'
+        - cron: '0 0 * * 1'
 
 defaults:
     run:

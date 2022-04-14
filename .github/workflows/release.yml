@@ -7,7 +7,7 @@ on:
         branches:
             - main
     schedule:
-        - chron: '0 0 * * 1'
+        - cron: '0 0 * * 1'
 
 defaults:
     run:
