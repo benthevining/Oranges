@@ -9,13 +9,16 @@ repos:
     - repo: meta
       hooks:
           - id: check-hooks-apply
+            always_run: true
           - id: check-useless-excludes
+            always_run: true
 
   # git
     - repo: https://github.com/jorisroovers/gitlint
       rev: v0.17.0
       hooks:
           - id: gitlint
+            always_run: true
     - repo: https://github.com/milin/gitown
       rev: v0.1.7
       hooks:
