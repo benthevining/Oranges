@@ -116,8 +116,7 @@
             ".bumpversion.cfg",
             "CMakeLists.txt",
             "help/oranges_help/main.py",
-            "help/setup.py",
-            "conanfile.py"
+            "help/setup.py"
           ]
         }
       ],
