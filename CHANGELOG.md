@@ -1,5 +1,13 @@
 # Oranges changelog
 
+### [2.16.1](http://github.com/benthevining/Oranges/compare/v2.16.0...v2.16.1) (2022-04-15)
+
+
+### Bug Fixes
+
+* added flags to fix a bug compiling vDSP with GCC ([e055a23](http://github.com/benthevining/Oranges/commit/e055a237d31177d5e04ab5d7591995dda316a112))
+* updating bumpversion config ([31e4e6a](http://github.com/benthevining/Oranges/commit/31e4e6a2acd6590bc39b1e97cc29d46880067c72))
+
 ## [2.16.0](http://github.com/benthevining/Oranges/compare/v2.15.0...v2.16.0) (2022-04-13)
 
 
