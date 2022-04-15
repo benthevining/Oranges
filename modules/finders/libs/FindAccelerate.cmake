@@ -74,6 +74,11 @@ foreach(lib_name IN LISTS Accelerate_FIND_COMPONENTS)
 	endif()
 endforeach()
 
+if(TARGET Apple_vDSP)
+	# fixes a bug present when compiling vDSP with GCC
+	target_compile_options (Apple_vDSP INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
+endif()
+
 add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 
 set (MTS-ESP_FOUND TRUE)

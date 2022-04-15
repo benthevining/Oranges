@@ -1,6 +1,7 @@
 ---
 # editorconfig-checker-disable
 # yamllint disable rule:line-length
+
 default_language_version:
     python: python3
 
@@ -115,7 +116,7 @@ repos:
       hooks:
           - id: check-github-workflows
           - id: check-jsonschema
-            name: "Validate CMake presets"
+            name: Validate CMake presets
             files: CMakePresets.json
             types: [json]
             args: [--schemafile, "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json"]

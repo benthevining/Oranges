@@ -20,6 +20,7 @@
 .github/ISSUE_TEMPLATE/feature_request.md benthevining
 .github/dependabot.yml benthevining
 .github/workflows/release.yml benthevining
+.github/workflows/update_readme.yml benthevining
 .gitignore benthevining
 .gitlint benthevining
 .gitownrc benthevining

@@ -157,8 +157,11 @@ target_compile_definitions (OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windo
 target_compile_options (OrangesDefaultTarget
 						INTERFACE $<$<CXX_COMPILER_ID:MSVC>:$<IF:$<CONFIG:Debug>,/Od /Zi,/Ox>>)
 
-target_compile_options (OrangesDefaultTarget
-						INTERFACE $<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MP,/EHsc>>)
+target_compile_options (
+	OrangesDefaultTarget
+	INTERFACE
+		$<$<PLATFORM_ID:Windows>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MP,$<$<NOT:$<CXX_COMPILER_ID:Clang>>:/EHsc>>>
+	)
 
 target_compile_options (OrangesDefaultTarget
 						INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,${GEN_ANY_REL_CONFIG}>:-GL>)
