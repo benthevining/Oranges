@@ -1,6 +1,8 @@
 ---
 name: Create release
 
+# yamllint disable rule:line-length
+
 on:
     workflow_dispatch:
     push:
@@ -17,14 +19,10 @@ jobs:
 
     Build:
 
-        name: ${{ matrix.os }} build
+        name: Build
         if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
-        runs-on: ${{ matrix.os }}
+        runs-on: ubuntu-latest
         timeout-minutes: 10
-        strategy:
-            fail-fast: false
-            matrix:
-                os: [windows-latest, ubuntu-latest, macos-latest]
 
         steps:
 
@@ -41,12 +39,14 @@ jobs:
               run: cmake --build --preset maintainer
 
             - name: Run install
-              if: runner.os != 'Windows'
-              run: sudo cmake --install Builds
+              run: cmake --install Builds --prefix '${{ github.workspace }}/deploy'
 
-            - name: Run install
-              if: runner.os == 'Windows'
-              run: cmake --install Builds
+            - name: Upload artefacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Oranges
+                  path: '${{ github.workspace }}/deploy'
+                  if-no-files-found: error
 
 
     Release:
@@ -73,6 +73,11 @@ jobs:
 
             - name: Install dependencies
               run: pip install --upgrade bumpversion
+
+            - name: Download artefacts
+              uses: actions/download-artifact@v3
+              with:
+                  path: '${{ github.workspace }}/deploy'
 
             - name: Run semantic release
               env:

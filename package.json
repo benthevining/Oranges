@@ -127,6 +127,10 @@
             {
               "label": "Changelog",
               "path": "CHANGELOG.md"
+            },
+            {
+              "label": "Oranges",
+              "path": "deploy"
             }
           ]
         }
