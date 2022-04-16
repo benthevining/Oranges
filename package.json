@@ -1,4 +1,8 @@
 {
+  "author": {
+    "email": "ben.the.vining@gmail.com",
+    "name": "Ben Vining"
+  },
   "dependencies": {
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.3",
@@ -6,6 +10,15 @@
     "conventional-changelog-conventionalcommits": "4.6.3",
     "semantic-release": "19.0.2"
   },
+  "description": "CMake modules and toolchains",
+  "homepage": "https://github.com/benthevining/Oranges",
+  "keywords": [
+    "CMake",
+    "build",
+    "utility"
+  ],
+  "license": "GPL3",
+  "name": "Oranges",
   "release": {
     "branches": [
       "main"
@@ -127,15 +140,13 @@
             {
               "label": "Changelog",
               "path": "CHANGELOG.md"
-            },
-            {
-              "label": "Oranges",
-              "path": "deploy"
             }
           ]
         }
       ]
     ],
     "repositoryUrl": "http://github.com/benthevining/Oranges.git"
-  }
+  },
+  "repository": "http://github.com/benthevining/Oranges",
+  "version": "2.17.0"
 }
