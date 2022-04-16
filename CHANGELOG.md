@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.17.0](http://github.com/benthevining/Oranges/compare/v2.16.1...v2.17.0) (2022-04-16)
+
+
+### Features
+
+* including install tree in release ([4248b9f](http://github.com/benthevining/Oranges/commit/4248b9f3c086d8775db47362f9cddfac0fb8f086))
+
 ### [2.16.1](http://github.com/benthevining/Oranges/compare/v2.16.0...v2.16.1) (2022-04-15)
 
 
