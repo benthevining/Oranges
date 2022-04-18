@@ -30,6 +30,7 @@
 .pylintrc benthevining
 .style.yapf benthevining
 .tool-versions benthevining
+CITATION.cff benthevining
 CMakeLists.txt benthevining
 CMakePresets.json benthevining
 CPackConfig.cmake benthevining
