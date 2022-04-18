@@ -170,7 +170,7 @@ repos:
       hooks:
           - id: editorconfig-checker
             always_run: true
-            exclude: oranges_header.txt|LICENSE
+            exclude: oranges_header.txt|LICENSE|CITATION.cff
 
 ci:
     skip: [gitown, check-jsonschema, pylint]

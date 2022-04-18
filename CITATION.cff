@@ -6,7 +6,7 @@ message: >-
 type: software
 authors:
 - given-names: Ben
-	family-names: Vining
-	email: ben.the.vining@gmail.com
+  family-names: Vining
+  email: ben.the.vining@gmail.com
 version: 2.17.0
 url: "https://github.com/benthevining/Oranges"
