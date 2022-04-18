@@ -57,6 +57,7 @@ modules/code_generation/OrangesGenerateExportHeader.cmake benthevining
 modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
 modules/code_generation/OrangesGenerateStandardHeaders.cmake benthevining
 modules/code_generation/scripts/build_type_header.h benthevining
+modules/code_generation/scripts/build_type_header_includer.h benthevining
 modules/code_generation/scripts/platform_header.h benthevining
 modules/code_generation/scripts/standard_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
