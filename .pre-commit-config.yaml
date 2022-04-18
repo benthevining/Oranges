@@ -38,10 +38,10 @@ repos:
             language: python
             files: .github/CODEOWNERS
 
-    - repo: https://github.com/andreoliwa/nitpick
-      rev: v0.32.0
-      hooks:
-          - id: nitpick
+    # - repo: https://github.com/andreoliwa/nitpick
+    #   rev: v0.32.0
+    #   hooks:
+    #       - id: nitpick
 
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v4.2.0
@@ -169,7 +169,7 @@ repos:
       rev: 2.4.0
       hooks:
           - id: editorconfig-checker
-            exclude: oranges_header.txt|LICENSE|CITATION.cff
+            exclude: oranges_header.txt|LICENSE
 
 ci:
     skip: [gitown, check-jsonschema, pylint]
