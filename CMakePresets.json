@@ -46,8 +46,8 @@
       }
     },
     {
-      "binaryDir": "${sourceDir}/Builds",
       "displayName": "CMake configuration for development of Oranges",
+      "inherits": "default",
       "name": "maintainer",
       "warnings": {
         "deprecated": true,

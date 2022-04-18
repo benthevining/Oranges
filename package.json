@@ -129,7 +129,8 @@
             ".bumpversion.cfg",
             "CMakeLists.txt",
             "help/oranges_help/main.py",
-            "help/setup.py"
+            "help/setup.py",
+            "CITATION.cff"
           ]
         }
       ],

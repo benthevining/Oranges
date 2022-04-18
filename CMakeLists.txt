@@ -140,7 +140,9 @@ cpack_add_install_type (Developer DISPLAY_NAME "Developer installation")
 feature_summary (FILENAME "${CMAKE_BINARY_DIR}/package_features.txt" INCLUDE_QUIET_PACKAGES
 																	 DEFAULT_DESCRIPTION WHAT ALL)
 
-feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
+if(PROJECT_IS_TOP_LEVEL)
+	feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
+endif()
 
 export (PACKAGE Oranges)
 

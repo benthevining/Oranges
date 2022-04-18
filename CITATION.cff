@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: >-
+	Oranges: a collection of CMake modules and
+	toolchains
+message: >-
+	If you use this software, please cite it using the
+	metadata from this file.
+type: software
+authors:
+	- given-names: Ben
+		family-names: Vining
+		email: ben.the.vining@gmail.com
+version: 2.17.0
+url: "https://github.com/benthevining/Oranges"
