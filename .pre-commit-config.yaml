@@ -169,7 +169,6 @@ repos:
       rev: 2.4.0
       hooks:
           - id: editorconfig-checker
-            always_run: true
             exclude: oranges_header.txt|LICENSE|CITATION.cff
 
 ci:
