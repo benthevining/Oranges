@@ -20,11 +20,10 @@ RM = $(CMAKE) -E rm -rf  # force this one to use CMake
 PRECOMMIT ?= pre-commit
 GIT ?= git
 ASDF ?= asdf
-CONAN ?= conan
 
 # directory aliases
 BUILDS ?= Builds
-BUILD_DIR ?= $(@PROJECT_NAME@_ROOT)/$(BUILDS)
+BUILD_DIR ?= $(ORANGES_ROOT)/$(BUILDS)
 DOCS ?= doc
 CACHE ?= Cache
 DEPS_GRAPH ?= deps_graph
@@ -49,20 +48,20 @@ endif
 
 #
 
-override @PROJECT_NAME@_ROOT = $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
+override ORANGES_ROOT = $(patsubst %/,%,$(strip $(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
 
 #
 
 .PHONY: help
 help:  ## Print this message
-	@grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(@PROJECT_NAME@_ROOT)/Makefile | sort | awk 'BEGIN {FS = ":.*?\#\# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?\#\# .*$$' $(ORANGES_ROOT)/Makefile | sort | awk 'BEGIN {FS = ":.*?\#\# "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 #
 
 .PHONY: init
 init:  ## Initializes the workspace and installs all dependencies
-	@chmod +x $(@PROJECT_NAME@_ROOT)/scripts/alphabetize_codeowners.py
-	@cd $(@PROJECT_NAME@_ROOT) && \
+	@chmod +x $(ORANGES_ROOT)/scripts/alphabetize_codeowners.py
+	@cd $(ORANGES_ROOT) && \
 		$(PRECOMMIT) install --install-hooks --overwrite && \
 		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg && \
 		$(ASDF) install
@@ -70,7 +69,7 @@ init:  ## Initializes the workspace and installs all dependencies
 #
 
 $(BUILDS):
-	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --preset default
+	@cd $(ORANGES_ROOT) && $(CMAKE) --preset default
 
 .PHONY: config
 config: $(BUILDS) ## configure CMake
@@ -79,11 +78,7 @@ config: $(BUILDS) ## configure CMake
 
 .PHONY: build
 build: config ## runs CMake build
-	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --build --preset default
-
-.PHONY: conan
-conan: ## Builds the Conan package
-	@cd $(@PROJECT_NAME@_ROOT) && $(CONAN) create .
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset default
 
 #
 
@@ -99,23 +94,23 @@ pack: build ## Creates a CPack installer
 
 .PHONY: test
 test: build ## runs all tests
-	@cd $(@PROJECT_NAME@_ROOT) && $(CTEST) --preset default
+	@cd $(ORANGES_ROOT) && $(CTEST) --preset default
 
 #
 
 .PHONY: pc
 pc:  ## Runs all pre-commit hooks over all files
-	@cd $(@PROJECT_NAME@_ROOT) && $(GIT) add . && $(PRECOMMIT) run --all-files
+	@cd $(ORANGES_ROOT) && $(GIT) add . && $(PRECOMMIT) run --all-files
 
 #
 
 .PHONY: deps_graph
 deps_graph: config ## Generates a PNG image of the CMake dependency graph
-	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --build --preset deps_graph
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset deps_graph
 
 .PHONY: docs
 docs: config ## Builds the documentation
-	@cd $(@PROJECT_NAME@_ROOT) && $(CMAKE) --build --preset docs
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset docs
 
 #
 
@@ -132,7 +127,7 @@ uninstall: ## Runs uninstall script
 clean: ## Cleans the source tree
 	@echo "Cleaning..."
 	@if [ -d $(BUILD_DIR) ]; then $(CMAKE) --build $(BUILD_DIR) --target clean; fi
-	@cd $(@PROJECT_NAME@_ROOT) && $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
+	@cd $(ORANGES_ROOT) && $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
 
 .PHONY: wipe
 wipe: clean ## Wipes the cache of downloaded dependencies
