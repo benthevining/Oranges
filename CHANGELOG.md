@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.17.3](http://github.com/benthevining/Oranges/compare/v2.17.2...v2.17.3) (2022-04-19)
+
+
+### Bug Fixes
+
+* updating minimum iOS version to 13 ([26738cc](http://github.com/benthevining/Oranges/commit/26738cc0bfadbb17df9a3205680e4ae449683bb8))
+
 ### [2.17.2](http://github.com/benthevining/Oranges/compare/v2.17.1...v2.17.2) (2022-04-19)
 
 
