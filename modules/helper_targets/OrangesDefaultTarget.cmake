@@ -63,7 +63,7 @@ if(APPLE)
 
 		# if(LEMONS_IOS_COMBINED) set (ORANGES_IOS_SIMULATOR ON) endif()
 
-		set (CMAKE_OSX_DEPLOYMENT_TARGET 9.3 CACHE STRING "Minimum OSX version to build for")
+		set (CMAKE_OSX_DEPLOYMENT_TARGET 13.0 CACHE STRING "Minimum OSX version to build for")
 
 		enable_language (OBJCXX)
 		enable_language (OBJC)
