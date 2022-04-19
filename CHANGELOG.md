@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.17.4](http://github.com/benthevining/Oranges/compare/v2.17.3...v2.17.4) (2022-04-19)
+
+
+### Bug Fixes
+
+* removed internal setting of CMAKE_OSX_DEPLOYMENT_TARGET ([f6acfb4](http://github.com/benthevining/Oranges/commit/f6acfb45c8f6b777a40db0ac58062e5f2980c333))
+
 ### [2.17.3](http://github.com/benthevining/Oranges/compare/v2.17.2...v2.17.3) (2022-04-19)
 
 
