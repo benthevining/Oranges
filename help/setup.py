@@ -21,7 +21,7 @@ from setuptools import find_packages, setup
 # editorconfig-checker-disable
 
 setup(name="oranges_help",
-      version="2.17.1",
+      version="2.17.2",
       author="Ben Vining",
       packages=find_packages(include=["oranges_help", "oranges_help.*"]),
       description="Command line help interface for the Oranges CMake library",

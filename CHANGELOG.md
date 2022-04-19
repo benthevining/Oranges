@@ -1,5 +1,14 @@
 # Oranges changelog
 
+### [2.17.2](http://github.com/benthevining/Oranges/compare/v2.17.1...v2.17.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* fixing bumpversion config ([9796d90](http://github.com/benthevining/Oranges/commit/9796d9028f7140ca8556b714346be55f3f5ba5c0))
+* fixing citation file syntax ([bba42e6](http://github.com/benthevining/Oranges/commit/bba42e653068394d05c6fcc417084cded819ed16))
+* fixing citation file syntax ([369149e](http://github.com/benthevining/Oranges/commit/369149e3a2c9a62d4d65fa992e9570b964a591da))
+
 ### [2.17.1](http://github.com/benthevining/Oranges/compare/v2.17.0...v2.17.1) (2022-04-18)
 
 
