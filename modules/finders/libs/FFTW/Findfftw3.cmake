@@ -45,9 +45,9 @@ endif()
 
 set (fftw3_FOUND FALSE)
 
-find_path (FFTW_D_INCLUDES NAMES fftw3.h dfftw3.h)
+find_path (FFTW_D_INCLUDES NAMES fftw3.h dfftw3.h DOC "FFTW [double] includes directory")
 
-find_library (FFTW_D_LIBRARIES NAMES fftw3 dfftw3)
+find_library (FFTW_D_LIBRARIES NAMES fftw3 dfftw3 DOC "FFTW [double] library")
 
 mark_as_advanced (FORCE FFTW_D_INCLUDES FFTW_D_LIBRARIES)
 

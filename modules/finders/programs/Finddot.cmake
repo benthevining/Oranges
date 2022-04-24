@@ -40,7 +40,7 @@ oranges_file_scoped_message_context ("Finddot")
 
 set (dot_FOUND FALSE)
 
-find_program (ORANGES_DOT dot)
+find_program (ORANGES_DOT dot DOC "graphviz dot tool")
 
 mark_as_advanced (FORCE ORANGES_DOT)
 

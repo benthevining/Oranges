@@ -45,7 +45,7 @@ if(TARGET PACE::wraptool)
 else()
 	set (wraptool_FOUND FALSE)
 
-	find_program (WRAPTOOL_PROGRAM wraptool)
+	find_program (WRAPTOOL_PROGRAM wraptool DOC "PACE wraptool program")
 
 	mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
 

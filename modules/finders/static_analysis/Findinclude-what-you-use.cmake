@@ -46,7 +46,8 @@ oranges_file_scoped_message_context ("Findinclude-what-you-use")
 
 set (include-what-you-use_FOUND FALSE)
 
-find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu)
+find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu
+			  DOC "include-what-you-use executable")
 
 mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
 

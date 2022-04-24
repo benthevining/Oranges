@@ -55,7 +55,7 @@ set (CPPLINT_IGNORE
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
-find_program (PROGRAM_CPPLINT NAMES cpplint)
+find_program (PROGRAM_CPPLINT NAMES cpplint DOC "cpplint executable")
 
 mark_as_advanced (FORCE PROGRAM_CPPLINT CPPLINT_IGNORE CPPLINT_VERBOSITY)
 

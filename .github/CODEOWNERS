@@ -220,11 +220,13 @@ modules/juce/LemonsJuceUtilities.cmake benthevining
 modules/juce/OrangesAppUtilities.cmake benthevining
 modules/juce/OrangesAssetsHelpers.cmake benthevining
 modules/juce/OrangesJuceModuleUtilities.cmake benthevining
+modules/juce/OrangesJuceUtilities.cmake benthevining
 modules/juce/plugins/AAX/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/AAX/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/CallForEachPluginFormat.cmake benthevining
 modules/juce/plugins/OrangesAAXUtils.cmake benthevining
 modules/juce/plugins/OrangesAddPrivateSDKs.cmake benthevining
+modules/juce/plugins/OrangesClapFormat.cmake benthevining
 modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake benthevining
 modules/juce/plugins/OrangesPluginUtilities.cmake benthevining
 modules/platform/LemonsDefaultPlatformSettings.cmake benthevining

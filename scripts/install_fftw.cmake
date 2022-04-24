@@ -80,9 +80,9 @@ function(install_fftw_library buildDir isFloat)
 
 	if(IS_DIRECTORY "${buildDir}")
 		file (REMOVE_RECURSE "${buildDir}")
-	else()
-		file (MAKE_DIRECTORY "${buildDir}")
 	endif()
+
+	file (MAKE_DIRECTORY "${buildDir}")
 
 	if(isFloat)
 		set (float_flag -D ENABLE_FLOAT=ON)

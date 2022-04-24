@@ -46,7 +46,7 @@ oranges_file_scoped_message_context ("Findclang-tidy")
 
 set (clang-tidy_FOUND FALSE)
 
-find_program (PROGRAM_CLANG_TIDY "clang-tidy")
+find_program (PROGRAM_CLANG_TIDY "clang-tidy" DOC "clang-tidy executable")
 
 mark_as_advanced (FORCE PROGRAM_CLANG_TIDY)
 

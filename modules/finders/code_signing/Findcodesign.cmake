@@ -48,7 +48,7 @@ endif()
 
 set (codesign_FOUND FALSE)
 
-find_program (CODESIGN_PROGRAM codesign)
+find_program (CODESIGN_PROGRAM codesign DOC "Apple's codesign program")
 
 mark_as_advanced (FORCE CODESIGN_PROGRAM)
 

@@ -55,7 +55,7 @@ endif()
 set (pluginval_FOUND FALSE)
 
 # TO DO: search the cache location where it would've been built...
-find_program (PLUGINVAL_PROGRAM pluginval)
+find_program (PLUGINVAL_PROGRAM pluginval DOC "pluginval executable")
 
 mark_as_advanced (FORCE PLUGINVAL_PROGRAM)
 

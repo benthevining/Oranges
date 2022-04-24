@@ -42,7 +42,7 @@ oranges_file_scoped_message_context ("Findxcodebuild")
 
 set (xcodebuild_FOUND FALSE) # cmake-lint: disable=W0105
 
-find_program (XCODE_BUILD xcodebuild)
+find_program (XCODE_BUILD xcodebuild DOC "xcodebuild executable")
 
 mark_as_advanced (FORCE XCODE_BUILD)
 

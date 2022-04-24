@@ -68,7 +68,7 @@ define_property (
 
 set (ccache_FOUND FALSE)
 
-find_program (CCACHE_PROGRAM ccache)
+find_program (CCACHE_PROGRAM ccache DOC "ccache executable")
 
 mark_as_advanced (FORCE CCACHE_PROGRAM)
 

@@ -59,9 +59,9 @@ cpack_add_component (AbletonLink DISPLAY_NAME "Ableton Link" DESCRIPTION "Ableto
 
 #
 
-find_path (ABLETONLINK_INCLUDES link.h)
+find_path (ABLETONLINK_INCLUDES link.h DOC "Ableton link include directory")
 
-find_library (ABLETONLINK_LIBRARIES NAMES link)
+find_library (ABLETONLINK_LIBRARIES NAMES link DOC "Ableton link library")
 
 mark_as_advanced (FORCE ABLETONLINK_INCLUDES ABLETONLINK_LIBRARIES)
 

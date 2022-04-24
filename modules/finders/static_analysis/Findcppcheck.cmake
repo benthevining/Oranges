@@ -57,7 +57,7 @@ set (
 	"unmatchedSuppression;missingIncludeSystem;unusedStructMember;unreadVariable;preprocessorErrorDirective;unknownMacro"
 	CACHE STRING "List of cppcheck checks to disable")
 
-find_program (PROGRAM_CPPCHECK NAMES cppcheck)
+find_program (PROGRAM_CPPCHECK NAMES cppcheck DOC "cppcheck executable")
 
 mark_as_advanced (FORCE PROGRAM_CPPCHECK CPPCHECK_ENABLE CPPCHECK_DISABLE)
 

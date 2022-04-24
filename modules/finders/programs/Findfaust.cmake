@@ -12,18 +12,18 @@
 
 #[=======================================================================[.rst:
 
-Findfftw3f
+Findfaust
 -------------------------
 
-A find module for the FFTW float-precision FFT library.
+Find the Faust compiler.
 
 Output variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- fftw3f_FOUND
+- faust_FOUND
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FFTW3::fftw3f : FFTW float precision library
+- faust::faust : The Faust compiler executable
 
 #]=======================================================================]
 
@@ -33,36 +33,25 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (fftw3f PROPERTIES URL "https://www.fftw.org"
-						DESCRIPTION "float precision FFT library")
+set_package_properties (faust PROPERTIES URL "https://faust.grame.fr/"
+						DESCRIPTION "Compiler for Faust .dsp files into c++ source code")
 
-oranges_file_scoped_message_context ("Findfftw3f")
+oranges_file_scoped_message_context ("Findfaust")
 
-if(TARGET FFTW3::fftw3f)
-	set (fftw3f_FOUND TRUE)
-	return ()
-endif()
+set (faust_FOUND FALSE)
 
-set (fftw3f_FOUND FALSE)
+find_program (PROGRAM_FAUST faust DOC "Faust compiler")
 
-find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h DOC "FFTW [float] includes directory")
+mark_as_advanced (FORCE PROGRAM_FAUST)
 
-find_library (FFTW_F_LIBRARIES NAMES fftw3f sfftw3 DOC "FFTW [float] library")
+if(PROGRAM_FAUST)
+	add_executable (faust IMPORTED GLOBAL)
 
-mark_as_advanced (FORCE FFTW_F_INCLUDES FFTW_F_LIBRARIES)
+	set_target_properties (faust PROPERTIES IMPORTED_LOCATION "${PROGRAM_FAUST}")
 
-if(FFTW_F_INCLUDES AND FFTW_F_LIBRARIES)
-	add_library (fftw3f IMPORTED UNKNOWN)
+	add_executable (faust::faust ALIAS faust)
 
-	set_target_properties (fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARIES}")
-
-	target_include_directories (fftw3f INTERFACE "${FFTW_F_INCLUDES}")
-
-	add_library (FFTW3::fftw3f ALIAS fftw3f)
-
-	message (DEBUG "FFTW float precision library found")
+	set (faust_FOUND TRUE)
 else()
-	find_package_warning_or_error ("fftw3f could not be located!")
+	find_package_warning_or_error ("faust compiler cannot be found!")
 endif()
-
-set (fftw3f_FOUND TRUE)

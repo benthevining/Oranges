@@ -83,20 +83,26 @@ endif()
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
 									  $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
 
-# TO DO: this will break if this find module is loaded multiple times with different component
-# requirements...
+# define FFTW_DOUBLE_ONLY to 1 if the double target exists and the float one doesn't
+target_compile_definitions (
+	FFTW
+	INTERFACE
+		$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3f>>>:FFTW_DOUBLE_ONLY=1>
+	)
 
-if(TARGET FFTW::fftw3 AND NOT TARGET FFTW::fftw3f)
-	target_compile_definitions (FFTW INTERFACE FFTW_DOUBLE_ONLY=1)
-else()
-	target_compile_definitions (FFTW INTERFACE FFTW_DOUBLE_ONLY=0)
-endif()
+# define FFTW_SINGLE_ONLY to 1 if the float target exists and the double one doesn't
+target_compile_definitions (
+	FFTW
+	INTERFACE
+		$<$<AND:$<TARGET_EXISTS:FFTW::fftw3f>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3>>>:FFTW_SINGLE_ONLY=1>
+	)
 
-if(TARGET FFTW::fftw3f AND NOT TARGET FFTW::fftw3)
-	target_compile_definitions (FFTW INTERFACE FFTW_SINGLE_ONLY=1)
-else()
-	target_compile_definitions (FFTW INTERFACE FFTW_SINGLE_ONLY=0)
-endif()
+# define both FFTW_DOUBLE_ONLY and FFTW_SINGLE_ONLY to 0 if both targets exist
+target_compile_definitions (
+	FFTW
+	INTERFACE
+		"$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<TARGET_EXISTS:FFTW::fftw3f>>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>"
+	)
 
 install (TARGETS FFTW EXPORT FFTWTargets)
 

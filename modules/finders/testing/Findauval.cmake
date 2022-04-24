@@ -51,7 +51,7 @@ endif()
 
 set (auval_FOUND FALSE)
 
-find_program (AUVAL_PROGRAM auval)
+find_program (AUVAL_PROGRAM auval DOC "auval executable")
 
 if(AUVAL_PROGRAM)
 	add_executable (auval IMPORTED GLOBAL)
