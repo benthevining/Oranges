@@ -35,16 +35,16 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-add_library (OrangesABIControlledLibrary INTERFACE)
-
-set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRESET hidden
-															  VISIBILITY_INLINES_HIDDEN TRUE)
-
-target_compile_definitions (OrangesABIControlledLibrary INTERFACE SHARED_AND_STATIC_STATIC_DEFINE=1)
-
-install (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
-
 if(NOT TARGET Oranges::OrangesABIControlledLibrary)
+	add_library (OrangesABIControlledLibrary INTERFACE)
+
+	set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRESET hidden
+																  VISIBILITY_INLINES_HIDDEN TRUE)
+
+	target_compile_definitions (OrangesABIControlledLibrary INTERFACE SHARED_AND_STATIC_STATIC_DEFINE=1)
+
+	install (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
+
 	add_library (Oranges::OrangesABIControlledLibrary ALIAS OrangesABIControlledLibrary)
 endif()
 

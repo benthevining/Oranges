@@ -77,6 +77,7 @@ include (OrangesCoverageFlags)
 include (OrangesDefaultTarget)
 include (OrangesDefaultWarnings)
 include (OrangesUnityBuild)
+include (OrangesIPOTarget)
 include (OrangesGenerateExportHeader)
 
 #

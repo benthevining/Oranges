@@ -32,16 +32,13 @@ if(TARGET Oranges::OrangesCoverageFlags)
 	return ()
 endif()
 
-include (OrangesCmakeDevTools)
-
 add_library (OrangesCoverageFlags INTERFACE)
 
 target_compile_options (
-	OrangesCoverageFlags INTERFACE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:$<$<CONFIG:Debug>:-O0
-								   -g --coverage>>)
+	OrangesCoverageFlags INTERFACE $<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:Debug>>:-O0 -g --coverage>)
 
 target_link_options (OrangesCoverageFlags INTERFACE
-					 $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:$<$<CONFIG:Debug>:--coverage>>)
+					 $<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:Debug>>:--coverage>)
 
 install (TARGETS OrangesCoverageFlags EXPORT OrangesTargets)
 

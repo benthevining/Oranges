@@ -29,7 +29,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if(TARGET Oranges::OrangesDefaultWarnings)
-	return ()
+	return()
 endif()
 
 add_library (OrangesDefaultWarnings INTERFACE)
@@ -39,24 +39,11 @@ target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSV
 target_compile_options (
 	OrangesDefaultWarnings
 	INTERFACE
-		"$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall
-			  -Wcast-align
-			  -Wno-ignored-qualifiers
-			  -Wno-missing-field-initializers
-			  -Woverloaded-virtual
-			  -Wpedantic
-			  -Wuninitialized
-			  -Wunreachable-code
-			  -Wunused-parameter
-			  -Wreorder
-			  -Wsign-conversion
-			  -Wstrict-aliasing
-			  -Wsign-compare>")
+		"$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall;-Wcast-align;-Wno-ignored-qualifiers;-Wno-missing-field-initializers;-Woverloaded-virtual;-Wpedantic;-Wuninitialized;-Wunreachable-code;-Wunused-parameter;-Wreorder;-Wsign-conversion;-Wstrict-aliasing;-Wsign-compare>")
 
 target_compile_options (
 	OrangesDefaultWarnings
-	INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
-			  -Wno-strict-overflow -Wredundant-decls -Wshadow>")
+	INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-Wextra;-Wno-implicit-fallthrough;-Wno-maybe-uninitialized;-Wno-strict-overflow;-Wredundant-decls;-Wshadow>")
 
 target_compile_options (OrangesDefaultWarnings
 						INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>)
@@ -64,19 +51,7 @@ target_compile_options (OrangesDefaultWarnings
 target_compile_options (
 	OrangesDefaultWarnings
 	INTERFACE
-		"$<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wbool-conversion
-			  -Wconditional-uninitialized
-			  -Wconversion
-			  -Wconstant-conversion
-			  -Wextra-semi
-			  -Wint-conversion
-			  -Wnon-virtual-dtor
-			  -Wnullable-to-nonnull-conversion
-			  -Wunused-variable
-			  -Wshadow
-			  -Wshadow-all
-			  -Wshift-sign-overflow
-			  -Wshorten-64-to-32>")
+		"$<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wbool-conversion;-Wconditional-uninitialized;-Wconversion;-Wconstant-conversion;-Wextra-semi;-Wint-conversion;-Wnon-virtual-dtor;-Wnullable-to-nonnull-conversion;-Wunused-variable;-Wshadow;-Wshadow-all;-Wshift-sign-overflow;-Wshorten-64-to-32>")
 
 set (clang_cxx_flags -Wzero-as-null-pointer-constant -Wunused-private-field -Woverloaded-virtual
 					 -Winconsistent-missing-destructor-override)

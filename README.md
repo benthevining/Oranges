@@ -59,6 +59,7 @@ Helper targets
   * OrangesCoverageFlags
   * OrangesDefaultTarget
   * OrangesDefaultWarnings
+  * OrangesIPOTarget
   * OrangesUnityBuild
 
 Installing

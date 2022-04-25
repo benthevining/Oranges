@@ -12,15 +12,15 @@
 
 #[=======================================================================[.rst:
 
-OrangesUnityBuild
+OrangesIPOTarget
 -------------------------
 
-Provides a helper target for configuring a target as a unity build.
+Provides a helper target for configuring IPO.
 
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesUnityBuild
+- Oranges::OrangesIPO
 
 #]=======================================================================]
 
@@ -28,14 +28,27 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(TARGET Oranges::OrangesUnityBuild)
+if(TARGET Oranges::OrangesIPO)
 	return()
 endif()
 
-add_library (OrangesUnityBuild INTERFACE)
+add_library (OrangesIPO INTERFACE)
 
-set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
+include (CheckIPOSupported)
 
-install (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
+check_ipo_supported (RESULT ipo_supported OUTPUT ipo_output)
 
-add_library (Oranges::OrangesUnityBuild ALIAS OrangesUnityBuild)
+if(ipo_supported)
+	set_target_properties (OrangesIPO PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
+
+	message (VERBOSE "Enabling IPO")
+else()
+	set_target_properties (OrangesIPO PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+endif()
+
+unset (ipo_output)
+unset (ipo_supported)
+
+install (TARGETS OrangesIPO EXPORT OrangesTargets)
+
+add_library (Oranges::OrangesIPO ALIAS OrangesIPO)

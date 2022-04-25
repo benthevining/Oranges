@@ -24,11 +24,6 @@ Targets
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_IGNORE_IPO
-- ORANGES_IGNORE_WARNINGS
-- ORANGES_COVERAGE_FLAGS
-- ORANGES_IOS_SIMULATOR (iOS only)
-- LEMONS_IOS_COMBINED (iOS only)
 - ORANGES_MAC_UNIVERSAL_BINARY (macOS only)
 
 Environment variables
@@ -45,32 +40,20 @@ if(TARGET Oranges::OrangesDefaultTarget)
 	return ()
 endif()
 
-include (OrangesDefaultWarnings)
 include (OrangesCmakeDevTools)
 include (OrangesGeneratorExpressions)
 include (OrangesConfigurationPostfixes)
 
 #
 
-option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" ON)
-option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
-option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
-
 if(APPLE)
 	if(IOS)
-		option (ORANGES_IOS_SIMULATOR "Build for an iOS simulator, rather than a real device" ON)
-		option (LEMONS_IOS_COMBINED "Build for both the iOS simulator and a real device" OFF)
-
-		# if(LEMONS_IOS_COMBINED) set (ORANGES_IOS_SIMULATOR ON) endif()
-
 		enable_language (OBJCXX)
 		enable_language (OBJC)
 	else()
 		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 	endif()
 else()
-	set (CMAKE_INSTALL_RPATH $ORIGIN)
-
 	if(UNIX AND NOT WIN32)
 		set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
 		set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
@@ -101,14 +84,6 @@ define_property (
 
 define_property (
 	TARGET INHERITED
-	PROPERTY ORANGES_IOS_SIMULATOR
-	BRIEF_DOCS "TRUE if compiling for an iOS simulator; FALSE if compiling for a real device"
-	FULL_DOCS
-		"TRUE if compiling for an iOS simulator; FALSE if compiling for a real device. FALSE if not cross-compiling for iOS"
-	)
-
-define_property (
-	TARGET INHERITED
 	PROPERTY ORANGES_MAC_UNIVERSAL_BINARY
 	BRIEF_DOCS "TRUE if building a universal binary; otherwise FALSE"
 	FULL_DOCS
@@ -116,7 +91,7 @@ define_property (
 	)
 
 define_property (
-	TARGET INHERITED
+	GLOBAL
 	PROPERTY ORANGES_MAC_NATIVE_ARCH
 	BRIEF_DOCS
 		"String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1)"
@@ -172,28 +147,6 @@ target_link_libraries (OrangesDefaultTarget
 					   INTERFACE $<$<AND:$<CXX_COMPILER_ID:MSVC>,${GEN_ANY_REL_CONFIG}>:-LTCG>)
 
 #
-# IPO
-
-if(ORANGES_IGNORE_IPO)
-	set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
-else()
-	include (CheckIPOSupported)
-
-	check_ipo_supported (RESULT ipo_supported OUTPUT output)
-
-	if(ipo_supported)
-		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
-
-		message (VERBOSE "Enabling IPO")
-	else()
-		set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
-	endif()
-
-	unset (output)
-	unset (ipo_supported)
-endif()
-
-#
 # MacOS options
 
 if(APPLE)
@@ -210,43 +163,17 @@ if(APPLE)
 			PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ./ XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
 					   XCODE_ATTRIBUTE_SKIP_INSTALL NO XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO)
 
-		if(ORANGES_IOS_SIMULATOR)
-			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR TRUE)
-		else()
-			set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_IOS_SIMULATOR FALSE)
+		# cmake-lint: disable=W0106
+		if(DEFINED ENV{APPLE_DEV_ID})
+			set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
+				 CACHE STRING "10-character Apple Developer ID")
 		endif()
 
-		if(ORANGES_IOS_SIMULATOR AND NOT LEMONS_IOS_COMBINED)
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
-		else()
-			set_target_properties (OrangesDefaultTarget PROPERTIES OSX_ARCHITECTURES
-																   "armv7;armv7s;arm64;i386;x86_64")
-		endif()
-
-		if(NOT ORANGES_IOS_SIMULATOR)
-			# cmake-lint: disable=W0106
-			if(DEFINED ENV{APPLE_DEV_ID})
-				set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
-					 CACHE STRING "10-character Apple Developer ID")
-			endif()
-
-			if(NOT ORANGES_IOS_DEV_TEAM_ID)
-				message (
-					SEND_ERROR
-						"ORANGES_IOS_DEV_TEAM_ID must be defined in order to build for a real iOS device."
-					)
-			endif()
-
+		if(ORANGES_IOS_DEV_TEAM_ID)
 			set_target_properties (
-				OrangesDefaultTarget
-				PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${ORANGES_IOS_DEV_TEAM_ID}"
-						   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\"")
-		endif()
-
-		if(LEMONS_IOS_COMBINED)
-			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED ON)
-		else()
-			set_target_properties (OrangesDefaultTarget PROPERTIES IOS_INSTALL_COMBINED OFF)
+			OrangesDefaultTarget
+			PROPERTIES XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${ORANGES_IOS_DEV_TEAM_ID}"
+					   XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "\"iPhone Developer\"")
 		endif()
 
 	else() # MacOS
@@ -256,8 +183,7 @@ if(APPLE)
 
 		message (DEBUG "Mac native arch: ${osx_native_arch}")
 
-		set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_NATIVE_ARCH
-															   "${osx_native_arch}")
+		set_property (GLOBAL PROPERTY ORANGES_MAC_NATIVE_ARCH "${osx_native_arch}")
 
 		if(("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE)
 			set_target_properties (
@@ -284,28 +210,6 @@ endif()
 include (OrangesAllIntegrations)
 
 target_link_libraries (OrangesDefaultTarget INTERFACE Oranges::OrangesAllIntegrations)
-
-#
-# Warnings
-
-if(PROJECT_IS_TOP_LEVEL)
-	if(NOT ORANGES_IGNORE_WARNINGS)
-		target_link_libraries (OrangesDefaultTarget
-							   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesDefaultWarnings>)
-	endif()
-endif()
-
-#
-# Coverage flags
-
-if(ORANGES_COVERAGE_FLAGS)
-	include (OrangesCoverageFlags)
-
-	target_link_libraries (OrangesDefaultTarget
-						   INTERFACE $<TARGET_NAME_IF_EXISTS:Oranges::OrangesCoverageFlags>)
-
-	message (VERBOSE "Enabling coverage flags for default target")
-endif()
 
 #
 
