@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.20.0](http://github.com/benthevining/Oranges/compare/v2.19.0...v2.20.0) (2022-04-25)
+
+
+### Features
+
+* test release ([d472fca](http://github.com/benthevining/Oranges/commit/d472fca8482c2a1d58d9227f104b68982b646faa))
+
 ## [2.19.0](http://github.com/benthevining/Oranges/compare/v2.18.0...v2.19.0) (2022-04-25)
 
 
