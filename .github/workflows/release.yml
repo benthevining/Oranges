@@ -80,7 +80,7 @@ jobs:
                   path: '${{ github.workspace }}/deploy'
 
             - name: Zip artefact
-              run: cmake -E tar cvz --format=zip Oranges.zip '${{ github.workspace }}/deploy/Oranges'
+              run: cmake -E tar cvz Oranges.zip '${{ github.workspace }}/deploy/Oranges'
 
             - name: Run semantic release
               env:
