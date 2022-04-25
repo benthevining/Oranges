@@ -105,6 +105,7 @@ Libs
 Programs
   * Findccache
   * Finddot
+  * Findfaust
   * Findxcodebuild
 
 Static analysis
