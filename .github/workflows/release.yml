@@ -44,7 +44,7 @@ jobs:
             - name: Upload artefacts
               uses: actions/upload-artifact@v3
               with:
-                  name: OrangesInstallTree
+                  name: Oranges
                   path: '${{ github.workspace }}/deploy'
                   if-no-files-found: error
 
@@ -80,7 +80,7 @@ jobs:
                   path: '${{ github.workspace }}/deploy'
 
             - name: Zip artefact
-              run: cmake -E tar cvz Oranges.zip '${{ github.workspace }}/deploy'
+              run: cmake -E tar cvz --format=zip Oranges.zip '${{ github.workspace }}/deploy/Oranges'
 
             - name: Run semantic release
               env:
