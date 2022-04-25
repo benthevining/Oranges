@@ -90,14 +90,12 @@ function(oranges_generate_build_type_header)
 		set (ORANGES_DEBUG_CONFIGS_LIST Debug)
 	endif()
 
-	set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
-
-	set (intermediate_file "${generated_dir}/intermediate_build_type_header.h")
+	set (intermediate_file "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
 
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h"
 					"${intermediate_file}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
-	set (configured_file "${generated_dir}/build_type_$<CONFIG>.h")
+	set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/build_type_$<CONFIG>.h")
 
 	file (GENERATE OUTPUT "${configured_file}" INPUT "${intermediate_file}"
 		  TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
@@ -106,7 +104,7 @@ function(oranges_generate_build_type_header)
 		"${ORANGES_ARG_TARGET}" "${public_vis}"
 								"ORANGES_BUILD_TYPE_HEADER_NAME=<build_type_$<CONFIG>.h>")
 
-	set (configured_includer "${generated_dir}/${ORANGES_ARG_HEADER}")
+	set (configured_includer "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
 					"${configured_includer}" @ONLY NEWLINE_STYLE UNIX)
@@ -126,7 +124,7 @@ function(oranges_generate_build_type_header)
 			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
 	target_include_directories (
-		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${generated_dir}>
+		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction()

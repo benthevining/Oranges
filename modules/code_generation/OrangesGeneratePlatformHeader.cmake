@@ -371,13 +371,15 @@ function(oranges_generate_platform_header)
 		set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
 	endif()
 
+	set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h"
-					"${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}" @ONLY NEWLINE_STYLE UNIX)
+					"${generated_file}" @ONLY NEWLINE_STYLE UNIX)
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
 		"${public_vis}"
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}>
+		$<BUILD_INTERFACE:${generated_file}>
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
 		)
 
@@ -385,7 +387,7 @@ function(oranges_generate_platform_header)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 	endif()
 
-	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
+	install (FILES "${generated_file}"
 			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
 	target_include_directories (
