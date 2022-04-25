@@ -156,3 +156,6 @@ endif()
 export (PACKAGE Oranges)
 
 unset (ORANGES_ROOT_DIR)
+
+set (ORANGES_PATH "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
+set (Oranges_FOUND TRUE CACHE INTERNAL "")
