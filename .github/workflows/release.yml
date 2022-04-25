@@ -36,7 +36,17 @@ jobs:
               run: cmake --preset maintainer
 
             - name: Run build
-              run: cmake --build --preset maintainer
+              run: cmake --build --preset maintainer --config Debug
+
+            - name: Create install tree
+              run: cmake --install Builds --config Debug --prefix '${{ github.workspace }}/deploy'
+
+            - name: Upload artefacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Oranges install tree
+                  path: '${{ github.workspace }}/deploy'
+                  if-no-files-found: error
 
 
     Release:
@@ -63,6 +73,11 @@ jobs:
 
             - name: Install dependencies
               run: pip install --upgrade bumpversion
+
+            - name: Download artefacts
+              uses: actions/download-artifact@v3
+              with:
+                  path: '${{ github.workspace }}/deploy'
 
             - name: Run semantic release
               env:

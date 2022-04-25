@@ -142,6 +142,10 @@
             {
               "label": "Changelog",
               "path": "CHANGELOG.md"
+            },
+            {
+              "label": "Install tree",
+              "path": "deploy"
             }
           ]
         }
