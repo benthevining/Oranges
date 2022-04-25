@@ -44,7 +44,7 @@ jobs:
             - name: Upload artefacts
               uses: actions/upload-artifact@v3
               with:
-                  name: Oranges install tree
+                  name: OrangesInstallTree
                   path: '${{ github.workspace }}/deploy'
                   if-no-files-found: error
 
