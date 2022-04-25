@@ -79,6 +79,9 @@ jobs:
               with:
                   path: '${{ github.workspace }}/deploy'
 
+            - name: Zip artefact
+              run: cmake -E tar cvz Oranges.zip '${{ github.workspace }}/deploy'
+
             - name: Run semantic release
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
