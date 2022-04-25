@@ -1,5 +1,13 @@
 # Oranges changelog
 
+### [2.20.2](http://github.com/benthevining/Oranges/compare/v2.20.1...v2.20.2) (2022-04-25)
+
+
+### Bug Fixes
+
+* fixing CMake tar step ([66b0886](http://github.com/benthevining/Oranges/commit/66b0886eb42194c0c4ba2d4621eb39f8c99a7fca))
+* install tree isn't zipped into a subfolder ([8a093c6](http://github.com/benthevining/Oranges/commit/8a093c61f0b4717c9c9faf0d9eb7ff01cd3d5ccc))
+
 ### [2.20.1](http://github.com/benthevining/Oranges/compare/v2.20.0...v2.20.1) (2022-04-25)
 
 

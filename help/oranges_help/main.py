@@ -23,7 +23,7 @@ from typing import Final
 from . import commands, modules, paths, targets
 
 
-ORANGES_VERSION: Final[str] = "2.20.1"
+ORANGES_VERSION: Final[str] = "2.20.2"
 
 #
 
