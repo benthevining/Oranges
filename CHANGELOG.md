@@ -1,5 +1,15 @@
 # Oranges changelog
 
+### [2.20.3](http://github.com/benthevining/Oranges/compare/v2.20.2...v2.20.3) (2022-04-25)
+
+
+### Bug Fixes
+
+* tar step paths ([ee74b79](http://github.com/benthevining/Oranges/commit/ee74b79878f9c24ca225c7728a6c3785ad7b8f55))
+* tar step paths ([7d6199f](http://github.com/benthevining/Oranges/commit/7d6199f553b12bc32cf0e0d902df6a0ddafd7c84))
+* using zip format ([0ba2f0f](http://github.com/benthevining/Oranges/commit/0ba2f0f86825e2bb3aac7995fcc04927a6302deb))
+* zip format ([4b2806b](http://github.com/benthevining/Oranges/commit/4b2806b646f55b7c351acf3f0592fdf72987aab1))
+
 ### [2.20.2](http://github.com/benthevining/Oranges/compare/v2.20.1...v2.20.2) (2022-04-25)
 
 
