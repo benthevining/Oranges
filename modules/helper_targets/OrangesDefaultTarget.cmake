@@ -52,7 +52,7 @@ include (OrangesConfigurationPostfixes)
 
 #
 
-option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" OFF)
+option (ORANGES_IGNORE_IPO "Always ignore introprocedural optimizations" ON)
 option (ORANGES_IGNORE_WARNINGS "Ignore all warnings by default" OFF)
 option (ORANGES_COVERAGE_FLAGS "Enable code coverage flags" OFF)
 
