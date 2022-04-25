@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.20.1](http://github.com/benthevining/Oranges/compare/v2.20.0...v2.20.1) (2022-04-25)
+
+
+### Bug Fixes
+
+* zipping install tree into one tarball before uploading as GitHub asset ([f4df48a](http://github.com/benthevining/Oranges/commit/f4df48a31fa1cc4bafa03723660de853f0baa463))
+
 ## [2.20.0](http://github.com/benthevining/Oranges/compare/v2.19.0...v2.20.0) (2022-04-25)
 
 
