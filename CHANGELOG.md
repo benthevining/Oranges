@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.17.5](http://github.com/benthevining/Oranges/compare/v2.17.4...v2.17.5) (2022-04-25)
+
+
+### Bug Fixes
+
+* IPO defaults to OFF ([7a6f8af](http://github.com/benthevining/Oranges/commit/7a6f8af5967664b32e67b8dbde818836211b4a84))
+
 ### [2.17.4](http://github.com/benthevining/Oranges/compare/v2.17.3...v2.17.4) (2022-04-19)
 
 
