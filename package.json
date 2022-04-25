@@ -145,7 +145,8 @@
             },
             {
               "label": "Install tree",
-              "path": "deploy"
+              "name": "Oranges.zip",
+              "path": "deploy/*"
             }
           ]
         }
