@@ -50,9 +50,9 @@ Documentation
 
 General
   * LinuxLSBInfo
-  * OrangesDefaultProjectSettings
   * OrangesFileUtils
   * OrangesListUtils
+  * OrangesSourceFileUtils
 
 Helper targets
   * OrangesAllIntegrations
@@ -64,7 +64,6 @@ Helper targets
 
 Installing
   * OrangesDefaultCPackSettings
-  * OrangesDefaultInstallSettings
   * OrangesGeneratePkgConfig
   * OrangesInstallSystemLibs
   * OrangesSetDefaultCpackGenerator

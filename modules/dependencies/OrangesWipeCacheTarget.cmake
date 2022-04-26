@@ -62,4 +62,6 @@ add_custom_target (
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM USES_TERMINAL)
 
+set_target_properties (wipe_cache PROPERTIES FOLDER Utility LABELS Utility)
+
 unset (configured_script)

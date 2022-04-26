@@ -33,6 +33,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
+		"Prefer config files to find modules in find_package search" ON)
+
 project (
 	Oranges
 	VERSION 2.20.3
@@ -42,25 +45,45 @@ project (
 
 enable_testing ()
 
-if(PROJECT_IS_TOP_LEVEL)
-	enable_language (CXX)
-endif()
-
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
-set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
+#
 
-include (OrangesDefaultProjectSettings)
-include (FeatureSummary)
+if(PROJECT_IS_TOP_LEVEL)
+	enable_language (CXX)
 
-unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
+	set_property (GLOBAL PROPERTY USE_FOLDERS YES)
+	set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
+	set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
+								  "${CMAKE_BINARY_DIR}/undefined_properties.log")
+
+	set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+	set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
+	set (CMAKE_INSTALL_MESSAGE LAZY)
+	set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
+
+	include (OrangesDeprecateDirectoryScopedCommands)
+	include (OrangesWipeCacheTarget)
+	include (OrangesUninstallTarget)
+	include (OrangesDefaultCPackSettings)
+
+	set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
+
+	include (OrangesGraphVizConfig)
+
+	unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
+endif()
 
 #
 
+include (GNUInstallDirs)
+
 set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
 	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
+
+mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
 #
 
@@ -82,14 +105,14 @@ include (OrangesGenerateExportHeader)
 
 #
 
-mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
-
 install (
 	EXPORT OrangesTargets
 	NAMESPACE Oranges::
 	DESTINATION "${ORANGES_INSTALL_DEST}"
 	EXPORT_LINK_INTERFACE_LIBRARIES
 	COMPONENT oranges_base)
+
+include (CMakePackageConfigHelpers)
 
 write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
 								  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
@@ -110,6 +133,8 @@ install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT orang
 
 install (DIRECTORY toolchains DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_toolchains
 		 PATTERN .DS_Store EXCLUDE)
+
+include (CPackComponent)
 
 cpack_add_component (oranges_base HIDDEN)
 
@@ -138,6 +163,10 @@ cpack_add_component_group (
 
 cpack_add_install_type (Developer DISPLAY_NAME "Developer installation")
 
+#
+
+include (FeatureSummary)
+
 feature_summary (
 	FILENAME "${CMAKE_BINARY_DIR}/package_features.txt"
 	INCLUDE_QUIET_PACKAGES
@@ -157,5 +186,4 @@ export (PACKAGE Oranges)
 
 unset (ORANGES_ROOT_DIR)
 
-set (ORANGES_PATH "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 set (Oranges_FOUND TRUE CACHE INTERNAL "")

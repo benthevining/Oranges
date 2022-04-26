@@ -92,7 +92,7 @@ add_custom_command (
 	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
-set_target_properties (DependencyGraph PROPERTIES ADDITIONAL_CLEAN_FILES "${dot_file_output}")
+set_target_properties (DependencyGraph PROPERTIES ADDITIONAL_CLEAN_FILES "${dot_file_output}" FOLDER Utility LABELS Utility)
 
 if(NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 
