@@ -383,6 +383,13 @@ function(oranges_generate_platform_header)
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
 		)
 
+	set_source_files_properties ("${generated_file}"
+		TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+		PROPERTIES GENERATED ON)
+
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
+
 	if(ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 	endif()

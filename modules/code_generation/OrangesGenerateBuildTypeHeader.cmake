@@ -109,6 +109,13 @@ function(oranges_generate_build_type_header)
 	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
 					"${configured_includer}" @ONLY NEWLINE_STYLE UNIX)
 
+	set_source_files_properties ("${configured_includer}"
+		TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+		PROPERTIES GENERATED ON)
+
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${configured_includer}")
+
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
 		"${public_vis}"

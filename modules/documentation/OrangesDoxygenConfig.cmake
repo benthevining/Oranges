@@ -188,8 +188,8 @@ function(oranges_create_doxygen_target)
 		add_dependencies ("${ORANGES_ARG_TARGET}" DependencyGraph)
 	endif()
 
-	set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES ADDITIONAL_CLEAN_FILES
-															  "${ORANGES_DOC_OUTPUT_DIR}")
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_DOC_OUTPUT_DIR}")
 
 	if(ORANGES_ARG_NO_INSTALL)
 		return ()

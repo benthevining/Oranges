@@ -145,6 +145,13 @@ function(oranges_generate_standard_headers)
 			set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 		endif()
 
+		set_source_files_properties ("${configured_file}"
+			TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+			PROPERTIES GENERATED ON)
+
+		set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+			PROPERTY ADDITIONAL_CLEAN_FILES "${configured_file}")
+
 		install (FILES "${configured_file}"
 				 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 

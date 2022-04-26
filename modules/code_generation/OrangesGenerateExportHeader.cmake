@@ -104,18 +104,27 @@ function(oranges_generate_export_header)
 		set (ORANGES_ARG_REL_PATH "${ORANGES_ARG_TARGET}")
 	endif()
 
+	set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
 		"${public_vis}"
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}>
+		$<BUILD_INTERFACE:${generated_file}>
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
 		)
+
+	set_source_files_properties ("${generated_file}"
+		TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+		PROPERTIES GENERATED ON)
+
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
 
 	if(ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 	endif()
 
-	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}"
+	install (FILES "${generated_file}"
 			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
 	target_include_directories (
