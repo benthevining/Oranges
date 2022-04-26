@@ -38,6 +38,8 @@ if(TARGET Oranges::OrangesAllIntegrations)
 	return ()
 endif()
 
+include (OrangesCmakeDevTools)
+
 oranges_file_scoped_message_context ("OrangesAllIntegrations")
 
 find_package (ccache MODULE QUIET)
