@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.22.0](http://github.com/benthevining/Oranges/compare/v2.21.1...v2.22.0) (2022-04-26)
+
+
+### Features
+
+* added an interface target for CXX concepts ([858fb62](http://github.com/benthevining/Oranges/commit/858fb626ffe32432849cf54e3d5a2d887c3f32b7))
+
 ### [2.21.1](http://github.com/benthevining/Oranges/compare/v2.21.0...v2.21.1) (2022-04-26)
 
 
