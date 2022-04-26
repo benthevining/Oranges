@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.21.0](http://github.com/benthevining/Oranges/compare/v2.20.3...v2.21.0) (2022-04-26)
+
+
+### Features
+
+* added a new helper module for adding source files to targets ([8ceb7cf](http://github.com/benthevining/Oranges/commit/8ceb7cfcdd26222f753b2da5a0265308aa1adad3))
+
 ### [2.20.3](http://github.com/benthevining/Oranges/compare/v2.20.2...v2.20.3) (2022-04-25)
 
 
