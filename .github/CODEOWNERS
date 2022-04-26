@@ -274,6 +274,7 @@ scripts/makefiles/Makefile.in benthevining
 scripts/makefiles/generate.sh benthevining
 scripts/makefiles/generate_makefile.cmake benthevining
 scripts/run_test_on_real_hardware.sh benthevining
+scripts/update_readme.cmake benthevining
 scripts/update_readme.py benthevining
 scripts/util.make benthevining
 tests/CMakeLists.txt benthevining

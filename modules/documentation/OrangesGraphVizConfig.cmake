@@ -96,7 +96,10 @@ set_property (TARGET DependencyGraph APPEND
 		PROPERTY ADDITIONAL_CLEAN_FILES "${dot_file_output}")
 
 set_target_properties (DependencyGraph PROPERTIES
-	FOLDER Utility LABELS Utility)
+	FOLDER Utility
+	LABELS Utility
+	XCODE_GENERATE_SCHEME OFF
+	EchoString "Generating dependency graph...")
 
 if(NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 

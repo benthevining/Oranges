@@ -62,6 +62,10 @@ add_custom_target (
 	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
 	VERBATIM USES_TERMINAL)
 
-set_target_properties (wipe_cache PROPERTIES FOLDER Utility LABELS Utility)
+set_target_properties (wipe_cache PROPERTIES
+	FOLDER Utility
+	LABELS Utility
+	XCODE_GENERATE_SCHEME OFF
+	EchoString "Clearing cache of downloaded dependencies...")
 
 unset (configured_script)

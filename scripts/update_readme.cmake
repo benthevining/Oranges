@@ -38,6 +38,15 @@ add_custom_target (
 	COMMENT "Updating Oranges readme..."
 	VERBATIM USES_TERMINAL)
 
+set_property (TARGET OrangesReadme APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
+
+set_target_properties (OrangesReadme PROPERTIES
+	FOLDER Utility
+	LABELS "Oranges;Utility"
+	XCODE_GENERATE_SCHEME OFF
+	EchoString "Updating Oranges ReadMe...")
+
 unset (modules_output)
 
 if(TARGET DependencyGraph)

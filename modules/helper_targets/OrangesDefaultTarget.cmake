@@ -52,6 +52,7 @@ if(APPLE)
 		enable_language (OBJC)
 	else()
 		option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+		mark_as_advanced (FORCE ORANGES_MAC_UNIVERSAL_BINARY)
 	endif()
 else()
 	if(UNIX AND NOT WIN32)
@@ -61,15 +62,6 @@ else()
 		include (LinuxLSBInfo)
 	endif()
 endif()
-
-mark_as_advanced (
-	FORCE
-	ORANGES_IGNORE_IPO
-	ORANGES_IGNORE_WARNINGS
-	ORANGES_COVERAGE_FLAGS
-	ORANGES_IOS_SIMULATOR
-	LEMONS_IOS_COMBINED
-	ORANGES_MAC_UNIVERSAL_BINARY)
 
 #
 
@@ -109,18 +101,16 @@ set_target_properties (
 			   RELEASE_POSTFIX "${ORANGES_RELEASE_POSTFIX}"
 			   RELWITHDEBINFO_POSTFIX "${ORANGES_RELWITHDEBINFO_POSTFIX}"
 			   MINSIZEREL_POSTFIX "${ORANGES_MINSIZEREL_POSTFIX}"
-			   CXX_STANDARD 20
-			   CXX_STANDARD_REQUIRED ON
 			   EXPORT_COMPILE_COMMANDS ON
 			   OPTIMIZE_DEPENDENCIES ON
+			   PCH_WARN_INVALID ON
+			   PCH_INSTANTIATE_TEMPLATES ON
 			   MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>
 			   $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
 			   $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
 # suppress "unknown pragma" warnings in MSVC
 target_compile_options (OrangesDefaultTarget INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/wd4068>)
-
-target_compile_features (OrangesDefaultTarget INTERFACE cxx_std_20)
 
 target_compile_definitions (OrangesDefaultTarget INTERFACE $<$<PLATFORM_ID:Windows>:NOMINMAX
 														   UNICODE STRICT>)

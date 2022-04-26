@@ -191,6 +191,12 @@ function(oranges_create_doxygen_target)
 	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
 		PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_DOC_OUTPUT_DIR}")
 
+	set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES
+		FOLDER Utility
+		LABELS "${PROJECT_NAME};Utility"
+		XCODE_GENERATE_SCHEME OFF
+		EchoString "Building ${PROJECT_NAME} documentation...")
+
 	if(ORANGES_ARG_NO_INSTALL)
 		return ()
 	endif()

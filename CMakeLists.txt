@@ -54,12 +54,9 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 if(PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 
-	set_property (GLOBAL PROPERTY USE_FOLDERS YES)
-	set_property (GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "Targets")
-	set_property (GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
-								  "${CMAKE_BINARY_DIR}/undefined_properties.log")
+	set_property (GLOBAL PROPERTY
+		REPORT_UNDEFINED_PROPERTIES "${CMAKE_BINARY_DIR}/undefined_properties.log")
 
-	set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 	set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
 	set (CMAKE_INSTALL_MESSAGE LAZY)
 	set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
@@ -102,6 +99,7 @@ include (OrangesDefaultWarnings)
 include (OrangesUnityBuild)
 include (OrangesIPOTarget)
 include (OrangesGenerateExportHeader)
+include (CXXConcepts)
 
 #
 

@@ -56,6 +56,10 @@ add_custom_target (
 	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 	VERBATIM USES_TERMINAL)
 
-set_target_properties (uninstall PROPERTIES FOLDER Utility LABELS Utility)
+set_target_properties (uninstall PROPERTIES
+	FOLDER Utility
+	LABELS Utility
+	XCODE_GENERATE_SCHEME OFF
+	EchoString "Uninstalling...")
 
 unset (configured_script)
