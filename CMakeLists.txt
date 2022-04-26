@@ -38,7 +38,7 @@ option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
 
 project (
 	Oranges
-	VERSION 2.21.0
+	VERSION 2.21.1
 	DESCRIPTION "CMake modules, scripts, and utilities"
 	HOMEPAGE_URL "www.github.com/benthevining/Oranges"
 	LANGUAGES NONE)

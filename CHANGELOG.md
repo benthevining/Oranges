@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.21.1](http://github.com/benthevining/Oranges/compare/v2.21.0...v2.21.1) (2022-04-26)
+
+
+### Bug Fixes
+
+* missing include in AllIntegrations module ([3a4f0b4](http://github.com/benthevining/Oranges/commit/3a4f0b4b1e00882865d0ea9540664b1e30f360b5))
+
 ## [2.21.0](http://github.com/benthevining/Oranges/compare/v2.20.3...v2.21.0) (2022-04-26)
 
 
