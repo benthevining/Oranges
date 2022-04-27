@@ -51,34 +51,36 @@ find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu
 
 mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
 
-if(NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
-	find_package_warning_or_error ("include-what-you-use program cannot be found!")
+if (NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
+	find_package_warning_or_error (
+		"include-what-you-use program cannot be found!")
 	return ()
-endif()
+endif ()
 
-if(NOT include-what-you-use_FIND_QUIETLY)
+if (NOT include-what-you-use_FIND_QUIETLY)
 	message (VERBOSE "Using include-what-you-use!")
-endif()
+endif ()
 
 add_executable (include-what-you-use IMPORTED GLOBAL)
 
-set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION
-													   "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
+set_target_properties (
+	include-what-you-use PROPERTIES IMPORTED_LOCATION
+									"${PROGRAM_INCLUDE_WHAT_YOU_USE}")
 
 add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
 set (include-what-you-use_FOUND TRUE)
 
-set (CMAKE_CXX_INCLUDE_WHAT_YOU_USE
-	 "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns" CACHE STRING "")
+if (NOT TARGET Google::include-what-you-use-interface)
+	add_library (include-what-you-use-interface INTERFACE)
 
-mark_as_advanced (FORCE CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
+	set_target_properties (
+		include-what-you-use-interface
+		PROPERTIES
+			CXX_INCLUDE_WHAT_YOU_USE
+			"${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns"
+		)
 
-add_library (include-what-you-use-interface INTERFACE)
-
-set_target_properties (include-what-you-use-interface
-					   PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}")
-
-if(NOT TARGET Google::include-what-you-use-interface)
-	add_library (Google::include-what-you-use-interface ALIAS include-what-you-use-interface)
-endif()
+	add_library (Google::include-what-you-use-interface ALIAS
+				 include-what-you-use-interface)
+endif ()

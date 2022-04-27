@@ -44,13 +44,13 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (CallForEachPluginFormat)
 include (LemonsCmakeDevTools)
 
-if(NOT TARGET Apple::codesign)
+if (NOT TARGET Apple::codesign)
 	find_package (codesign REQUIRED)
-endif()
+endif ()
 
 #
 
-function(codesign_sign_target)
+function (codesign_sign_target)
 
 	oranges_add_function_message_context ()
 
@@ -59,33 +59,38 @@ function(codesign_sign_target)
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if(NOT TARGET Apple::codesign)
-		message (FATAL_ERROR "Codesign cannot be found, plugin signing cannot be configured!")
-		return ()
-	endif()
-
-	if(NOT TARGET "${ORANGES_ARG_TARGET}")
+	if (NOT TARGET Apple::codesign)
 		message (
 			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
-	endif()
+				"Codesign cannot be found, plugin signing cannot be configured!"
+			)
+		return ()
+	endif ()
+
+	if (NOT TARGET "${ORANGES_ARG_TARGET}")
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!"
+			)
+	endif ()
 
 	set (dest "$<TARGET_BUNDLE_DIR:${ORANGES_ARG_TARGET}>")
 
 	add_custom_command (
 		TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-		COMMAND Apple::codesign -s - --force "${dest}" COMMENT "Signing ${ORANGES_ARG_TARGET}...")
+		COMMAND Apple::codesign -s - --force "${dest}"
+		COMMENT "Signing ${ORANGES_ARG_TARGET}...")
 
 	add_custom_command (
 		TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
 		COMMAND Apple::codesign -verify "${dest}"
 		COMMENT "Verifying signing of ${ORANGES_ARG_TARGET}...")
 
-endfunction()
+endfunction ()
 
 #
 
-function(codesign_sign_plugin_targets)
+function (codesign_sign_plugin_targets)
 
 	oranges_add_function_message_context ()
 
@@ -94,17 +99,18 @@ function(codesign_sign_plugin_targets)
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if(NOT TARGET "${ORANGES_ARG_TARGET}")
+	if (NOT TARGET "${ORANGES_ARG_TARGET}")
 		message (
 			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
-	endif()
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!"
+			)
+	endif ()
 
-	macro(_codesign_config_plugin_format_sign targetName formatName)
+	macro (_codesign_config_plugin_format_sign targetName formatName)
 		codesign_sign_target (TARGET "${targetName}")
-	endmacro()
+	endmacro ()
 
 	call_for_each_plugin_format (TARGET "${ORANGES_ARG_TARGET}" FUNCTION
 								 _codesign_config_plugin_format_sign)
 
-endfunction()
+endfunction ()

@@ -49,9 +49,10 @@ set_package_properties (
 
 oranges_file_scoped_message_context ("Findcpplint")
 
-set (CPPLINT_IGNORE
-	 "-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo"
-	 CACHE STRING "List of cpplint checks to ignore")
+set (
+	CPPLINT_IGNORE
+	"-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo"
+	CACHE STRING "List of cpplint checks to ignore")
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
@@ -61,36 +62,38 @@ mark_as_advanced (FORCE PROGRAM_CPPLINT CPPLINT_IGNORE CPPLINT_VERBOSITY)
 
 set (cpplint_FOUND FALSE)
 
-if(NOT PROGRAM_CPPLINT)
+if (NOT PROGRAM_CPPLINT)
 	find_package_warning_or_error ("cpplint program cannot be found!")
 	return ()
-endif()
+endif ()
 
-if(NOT cpplint_FIND_QUIETLY)
+if (NOT cpplint_FIND_QUIETLY)
 	message (VERBOSE "Using cpplint!")
-endif()
+endif ()
 
 add_executable (cpplint IMPORTED GLOBAL)
 
-set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPLINT}")
+set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION
+										  "${PROGRAM_CPPLINT}")
 
 add_executable (Google::cpplint ALIAS cpplint)
 
 set (cpplint_FOUND TRUE)
 
-list (JOIN CPPLINT_IGNORE "," CPPLINT_IGNORE)
+if (NOT TARGET Google::cpplint-interface)
 
-set (CMAKE_CXX_CPPLINT
-	 "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}" CACHE STRING "")
-set (CMAKE_C_CPPLINT "${CMAKE_CXX_CPPLINT}" CACHE STRING "")
+	add_library (cpplint-interface INTERFACE)
 
-mark_as_advanced (FORCE CMAKE_CXX_CPPLINT CMAKE_C_CPPLINT)
+	list (JOIN CPPLINT_IGNORE "," CPPLINT_IGNORE)
 
-add_library (cpplint-interface INTERFACE)
+	set_target_properties (
+		cpplint-interface
+		PROPERTIES
+			CXX_CPPLINT
+			"${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
+			C_CPPLINT
+			"${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
+		)
 
-set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${CMAKE_CXX_CPPLINT}"
-													C_CPPLINT "${CMAKE_C_CPPLINT}")
-
-if(NOT TARGET Google::cpplint-interface)
 	add_library (Google::cpplint-interface ALIAS cpplint-interface)
-endif()
+endif ()

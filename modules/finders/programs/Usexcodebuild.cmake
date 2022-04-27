@@ -40,13 +40,13 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-if(NOT TARGET Apple::xcodebuild)
+if (NOT TARGET Apple::xcodebuild)
 	find_package (xcodebuild REQUIRED)
-endif()
+endif ()
 
 #
 
-function(include_external_xcode_project)
+function (include_external_xcode_project)
 
 	oranges_add_function_message_context ()
 
@@ -57,14 +57,17 @@ function(include_external_xcode_project)
 	lemons_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if(NOT TARGET Apple::xcodebuild)
-		message (FATAL_ERROR "xcodebuild cannot be found, xcode project target cannot be created!")
+	if (NOT TARGET Apple::xcodebuild)
+		message (
+			FATAL_ERROR
+				"xcodebuild cannot be found, xcode project target cannot be created!"
+			)
 		return ()
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_COMMENT)
+	if (NOT ORANGES_ARG_COMMENT)
 		set (ORANGES_ARG_COMMENT "Building ${ORANGES_ARG_TARGET}...")
-	endif()
+	endif ()
 
 	add_custom_target (
 		"${ORANGES_ARG_TARGET}"
@@ -75,4 +78,4 @@ function(include_external_xcode_project)
 		COMMENT "${ORANGES_ARG_COMMENT}"
 		COMMAND_ECHO STDOUT)
 
-endfunction()
+endfunction ()

@@ -17,6 +17,17 @@ OrangesCoverageFlags
 
 Provides a helper target for configuring coverage flags.
 
+Note that this is a build-only target! You should always link to it using the following command:
+```cmake
+target_link_libraries (YourTarget YOUR_SCOPE
+	$<BUILD_INTERFACE:Oranges::OrangesCoverageFlags>)
+```
+If you get an error similar to:
+```
+CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesCoverageFlags" that is not in any export set.
+```
+then this is why. You're linking to OrangesCoverageFlags unconditionally (or with incorrect generator expressions).
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,18 +39,34 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(TARGET Oranges::OrangesCoverageFlags)
+if (TARGET Oranges::OrangesCoverageFlags)
 	return ()
-endif()
+endif ()
 
 add_library (OrangesCoverageFlags INTERFACE)
 
+get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
+
+if (NOT debug_configs)
+	set (debug_configs Debug)
+endif ()
+
+set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
+
+unset (debug_configs)
+
+set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
+
 target_compile_options (
-	OrangesCoverageFlags INTERFACE $<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:Debug>>:-O0 -g --coverage>)
+	OrangesCoverageFlags
+	INTERFACE
+		"$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
 
-target_link_options (OrangesCoverageFlags INTERFACE
-					 $<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<CONFIG:Debug>>:--coverage>)
+target_link_options (
+	OrangesCoverageFlags INTERFACE
+	"$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
 
-install (TARGETS OrangesCoverageFlags EXPORT OrangesTargets)
+unset (config_is_debug)
+unset (compiler_gcclike)
 
 add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)

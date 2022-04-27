@@ -26,19 +26,20 @@ Input variables (define with -D)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(NOT SOURCE_DIR)
+if (NOT SOURCE_DIR)
 
 	message (STATUS "Downloading FFTW sources...")
 
-	if(NOT CACHE_DIR)
+	if (NOT CACHE_DIR)
 		set (CACHE_DIR "${CMAKE_CURRENT_LIST_DIR}/temp")
-	endif()
+	endif ()
 
 	message (STATUS "Cache dir: ${CACHE_DIR}")
 
 	set (tarball "${CACHE_DIR}/fftw-3.3.10.tar.gz")
 
-	file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}" SHOW_PROGRESS)
+	file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}"
+		  SHOW_PROGRESS)
 
 	set (SOURCE_DIR "${CACHE_DIR}/FFTW")
 
@@ -46,7 +47,7 @@ if(NOT SOURCE_DIR)
 
 	set (SOURCE_DIR "${CACHE_DIR}/fftw-3.3.10")
 
-endif()
+endif ()
 
 #
 
@@ -54,9 +55,9 @@ include (ProcessorCount)
 
 ProcessorCount (numCores)
 
-if(numCores EQUAL 0)
+if (numCores EQUAL 0)
 	set (numCores 4)
-endif()
+endif ()
 
 find_program (SUDO_PROGRAM NAMES sudo)
 
@@ -64,42 +65,47 @@ find_program (SUDO_PROGRAM NAMES sudo)
 
 cmake_host_system_information (RESULT has_sse QUERY HAS_SSE)
 
-if(has_sse)
+if (has_sse)
 	set (sse_flag -D ENABLE_SSE=ON)
-endif()
+endif ()
 
 cmake_host_system_information (RESULT has_sse2 QUERY HAS_SSE2)
 
-if(has_sse2)
+if (has_sse2)
 	set (sse2_flag -D ENABLE_SSE2=ON)
-endif()
+endif ()
 
 #
 
-function(install_fftw_library buildDir isFloat)
+function (install_fftw_library buildDir isFloat)
 
-	if(IS_DIRECTORY "${buildDir}")
+	if (IS_DIRECTORY "${buildDir}")
 		file (REMOVE_RECURSE "${buildDir}")
-	endif()
+	endif ()
 
 	file (MAKE_DIRECTORY "${buildDir}")
 
-	if(isFloat)
+	if (isFloat)
 		set (float_flag -D ENABLE_FLOAT=ON)
-	endif()
+	endif ()
 
 	execute_process (
-		COMMAND "${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D BUILD_TESTS=OFF
-				--log-level=VERBOSE ${float_flag} ${sse_flag} ${sse2_flag}
-		WORKING_DIRECTORY "${SOURCE_DIR}" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+		COMMAND
+			"${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D
+			BUILD_TESTS=OFF --log-level=VERBOSE ${float_flag} ${sse_flag}
+			${sse2_flag}
+		WORKING_DIRECTORY "${SOURCE_DIR}" COMMAND_ECHO STDOUT
+						  COMMAND_ERROR_IS_FATAL ANY)
 
-	execute_process (COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel "${numCores}"
-							 COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+	execute_process (
+		COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel
+				"${numCores}" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
 
-	execute_process (COMMAND ${SUDO_PROGRAM} "${CMAKE_COMMAND}" --install "${buildDir}"
-							 COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+	execute_process (
+		COMMAND ${SUDO_PROGRAM} "${CMAKE_COMMAND}" --install "${buildDir}"
+				COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
 
-endfunction()
+endfunction ()
 
 #
 

@@ -24,6 +24,20 @@ This module searches for the following packages:
 - cpplint
 - include-what-you-use
 
+and enables build-time integrations for any of the tools that are found. No errors are emitted for unfound integration tools.
+
+Note that this is a build-only target! You should always link to it using the following command:
+```cmake
+target_link_libraries (YourTarget YOUR_SCOPE
+	$<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
+```
+If you get an error similar to:
+```
+CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesAllIntegrations" that is not in any export set.
+```
+then this is why. You're linking to OrangesAllIntegrations unconditionally (or with incorrect generator expressions).
+
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesAllIntegrations
@@ -34,9 +48,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(TARGET Oranges::OrangesAllIntegrations)
+if (TARGET Oranges::OrangesAllIntegrations)
 	return ()
-endif()
+endif ()
 
 include (OrangesCmakeDevTools)
 
@@ -52,12 +66,12 @@ add_library (OrangesAllIntegrations INTERFACE)
 
 target_link_libraries (
 	OrangesAllIntegrations
-	INTERFACE $<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>
-			  $<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>
-			  $<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>
-			  $<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>
-			  $<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>)
-
-install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets)
+	INTERFACE
+		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>>
+		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>>
+		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>>
+		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>>
+		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>>
+	)
 
 add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)

@@ -19,102 +19,108 @@ include (OrangesFunctionArgumentHelpers)
 
 #
 
-function(_lemons_const_variable_watch variableName access value current_file stack)
-	if(access STREQUAL "WRITE_ACCESS")
+function (_lemons_const_variable_watch variableName access value current_file
+		  stack)
+	if (access STREQUAL "WRITE_ACCESS")
 		message (AUTHOR_WARNING "Writing to const variable ${variableName}!")
-	endif()
-endfunction()
+	endif ()
+endfunction ()
 
-macro(lemons_make_variable_const variable)
+macro (lemons_make_variable_const variable)
 	variable_watch ("${variableName}" _lemons_const_variable_watch)
-endmacro()
+endmacro ()
 
-macro(oranges_set_const variable value)
+macro (oranges_set_const variable value)
 	set ("${variable}" "${value}")
 	lemons_make_variable_const ("${variable}")
-endmacro()
+endmacro ()
 
 #
 
-function(get_required_target_property output target property)
-	if(NOT TARGET ${target})
-		message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!")
-	endif()
+function (get_required_target_property output target property)
+	if (NOT TARGET ${target})
+		message (
+			FATAL_ERROR
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!"
+			)
+	endif ()
 
 	get_target_property (property_value "${target}" "${property}")
 
-	if(NOT property_value)
-		message (FATAL_ERROR "Error retrieving property ${property} from target ${target}!")
-	endif()
+	if (NOT property_value)
+		message (
+			FATAL_ERROR
+				"Error retrieving property ${property} from target ${target}!")
+	endif ()
 
 	set (${output} ${property_value} PARENT_SCOPE)
-endfunction()
+endfunction ()
 
 #
 
-macro(lemons_warn_if_not_processing_project)
-	if(NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
+macro (lemons_warn_if_not_processing_project)
+	if (NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
 		message (
 			AUTHOR_WARNING
 				"This module (${CMAKE_CURRENT_LIST_FILE}) isn't meant to be used outside of project configurations. Some commands may not be available."
 			)
-	endif()
-endmacro()
+	endif ()
+endmacro ()
 
-macro(lemons_error_if_not_processing_project)
-	if(NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
+macro (lemons_error_if_not_processing_project)
+	if (NOT "${CMAKE_ROLE}" STREQUAL "PROJECT")
 		message (
 			FATAL_ERROR
 				"This module (${CMAKE_CURRENT_LIST_FILE}) cannot be used outside of project configurations!"
 			)
-	endif()
-endmacro()
+	endif ()
+endmacro ()
 
 #
 
-macro(oranges_add_function_message_context)
+macro (oranges_add_function_message_context)
 	list (APPEND CMAKE_MESSAGE_CONTEXT "${CMAKE_CURRENT_FUNCTION}")
-endmacro()
+endmacro ()
 
-macro(oranges_file_scoped_message_context context_msg)
+macro (oranges_file_scoped_message_context context_msg)
 	# if("${CMAKE_ROLE}" STREQUAL "PROJECT")
 	list (APPEND CMAKE_MESSAGE_CONTEXT "${context_msg}")
 
 	cmake_language (DEFER CALL list POP_BACK CMAKE_MESSAGE_CONTEXT)
 	# endif()
-endmacro()
+endmacro ()
 
 #
 
 # returns true if only a single one of its arguments is true
-function(xor result)
+function (xor result)
 	set (true_args_count 0)
 
-	foreach(foo ${ARGN})
-		if(foo)
+	foreach (foo ${ARGN})
+		if (foo)
 			math (EXPR true_args_count "${true_args_count}+1")
-		endif()
-	endforeach()
+		endif ()
+	endforeach ()
 
-	if(NOT (${true_args_count} EQUAL 1))
+	if (NOT (${true_args_count} EQUAL 1))
 		set (${result} FALSE PARENT_SCOPE)
-	else()
+	else ()
 		set (${result} TRUE PARENT_SCOPE)
-	endif()
-endfunction()
+	endif ()
+endfunction ()
 
-function(at_most_one result)
+function (at_most_one result)
 	set (true_args_count 0)
 
-	foreach(foo ${ARGN})
-		if(foo)
+	foreach (foo ${ARGN})
+		if (foo)
 			math (EXPR true_args_count "${true_args_count}+1")
-		endif()
-	endforeach()
+		endif ()
+	endforeach ()
 
-	if(${true_args_count} GREATER 1)
+	if (${true_args_count} GREATER 1)
 		set (${result} FALSE PARENT_SCOPE)
-	else()
+	else ()
 		set (${result} TRUE PARENT_SCOPE)
-	endif()
-endfunction()
+	endif ()
+endfunction ()

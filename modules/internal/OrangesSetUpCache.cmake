@@ -16,23 +16,31 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-# if("${CMAKE_ROLE}" STREQUAL "PROJECT")
 define_property (
-	GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
-	FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
+	GLOBAL
+	PROPERTY CACHE_DIR
+	BRIEF_DOCS "Cache directory for downloaded dependencies"
+	FULL_DOCS
+		"Full path to the directory where downloaded dependencies will be stored"
+	)
 
 define_property (
-	GLOBAL PROPERTY CACHE_DISCONNECTED BRIEF_DOCS "All dependency fetching fully disconnected"
+	GLOBAL PROPERTY CACHE_DISCONNECTED
+	BRIEF_DOCS "All dependency fetching fully disconnected"
 	FULL_DOCS "ON if all dependency fetching is fully disconnected")
 
-oranges_file_scoped_message_context ("OrangesSetUpCache")
-# endif()
+if (ORANGES_PROPERTIES_LIST_FILE)
+	file (APPEND "${ORANGES_PROPERTIES_LIST_FILE}"
+		  "CACHE_DIR GLOBAL\nCACHE_DISCONNECTED GLOBAL\n")
+endif ()
 
-if(DEFINED ENV{CMAKE_CACHE})
+oranges_file_scoped_message_context ("OrangesSetUpCache")
+
+if (DEFINED ENV{CMAKE_CACHE})
 	set (default_cache "$ENV{CMAKE_CACHE}")
-else()
+else ()
 	set (default_cache "${CMAKE_SOURCE_DIR}/Cache")
-endif()
+endif ()
 
 set (FETCHCONTENT_BASE_DIR "${default_cache}"
 	 CACHE PATH "Directory in which to cache all downloaded git repos")
@@ -49,36 +57,39 @@ set (ORANGES_FILE_DOWNLOAD_CACHE "${FETCHCONTENT_BASE_DIR}"
 set (ExternalData_BINARY_ROOT "${FETCHCONTENT_BASE_DIR}"
 	 CACHE PATH "Directory in which to cache all downloaded data files")
 
-mark_as_advanced (FORCE FETCHCONTENT_BASE_DIR ORANGES_FILE_DOWNLOAD_CACHE ExternalData_BINARY_ROOT)
+mark_as_advanced (FORCE FETCHCONTENT_BASE_DIR ORANGES_FILE_DOWNLOAD_CACHE
+				  ExternalData_BINARY_ROOT)
 
-if(NOT DEFINED ENV{CPM_SOURCE_CACHE})
+if (NOT DEFINED ENV{CPM_SOURCE_CACHE})
 	set (ENV{CPM_SOURCE_CACHE} "${FETCHCONTENT_BASE_DIR}")
-endif()
+endif ()
 
 #
 
-if(DEFINED ENV{CMAKE_CACHE_DISCONNECTED})
-	if($ENV{CMAKE_CACHE_DISCONNECTED})
+if (DEFINED ENV{CMAKE_CACHE_DISCONNECTED})
+	if ($ENV{CMAKE_CACHE_DISCONNECTED})
 		set (default_disconnect ON)
-	else()
+	else ()
 		set (default_disconnect OFF)
-	endif()
-else()
+	endif ()
+else ()
 	set (default_disconnect OFF)
-endif()
+endif ()
 
 set (FETCHCONTENT_FULLY_DISCONNECTED "${default_disconnect}"
 	 CACHE BOOL "ON if all dependency fetching is fully disconnected")
 
 unset (default_disconnect)
 
-if(FETCHCONTENT_FULLY_DISCONNECTED)
+if (FETCHCONTENT_FULLY_DISCONNECTED)
 	message (DEBUG "Oranges cache: disconnected for this run!")
-endif()
+endif ()
 
-set_property (GLOBAL PROPERTY CACHE_DISCONNECTED "${FETCHCONTENT_FULLY_DISCONNECTED}")
+set_property (GLOBAL PROPERTY CACHE_DISCONNECTED
+							  "${FETCHCONTENT_FULLY_DISCONNECTED}")
 
 set (ORANGES_FILE_DOWNLOAD_DISCONNECTED "${FETCHCONTENT_FULLY_DISCONNECTED}"
 	 CACHE BOOL "ON if all dependency fetching is fully disconnected")
 
-mark_as_advanced (FORCE FETCHCONTENT_FULLY_DISCONNECTED ORANGES_FILE_DOWNLOAD_DISCONNECTED)
+mark_as_advanced (FORCE FETCHCONTENT_FULLY_DISCONNECTED
+				  ORANGES_FILE_DOWNLOAD_DISCONNECTED)

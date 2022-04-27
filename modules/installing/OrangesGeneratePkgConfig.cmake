@@ -43,7 +43,7 @@ include (GNUInstallDirs)
 
 #
 
-function(oranges_create_pkgconfig_file)
+function (oranges_create_pkgconfig_file)
 
 	oranges_add_function_message_context ()
 
@@ -61,72 +61,76 @@ function(oranges_create_pkgconfig_file)
 		INSTALL_COMPONENT)
 	set (multiValueArgs REQUIRES)
 
-	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}"
+						   "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG TARGET)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
 
-	if(ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_DEST)
+	if (ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_DEST)
 		message (
 			"NO_INSTALL and INSTALL_DEST cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
 			)
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_OUTPUT_DIR)
+	if (NOT ORANGES_ARG_OUTPUT_DIR)
 		set (ORANGES_ARG_OUTPUT_DIR "${PROJECT_BINARY_DIR}/pkgconfig")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_NAME)
+	if (NOT ORANGES_ARG_NAME)
 		set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_INCLUDE_REL_PATH)
+	if (NOT ORANGES_ARG_INCLUDE_REL_PATH)
 		set (ORANGES_ARG_INCLUDE_REL_PATH "${ORANGES_ARG_NAME}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_DESCRIPTION)
+	if (NOT ORANGES_ARG_DESCRIPTION)
 		set (ORANGES_ARG_DESCRIPTION "${PROJECT_DESCRIPTION}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_URL)
+	if (NOT ORANGES_ARG_URL)
 		set (ORANGES_ARG_URL "${PROJECT_HOMEPAGE_URL}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_VERSION)
+	if (NOT ORANGES_ARG_VERSION)
 		set (ORANGES_ARG_VERSION "${PROJECT_VERSION}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_NO_INSTALL)
+	if (NOT ORANGES_ARG_NO_INSTALL)
 		set (ORANGES_ARG_NO_INSTALL FALSE)
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_INSTALL_DEST)
+	if (NOT ORANGES_ARG_INSTALL_DEST)
 		set (ORANGES_ARG_INSTALL_DEST "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")
-	endif()
+	endif ()
 
 	list (JOIN ORANGES_ARG_REQUIRES " " ORANGES_ARG_REQUIRES)
 
-	set (pc_file_configured "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
+	set (pc_file_configured
+		 "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
 
-	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc" "${pc_file_configured}"
-					@ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+	configure_file (
+		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc"
+		"${pc_file_configured}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
 	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-		PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")
 
-	set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
+	set (pc_file_output
+		 "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
 	file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}"
 		  TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
 
-	if(NOT ORANGES_ARG_NO_INSTALL)
-		if(ORANGES_ARG_INSTALL_COMPONENT)
+	if (NOT ORANGES_ARG_NO_INSTALL)
+		if (ORANGES_ARG_INSTALL_COMPONENT)
 			set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-		endif()
+		endif ()
 
-		install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}"
-				 ${component_flag})
-	endif()
+		install (FILES "${pc_file_output}"
+				 DESTINATION "${ORANGES_ARG_INSTALL_DEST}" ${component_flag})
+	endif ()
 
-endfunction()
+endfunction ()

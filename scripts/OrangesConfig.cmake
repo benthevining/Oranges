@@ -33,8 +33,9 @@ set (Oranges_FOUND TRUE)
 include (FeatureSummary)
 include (FindPackageMessage)
 
-set_package_properties (Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
-						DESCRIPTION "CMake modules and toolchains")
+set_package_properties (
+	Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
+	DESCRIPTION "CMake modules and toolchains")
 
 find_package_message (Oranges "Oranges package found -- installed on system"
 					  "Oranges (system install)")

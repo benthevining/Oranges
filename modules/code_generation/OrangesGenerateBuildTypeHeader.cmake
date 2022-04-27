@@ -52,7 +52,7 @@ include (OrangesCmakeDevTools)
 
 #
 
-function(oranges_generate_build_type_header)
+function (oranges_generate_build_type_header)
 
 	oranges_add_function_message_context ()
 
@@ -63,37 +63,40 @@ function(oranges_generate_build_type_header)
 	oranges_assert_target_argument_is_target (ORANGES_ARG)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if(NOT ORANGES_ARG_BASE_NAME)
+	if (NOT ORANGES_ARG_BASE_NAME)
 		set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_HEADER)
+	if (NOT ORANGES_ARG_HEADER)
 		set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_build_type.h")
-	endif()
+	endif ()
 
 	string (TOUPPER "${ORANGES_ARG_BASE_NAME}" ORANGES_ARG_BASE_NAME)
 
-	if(ORANGES_ARG_INTERFACE)
+	if (ORANGES_ARG_INTERFACE)
 		set (public_vis INTERFACE)
-	else()
+	else ()
 		set (public_vis PUBLIC)
-	endif()
+	endif ()
 
-	get_property (ORANGES_DEBUG_CONFIGS_LIST GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
+	get_property (ORANGES_DEBUG_CONFIGS_LIST GLOBAL
+				  PROPERTY DEBUG_CONFIGURATIONS)
 
-	if(NOT ORANGES_DEBUG_CONFIGS_LIST)
+	if (NOT ORANGES_DEBUG_CONFIGS_LIST)
 		message (
 			AUTHOR_WARNING
 				"The global property DEBUG_CONFIGURATIONS must be defined in order for ${CMAKE_CURRENT_FUNCTION} to work correctly!"
 			)
 
 		set (ORANGES_DEBUG_CONFIGS_LIST Debug)
-	endif()
+	endif ()
 
-	set (intermediate_file "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
+	set (intermediate_file
+		 "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
 
-	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h"
-					"${intermediate_file}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+	configure_file (
+		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h"
+		"${intermediate_file}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
 	set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/build_type_$<CONFIG>.h")
 
@@ -101,20 +104,25 @@ function(oranges_generate_build_type_header)
 		  TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
 
 	target_compile_definitions (
-		"${ORANGES_ARG_TARGET}" "${public_vis}"
-								"ORANGES_BUILD_TYPE_HEADER_NAME=<build_type_$<CONFIG>.h>")
+		"${ORANGES_ARG_TARGET}"
+		"${public_vis}"
+		"ORANGES_BUILD_TYPE_HEADER_NAME=<build_type_$<CONFIG>.h>")
 
-	set (configured_includer "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+	set (configured_includer
+		 "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-	configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
-					"${configured_includer}" @ONLY NEWLINE_STYLE UNIX)
+	configure_file (
+		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
+		"${configured_includer}"
+		@ONLY
+		NEWLINE_STYLE UNIX)
 
-	set_source_files_properties ("${configured_includer}"
-		TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+	set_source_files_properties (
+		"${configured_includer}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
 		PROPERTIES GENERATED ON)
 
 	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-		PROPERTY ADDITIONAL_CLEAN_FILES "${configured_includer}")
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${configured_includer}")
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
@@ -123,15 +131,18 @@ function(oranges_generate_build_type_header)
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
 		)
 
-	if(ORANGES_ARG_INSTALL_COMPONENT)
+	if (ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-	endif()
+	endif ()
 
 	install (FILES "${configured_file}" "${configured_includer}"
-			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
+			 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}"
+			 ${install_component})
 
 	target_include_directories (
-		"${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
+		"${ORANGES_ARG_TARGET}" "${public_vis}"
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>
+		)
 
-endfunction()
+endfunction ()

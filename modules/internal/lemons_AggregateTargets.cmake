@@ -22,24 +22,25 @@ add_custom_target (LEMONS_ALL_PLUGINS COMMENT "Building all plugins...")
 oranges_export_alias_target (LEMONS_ALL_APPS Lemons)
 oranges_export_alias_target (LEMONS_ALL_PLUGINS Lemons)
 
-oranges_install_targets (TARGETS LEMONS_ALL_APPS LEMONS_ALL_PLUGINS EXPORT OrangesTargets OPTIONAL)
+oranges_install_targets (TARGETS LEMONS_ALL_APPS LEMONS_ALL_PLUGINS EXPORT
+						 OrangesTargets OPTIONAL)
 
 #
 
-function(_lemons_add_to_all_apps_target target)
+function (_lemons_add_to_all_apps_target target)
 	add_dependencies (LEMONS_ALL_APPS "${target}")
-endfunction()
+endfunction ()
 
 #
 
-function(_lemons_add_to_all_plugins_target target)
+function (_lemons_add_to_all_plugins_target target)
 
 	add_dependencies (LEMONS_ALL_PLUGINS "${target}_All")
 
 	set (stdaln_target "${target}_Standalone")
 
-	if(TARGET "${stdaln_target}")
+	if (TARGET "${stdaln_target}")
 		_lemons_add_to_all_apps_target ("${stdaln_target}")
-	endif()
+	endif ()
 
-endfunction()
+endfunction ()

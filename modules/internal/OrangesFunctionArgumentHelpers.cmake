@@ -14,43 +14,44 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-macro(lemons_require_function_arguments prefix)
-	foreach(requiredArgument ${ARGN})
-		if(NOT ${prefix}_${requiredArgument})
+macro (lemons_require_function_arguments prefix)
+	foreach (requiredArgument ${ARGN})
+		if (NOT ${prefix}_${requiredArgument})
 			message (
 				FATAL_ERROR
 					"Required argument ${requiredArgument} not specified in call to ${CMAKE_CURRENT_FUNCTION}!"
 				)
-		endif()
-	endforeach()
-endmacro()
+		endif ()
+	endforeach ()
+endmacro ()
 
 #
 
-macro(lemons_check_for_unparsed_args prefix)
-	if(${prefix}_UNPARSED_ARGUMENTS)
+macro (lemons_check_for_unparsed_args prefix)
+	if (${prefix}_UNPARSED_ARGUMENTS)
 		message (
 			FATAL_ERROR
 				"Unparsed arguments ${${prefix}_UNPARSED_ARGUMENTS} found in call to ${CMAKE_CURRENT_FUNCTION}!"
 			)
-	endif()
-endmacro()
+	endif ()
+endmacro ()
 
 #
 
-macro(oranges_assert_target_argument_is_target prefix)
+macro (oranges_assert_target_argument_is_target prefix)
 	lemons_require_function_arguments ("${prefix}" TARGET)
 
-	if(NOT TARGET "${${prefix}_TARGET}")
+	if (NOT TARGET "${${prefix}_TARGET}")
 		message (
 			FATAL_ERROR
-				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${${prefix}_TARGET}!")
-	endif()
-endmacro()
+				"${CMAKE_CURRENT_FUNCTION} called with non-existent target ${${prefix}_TARGET}!"
+			)
+	endif ()
+endmacro ()
 
 #
 
-function(oranges_forward_function_argument)
+function (oranges_forward_function_argument)
 
 	set (oneValueArgs PREFIX ARG KIND)
 
@@ -60,31 +61,33 @@ function(oranges_forward_function_argument)
 
 	set (variable_name "${PREFIX}_${ORANGES_ARG_ARG}")
 
-	if(${variable_name})
-		if("${ORANGES_ARG_KIND}" STREQUAL "option")
+	if (${variable_name})
+		if ("${ORANGES_ARG_KIND}" STREQUAL "option")
 			set (new_flag "${ORANGES_ARG_ARG}")
-		elseif("${ORANGES_ARG_KIND}" STREQUAL "oneVal")
+		elseif ("${ORANGES_ARG_KIND}" STREQUAL "oneVal")
 			set (new_flag "${ORANGES_ARG_ARG}" "${variable_name}")
-		elseif("${ORANGES_ARG_KIND}" STREQUAL "multiVal")
+		elseif ("${ORANGES_ARG_KIND}" STREQUAL "multiVal")
 			set (new_flag "${ORANGES_ARG_ARG}" ${variable_name})
-		else()
+		else ()
 			message (
-				FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
+				FATAL_ERROR
+					"${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
 				)
-		endif()
-	endif()
+		endif ()
+	endif ()
 
-	if(new_flag)
+	if (new_flag)
 		list (APPEND ORANGES_FORWARDED_ARGUMENTS ${new_flag})
 
-		set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
-	endif()
+		set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS}
+			 PARENT_SCOPE)
+	endif ()
 
-endfunction()
+endfunction ()
 
 #
 
-function(oranges_forward_function_arguments)
+function (oranges_forward_function_arguments)
 
 	set (oneValueArgs PREFIX KIND)
 
@@ -92,11 +95,13 @@ function(oranges_forward_function_arguments)
 
 	lemons_require_function_arguments (ORANGES_ARG PREFIX KIND ARGS)
 
-	foreach(argument ${ORANGES_ARG_ARGS})
-		oranges_forward_function_argument (PREFIX "${ORANGES_ARG_PREFIX}" ARG "${argument}" KIND
-										   "${ORANGES_ARG_KIND}")
-	endforeach()
+	foreach (argument ${ORANGES_ARG_ARGS})
+		oranges_forward_function_argument (
+			PREFIX "${ORANGES_ARG_PREFIX}" ARG "${argument}" KIND
+			"${ORANGES_ARG_KIND}")
+	endforeach ()
 
-	set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
+	set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS}
+		 PARENT_SCOPE)
 
-endfunction()
+endfunction ()

@@ -23,57 +23,58 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-cmake_language (DEFER CALL message VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")
+cmake_language (DEFER CALL message VERBOSE
+				"Using CPack generator(s): ${CPACK_GENERATOR}")
 
-if(CPACK_GENERATOR)
+if (CPACK_GENERATOR)
 	return ()
-endif()
+endif ()
 
-if(MSVC OR WIN32)
+if (MSVC OR WIN32)
 	set (CPACK_GENERATOR "NSIS" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
-if(APPLE)
+if (APPLE)
 	set (CPACK_GENERATOR "PackageMaker" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
-if(NOT UNIX)
+if (NOT UNIX)
 	set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
 # Linux
 
 include (LinuxLSBInfo)
 
-if(LSB_DISTRIBUTOR_ID MATCHES "Ubuntu")
+if (LSB_DISTRIBUTOR_ID MATCHES "Ubuntu")
 	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
-if(LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
+if (LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
 	set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
 find_program (ORANGES_DEB_EXE debuild)
 
 mark_as_advanced (FORCE ORANGES_DEB_EXE)
 
-if(ORANGES_DEB_EXE)
+if (ORANGES_DEB_EXE)
 	set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
 find_program (ORANGES_RPM_EXE rpmbuild)
 
 mark_as_advanced (FORCE ORANGES_RPM_EXE)
 
-if(ORANGES_RPM_EXE)
+if (ORANGES_RPM_EXE)
 	set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
 	return ()
-endif()
+endif ()
 
 set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")

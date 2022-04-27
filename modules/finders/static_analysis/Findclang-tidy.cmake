@@ -50,34 +50,31 @@ find_program (PROGRAM_CLANG_TIDY "clang-tidy" DOC "clang-tidy executable")
 
 mark_as_advanced (FORCE PROGRAM_CLANG_TIDY)
 
-if(NOT PROGRAM_CLANG_TIDY)
+if (NOT PROGRAM_CLANG_TIDY)
 	find_package_warning_or_error ("clang-tidy program cannot be found!")
 	return ()
-endif()
+endif ()
 
-if(NOT clang-tidy_FIND_QUIETLY)
+if (NOT clang-tidy_FIND_QUIETLY)
 	message (VERBOSE "Using clang-tidy!")
-endif()
+endif ()
 
 add_executable (clang-tidy IMPORTED GLOBAL)
 
-set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${PROGRAM_CLANG_TIDY}")
+set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION
+											 "${PROGRAM_CLANG_TIDY}")
 
 add_executable (Clang::clang-tidy ALIAS clang-tidy)
 
 set (clang-tidy_FOUND TRUE)
 
-set (CMAKE_CXX_CLANG_TIDY "${PROGRAM_CLANG_TIDY}" CACHE STRING "")
+if (NOT TARGET Clang::clang-tidy-interface)
 
-mark_as_advanced (FORCE CMAKE_CXX_CLANG_TIDY)
+	add_library (clang-tidy-interface INTERFACE)
 
-set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+	set_target_properties (
+		clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+										CXX_CLANG_TIDY "${PROGRAM_CLANG_TIDY}")
 
-add_library (clang-tidy-interface INTERFACE)
-
-set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-													   CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}")
-
-if(NOT TARGET Clang::clang-tidy-interface)
 	add_library (Clang::clang-tidy-interface ALIAS clang-tidy-interface)
-endif()
+endif ()

@@ -60,77 +60,80 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-function(lemons_subdir_list)
+function (lemons_subdir_list)
 
 	oranges_add_function_message_context ()
 
 	set (options RECURSE FILES FULL_PATHS)
 	set (oneValueArgs RESULT DIR BASE_DIR)
 
-	cmake_parse_arguments (LEMONS_SUBDIR "${options}" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (LEMONS_SUBDIR "${options}" "${oneValueArgs}" ""
+						   ${ARGN})
 
 	lemons_require_function_arguments (LEMONS_SUBDIR RESULT DIR)
 	lemons_check_for_unparsed_args (LEMONS_SUBDIR)
 
-	if((NOT LEMONS_SUBDIR_FULL_PATHS) AND (NOT LEMONS_SUBDIR_BASE_DIR))
+	if ((NOT LEMONS_SUBDIR_FULL_PATHS) AND (NOT LEMONS_SUBDIR_BASE_DIR))
 		message (
 			WARNING
 				"Either FULL_PATHS or BASE_DIR must be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
 			)
-	endif()
+	endif ()
 
 	cmake_path (IS_ABSOLUTE LEMONS_SUBDIR_DIR dir_path_is_absolute)
 
-	if(dir_path_is_absolute)
+	if (dir_path_is_absolute)
 		set (dir "${LEMONS_SUBDIR_DIR}")
-	else()
+	else ()
 		set (dir "${CMAKE_CURRENT_LIST_DIR}/${LEMONS_SUBDIR_DIR}")
-	endif()
+	endif ()
 
 	lemons_make_variable_const (dir)
 
-	if(LEMONS_SUBDIR_RECURSE)
+	if (LEMONS_SUBDIR_RECURSE)
 		file (GLOB_RECURSE children RELATIVE ${dir} ${dir}/*)
-	else()
+	else ()
 		file (GLOB children RELATIVE ${dir} ${dir}/*)
-	endif()
+	endif ()
 
 	set (dirlist "")
 
-	foreach(child ${children})
-		if(LEMONS_SUBDIR_FILES)
+	foreach (child ${children})
+		if (LEMONS_SUBDIR_FILES)
 			set (filepath "${dir}/${child}")
 
-			if(EXISTS ${filepath} AND NOT IS_DIRECTORY ${filepath} AND NOT "${child}" STREQUAL
-																	   ".DS_Store")
-				if(NOT LEMONS_SUBDIR_FULL_PATHS)
-					cmake_path (RELATIVE_PATH filepath BASE_DIRECTORY "${LEMONS_SUBDIR_BASE_DIR}"
-								OUTPUT_VARIABLE filepath)
-				endif()
+			if (EXISTS ${filepath} AND NOT IS_DIRECTORY ${filepath}
+				AND NOT "${child}" STREQUAL ".DS_Store")
+				if (NOT LEMONS_SUBDIR_FULL_PATHS)
+					cmake_path (
+						RELATIVE_PATH filepath BASE_DIRECTORY
+						"${LEMONS_SUBDIR_BASE_DIR}" OUTPUT_VARIABLE filepath)
+				endif ()
 
 				list (APPEND dirlist "${filepath}")
-			endif()
-		else()
+			endif ()
+		else ()
 			set (dirpath "${dir}/${child}")
 
-			if(EXISTS ${dirpath} AND IS_DIRECTORY ${dirpath})
-				if(NOT LEMONS_SUBDIR_FULL_PATHS)
-					cmake_path (RELATIVE_PATH dirpath BASE_DIRECTORY "${LEMONS_SUBDIR_BASE_DIR}"
-								OUTPUT_VARIABLE dirpath)
-				endif()
+			if (EXISTS ${dirpath} AND IS_DIRECTORY ${dirpath})
+				if (NOT LEMONS_SUBDIR_FULL_PATHS)
+					cmake_path (
+						RELATIVE_PATH dirpath BASE_DIRECTORY
+						"${LEMONS_SUBDIR_BASE_DIR}" OUTPUT_VARIABLE dirpath)
+				endif ()
 
 				list (APPEND dirlist "${dirpath}")
-			endif()
-		endif()
-	endforeach()
+			endif ()
+		endif ()
+	endforeach ()
 
 	set (${LEMONS_SUBDIR_RESULT} ${dirlist} PARENT_SCOPE)
 
-endfunction()
+endfunction ()
 
 #
 
-function(lemons_make_path_absolute)
+function (lemons_make_path_absolute)
 
 	oranges_add_function_message_context ()
 
@@ -143,10 +146,11 @@ function(lemons_make_path_absolute)
 
 	cmake_path (IS_ABSOLUTE ${LEMONS_PATH_VAR} is_abs_path)
 
-	if(NOT is_abs_path)
+	if (NOT is_abs_path)
 		lemons_require_function_arguments (LEMONS_PATH BASE_DIR)
 
-		set (${LEMONS_PATH_VAR} "${LEMONS_PATH_BASE_DIR}/${${LEMONS_PATH_VAR}}" PARENT_SCOPE)
-	endif()
+		set (${LEMONS_PATH_VAR} "${LEMONS_PATH_BASE_DIR}/${${LEMONS_PATH_VAR}}"
+			 PARENT_SCOPE)
+	endif ()
 
-endfunction()
+endfunction ()

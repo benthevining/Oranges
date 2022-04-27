@@ -51,11 +51,15 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
 #
 
-if(PROJECT_IS_TOP_LEVEL)
+set (ORANGES_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}/properties.txt"
+	 CACHE INTERNAL "")
+
+if (PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 
-	set_property (GLOBAL PROPERTY
-		REPORT_UNDEFINED_PROPERTIES "${CMAKE_BINARY_DIR}/undefined_properties.log")
+	set_property (
+		GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
+						"${CMAKE_BINARY_DIR}/undefined_properties.log")
 
 	set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
 	set (CMAKE_INSTALL_MESSAGE LAZY)
@@ -71,16 +75,33 @@ if(PROJECT_IS_TOP_LEVEL)
 	include (OrangesGraphVizConfig)
 
 	unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
-endif()
+endif ()
 
 #
 
 include (GNUInstallDirs)
 
 set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-	 CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
+	 CACHE STRING
+		   "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
+
+#
+
+# include any modules that create exported targets (for installing)
+include (OrangesDefaultTarget)
+include (CXXConcepts)
+
+# include any modules that define properties (for documentation generation)
+include (OrangesSetUpCache)
+
+include (OrangesGeneratePropertiesJSON)
+
+oranges_generate_properties_json (
+	INPUT_FILE "${ORANGES_PROPERTIES_LIST_FILE}"
+	OUTPUT_FILE "${PROJECT_BINARY_DIR}/properties.json"
+	USE_TARGET OrangesDefaultTarget)
 
 #
 
@@ -88,18 +109,6 @@ add_subdirectory (docs)
 add_subdirectory (help)
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
-
-#
-
-# include any modules that create targets (for installing)
-include (OrangesAllIntegrations)
-include (OrangesCoverageFlags)
-include (OrangesDefaultTarget)
-include (OrangesDefaultWarnings)
-include (OrangesUnityBuild)
-include (OrangesIPOTarget)
-include (OrangesGenerateExportHeader)
-include (CXXConcepts)
 
 #
 
@@ -112,8 +121,9 @@ install (
 
 include (CMakePackageConfigHelpers)
 
-write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
-								  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+write_basic_package_version_file (
+	"OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
+	COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 configure_package_config_file (
 	"${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
@@ -126,11 +136,11 @@ install (
 	DESTINATION "${ORANGES_INSTALL_DEST}"
 	COMPONENT oranges_base)
 
-install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_modules
-		 PATTERN .DS_Store EXCLUDE)
+install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}"
+		 COMPONENT oranges_modules PATTERN .DS_Store EXCLUDE)
 
-install (DIRECTORY toolchains DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_toolchains
-		 PATTERN .DS_Store EXCLUDE)
+install (DIRECTORY toolchains DESTINATION "${ORANGES_INSTALL_DEST}"
+		 COMPONENT oranges_toolchains PATTERN .DS_Store EXCLUDE)
 
 include (CPackComponent)
 
@@ -166,19 +176,21 @@ cpack_add_install_type (Developer DISPLAY_NAME "Developer installation")
 include (FeatureSummary)
 
 feature_summary (
-	FILENAME "${CMAKE_BINARY_DIR}/package_features.txt"
+	FILENAME "${PROJECT_BINARY_DIR}/package_features.txt"
 	INCLUDE_QUIET_PACKAGES
 	WHAT ALL
 	DESCRIPTION
 		"This version of Oranges was configured with the following features and third party libraries:"
 	)
 
-install (FILES "${CMAKE_BINARY_DIR}/package_features.txt" DESTINATION "${ORANGES_INSTALL_DEST}"
-		 CONFIGURATIONS Debug COMPONENT oranges_base)
+install (FILES "${PROJECT_BINARY_DIR}/package_features.txt"
+		 DESTINATION "${ORANGES_INSTALL_DEST}" CONFIGURATIONS Debug
+		 COMPONENT oranges_base)
 
-if(PROJECT_IS_TOP_LEVEL)
-	feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
-endif()
+if (PROJECT_IS_TOP_LEVEL)
+	feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY
+					 WHAT ALL)
+endif ()
 
 export (PACKAGE Oranges)
 

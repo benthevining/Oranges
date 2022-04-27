@@ -10,9 +10,9 @@
 #
 # ======================================================================================
 
-# Choose an appropriate compiler prefix for classical mingw32 see http://www.mingw.org/
-# set(COMPILER_PREFIX "i586-mingw32msvc") for 32 or 64 bits mingw-w64 see
-# http://mingw-w64.sourceforge.net/
+# Choose an appropriate compiler prefix for classical mingw32 see
+# http://www.mingw.org/ set(COMPILER_PREFIX "i586-mingw32msvc") for 32 or 64
+# bits mingw-w64 see http://mingw-w64.sourceforge.net/
 set (COMPILER_PREFIX "x86_64-w64-mingw32")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/mingw_common.cmake")

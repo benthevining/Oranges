@@ -14,33 +14,36 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 #
 
-function(_oranges_remove_directory dir_path)
-	if(IS_DIRECTORY "${dir_path}")
+function (_oranges_remove_directory dir_path)
+	if (IS_DIRECTORY "${dir_path}")
 		file (REMOVE_RECURSE "${dir_path}")
 		message (STATUS "Removing cache directory: ${dir_path}")
 
-		if(IS_DIRECTORY "${dir_path}")
+		if (IS_DIRECTORY "${dir_path}")
 			message (WARNING "Removing cache directory ${dir_path} failed!")
-		endif()
-	endif()
-endfunction()
+		endif ()
+	endif ()
+endfunction ()
 
 #
 
 # FETCHCONTENT_BASE_DIR
-if(NOT "@FETCHCONTENT_BASE_DIR@" STREQUAL "")
+if (NOT "@FETCHCONTENT_BASE_DIR@" STREQUAL "")
 	_oranges_remove_directory ("@FETCHCONTENT_BASE_DIR@")
-endif()
+endif ()
 
 # ORANGES_FILE_DOWNLOAD_CACHE
-if(NOT "@ORANGES_FILE_DOWNLOAD_CACHE@" STREQUAL "")
+if (NOT "@ORANGES_FILE_DOWNLOAD_CACHE@" STREQUAL "")
 	_oranges_remove_directory ("@ORANGES_FILE_DOWNLOAD_CACHE@")
-endif()
+endif ()
 
-_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/Cache") # @CMAKE_SOURCE_DIR@/Cache
-_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/.cache") # @CMAKE_SOURCE_DIR@/.cache
-_oranges_remove_directory ("@CMAKE_BINARY_DIR@/_deps") # @CMAKE_BINARY_DIR@/_deps
+_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/Cache"
+	)# @CMAKE_SOURCE_DIR@/Cache
+_oranges_remove_directory ("@CMAKE_SOURCE_DIR@/.cache"
+	)# @CMAKE_SOURCE_DIR@/.cache
+_oranges_remove_directory ("@CMAKE_BINARY_DIR@/_deps"
+	)# @CMAKE_BINARY_DIR@/_deps
 
-if(DEFINED ENV{CPM_SOURCE_CACHE})
+if (DEFINED ENV{CPM_SOURCE_CACHE})
 	_oranges_remove_directory ("$ENV{CPM_SOURCE_CACHE}")
-endif()
+endif ()

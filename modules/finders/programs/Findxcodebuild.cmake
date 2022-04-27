@@ -46,14 +46,15 @@ find_program (XCODE_BUILD xcodebuild DOC "xcodebuild executable")
 
 mark_as_advanced (FORCE XCODE_BUILD)
 
-if(XCODE_BUILD)
+if (XCODE_BUILD)
 	add_executable (xcodebuild IMPORTED GLOBAL)
 
-	set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION "${XCODE_BUILD}")
+	set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION
+												 "${XCODE_BUILD}")
 
 	add_executable (Apple::xcodebuild ALIAS xcodebuild)
 
 	set (xcodebuild_FOUND TRUE) # cmake-lint: disable=W0105
-else()
+else ()
 	find_package_warning_or_error ("xcodebuild program cannot be found!")
-endif()
+endif ()

@@ -36,9 +36,9 @@ option (ORANGES_IGNORE_SYSTEM_LIBS
 
 mark_as_advanced (FORCE ORANGES_IGNORE_SYSTEM_LIBS)
 
-if(ORANGES_IGNORE_SYSTEM_LIBS)
+if (ORANGES_IGNORE_SYSTEM_LIBS)
 	return ()
-endif()
+endif ()
 
 #
 

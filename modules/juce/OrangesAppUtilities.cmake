@@ -52,7 +52,7 @@ lemons_warn_if_not_processing_project ()
 
 #
 
-macro(_lemons_configure_app_internal)
+macro (_lemons_configure_app_internal)
 	oranges_add_function_message_context ()
 
 	lemons_configure_juce_target (${ARGN})
@@ -60,25 +60,29 @@ macro(_lemons_configure_app_internal)
 	cmake_parse_arguments (LEMONS_APP "" "TARGET" "" ${ARGN})
 
 	_lemons_add_to_all_apps_target (${LEMONS_APP_TARGET})
-endmacro()
+endmacro ()
 
 #
 
-function(lemons_configure_headless_app)
+function (lemons_configure_headless_app)
 	oranges_add_function_message_context ()
 	_lemons_configure_app_internal (${ARGN})
-endfunction()
+endfunction ()
 
 #
 
-function(lemons_configure_juce_app)
+function (lemons_configure_juce_app)
 	oranges_add_function_message_context ()
 
 	_lemons_configure_app_internal (${ARGN})
 
-	if(TARGET Lemons::LemonsAppModules)
-		target_link_libraries (${LEMONS_APP_TARGET} PRIVATE Lemons::LemonsAppModules)
-	else()
-		message (DEBUG "No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}...")
-	endif()
-endfunction()
+	if (TARGET Lemons::LemonsAppModules)
+		target_link_libraries (${LEMONS_APP_TARGET}
+							   PRIVATE Lemons::LemonsAppModules)
+	else ()
+		message (
+			DEBUG
+			"No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}..."
+			)
+	endif ()
+endfunction ()

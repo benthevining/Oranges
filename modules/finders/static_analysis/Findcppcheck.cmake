@@ -63,44 +63,43 @@ mark_as_advanced (FORCE PROGRAM_CPPCHECK CPPCHECK_ENABLE CPPCHECK_DISABLE)
 
 set (cppcheck_FOUND FALSE)
 
-if(NOT PROGRAM_CPPCHECK)
+if (NOT PROGRAM_CPPCHECK)
 	find_package_warning_or_error ("cppcheck program cannot be found!")
 	return ()
-endif()
+endif ()
 
-if(NOT cppcheck_FIND_QUIETLY)
+if (NOT cppcheck_FIND_QUIETLY)
 	message (VERBOSE "Using cppcheck!")
-endif()
+endif ()
 
 add_executable (cppcheck IMPORTED GLOBAL)
 
-set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPCHECK}")
+set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION
+										   "${PROGRAM_CPPCHECK}")
 
 add_executable (cppcheck::cppcheck ALIAS cppcheck)
 
 set (cppcheck_FOUND TRUE)
 
-set (CMAKE_CXX_CPPCHECK "${PROGRAM_CPPCHECK};--inline-suppr")
+if (NOT TARGET cppcheck::cppcheck-interface)
 
-foreach(enable_check IN LISTS CPPCHECK_ENABLE)
-	list (APPEND CMAKE_CXX_CPPCHECK "--enable=${enable_check}")
-endforeach()
+	set (cppcheck_cmd "${PROGRAM_CPPCHECK};--inline-suppr")
 
-foreach(disable_check IN LISTS CPPCHECK_DISABLE)
-	list (APPEND CMAKE_CXX_CPPCHECK "--suppress=${disable_check}")
-endforeach()
+	foreach (enable_check IN LISTS CPPCHECK_ENABLE)
+		list (APPEND cppcheck_cmd "--enable=${enable_check}")
+	endforeach ()
 
-set (CMAKE_CXX_CPPCHECK "${CMAKE_CXX_CPPCHECK}" CACHE STRING "")
+	foreach (disable_check IN LISTS CPPCHECK_DISABLE)
+		list (APPEND cppcheck_cmd "--suppress=${disable_check}")
+	endforeach ()
 
-mark_as_advanced (FORCE CMAKE_CXX_CPPCHECK)
+	add_library (cppcheck-interface INTERFACE)
 
-set (CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+	set_target_properties (
+		cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+									  CXX_CPPCHECK "${cppcheck_cmd}")
 
-add_library (cppcheck-interface INTERFACE)
+	unset (cppcheck_cmd)
 
-set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-													 CXX_CPPCHECK "${CMAKE_CXX_CPPCHECK}")
-
-if(NOT TARGET cppcheck::cppcheck-interface)
 	add_library (cppcheck::cppcheck-interface ALIAS cppcheck-interface)
-endif()
+endif ()

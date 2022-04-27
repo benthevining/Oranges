@@ -34,15 +34,16 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
 
-set_package_properties (MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
-						DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
+set_package_properties (
+	MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
+	DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
 
 #
 
-if(TARGET aff3ct::MIPP)
+if (TARGET aff3ct::MIPP)
 	set (MIPP_FOUND TRUE)
 	return ()
-endif()
+endif ()
 
 oranges_file_scoped_message_context ("FindMIPP")
 
@@ -54,30 +55,33 @@ find_package_try_pkgconfig (aff3ct::MIPP mipp)
 
 #
 
-if(MIPP_FIND_QUIETLY)
+if (MIPP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
-endif()
+endif ()
 
-oranges_fetch_repository (NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
-						  DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
+oranges_fetch_repository (
+	NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
+	DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 
 add_library (MIPP INTERFACE)
 
-target_include_directories (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
-										   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP>)
+target_include_directories (
+	MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
+				   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP>)
 
-target_sources (MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
-							   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP/mipp.h>)
+target_sources (
+	MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
+				   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP/mipp.h>)
 
-install (DIRECTORY "${MIPP_SOURCE_DIR}/src" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP"
-		 COMPONENT MIPP)
+install (DIRECTORY "${MIPP_SOURCE_DIR}/src"
+		 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP" COMPONENT MIPP)
 
 install (TARGETS MIPP EXPORT MIPPTargets)
 
-install (EXPORT MIPPTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP" NAMESPACE aff3ct::
-		 COMPONENT MIPP)
+install (EXPORT MIPPTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP"
+		 NAMESPACE aff3ct:: COMPONENT MIPP)
 
 include (CPackComponent)
 

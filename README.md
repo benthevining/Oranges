@@ -46,6 +46,7 @@ Dependencies
 Documentation
   * OrangesDocsBuildConfig
   * OrangesDoxygenConfig
+  * OrangesGeneratePropertiesJSON
   * OrangesGraphVizConfig
 
 General
@@ -60,7 +61,6 @@ Helper targets
   * OrangesCoverageFlags
   * OrangesDefaultTarget
   * OrangesDefaultWarnings
-  * OrangesIPOTarget
   * OrangesUnityBuild
 
 Installing

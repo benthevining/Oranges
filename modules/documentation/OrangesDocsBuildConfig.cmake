@@ -29,8 +29,8 @@ include (OrangesCmakeDevTools)
 
 oranges_file_scoped_message_context ("OrangesDocsBuildConfig")
 
-if(PROJECT_IS_TOP_LEVEL)
+if (PROJECT_IS_TOP_LEVEL)
 	include (OrangesGraphVizConfig)
-endif()
+endif ()
 
 include (OrangesDoxygenConfig)

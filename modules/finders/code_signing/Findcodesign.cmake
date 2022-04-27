@@ -41,10 +41,10 @@ set_package_properties (
 
 oranges_file_scoped_message_context ("Findcodesign")
 
-if(TARGET Apple::codesign)
+if (TARGET Apple::codesign)
 	set (codesign_FOUND TRUE)
 	return ()
-endif()
+endif ()
 
 set (codesign_FOUND FALSE)
 
@@ -52,14 +52,15 @@ find_program (CODESIGN_PROGRAM codesign DOC "Apple's codesign program")
 
 mark_as_advanced (FORCE CODESIGN_PROGRAM)
 
-if(CODESIGN_PROGRAM)
+if (CODESIGN_PROGRAM)
 	add_executable (codesign IMPORTED GLOBAL)
 
-	set_target_properties (codesign PROPERTIES IMPORTED_LOCATION "${CODESIGN_PROGRAM}")
+	set_target_properties (codesign PROPERTIES IMPORTED_LOCATION
+											   "${CODESIGN_PROGRAM}")
 
 	add_executable (Apple::codesign ALIAS codesign)
 
 	set (codesign_FOUND TRUE)
-else()
+else ()
 	find_package_warning_or_error ("codesign program cannot be found!")
-endif()
+endif ()

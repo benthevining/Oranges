@@ -40,17 +40,18 @@ include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
 include (LemonsCmakeDevTools)
 
-set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
-						DESCRIPTION "Audio plugin testing and validation tool")
+set_package_properties (
+	pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
+	DESCRIPTION "Audio plugin testing and validation tool")
 
 #
 
 oranges_file_scoped_message_context ("Findpluginval")
 
-if(TARGET Tracktion::pluginval)
+if (TARGET Tracktion::pluginval)
 	set (pluginval_FOUND TRUE)
 	return ()
-endif()
+endif ()
 
 set (pluginval_FOUND FALSE)
 
@@ -59,58 +60,68 @@ find_program (PLUGINVAL_PROGRAM pluginval DOC "pluginval executable")
 
 mark_as_advanced (FORCE PLUGINVAL_PROGRAM)
 
-if(PLUGINVAL_PROGRAM)
+if (PLUGINVAL_PROGRAM)
 	add_executable (pluginval IMPORTED GLOBAL)
 
-	set_target_properties (pluginval PROPERTIES IMPORTED_LOCATION "${PLUGINVAL_PROGRAM}")
+	set_target_properties (pluginval PROPERTIES IMPORTED_LOCATION
+												"${PLUGINVAL_PROGRAM}")
 
 	add_executable (Tracktion::pluginval ALIAS pluginval)
 
 	set (pluginval_FOUND TRUE)
 
 	return ()
-endif()
+endif ()
 
-option (PLUGINVAL_BUILD_AT_CONFIGURE_TIME ON
-		"Build pluginval from source at configure-time if it can't be found on the system")
+option (
+	PLUGINVAL_BUILD_AT_CONFIGURE_TIME
+	ON
+	"Build pluginval from source at configure-time if it can't be found on the system"
+	)
 
-if(PLUGINVAL_BUILD_AT_CONFIGURE_TIME)
+if (PLUGINVAL_BUILD_AT_CONFIGURE_TIME)
 
-	if(pluginval_FIND_QUIETLY)
+	if (pluginval_FIND_QUIETLY)
 		set (quiet_flag QUIET)
-	endif()
+	endif ()
 
 	oranges_fetch_repository (
-		NAME pluginval GITHUB_REPOSITORY Tracktion/pluginval GIT_TAG origin/master
-		DOWNLOAD_ONLY EXCLUDE_FROM_ALL NEVER_LOCAL ${quiet_flag})
+		NAME pluginval GITHUB_REPOSITORY Tracktion/pluginval
+		GIT_TAG origin/master DOWNLOAD_ONLY EXCLUDE_FROM_ALL NEVER_LOCAL
+							  ${quiet_flag})
 
 	unset (quiet_flag)
 
-	if(WIN32)
-		execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/windows_build.bat")
-	else()
-		if(APPLE)
-			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/mac_build")
-		else()
-			execute_process (COMMAND "${pluginval_SOURCE_DIR}/install/linux_build")
-		endif()
-	endif()
+	if (WIN32)
+		execute_process (
+			COMMAND "${pluginval_SOURCE_DIR}/install/windows_build.bat")
+	else ()
+		if (APPLE)
+			execute_process (
+				COMMAND "${pluginval_SOURCE_DIR}/install/mac_build")
+		else ()
+			execute_process (
+				COMMAND "${pluginval_SOURCE_DIR}/install/linux_build")
+		endif ()
+	endif ()
 
 	unset (CACHE{PLUGINVAL_BUILT_PROGRAM})
 
-	find_program (PLUGINVAL_BUILT_PROGRAM pluginval PATHS "${pluginval_SOURCE_DIR}/bin")
+	find_program (PLUGINVAL_BUILT_PROGRAM pluginval
+				  PATHS "${pluginval_SOURCE_DIR}/bin")
 
-	if(PLUGINVAL_BUILT_PROGRAM)
+	if (PLUGINVAL_BUILT_PROGRAM)
 		add_executable (pluginval IMPORTED GLOBAL)
 
-		set_target_properties (pluginval PROPERTIES IMPORTED_LOCATION "${PLUGINVAL_BUILT_PROGRAM}")
+		set_target_properties (
+			pluginval PROPERTIES IMPORTED_LOCATION "${PLUGINVAL_BUILT_PROGRAM}")
 
 		add_executable (Tracktion::pluginval ALIAS pluginval)
 
 		set (pluginval_FOUND TRUE)
-	endif()
-endif()
+	endif ()
+endif ()
 
-if(NOT TARGET Tracktion::pluginval)
+if (NOT TARGET Tracktion::pluginval)
 	find_package_warning_or_error ("pluginval cannot be found!")
-endif()
+endif ()

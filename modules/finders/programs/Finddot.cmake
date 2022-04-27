@@ -44,10 +44,10 @@ find_program (ORANGES_DOT dot DOC "graphviz dot tool")
 
 mark_as_advanced (FORCE ORANGES_DOT)
 
-if(NOT ORANGES_DOT)
+if (NOT ORANGES_DOT)
 	find_package_warning_or_error ("dot program cannot be found!")
 	return ()
-endif()
+endif ()
 
 add_executable (dot IMPORTED GLOBAL)
 

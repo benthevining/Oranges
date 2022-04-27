@@ -53,109 +53,118 @@ oranges_file_scoped_message_context ("OrangesDoxygenConfig")
 
 find_package (Doxygen OPTIONAL_COMPONENTS dot)
 
-if(NOT TARGET Doxygen::doxygen)
+if (NOT TARGET Doxygen::doxygen)
 	message (WARNING "Doxygen dependencies missing!")
 
-	function(oranges_create_doxygen_target)
+	function (oranges_create_doxygen_target)
 
-	endfunction()
+	endfunction ()
 
 	return ()
-endif()
+endif ()
 
 #
 
-function(oranges_create_doxygen_target)
+function (oranges_create_doxygen_target)
 
 	oranges_add_function_message_context ()
 
 	set (options NO_VERSION_DISPLAY NO_INSTALL)
-	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR INSTALL_COMPONENT)
+	set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR
+					  INSTALL_COMPONENT)
 	set (multiValueArgs INPUT_PATHS FILE_PATTERNS IMAGE_PATHS)
 
-	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}"
+						   "${multiValueArgs}" ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG INPUT_PATHS)
 	lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if(ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_COMPONENT)
+	if (ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_COMPONENT)
 		message (
 			WARNING
 				"Arguments NO_INSTALL and INSTALL_COMPONENT cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
 			)
-	endif()
+	endif ()
 
-	foreach(input_path ${ORANGES_ARG_INPUT_PATHS})
-		lemons_make_path_absolute (VAR input_path BASE_DIR "${PROJECT_SOURCE_DIR}")
+	foreach (input_path ${ORANGES_ARG_INPUT_PATHS})
+		lemons_make_path_absolute (VAR input_path
+								   BASE_DIR "${PROJECT_SOURCE_DIR}")
 
 		list (APPEND ORANGES_DOXYGEN_INPUT_PATHS "${input_path}")
-	endforeach()
+	endforeach ()
 
 	list (REMOVE_DUPLICATES ORANGES_DOXYGEN_INPUT_PATHS)
 	list (JOIN ORANGES_DOXYGEN_INPUT_PATHS " " ORANGES_DOXYGEN_INPUT_PATHS)
 
-	if(ORANGES_ARG_MAIN_PAGE_MD_FILE)
+	if (ORANGES_ARG_MAIN_PAGE_MD_FILE)
 		lemons_make_path_absolute (VAR ORANGES_ARG_MAIN_PAGE_MD_FILE
 								   BASE_DIR "${PROJECT_SOURCE_DIR}")
 
-		if(EXISTS "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
-			set (ORANGES_DOXYGEN_MAIN_PAGE_MARKDOWN_FILE "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
-		else()
+		if (EXISTS "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
+			set (ORANGES_DOXYGEN_MAIN_PAGE_MARKDOWN_FILE
+				 "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
+		else ()
 			message (
 				AUTHOR_WARNING
 					"Specified Doxygen main page markdown file ${ORANGES_ARG_MAIN_PAGE_MD_FILE} does not exist!"
 				)
-		endif()
-	else()
+		endif ()
+	else ()
 		find_file (
-			ORANGES_DOCS_README README.md README PATHS "${PROJECT_SOURCE_DIR}"
-													   ${ORANGES_DOXYGEN_INPUT_PATHS} NO_CACHE
-			NO_DEFAULT_PATH)
+			ORANGES_DOCS_README README.md README
+			PATHS "${PROJECT_SOURCE_DIR}" ${ORANGES_DOXYGEN_INPUT_PATHS}
+				  NO_CACHE NO_DEFAULT_PATH)
 
-		if(ORANGES_DOCS_README)
+		if (ORANGES_DOCS_README)
 			set (ORANGES_ARG_MAIN_PAGE_MD_FILE "${ORANGES_DOCS_README}")
-		endif()
-	endif()
+		endif ()
+	endif ()
 
-	if(ORANGES_ARG_LOGO)
-		lemons_make_path_absolute (VAR ORANGES_ARG_LOGO BASE_DIR "${PROJECT_SOURCE_DIR}")
+	if (ORANGES_ARG_LOGO)
+		lemons_make_path_absolute (VAR ORANGES_ARG_LOGO
+								   BASE_DIR "${PROJECT_SOURCE_DIR}")
 
-		if(EXISTS "${ORANGES_ARG_LOGO}")
+		if (EXISTS "${ORANGES_ARG_LOGO}")
 			set (ORANGES_DOXYGEN_LOGO "${ORANGES_ARG_LOGO}")
-		else()
+		else ()
 			message (
-				AUTHOR_WARNING "Specified Doxygen logo file ${ORANGES_DOXYGEN_LOGO} does not exist!"
+				AUTHOR_WARNING
+					"Specified Doxygen logo file ${ORANGES_DOXYGEN_LOGO} does not exist!"
 				)
-		endif()
-	endif()
+		endif ()
+	endif ()
 
-	if(NOT ORANGES_ARG_FILE_PATTERNS)
+	if (NOT ORANGES_ARG_FILE_PATTERNS)
 		set (ORANGES_DOXYGEN_INPUT_FILE_PATTERNS "*.h")
-	endif()
+	endif ()
 
-	if(ORANGES_ARG_MAIN_PAGE_MD_FILE)
+	if (ORANGES_ARG_MAIN_PAGE_MD_FILE)
 		list (APPEND ORANGES_ARG_FILE_PATTERNS *.md)
-	endif()
+	endif ()
 
-	if(ORANGES_ARG_OUTPUT_DIR)
+	if (ORANGES_ARG_OUTPUT_DIR)
 		set (ORANGES_DOC_OUTPUT_DIR "${ORANGES_ARG_OUTPUT_DIR}")
-	else()
+	else ()
 		set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
-	endif()
+	endif ()
 
-	if(TARGET DependencyGraph)
-		list (APPEND ORANGES_ARG_IMAGE_PATHS "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
+	if (TARGET DependencyGraph)
+		list (APPEND ORANGES_ARG_IMAGE_PATHS
+			  "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
 		list (APPEND ORANGES_ARG_FILE_PATTERNS *.png)
-	endif()
+	endif ()
 
 	list (REMOVE_DUPLICATES ORANGES_ARG_IMAGE_PATHS)
 	list (REMOVE_DUPLICATES ORANGES_ARG_FILE_PATTERNS)
 
 	list (JOIN ORANGES_ARG_IMAGE_PATHS " " ORANGES_DOXYGEN_INPUT_IMAGE_PATHS)
-	list (JOIN ORANGES_ARG_FILE_PATTERNS " " ORANGES_DOXYGEN_INPUT_FILE_PATTERNS)
+	list (JOIN ORANGES_ARG_FILE_PATTERNS " "
+		  ORANGES_DOXYGEN_INPUT_FILE_PATTERNS)
 
 	set (doxyfile_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/Doxyfile")
-	set (doxylayout_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/DoxygenLayout.xml")
+	set (doxylayout_input
+		 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/DoxygenLayout.xml")
 
 	set (doxyfile_output "${CMAKE_BINARY_DIR}/Doxyfile")
 	set (doxylayout_output "${CMAKE_BINARY_DIR}/DoxygenLayout.xml")
@@ -163,9 +172,9 @@ function(oranges_create_doxygen_target)
 	configure_file ("${doxyfile_input}" "${doxyfile_output}" @ONLY)
 	configure_file ("${doxylayout_input}" "${doxylayout_output}" @ONLY)
 
-	if(NOT ORANGES_ARG_TARGET)
+	if (NOT ORANGES_ARG_TARGET)
 		set (ORANGES_ARG_TARGET "${PROJECT_NAME}Doxygen")
-	endif()
+	endif ()
 
 	add_custom_target (
 		"${ORANGES_ARG_TARGET}"
@@ -178,32 +187,33 @@ function(oranges_create_doxygen_target)
 		BYPRODUCTS "${ORANGES_DOC_OUTPUT_DIR}/html/index.html"
 		COMMENT "Building ${PROJECT_NAME} documentation...")
 
-	if(NOT ORANGES_ARG_NO_VERSION_DISPLAY)
+	if (NOT ORANGES_ARG_NO_VERSION_DISPLAY)
 		add_custom_command (
-			TARGET "${ORANGES_ARG_TARGET}" PRE_BUILD COMMAND Doxygen::doxygen --version
+			TARGET "${ORANGES_ARG_TARGET}" PRE_BUILD COMMAND Doxygen::doxygen
+															 --version
 			COMMENT "Doxygen version:")
-	endif()
+	endif ()
 
-	if(TARGET DependencyGraph)
+	if (TARGET DependencyGraph)
 		add_dependencies ("${ORANGES_ARG_TARGET}" DependencyGraph)
-	endif()
+	endif ()
 
 	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-		PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_DOC_OUTPUT_DIR}")
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_DOC_OUTPUT_DIR}")
 
-	set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES
-		FOLDER Utility
-		LABELS "${PROJECT_NAME};Utility"
-		XCODE_GENERATE_SCHEME OFF
-		EchoString "Building ${PROJECT_NAME} documentation...")
+	set_target_properties (
+		"${ORANGES_ARG_TARGET}"
+		PROPERTIES FOLDER Utility LABELS "${PROJECT_NAME};Utility"
+				   XCODE_GENERATE_SCHEME OFF
+				   EchoString "Building ${PROJECT_NAME} documentation...")
 
-	if(ORANGES_ARG_NO_INSTALL)
+	if (ORANGES_ARG_NO_INSTALL)
 		return ()
-	endif()
+	endif ()
 
-	if(NOT ORANGES_ARG_INSTALL_COMPONENT)
+	if (NOT ORANGES_ARG_INSTALL_COMPONENT)
 		set (ORANGES_ARG_INSTALL_COMPONENT "${PROJECT_NAME}_Documentation")
-	endif()
+	endif ()
 
 	install (
 		DIRECTORY "${ORANGES_DOC_OUTPUT_DIR}/man3"
@@ -219,7 +229,7 @@ function(oranges_create_doxygen_target)
 		EXCLUDE_FROM_ALL OPTIONAL
 		PATTERN .DS_Store EXCLUDE)
 
-	install (FILES "${ORANGES_DOC_OUTPUT_DIR}/${PROJECT_NAME}.tag" TYPE INFO OPTIONAL
-			 COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+	install (FILES "${ORANGES_DOC_OUTPUT_DIR}/${PROJECT_NAME}.tag" TYPE INFO
+			 OPTIONAL COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 
-endfunction()
+endfunction ()

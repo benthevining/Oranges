@@ -14,20 +14,23 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if((NOT ORANGES_ROOT_DIR) OR NOT IS_DIRECTORY "${ORANGES_ROOT_DIR}")
+if ((NOT ORANGES_ROOT_DIR) OR NOT IS_DIRECTORY "${ORANGES_ROOT_DIR}")
 	message (
-		FATAL_ERROR "Oranges root directory ${ORANGES_ROOT_DIR} not specified or does not exist!")
-endif()
+		FATAL_ERROR
+			"Oranges root directory ${ORANGES_ROOT_DIR} not specified or does not exist!"
+		)
+endif ()
 
 #
 
-function(_oranges_add_cmake_module_dir directory parent)
+function (_oranges_add_cmake_module_dir directory parent)
 	set (full_path "${parent}/${directory}")
 
-	if(NOT IS_DIRECTORY "${full_path}")
+	if (NOT IS_DIRECTORY "${full_path}")
 		return ()
-	endif()
+	endif ()
 
+	# cmake-lint: disable=E1126
 	file (REAL_PATH "${full_path}" _abs_path EXPAND_TILDE)
 	list (APPEND orangesModulePaths "${_abs_path}")
 
@@ -35,20 +38,21 @@ function(_oranges_add_cmake_module_dir directory parent)
 
 	list (REMOVE_ITEM dirChildren scripts)
 
-	foreach(child IN LISTS dirChildren)
+	foreach (child IN LISTS dirChildren)
 		_oranges_add_cmake_module_dir ("${child}" "${_abs_path}")
-	endforeach()
+	endforeach ()
 
 	set (orangesModulePaths "${orangesModulePaths}" PARENT_SCOPE)
-endfunction()
+endfunction ()
 
 #
 
-file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
+file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}"
+	  "${ORANGES_ROOT_DIR}/modules/*")
 
-foreach(child IN LISTS children)
+foreach (child IN LISTS children)
 	_oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
-endforeach()
+endforeach ()
 
 #
 

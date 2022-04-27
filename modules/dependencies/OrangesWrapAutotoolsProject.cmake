@@ -49,7 +49,7 @@ include (OrangesCmakeDevTools)
 
 #
 
-function(autotools_run_configure)
+function (autotools_run_configure)
 
 	set (options STATIC SHARED)
 	set (oneValueArgs SOURCE_DIR)
@@ -63,42 +63,43 @@ function(autotools_run_configure)
 	list (JOIN ORANGES_ARG_CXX_FLAGS " " cxx_flags)
 	list (JOIN ORANGES_ARG_LD_FLAGS " " ld_flags)
 
-	if(c_flags)
+	if (c_flags)
 		set (c_flags_arg "CFLAGS=${c_flags}")
-	endif()
+	endif ()
 
-	if(cxx_flags)
+	if (cxx_flags)
 		set (cxx_flags_arg "CPPFLAGS=${cxx_flags}")
-	endif()
+	endif ()
 
-	if(ld_flags)
+	if (ld_flags)
 		set (ld_flags_arg "LDFLAGS=${ld_flags}")
-	endif()
+	endif ()
 
-	if(ORANGES_ARG_STATIC)
+	if (ORANGES_ARG_STATIC)
 		set (static_flag --enable-static)
-	else()
+	else ()
 		set (static_flag --disable-static)
-	endif()
+	endif ()
 
-	if(ORANGES_ARG_SHARED)
+	if (ORANGES_ARG_SHARED)
 		set (shared_flag --enable-shared)
-	else()
+	else ()
 		set (shared_flag --disable-shared)
-	endif()
+	endif ()
 
 	execute_process (
 		COMMAND
-			./configure "CC=${CMAKE_C_COMPILER}" "CXX=${CMAKE_CXX_COMPILER}" "${static_flag}"
-			"${shared_flag}" ${c_flags_arg} ${cxx_flags_arg} ${ld_flags_arg}
+			./configure "CC=${CMAKE_C_COMPILER}" "CXX=${CMAKE_CXX_COMPILER}"
+			"${static_flag}" "${shared_flag}" ${c_flags_arg} ${cxx_flags_arg}
+			${ld_flags_arg}
 			"--cache-file=${CMAKE_CURRENT_BINARY_DIR}/config.cache"
 		WORKING_DIRECTORY "${ORANGES_ARG_SOURCE_DIR}" COMMAND_ECHO STDOUT)
 
-endfunction()
+endfunction ()
 
 #
 
-function(autotools_add_build_target)
+function (autotools_add_build_target)
 
 	set (oneValueArgs SOURCE_DIR TARGET COMMENT)
 
@@ -106,9 +107,9 @@ function(autotools_add_build_target)
 
 	lemons_require_function_arguments (ORANGES_ARG SOURCE_DIR TARGET)
 
-	if(NOT ORANGES_ARG_COMMENT)
+	if (NOT ORANGES_ARG_COMMENT)
 		set (ORANGES_ARG_COMMENT "Building ${ORANGES_ARG_TARGET}...")
-	endif()
+	endif ()
 
 	add_custom_target (
 		"${ORANGES_ARG_TARGET}"
@@ -117,4 +118,4 @@ function(autotools_add_build_target)
 		COMMENT "${ORANGES_ARG_COMMENT}"
 		VERBATIM USES_TERMINAL)
 
-endfunction()
+endfunction ()

@@ -44,23 +44,24 @@ oranges_file_scoped_message_context ("Findauval")
 
 #
 
-if(TARGET Apple::auval)
+if (TARGET Apple::auval)
 	set (auval_FOUND TRUE)
 	return ()
-endif()
+endif ()
 
 set (auval_FOUND FALSE)
 
 find_program (AUVAL_PROGRAM auval DOC "auval executable")
 
-if(AUVAL_PROGRAM)
+if (AUVAL_PROGRAM)
 	add_executable (auval IMPORTED GLOBAL)
 
-	set_target_properties (auval PROPERTIES IMPORTED_LOCATION "${AUVAL_PROGRAM}")
+	set_target_properties (auval PROPERTIES IMPORTED_LOCATION
+											"${AUVAL_PROGRAM}")
 
 	add_executable (Apple::auval ALIAS auval)
 
 	set (auval_FOUND TRUE)
-else()
+else ()
 	find_package_warning_or_error ("auval cannot be found!")
-endif()
+endif ()

@@ -37,41 +37,42 @@ include (OrangesCmakeDevTools)
 
 #
 
-function(oranges_list_transform)
+function (oranges_list_transform)
 
 	oranges_add_function_message_context ()
 
 	set (oneValueArgs LIST CALLBACK OUTPUT)
 
-	cmake_parse_arguments (ORANGES_ARG "REMOVE_DUPLICATES" "${oneValueArgs}" "" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "REMOVE_DUPLICATES" "${oneValueArgs}" ""
+						   ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG LIST CALLBACK)
 
 	set (newList "")
 
-	foreach(item ${ORANGES_ARG_LIST})
+	foreach (item ${ORANGES_ARG_LIST})
 		cmake_language (CALL "${ORANGES_ARG_CALLBACK}" "${item}" new_item)
 
-		if(new_item)
+		if (new_item)
 			list (APPEND newList "${new_item}")
-		endif()
-	endforeach()
+		endif ()
+	endforeach ()
 
-	if(ORANGES_ARG_REMOVE_DUPLICATES)
+	if (ORANGES_ARG_REMOVE_DUPLICATES)
 		list (REMOVE_DUPLICATES newList)
-	endif()
+	endif ()
 
 	unset (${ORANGES_ARG_LIST} PARENT_SCOPE)
 
-	if(ORANGES_ARG_OUTPUT)
+	if (ORANGES_ARG_OUTPUT)
 		unset (${ORANGES_ARG_OUTPUT} PARENT_SCOPE)
-	endif()
+	endif ()
 
-	if(newList)
-		if(ORANGES_ARG_OUTPUT)
+	if (newList)
+		if (ORANGES_ARG_OUTPUT)
 			set (${ORANGES_ARG_OUTPUT} ${newList} PARENT_SCOPE)
-		else()
+		else ()
 			set (${ORANGES_ARG_LIST} ${newList} PARENT_SCOPE)
-		endif()
-	endif()
-endfunction()
+		endif ()
+	endif ()
+endfunction ()

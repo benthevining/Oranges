@@ -34,20 +34,25 @@ include (OrangesCmakeDevTools)
 
 oranges_file_scoped_message_context ("OrangesUninstallTarget")
 
-if(TARGET uninstall)
+if (TARGET uninstall)
 	message (AUTHOR_WARNING "uninstall target already exists!")
 	return ()
-endif()
+endif ()
 
-if(PROJECT_IS_TOP_LEVEL)
-	message (DEBUG "Oranges - adding uninstall target in project ${PROJECT_NAME}")
-else()
-	message (AUTHOR_WARNING "Creating uninstall target in non-top-level project ${PROJECT_NAME}!")
-endif()
+if (PROJECT_IS_TOP_LEVEL)
+	message (DEBUG
+			 "Oranges - adding uninstall target in project ${PROJECT_NAME}")
+else ()
+	message (
+		AUTHOR_WARNING
+			"Creating uninstall target in non-top-level project ${PROJECT_NAME}!"
+		)
+endif ()
 
 set (configured_script "${CMAKE_BINARY_DIR}/uninstall.cmake")
 
-configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/uninstall.cmake" "${configured_script}" @ONLY)
+configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/uninstall.cmake"
+				"${configured_script}" @ONLY)
 
 add_custom_target (
 	uninstall
@@ -56,10 +61,8 @@ add_custom_target (
 	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
 	VERBATIM USES_TERMINAL)
 
-set_target_properties (uninstall PROPERTIES
-	FOLDER Utility
-	LABELS Utility
-	XCODE_GENERATE_SCHEME OFF
-	EchoString "Uninstalling...")
+set_target_properties (
+	uninstall PROPERTIES FOLDER Utility LABELS Utility XCODE_GENERATE_SCHEME OFF
+						 EchoString "Uninstalling...")
 
 unset (configured_script)

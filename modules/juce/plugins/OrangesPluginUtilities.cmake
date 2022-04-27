@@ -58,61 +58,64 @@ include (lemons_AggregateTargets)
 
 oranges_file_scoped_message_context ("OrangesPluginUtilities")
 
-option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF)
+option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake"
+		OFF)
 
 mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
 
-if(LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs OR DEFINED
-																		 ENV{LEMONS_PRIVATE_SDKS})
+if (LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs
+	OR DEFINED ENV{LEMONS_PRIVATE_SDKS})
 	include (OrangesAddPrivateSDKs)
-endif()
+endif ()
 
-if(LEMONS_AAX_SDK_PATH)
+if (LEMONS_AAX_SDK_PATH)
 	include (OrangesAAXUtils)
-endif()
+endif ()
 
 lemons_warn_if_not_processing_project ()
 
 #
 
-if(NOT LEMONS_PLUGIN_FORMATS)
+if (NOT LEMONS_PLUGIN_FORMATS)
 
 	set (available_formats Standalone)
 
-	if(APPLE AND XCODE)
+	if (APPLE AND XCODE)
 		list (APPEND available_formats AUv3)
-	endif()
+	endif ()
 
-	if(NOT IOS)
+	if (NOT IOS)
 		list (APPEND available_formats Unity VST3)
 
-		if(APPLE)
+		if (APPLE)
 			list (APPEND available_formats AU)
-		endif()
+		endif ()
 
-		if(TARGET AAXSDK)
+		if (TARGET AAXSDK)
 			list (APPEND available_formats AAX)
-		endif()
+		endif ()
 
-		if(LEMONS_VST2_SDK_PATH)
-			if(IS_DIRECTORY "${LEMONS_VST2_SDK_PATH}")
+		if (LEMONS_VST2_SDK_PATH)
+			if (IS_DIRECTORY "${LEMONS_VST2_SDK_PATH}")
 				juce_set_vst2_sdk_path ("${LEMONS_VST2_SDK_PATH}")
 				list (APPEND available_formats VST)
-			else()
+			else ()
 				message (
 					AUTHOR_WARNING
-						"LEMONS_VST2_SDK_PATH specified, but the directory does not exist!")
-			endif()
-		endif()
-	endif()
+						"LEMONS_VST2_SDK_PATH specified, but the directory does not exist!"
+					)
+			endif ()
+		endif ()
+	endif ()
 
-	set (LEMONS_PLUGIN_FORMATS ${available_formats} CACHE STRING "Available plugin formats")
+	set (LEMONS_PLUGIN_FORMATS ${available_formats}
+		 CACHE STRING "Available plugin formats")
 
 	unset (available_formats)
 
 	mark_as_advanced (LEMONS_PLUGIN_FORMATS)
 
-endif()
+endif ()
 
 lemons_make_variable_const (LEMONS_PLUGIN_FORMATS)
 
@@ -121,56 +124,65 @@ message (STATUS "  -- Available plugin formats: ${formats_output}")
 
 #
 
-function(lemons_configure_juce_plugin)
+function (lemons_configure_juce_plugin)
 
 	oranges_add_function_message_context ()
 
 	lemons_configure_juce_target (${ARGN})
 
 	set (oneValueArgs TARGET AAX_PAGETABLE_FILE AAX_GUID)
-	cmake_parse_arguments (LEMONS_PLUGIN "CLAP_FORMAT" "${oneValueArgs}" "CLAP_FEATURES" ${ARGN})
+	cmake_parse_arguments (LEMONS_PLUGIN "CLAP_FORMAT" "${oneValueArgs}"
+						   "CLAP_FEATURES" ${ARGN})
 
 	oranges_assert_target_argument_is_target (LEMONS_PLUGIN)
 
 	set (aax_target "${LEMONS_PLUGIN_TARGET}_AAX")
-	if(TARGET ${aax_target})
+	if (TARGET ${aax_target})
 		message (DEBUG "Configuring AAX plugin target...")
 
 		lemons_configure_aax_plugin (
-			TARGET ${aax_target} PAGETABLE_FILE "${LEMONS_PLUGIN_AAX_PAGETABLE_FILE}" GUID
+			TARGET ${aax_target} PAGETABLE_FILE
+			"${LEMONS_PLUGIN_AAX_PAGETABLE_FILE}" GUID
 			"${LEMONS_PLUGIN_AAX_GUID}")
-	endif()
+	endif ()
 
-	if(TARGET Lemons::LemonsPluginModules)
-		target_link_libraries (${LEMONS_PLUGIN_TARGET} PRIVATE Lemons::LemonsPluginModules)
-	else()
-		message (DEBUG
-				 "No target Lemons::LemonsPluginModules in call to ${CMAKE_CURRENT_FUNCTION}...")
-	endif()
+	if (TARGET Lemons::LemonsPluginModules)
+		target_link_libraries (${LEMONS_PLUGIN_TARGET}
+							   PRIVATE Lemons::LemonsPluginModules)
+	else ()
+		message (
+			DEBUG
+			"No target Lemons::LemonsPluginModules in call to ${CMAKE_CURRENT_FUNCTION}..."
+			)
+	endif ()
 
 	target_compile_definitions (${LEMONS_PLUGIN_TARGET}
 								PRIVATE JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=0)
 
 	_lemons_add_to_all_plugins_target (${LEMONS_PLUGIN_TARGET})
 
-	# This dependency is needed to build Standalone and AUv3 targets, but isn't needed directly by
-	# my lemons_plugin module, so add it to those targets here...
-	function(_lemons_add_extra_pluginformat_modules formatTarget)
-		if(TARGET ${formatTarget})
-			target_link_libraries (${formatTarget} PRIVATE juce::juce_audio_devices)
-		endif()
-	endfunction()
+	# This dependency is needed to build Standalone and AUv3 targets, but isn't
+	# needed directly by my lemons_plugin module, so add it to those targets
+	# here...
+	function (_lemons_add_extra_pluginformat_modules formatTarget)
+		if (TARGET ${formatTarget})
+			target_link_libraries (${formatTarget}
+								   PRIVATE juce::juce_audio_devices)
+		endif ()
+	endfunction ()
 
 	_lemons_add_extra_pluginformat_modules (${LEMONS_PLUGIN_TARGET}_Standalone)
 	_lemons_add_extra_pluginformat_modules (${LEMONS_PLUGIN_TARGET}_AUv3)
 
-	if(LEMONS_PLUGIN_CLAP_FORMAT OR LEMONS_PLUGIN_CLAP_FEATURES)
+	if (LEMONS_PLUGIN_CLAP_FORMAT OR LEMONS_PLUGIN_CLAP_FEATURES)
 		include (OrangesClapFormat)
 
-		get_required_target_property (clapID "${LEMONS_PLUGIN_TARGET}" BUNDLE_ID)
+		get_required_target_property (clapID "${LEMONS_PLUGIN_TARGET}"
+									  BUNDLE_ID)
 
-		clap_juce_extensions_plugin (TARGET "${LEMONS_PLUGIN_TARGET}" CLAP_ID "${clapID}"
-									 CLAP_FEATURES "${LEMONS_PLUGIN_CLAP_FEATURES}")
-	endif()
+		clap_juce_extensions_plugin (
+			TARGET "${LEMONS_PLUGIN_TARGET}" CLAP_ID "${clapID}" CLAP_FEATURES
+			"${LEMONS_PLUGIN_CLAP_FEATURES}")
+	endif ()
 
-endfunction()
+endfunction ()

@@ -210,6 +210,13 @@
           "flags": "INTERFACE"
         }
       },
+      "oranges_generate_properties_json": {
+        "kwargs": {
+          "INPUT_FILE": 1,
+          "OUTPUT_FILE": 1,
+          "USE_TARGET": 1
+        }
+      },
       "oranges_generate_standard_headers": {
         "kwargs": {
           "BASE_NAME": 1,

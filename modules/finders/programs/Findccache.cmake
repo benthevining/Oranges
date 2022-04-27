@@ -51,9 +51,9 @@ set_package_properties (
 
 option (CCACHE_DISABLE "Disable ccache for this build" OFF)
 
-if(CCACHE_DISABLE)
+if (CCACHE_DISABLE)
 	return ()
-endif()
+endif ()
 
 #
 
@@ -62,9 +62,13 @@ oranges_file_scoped_message_context ("Findccache")
 #
 
 define_property (
-	TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
-	BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
-	FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
+	TARGET INHERITED
+	PROPERTY ORANGES_USING_CCACHE
+	BRIEF_DOCS
+		"Boolean that indicates whether this target is using the ccache compiler cache"
+	FULL_DOCS
+		"Boolean that indicates whether this target is using the ccache compiler cache"
+	)
 
 set (ccache_FOUND FALSE)
 
@@ -72,14 +76,14 @@ find_program (CCACHE_PROGRAM ccache DOC "ccache executable")
 
 mark_as_advanced (FORCE CCACHE_PROGRAM)
 
-if(NOT CCACHE_PROGRAM)
+if (NOT CCACHE_PROGRAM)
 	find_package_warning_or_error ("ccache program cannot be found!")
 	return ()
-endif()
+endif ()
 
-if(NOT ccache_FIND_QUIETLY)
+if (NOT ccache_FIND_QUIETLY)
 	message (VERBOSE "Using ccache!")
-endif()
+endif ()
 
 add_executable (ccache IMPORTED GLOBAL)
 
@@ -91,18 +95,19 @@ set (ccache_FOUND TRUE)
 
 #
 
-if(NOT CMAKE_CXX_COMPILER)
+if (NOT CMAKE_CXX_COMPILER)
 	enable_language (CXX)
-endif()
+endif ()
 
-if(NOT CMAKE_C_COMPILER)
+if (NOT CMAKE_C_COMPILER)
 	enable_language (C)
-endif()
+endif ()
 
 #
 
-set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
-																							"")
+set (CCACHE_OPTIONS
+	 "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M"
+	 CACHE STRING "")
 
 mark_as_advanced (FORCE CCACHE_OPTIONS)
 
@@ -115,7 +120,7 @@ list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 
 #
 
-function(_lemons_configure_compiler_launcher language)
+function (_lemons_configure_compiler_launcher language)
 
 	oranges_add_function_message_context ()
 
@@ -125,11 +130,12 @@ function(_lemons_configure_compiler_launcher language)
 
 	set (script_name "launch-${language}")
 
-	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in" "${script_name}" @ONLY
-					NEWLINE_STYLE UNIX)
+	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in"
+					"${script_name}" @ONLY NEWLINE_STYLE UNIX)
 
-	set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}" PARENT_SCOPE)
-endfunction()
+	set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}"
+		 PARENT_SCOPE)
+endfunction ()
 
 _lemons_configure_compiler_launcher (c)
 _lemons_configure_compiler_launcher (cxx)
@@ -145,7 +151,7 @@ add_library (ccache-interface INTERFACE)
 
 set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
 
-if(XCODE)
+if (XCODE)
 	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
 	set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}")
 	set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}")
@@ -153,16 +159,19 @@ if(XCODE)
 
 	set_target_properties (
 		ccache-interface
-		PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
-				   XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
-else()
+		PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}"
+				   XCODE_ATTRIBUTE_CXX "${cxx_script}"
+				   XCODE_ATTRIBUTE_LD "${c_script}"
+				   XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+else ()
 	set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
 	set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
 
-	set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-													   CXX_COMPILER_LAUNCHER "${cxx_script}")
-endif()
+	set_target_properties (
+		ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+									CXX_COMPILER_LAUNCHER "${cxx_script}")
+endif ()
 
-if(NOT TARGET ccache::ccache-interface)
+if (NOT TARGET ccache::ccache-interface)
 	add_library (ccache::ccache-interface ALIAS ccache-interface)
-endif()
+endif ()

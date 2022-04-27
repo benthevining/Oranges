@@ -23,76 +23,81 @@ option (FIND_PACKAGE_TRY_PKGCONFIG "Try using pkgconfig to locate libraries" ON)
 
 #
 
-macro(find_package_warning_or_error message_text)
-	if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
+macro (find_package_warning_or_error message_text)
+	if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
 		message (FATAL_ERROR "${message_text}")
-	endif()
+	endif ()
 
-	if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+	if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
 		message (WARNING "${message_text}")
-	endif()
-endmacro()
+	endif ()
+endmacro ()
 
 #
 
-function(find_package_execute_process)
+function (find_package_execute_process)
 
 	oranges_add_function_message_context ()
 
 	set (oneValueArgs WORKING_DIRECTORY)
 	set (multiValueArgs COMMAND)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}"
+						   ${ARGN})
 
 	lemons_require_function_arguments (ORANGES_ARG COMMAND)
 
-	if(ORANGES_ARG_WORKING_DIRECTORY)
+	if (ORANGES_ARG_WORKING_DIRECTORY)
 		set (dir_flag WORKING_DIRECTORY "${ORANGES_ARG_WORKING_DIRECTORY}")
-	endif()
+	endif ()
 
-	if(${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+	if (${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
 		set (quiet_flag OUTPUT_QUIET ERROR_QUIET)
-	else()
+	else ()
 		set (quiet_flag COMMAND_ECHO STDOUT)
-	endif()
+	endif ()
 
-	if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
+	if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
 		set (error_flag COMMAND_ERROR_IS_FATAL ANY)
-	endif()
+	endif ()
 
-	execute_process (COMMAND ${ORANGES_ARG_COMMAND} ${dir_flag} ${quiet_flag} ${error_flag})
+	execute_process (COMMAND ${ORANGES_ARG_COMMAND} ${dir_flag} ${quiet_flag}
+							 ${error_flag})
 
-endfunction()
-
-#
-
-macro(find_package_default_component_list)
-	if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
-	elseif(All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
-	endif()
-endmacro()
+endfunction ()
 
 #
 
-macro(find_package_try_pkgconfig outputTarget)
-	if(FIND_PACKAGE_TRY_PKGCONFIG)
+macro (find_package_default_component_list)
+	if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
+	elseif (All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+		set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
+	endif ()
+endmacro ()
+
+#
+
+macro (find_package_try_pkgconfig outputTarget)
+	if (FIND_PACKAGE_TRY_PKGCONFIG)
 		find_package (PkgConfig QUIET)
 
-		if(PkgConfig_FOUND)
-			pkg_search_module ("${CMAKE_FIND_PACKAGE_NAME}" QUIET IMPORTED_TARGET
-							   "${CMAKE_FIND_PACKAGE_NAME}" ${ARGN})
+		if (PkgConfig_FOUND)
+			pkg_search_module (
+				"${CMAKE_FIND_PACKAGE_NAME}" QUIET IMPORTED_TARGET
+				"${CMAKE_FIND_PACKAGE_NAME}" ${ARGN})
 
-			if(TARGET PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
-				add_library ("${outputTarget}" ALIAS PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
+			if (TARGET PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
+				add_library ("${outputTarget}" ALIAS
+							 PkgConfig::${CMAKE_FIND_PACKAGE_NAME})
 
 				set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
 				find_package_message (
-					${CMAKE_FIND_PACKAGE_NAME} "Found ${CMAKE_FIND_PACKAGE_NAME} - via pkgconfig"
+					${CMAKE_FIND_PACKAGE_NAME}
+					"Found ${CMAKE_FIND_PACKAGE_NAME} - via pkgconfig"
 					"${CMAKE_FIND_PACKAGE_NAME} - pkgconfig")
 				return ()
-			endif()
-		endif()
-	endif()
-endmacro()
+			endif ()
+		endif ()
+	endif ()
+endmacro ()

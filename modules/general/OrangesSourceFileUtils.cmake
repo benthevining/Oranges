@@ -34,7 +34,6 @@ The variable `<directory>_files` will be set in the scope of the caller as a lis
 
 #]=======================================================================]
 
-
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
@@ -44,7 +43,7 @@ include (OrangesFunctionArgumentHelpers)
 
 #
 
-function(oranges_add_source_files)
+function (oranges_add_source_files)
 
 	set (oneValueArgs DIRECTORY_NAME TARGET INSTALL_COMPONENT INSTALL_DIR)
 
@@ -54,32 +53,38 @@ function(oranges_add_source_files)
 	lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
 
 	foreach (filename IN LISTS ORANGES_ARG_FILES)
-		target_sources ("${ORANGES_ARG_TARGET}" PRIVATE
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
-	endforeach()
+		target_sources (
+			"${ORANGES_ARG_TARGET}"
+			PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
+	endforeach ()
 
 	set (headers ${ORANGES_ARG_FILES})
 
 	list (FILTER headers INCLUDE REGEX "\\.\\h")
 
-	if(NOT ORANGES_ARG_INSTALL_DIR)
+	if (NOT ORANGES_ARG_INSTALL_DIR)
 		set (ORANGES_ARG_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
-	endif()
+	endif ()
 
-	if(ORANGES_ARG_INSTALL_COMPONENT)
+	if (ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-	endif()
+	endif ()
 
-	install (FILES ${headers} DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
-			 ${install_component})
+	install (
+		FILES ${headers}
+		DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
+		${install_component})
 
 	foreach (header IN LISTS headers)
-		target_sources ("${ORANGES_ARG_TARGET}" PRIVATE
-			$<INSTALL_INTERFACE:${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}/${header}>)
-	endforeach()
+		target_sources (
+			"${ORANGES_ARG_TARGET}"
+			PRIVATE
+				$<INSTALL_INTERFACE:${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}/${header}>
+			)
+	endforeach ()
 
 	list (TRANSFORM ORANGES_ARG_FILES PREPEND "${ORANGES_ARG_DIRECTORY_NAME}/")
 
 	set (${ORANGES_ARG_DIRECTORY_NAME}_files ${ORANGES_ARG_FILES} PARENT_SCOPE)
 
-endfunction()
+endfunction ()

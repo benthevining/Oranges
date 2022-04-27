@@ -40,24 +40,25 @@ oranges_file_scoped_message_context ("Findwraptool")
 
 #
 
-if(TARGET PACE::wraptool)
+if (TARGET PACE::wraptool)
 	set (wraptool_FOUND TRUE)
-else()
+else ()
 	set (wraptool_FOUND FALSE)
 
 	find_program (WRAPTOOL_PROGRAM wraptool DOC "PACE wraptool program")
 
 	mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
 
-	if(WRAPTOOL_PROGRAM)
+	if (WRAPTOOL_PROGRAM)
 		add_executable (wraptool IMPORTED GLOBAL)
 
-		set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${WRAPTOOL_PROGRAM}")
+		set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION
+												   "${WRAPTOOL_PROGRAM}")
 
 		add_executable (PACE::wraptool ALIAS wraptool)
 
 		set (wraptool_FOUND TRUE)
-	else()
+	else ()
 		find_package_warning_or_error ("wraptool program cannot be found!")
-	endif()
-endif()
+	endif ()
+endif ()

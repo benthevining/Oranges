@@ -17,6 +17,17 @@ OrangesUnityBuild
 
 Provides a helper target for configuring a target as a unity build.
 
+Note that this is a build-only target! You should always link to it using the following command:
+```cmake
+target_link_libraries (YourTarget YOUR_SCOPE
+	$<BUILD_INTERFACE:Oranges::OrangesUnityBuild>)
+```
+If you get an error similar to:
+```
+CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesUnityBuild" that is not in any export set.
+```
+then this is why. You're linking to OrangesUnityBuild unconditionally (or with incorrect generator expressions).
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,14 +39,13 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(TARGET Oranges::OrangesUnityBuild)
-	return()
-endif()
+if (TARGET Oranges::OrangesUnityBuild)
+	return ()
+endif ()
 
 add_library (OrangesUnityBuild INTERFACE)
 
-set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
-
-install (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
+set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH
+													UNITY_BUILD ON)
 
 add_library (Oranges::OrangesUnityBuild ALIAS OrangesUnityBuild)

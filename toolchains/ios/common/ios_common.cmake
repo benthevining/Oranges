@@ -26,18 +26,21 @@ set (CMAKE_DL_LIBS "")
 
 set (CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG "-compatibility_version ")
 set (CMAKE_C_OSX_CURRENT_VERSION_FLAG "-current_version ")
-set (CMAKE_CXX_OSX_COMPATIBILITY_VERSION_FLAG "${CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG}")
+set (CMAKE_CXX_OSX_COMPATIBILITY_VERSION_FLAG
+	 "${CMAKE_C_OSX_COMPATIBILITY_VERSION_FLAG}")
 set (CMAKE_CXX_OSX_CURRENT_VERSION_FLAG "${CMAKE_C_OSX_CURRENT_VERSION_FLAG}")
 
 # Hidden visibility is required for cxx on iOS
 set (CMAKE_C_FLAGS_INIT "-fembed-bitcode")
-set (CMAKE_CXX_FLAGS_INIT "-fvisibility=hidden -fvisibility-inlines-hidden -fembed-bitcode")
+set (CMAKE_CXX_FLAGS_INIT
+	 "-fvisibility=hidden -fvisibility-inlines-hidden -fembed-bitcode")
 
 set (CMAKE_C_LINK_FLAGS "-Wl,-search_paths_first ${CMAKE_C_LINK_FLAGS}")
 set (CMAKE_CXX_LINK_FLAGS "-Wl,-search_paths_first ${CMAKE_CXX_LINK_FLAGS}")
 
 set (CMAKE_PLATFORM_HAS_INSTALLNAME 1)
-set (CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS "-dynamiclib -headerpad_max_install_names")
+set (CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS
+	 "-dynamiclib -headerpad_max_install_names")
 set (CMAKE_SHARED_MODULE_CREATE_C_FLAGS "-bundle -headerpad_max_install_names")
 set (CMAKE_SHARED_MODULE_LOADER_C_FLAG "-Wl,-bundle_loader,")
 set (CMAKE_SHARED_MODULE_LOADER_CXX_FLAG "-Wl,-bundle_loader,")
