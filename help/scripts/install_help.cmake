@@ -21,12 +21,17 @@ file (TOUCH "@CMAKE_CURRENT_LIST_DIR@/setup.cfg")
 file (REMOVE "@PATHS_OUTPUT_FILE@")
 file (WRITE "@PATHS_OUTPUT_FILE@" "${oranges_root}/modules")
 
+# --prefix "@CMAKE_INSTALL_PREFIX@"
+
+# cmake-format: off
 execute_process (
 	COMMAND
-		python3 -m pip install . --prefix "@CMAKE_INSTALL_PREFIX@" --log
-		"@CMAKE_CURRENT_BINARY_DIR@/orangesHelpInstall.log" --compile --no-input
-		--use-pep517
-	WORKING_DIRECTORY "@CMAKE_CURRENT_LIST_DIR@" COMMAND_ECHO STDOUT
-					  COMMAND_ERROR_IS_FATAL ANY)
+		python3 -m pip install .
+		--log "@CMAKE_CURRENT_BINARY_DIR@/orangesHelpInstall.log"
+		--compile --no-input --use-pep517
+	WORKING_DIRECTORY "@CMAKE_CURRENT_LIST_DIR@"
+	COMMAND_ECHO STDOUT
+	COMMAND_ERROR_IS_FATAL ANY)
+# cmake-format: on
 
 file (CHMOD_RECURSE "${oranges_root}" PERMISSIONS WORLD_WRITE)
