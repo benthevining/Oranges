@@ -91,12 +91,13 @@ function (oranges_generate_build_type_header)
 		set (ORANGES_DEBUG_CONFIGS_LIST Debug)
 	endif ()
 
+	set (intermediate_file_in
+		 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h")
 	set (intermediate_file
 		 "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
 
-	configure_file (
-		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h"
-		"${intermediate_file}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+	configure_file ("${intermediate_file_in}" "${intermediate_file}" @ONLY
+					NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
 	set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/build_type_$<CONFIG>.h")
 
@@ -111,18 +112,27 @@ function (oranges_generate_build_type_header)
 	set (configured_includer
 		 "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-	configure_file (
+	set (
+		includer_input
 		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
-		"${configured_includer}"
-		@ONLY
-		NEWLINE_STYLE UNIX)
+		)
+
+	configure_file ("${includer_input}" "${configured_includer}" @ONLY
+					NEWLINE_STYLE UNIX)
+
+	set_property (
+		DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+		PROPERTY CMAKE_CONFIGURE_DEPENDS "${intermediate_file_in}"
+				 "${includer_input}")
+
+	set_property (
+		TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${intermediate_file}"
+				 "${configured_includer}")
 
 	set_source_files_properties (
 		"${configured_includer}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
 		PROPERTIES GENERATED ON)
-
-	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-				  PROPERTY ADDITIONAL_CLEAN_FILES "${configured_includer}")
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"

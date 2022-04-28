@@ -22,6 +22,7 @@ Install components
 - oranges_modules
 - oranges_toolchains
 - oranges_docs
+- oranges_help
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -67,7 +68,6 @@ if (PROJECT_IS_TOP_LEVEL)
 
 	include (OrangesDeprecateDirectoryScopedCommands)
 	include (OrangesWipeCacheTarget)
-	include (OrangesUninstallTarget)
 	include (OrangesDefaultCPackSettings)
 
 	set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
@@ -81,27 +81,34 @@ endif ()
 
 include (GNUInstallDirs)
 
-set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/Oranges"
 	 CACHE STRING
 		   "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
-#
-
-# include any modules that create exported targets (for installing)
+#[[
+Include any modules that:
+	- create exported targets (for installing)
+	- define properties (for documentation generation)
+]]
 include (OrangesDefaultTarget)
 include (CXXConcepts)
-
-# include any modules that define properties (for documentation generation)
 include (OrangesSetUpCache)
 
 include (OrangesGeneratePropertiesJSON)
 
+set (oranges_properties_output
+	 "${PROJECT_SOURCE_DIR}/help/oranges_help/data/properties.json")
+
 oranges_generate_properties_json (
 	INPUT_FILE "${ORANGES_PROPERTIES_LIST_FILE}"
-	OUTPUT_FILE "${PROJECT_BINARY_DIR}/properties.json"
-	USE_TARGET OrangesDefaultTarget)
+	OUTPUT_FILE "${oranges_properties_output}" USE_TARGET OrangesDefaultTarget)
+
+set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+			  PROPERTY ADDITIONAL_CLEAN_FILES "${oranges_properties_output}")
+
+unset (oranges_properties_output)
 
 #
 
@@ -162,6 +169,14 @@ cpack_add_component (
 	DEPENDS oranges_base
 	INSTALL_TYPES Developer)
 
+cpack_add_component (
+	oranges_help
+	DISPLAY_NAME "Oranges CLI help tool"
+	DESCRIPTION
+		"A command-line reference tool, similar to CMake's CLI help functionality"
+	GROUP oranges
+	INSTALL_TYPES Developer)
+
 cpack_add_component_group (
 	oranges
 	DISPLAY_NAME Oranges
@@ -190,6 +205,8 @@ install (FILES "${PROJECT_BINARY_DIR}/package_features.txt"
 if (PROJECT_IS_TOP_LEVEL)
 	feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY
 					 WHAT ALL)
+
+	include (OrangesUninstallTarget)
 endif ()
 
 export (PACKAGE Oranges)

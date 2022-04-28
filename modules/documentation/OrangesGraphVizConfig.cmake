@@ -56,7 +56,7 @@ endif ()
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake"
 				"${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake" @ONLY)
 
-find_package (dot QUIET)
+find_package (dot MODULE QUIET)
 
 if (NOT ORANGES_DOT)
 	message (
@@ -73,12 +73,17 @@ else ()
 		 CACHE PATH "Location to output the generated documentation files")
 endif ()
 
-set (dot_file_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot")
-set (graph_image_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
+set (input_file
+	 "${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake")
 
-configure_file (
-	"${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake"
-	generate_deps_graph_image.cmake @ONLY)
+configure_file ("${input_file}" generate_deps_graph_image.cmake @ONLY)
+
+set_property (
+	DIRECTORY "${}" APPEND
+	PROPERTY CMAKE_CONFIGURE_DEPENDS "${input_file}"
+			 "${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake")
+
+set (dot_file_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot")
 
 add_custom_target (
 	DependencyGraph
@@ -98,8 +103,13 @@ add_custom_command (
 	COMMENT "Generating dependency graph image..."
 	VERBATIM USES_TERMINAL)
 
-set_property (TARGET DependencyGraph APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-													 "${dot_file_output}")
+set_property (
+	TARGET DependencyGraph
+	APPEND
+	PROPERTY ADDITIONAL_CLEAN_FILES
+			 "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
+			 "${dot_file_output}"
+			 "${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake")
 
 set_target_properties (
 	DependencyGraph
@@ -111,6 +121,8 @@ if (NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 	set (image_dest "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}")
 
 	lemons_make_path_absolute (VAR image_dest BASE_DIR "${PROJECT_SOURCE_DIR}")
+
+	set (graph_image_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
 
 	add_custom_command (
 		TARGET DependencyGraph

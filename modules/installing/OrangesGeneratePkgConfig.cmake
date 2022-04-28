@@ -111,9 +111,13 @@ function (oranges_create_pkgconfig_file)
 	set (pc_file_configured
 		 "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
 
-	configure_file (
-		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc"
-		"${pc_file_configured}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+	set (pc_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc")
+
+	configure_file ("${pc_input}" "${pc_file_configured}" @ONLY
+					NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+				  PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
 
 	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
 				  PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")

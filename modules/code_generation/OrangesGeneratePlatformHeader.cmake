@@ -394,11 +394,22 @@ function (oranges_generate_platform_header)
 		set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
 	endif ()
 
+	set (input_file
+		 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")
 	set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-	configure_file (
-		"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h"
-		"${generated_file}" @ONLY NEWLINE_STYLE UNIX)
+	configure_file ("${input_file}" "${generated_file}" @ONLY
+					NEWLINE_STYLE UNIX)
+
+	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+				  PROPERTY CMAKE_CONFIGURE_DEPENDS "${input_file}")
+
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
+
+	set_source_files_properties (
+		"${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+		PROPERTIES GENERATED ON)
 
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
@@ -406,13 +417,6 @@ function (oranges_generate_platform_header)
 		$<BUILD_INTERFACE:${generated_file}>
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
 		)
-
-	set_source_files_properties (
-		"${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-		PROPERTIES GENERATED ON)
-
-	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-				  PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
 
 	if (ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")

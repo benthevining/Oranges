@@ -29,7 +29,7 @@ Generating an export header for a target
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- OrangesABIControlledLibrary
+- Oranges::OrangesABIControlledLibrary
 
 Note that OrangesABIControlledLibrary is a build-only target. If you link against it, you must do so using the `$<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>` syntax.
 
@@ -115,19 +115,19 @@ function (oranges_generate_export_header)
 
 	set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
+	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
+
+	set_source_files_properties (
+		"${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+		PROPERTIES GENERATED ON)
+
 	target_sources (
 		"${ORANGES_ARG_TARGET}"
 		"${public_vis}"
 		"$<BUILD_INTERFACE:${generated_file}>"
 		"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>"
 		)
-
-	set_source_files_properties (
-		"${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-		PROPERTIES GENERATED ON)
-
-	set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-				  PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
 
 	if (ORANGES_ARG_INSTALL_COMPONENT)
 		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")

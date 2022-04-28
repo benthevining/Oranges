@@ -126,7 +126,6 @@ uninstall: ## Runs uninstall script
 .PHONY: clean
 clean: ## Cleans the source tree
 	@echo "Cleaning..."
-	@if [ -d $(BUILD_DIR) ]; then $(CMAKE) --build $(BUILD_DIR) --target clean; fi
 	@cd $(ORANGES_ROOT) && $(RM) $(BUILDS) $(DOCS) $(DEPS_GRAPH).dot; $(PRECOMMIT) gc
 
 .PHONY: wipe

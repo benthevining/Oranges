@@ -87,9 +87,10 @@ function (oranges_create_doxygen_target)
 			)
 	endif ()
 
-	foreach (input_path ${ORANGES_ARG_INPUT_PATHS})
-		lemons_make_path_absolute (VAR input_path
-								   BASE_DIR "${PROJECT_SOURCE_DIR}")
+	foreach (input_path IN LISTS ORANGES_ARG_INPUT_PATHS)
+		if (NOT IS_ABSOLUTE)
+			set (input_path "${PROJECT_SOURCE_DIR}/${input_path}")
+		endif ()
 
 		list (APPEND ORANGES_DOXYGEN_INPUT_PATHS "${input_path}")
 	endforeach ()
@@ -98,8 +99,10 @@ function (oranges_create_doxygen_target)
 	list (JOIN ORANGES_DOXYGEN_INPUT_PATHS " " ORANGES_DOXYGEN_INPUT_PATHS)
 
 	if (ORANGES_ARG_MAIN_PAGE_MD_FILE)
-		lemons_make_path_absolute (VAR ORANGES_ARG_MAIN_PAGE_MD_FILE
-								   BASE_DIR "${PROJECT_SOURCE_DIR}")
+		if (NOT IS_ABSOLUTE "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
+			set (ORANGES_ARG_MAIN_PAGE_MD_FILE
+				 "${PROJECT_SOURCE_DIR}/${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
+		endif ()
 
 		if (EXISTS "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
 			set (ORANGES_DOXYGEN_MAIN_PAGE_MARKDOWN_FILE
@@ -114,19 +117,32 @@ function (oranges_create_doxygen_target)
 		find_file (
 			ORANGES_DOCS_README README.md README
 			PATHS "${PROJECT_SOURCE_DIR}" ${ORANGES_DOXYGEN_INPUT_PATHS}
-				  NO_CACHE NO_DEFAULT_PATH)
+				  NO_CACHE
+			NO_DEFAULT_PATH
+			DOC "Readme file for Doxygen documentation")
 
 		if (ORANGES_DOCS_README)
 			set (ORANGES_ARG_MAIN_PAGE_MD_FILE "${ORANGES_DOCS_README}")
 		endif ()
 	endif ()
 
+	if (ORANGES_ARG_MAIN_PAGE_MD_FILE)
+		set_property (
+			DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+			PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_MAIN_PAGE_MD_FILE}")
+	endif ()
+
 	if (ORANGES_ARG_LOGO)
-		lemons_make_path_absolute (VAR ORANGES_ARG_LOGO
-								   BASE_DIR "${PROJECT_SOURCE_DIR}")
+		if (NOT IS_ABSOLUTE "${ORANGES_ARG_LOGO}")
+			set (ORANGES_ARG_LOGO "${PROJECT_SOURCE_DIR}/${ORANGES_ARG_LOGO}")
+		endif ()
 
 		if (EXISTS "${ORANGES_ARG_LOGO}")
 			set (ORANGES_DOXYGEN_LOGO "${ORANGES_ARG_LOGO}")
+
+			set_property (
+				DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+				PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_LOGO}")
 		else ()
 			message (
 				AUTHOR_WARNING
@@ -144,10 +160,16 @@ function (oranges_create_doxygen_target)
 	endif ()
 
 	if (ORANGES_ARG_OUTPUT_DIR)
-		set (ORANGES_DOC_OUTPUT_DIR "${ORANGES_ARG_OUTPUT_DIR}")
+		if (NOT IS_ABSOLUTE "${ORANGES_ARG_OUTPUT_DIR}")
+			set (ORANGES_ARG_OUTPUT_DIR
+				 "${PROJECT_SOURCE_DIR}/${ORANGES_ARG_OUTPUT_DIR}")
+		endif ()
 	else ()
 		set (ORANGES_DOC_OUTPUT_DIR "${PROJECT_SOURCE_DIR}/doc")
 	endif ()
+
+	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_DOC_OUTPUT_DIR}")
 
 	if (TARGET DependencyGraph)
 		list (APPEND ORANGES_ARG_IMAGE_PATHS
@@ -186,6 +208,16 @@ function (oranges_create_doxygen_target)
 				"${doxylayout_output}"
 		BYPRODUCTS "${ORANGES_DOC_OUTPUT_DIR}/html/index.html"
 		COMMENT "Building ${PROJECT_NAME} documentation...")
+
+	set_property (
+		TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY CMAKE_CONFIGURE_DEPENDS "${doxyfile_input}"
+				 "${doxylayout_input}")
+
+	set_property (
+		TARGET "${ORANGES_ARG_TARGET}" APPEND
+		PROPERTY ADDITIONAL_CLEAN_FILES "${doxyfile_output}"
+				 "${doxylayout_output}")
 
 	if (NOT ORANGES_ARG_NO_VERSION_DISPLAY)
 		add_custom_command (

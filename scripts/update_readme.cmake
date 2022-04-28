@@ -22,7 +22,6 @@ if (NOT TARGET Python3::Interpreter)
 endif ()
 
 set (modules_output "${CMAKE_CURRENT_BINARY_DIR}/module_list.txt")
-
 set (readme "${CMAKE_CURRENT_LIST_DIR}/../README.md")
 
 configure_file (
@@ -38,6 +37,11 @@ add_custom_target (
 	COMMAND Python3::Interpreter "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py"
 	COMMENT "Updating Oranges readme..."
 	VERBATIM USES_TERMINAL)
+
+set_property (
+	TARGET OrangesReadme APPEND
+	PROPERTY CMAKE_CONFIGURE_DEPENDS
+			 "${CMAKE_CURRENT_LIST_DIR}/update_readme.py")
 
 set_property (
 	TARGET OrangesReadme APPEND

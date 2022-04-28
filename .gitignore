@@ -8,3 +8,8 @@ Testing/
 doc/
 __pycache__/
 node_modules/
+help/dist/
+help/build/
+help/oranges_help.egg-info/
+help/oranges_help/data/properties.json
+help/setup.cfg

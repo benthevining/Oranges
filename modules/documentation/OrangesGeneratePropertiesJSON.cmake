@@ -172,4 +172,10 @@ function (oranges_generate_properties_json)
 		file (REMOVE "${ORANGES_ARG_INPUT_FILE}")
 	endif ()
 
+	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+				  PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_INPUT_FILE}")
+
+	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+				  PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_ARG_OUTPUT_FILE}")
+
 endfunction ()

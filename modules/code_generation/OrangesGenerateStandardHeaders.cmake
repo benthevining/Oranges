@@ -132,9 +132,21 @@ function (oranges_generate_standard_headers)
 		set (configured_file
 			 "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-		configure_file (
-			"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/standard_header.h"
-			"${configured_file}" @ONLY NEWLINE_STYLE UNIX)
+		set (input_file
+			 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/standard_header.h")
+
+		configure_file ("${input_file}" "${configured_file}" @ONLY
+						NEWLINE_STYLE UNIX)
+
+		set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+					  APPEND CMAKE_CONFIGURE_DEPENDS "${input_file}")
+
+		set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+					  PROPERTY ADDITIONAL_CLEAN_FILES "${configured_file}")
+
+		set_source_files_properties (
+			"${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+			PROPERTIES GENERATED ON)
 
 		if (ORANGES_ARG_INTERFACE)
 			set (public_vis INTERFACE)
@@ -152,13 +164,6 @@ function (oranges_generate_standard_headers)
 		if (ORANGES_ARG_INSTALL_COMPONENT)
 			set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
 		endif ()
-
-		set_source_files_properties (
-			"${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-			PROPERTIES GENERATED ON)
-
-		set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-					  PROPERTY ADDITIONAL_CLEAN_FILES "${configured_file}")
 
 		install (
 			FILES "${configured_file}"

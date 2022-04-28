@@ -126,6 +126,7 @@ modules/finders/programs/Findinclude-what-you-use.cmake benthevining
 modules/finders/programs/Findpluginval.cmake benthevining
 modules/finders/programs/Findwraptool.cmake benthevining
 modules/finders/programs/Findxcodebuild.cmake benthevining
+modules/finders/programs/UseFaust.cmake benthevining
 modules/finders/programs/Usexcodebuild.cmake benthevining
 modules/finders/programs/package_managers/FindChocolatey.cmake benthevining
 modules/finders/programs/package_managers/FindHomebrew.cmake benthevining
@@ -297,5 +298,6 @@ toolchains/mingw/linux_mingw.cmake benthevining
 toolchains/mingw/mac_mingw.cmake benthevining
 toolchains/mingw/mingw_common.cmake benthevining
 util/deps_graph.png benthevining
+util/oranges_cmake_commands.json benthevining
 util/oranges_header.txt benthevining
 util/workspace_dependencies.json benthevining
