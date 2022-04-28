@@ -28,7 +28,7 @@ execute_process (
 	COMMAND
 		python3 -m pip install .
 		--log "@CMAKE_CURRENT_BINARY_DIR@/orangesHelpInstall.log"
-		--compile --no-input --use-pep517
+		--compile --no-input
 	WORKING_DIRECTORY "@CMAKE_CURRENT_LIST_DIR@"
 	COMMAND_ECHO STDOUT
 	COMMAND_ERROR_IS_FATAL ANY)
