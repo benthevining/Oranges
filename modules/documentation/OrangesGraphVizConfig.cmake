@@ -42,7 +42,6 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
-include (OrangesFileUtils)
 
 oranges_file_scoped_message_context ("OrangesGraphVizConfig")
 
@@ -120,7 +119,9 @@ if (NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 
 	set (image_dest "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}")
 
-	lemons_make_path_absolute (VAR image_dest BASE_DIR "${PROJECT_SOURCE_DIR}")
+	if (NOT IS_ABSOLUTE "${image_dest}")
+		set ("${PROJECT_SOURCE_DIR}/${image_dest}")
+	endif ()
 
 	set (graph_image_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.png")
 

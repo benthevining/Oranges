@@ -101,6 +101,7 @@ modules/finders/OrangesFindPackageHelpers.cmake benthevining
 modules/finders/code_signing/Findcodesign.cmake benthevining
 modules/finders/code_signing/Findwraptool.cmake benthevining
 modules/finders/code_signing/Usecodesign.cmake benthevining
+modules/finders/code_signing/Usewraptool.cmake benthevining
 modules/finders/libs/FFTW/FindFFTW.cmake benthevining
 modules/finders/libs/FFTW/Findfftw3.cmake benthevining
 modules/finders/libs/FFTW/Findfftw3f.cmake benthevining

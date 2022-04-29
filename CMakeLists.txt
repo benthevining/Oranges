@@ -15,14 +15,11 @@
 Oranges
 -------------------------
 
-The Oranges library.
+The Oranges CMake library.
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
-- oranges_toolchains
-- oranges_docs
-- oranges_help
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -58,9 +55,13 @@ set (ORANGES_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}/properties.txt"
 if (PROJECT_IS_TOP_LEVEL)
 	enable_language (CXX)
 
+	# cmake-format: off
 	set_property (
-		GLOBAL PROPERTY REPORT_UNDEFINED_PROPERTIES
-						"${CMAKE_BINARY_DIR}/undefined_properties.log")
+		GLOBAL PROPERTY
+			USE_FOLDERS YES
+			PREDEFINED_TARGETS_FOLDER Targets
+			REPORT_UNDEFINED_PROPERTIES "${CMAKE_BINARY_DIR}/undefined_properties.log")
+	# cmake-format: on
 
 	set (CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
 	set (CMAKE_INSTALL_MESSAGE LAZY)
@@ -112,7 +113,8 @@ unset (oranges_properties_output)
 
 #
 
-add_subdirectory (docs)
+# add_subdirectory (docs)
+
 add_subdirectory (help)
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
@@ -146,9 +148,6 @@ install (
 install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}"
 		 COMPONENT oranges_modules PATTERN .DS_Store EXCLUDE)
 
-install (DIRECTORY toolchains DESTINATION "${ORANGES_INSTALL_DEST}"
-		 COMPONENT oranges_toolchains PATTERN .DS_Store EXCLUDE)
-
 include (CPackComponent)
 
 cpack_add_component (oranges_base HIDDEN)
@@ -159,22 +158,6 @@ cpack_add_component (
 	DESCRIPTION "Install the Oranges CMake modules"
 	GROUP oranges
 	DEPENDS oranges_base
-	INSTALL_TYPES Developer)
-
-cpack_add_component (
-	oranges_toolchains
-	DISPLAY_NAME "Oranges CMake toolchains"
-	DESCRIPTION "Install the Oranges CMake toolchain files"
-	GROUP oranges
-	DEPENDS oranges_base
-	INSTALL_TYPES Developer)
-
-cpack_add_component (
-	oranges_help
-	DISPLAY_NAME "Oranges CLI help tool"
-	DESCRIPTION
-		"A command-line reference tool, similar to CMake's CLI help functionality"
-	GROUP oranges
 	INSTALL_TYPES Developer)
 
 cpack_add_component_group (

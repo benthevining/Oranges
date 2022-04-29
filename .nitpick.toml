@@ -1,7 +1,6 @@
 [tool.nitpick]
+cache = "forever"
 style = [
 	"github://benthevining/nitpick_styles@main/BasicConfig.toml",
 	"github://benthevining/nitpick_styles@main/styles/cmake.toml"
 ]
-
-cache = "forever"

@@ -1,17 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
-
+requires = ["setuptools>=61.0.0"]
 
 [project]
-name = "oranges_help"
-description = "Command line help interface for the Oranges CMake library"
-version = "2.22.0"
-requires-python = ">=3.9"
-license = {text = "GPL3"}
 authors = [{name = "Ben Vining"}]
-keywords = ["CMake", "Oranges", "reference", "docs"]
-urls = {repository = "https://github.com/benthevining/Oranges"}
 classifiers = [
 	"Development Status :: 3 - Alpha",
 	"Intended Audience :: Developers",
@@ -21,13 +13,19 @@ classifiers = [
 	"Programming Language :: Python :: 3.9",
 	"Programming Language :: Python :: 3 :: Only"
 ]
+description = "Command line help interface for the Oranges CMake library"
+keywords = ["CMake", "Oranges", "reference", "docs"]
+license = {text = "GPL3"}
+name = "oranges_help"
+requires-python = ">=3.9"
+urls = {repository = "https://github.com/benthevining/Oranges"}
+version = "2.22.0"
 
 [project.scripts]
 oranges = "oranges_help.main:main"
 
-
 [tool.setuptools]
-packages = ["oranges_help"]
-package-dir = {oranges_help = "."}
-package-data = {oranges_help = ["data/modules_root.txt", "data/properties.json"]}
 include-package-data = false
+package-data = {oranges_help = ["data/modules_root.txt", "data/properties.json"]}
+package-dir = {oranges_help = "."}
+packages = ["oranges_help"]

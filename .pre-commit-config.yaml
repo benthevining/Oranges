@@ -38,7 +38,7 @@ repos:
             language: python
             files: .github/CODEOWNERS
 
-          # run cmake & update dependency graph
+          # run cmake & update dependency graph & readme
           - id: run-cmake
             name: Run CMake
             entry: cmake --preset default
@@ -63,6 +63,7 @@ repos:
       hooks:
           - id: check-json
           - id: check-yaml
+          - id: check-toml
           - id: pretty-format-json
             args: [--autofix]
 
@@ -77,7 +78,7 @@ repos:
           - id: trailing-whitespace
 
       # shell scripts
-          - id: check-executables-have-shebangs
+          #- id: check-executables-have-shebangs
 
       # Python
           - id: check-ast
@@ -143,6 +144,13 @@ repos:
           - id: markdownlint-fix
             exclude: CHANGELOG.md
 
+  # TOML
+    - repo: https://github.com/pappasam/toml-sort
+      rev: v0.20.0
+      hooks:
+          - id: toml-sort
+            args: [--in-place, --all]
+
   # shell scripts
     - repo: https://github.com/shellcheck-py/shellcheck-py
       rev: v0.8.0.4
@@ -163,11 +171,11 @@ repos:
       rev: v1.4
       hooks:
           - id: autoflake
-    - repo: https://github.com/pre-commit/mirrors-yapf
-      rev: v0.32.0
-      hooks:
-          - id: yapf
-            args: [-i]
+    # - repo: https://github.com/pre-commit/mirrors-yapf
+    #   rev: v0.32.0
+    #   hooks:
+    #       - id: yapf
+    #         args: [-i]
     - repo: https://github.com/PyCQA/pylint
       rev: v2.13.7
       hooks:

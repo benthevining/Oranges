@@ -108,6 +108,10 @@ pc:  ## Runs all pre-commit hooks over all files
 deps_graph: config ## Generates a PNG image of the CMake dependency graph
 	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset deps_graph
 
+.PHONY: readme
+readme: config ## Updates the readme with the list of modules found in the source tree
+	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset readme
+
 .PHONY: docs
 docs: config ## Builds the documentation
 	@cd $(ORANGES_ROOT) && $(CMAKE) --build --preset docs

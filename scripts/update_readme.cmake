@@ -36,12 +36,8 @@ add_custom_target (
 			--list-all-modules --output "${modules_output}"
 	COMMAND Python3::Interpreter "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py"
 	COMMENT "Updating Oranges readme..."
+	DEPENDS "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
 	VERBATIM USES_TERMINAL)
-
-set_property (
-	TARGET OrangesReadme APPEND
-	PROPERTY CMAKE_CONFIGURE_DEPENDS
-			 "${CMAKE_CURRENT_LIST_DIR}/update_readme.py")
 
 set_property (
 	TARGET OrangesReadme APPEND
@@ -49,9 +45,8 @@ set_property (
 			 "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
 
 set_target_properties (
-	OrangesReadme
-	PROPERTIES FOLDER Utility LABELS "Oranges;Utility" XCODE_GENERATE_SCHEME OFF
-			   EchoString "Updating Oranges ReadMe...")
+	OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
+							 XCODE_GENERATE_SCHEME OFF)
 
 unset (modules_output)
 

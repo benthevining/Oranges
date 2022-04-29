@@ -20,7 +20,7 @@ import sys
 from argparse import ArgumentParser
 from typing import Final
 
-from . import commands, modules, paths, targets
+from . import commands, modules, paths, targets, properties
 
 
 ORANGES_VERSION: Final[str] = "2.22.0"
@@ -172,6 +172,18 @@ def main() -> None:
 	                    type=str,
 	                    dest="help_target")
 
+	parser.add_argument("--list-properties", "--properties",
+		help="List all CMake properties defined by Oranges modules",
+		action="store_true",
+		dest="list_properties")
+
+	parser.add_argument("--property", "-p",
+		help="View help for a specific property",
+		action="store",
+		default=None,
+		type=str,
+		dest="help_property")
+
 	parser.add_argument("--file",
 	                    "--output",
 	                    "-o",
@@ -251,6 +263,19 @@ def main() -> None:
 		                   file_append=args.file_append)
 		return
 
+	if args.list_properties:
+		properties.print_list(out_file=args.out_file,
+							  file_append=args.file_append)
+		return
+
+	if args.help_property:
+		properties.print_help(property_name=args.help_property,
+							  out_file=args.out_file,
+							  file_append=args.file_append)
+		return
+
+	parser.print_help(sys.stderr)
+	sys.exit(1)
 
 #
 

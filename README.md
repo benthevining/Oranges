@@ -23,7 +23,7 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/benthevining/Oranges?style=social)
 ![GitHub followers](https://img.shields.io/github/followers/benthevining?style=social)
 
-A library of CMake modules, scripts, and toolchains.
+A library of CMake modules.
 
 For quick CLI reference, run the `help.py` script in the `help/` directory.
 
@@ -51,8 +51,6 @@ Documentation
 
 General
   * LinuxLSBInfo
-  * OrangesFileUtils
-  * OrangesListUtils
   * OrangesSourceFileUtils
 
 Helper targets
@@ -129,7 +127,6 @@ See the `FindOranges` file for more documentation on what it does.
 
 ## CMake install components
   * oranges_modules
-  * oranges_toolchains
   * oranges_docs
   * oranges - installs all Oranges components
 
