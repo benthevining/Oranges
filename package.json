@@ -129,7 +129,7 @@
             ".bumpversion.cfg",
             "CMakeLists.txt",
             "help/oranges_help/main.py",
-            "help/setup.py",
+            "help/pyproject.toml",
             "package.json",
             "CITATION.cff"
           ]
