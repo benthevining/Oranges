@@ -1,5 +1,17 @@
 # Oranges changelog
 
+## [2.23.0](http://github.com/benthevining/Oranges/compare/v2.22.0...v2.23.0) (2022-04-29)
+
+
+### Features
+
+* added properties to CLI help tool ([194b1c4](http://github.com/benthevining/Oranges/commit/194b1c46e820dffa1e08c47d6becd244d2786edd))
+
+
+### Bug Fixes
+
+* fixing bumpversion config ([8f37a29](http://github.com/benthevining/Oranges/commit/8f37a298f90fd248366ee42ec2aa38e84850a178))
+
 ## [2.22.0](http://github.com/benthevining/Oranges/compare/v2.21.1...v2.22.0) (2022-04-26)
 
 

@@ -19,7 +19,7 @@ license = {text = "GPL3"}
 name = "oranges_help"
 requires-python = ">=3.9"
 urls = {repository = "https://github.com/benthevining/Oranges"}
-version = "2.22.0"
+version = "2.23.0"
 
 [project.scripts]
 oranges = "oranges_help.main:main"
