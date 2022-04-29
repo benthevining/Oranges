@@ -23,7 +23,7 @@ project (
 
 find_package (Python3 3.9 COMPONENTS Interpreter)
 
-if (NOT TARGET Python3::Interpreter)
+if (NOT TARGET Python3::Interpreter OR NOT Python3_FOUND)
 	if (Oranges_IS_TOP_LEVEL)
 		message (
 			WARNING "Python cannot be found, CLI help tool cannot be generated!"

@@ -47,10 +47,7 @@ If the `COPY_TO` argument is present, the downloaded file will be copied to the 
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_FILE_DOWNLOAD_CACHE : defines the directory where downloaded files will be stored.
-I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
-If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR.
-Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
+- ORANGES_FILE_DOWNLOAD_CACHE : defines the directory where downloaded files will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. If FETCHCONTENT_BASE_DIR is set, this variable will default to the value of FETCHCONTENT_BASE_DIR. Otherwise, this variable defaults to ${CMAKE_SOURCE_DIR}/Cache.
 - ORANGES_FILE_DOWNLOAD_DISCONNECTED: if ON, this function will not attempt to download any files.
 
 #]=======================================================================]

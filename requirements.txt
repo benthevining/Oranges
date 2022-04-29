@@ -1,0 +1,8 @@
+# For development
+bumpversion
+pre-commit
+
+# For docs
+sphinx
+sphinxcontrib.domaintools
+sphinxcontrib-moderncmakedomain

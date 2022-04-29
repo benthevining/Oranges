@@ -12,30 +12,26 @@
 #
 # ======================================================================================
 
-import sys
-
-
-sys.path.insert(0, r'@conf_path@')
 
 source_suffix = '.rst'
 root_doc = 'index'
 
 project = 'Oranges'
 author = 'Ben Vining'
-copyright = '@conf_copyright@'  # pylint: disable=redefined-builtin
+copyright = '@conf_copyright@'
 version = '@conf_version@'  # feature version
 release = '@conf_version@'  # full version string
-pygments_style = 'colors.CMakeTemplateStyle'
+#pygments_style = 'colors.CMakeTemplateStyle'
 
 language = 'en'
 primary_domain = 'cmake'
 highlight_language = 'none'
 
-# needs_sphinx = '1.1'
+needs_sphinx = '1.1'
 
 exclude_patterns = []
 
-extensions = ['cmake']
+extensions = ['sphinxcontrib.moderncmakedomain']
 #templates_path = ['@conf_path@/templates']
 
 nitpicky = True
@@ -74,7 +70,7 @@ html_theme_options = {
 # editorconfig-checker-enable
 
 html_title = f'Oranges {release} Documentation'
-html_short_title = f'{release} Documentation'
+html_short_title = f'Oranges {release} Documentation'
 #html_favicon = '@conf_path@/static/cmake-favicon.ico'
 
 # Not supported yet by sphinx:

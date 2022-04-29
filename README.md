@@ -15,7 +15,6 @@
 [![semantic-release: conventionalcommits](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 ![License](https://img.shields.io/github/license/benthevining/Oranges)
 ![GitHub repo size](https://img.shields.io/github/repo-size/benthevining/Oranges)
-![Lines of code](https://img.shields.io/tokei/lines/github/benthevining/Oranges)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/benthevining/Oranges)
 ![GitHub Release Date](https://img.shields.io/github/release-date/benthevining/Oranges)
 ![GitHub release](https://img.shields.io/github/v/release/benthevining/Oranges)
@@ -127,7 +126,6 @@ See the `FindOranges` file for more documentation on what it does.
 
 ## CMake install components
   * oranges_modules
-  * oranges_docs
   * oranges - installs all Oranges components
 
 ## Dependency graph

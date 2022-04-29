@@ -51,6 +51,7 @@ Components
 - SR : speech recognition
 - VC : video coding
 - VM : vector math
+
 Each one produces an imported target named Intel::ipp_lib_<Component>.
 
 Each component imports its dependencies as well:

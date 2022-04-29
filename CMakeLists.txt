@@ -113,9 +113,8 @@ unset (oranges_properties_output)
 
 #
 
-# add_subdirectory (docs)
-
 add_subdirectory (help)
+add_subdirectory (docs)
 
 include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
 

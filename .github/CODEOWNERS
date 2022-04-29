@@ -84,6 +84,7 @@ modules/dependencies/OrangesWrapAutotoolsProject.cmake benthevining
 modules/dependencies/scripts/wipe_cache.cmake benthevining
 modules/documentation/OrangesDocsBuildConfig.cmake benthevining
 modules/documentation/OrangesDoxygenConfig.cmake benthevining
+modules/documentation/OrangesGeneratePropertiesJSON.cmake benthevining
 modules/documentation/OrangesGraphVizConfig.cmake benthevining
 modules/documentation/scripts/CMakeGraphVizOptions.cmake benthevining
 modules/documentation/scripts/Doxyfile benthevining

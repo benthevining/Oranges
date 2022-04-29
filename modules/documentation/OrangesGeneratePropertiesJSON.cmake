@@ -44,7 +44,7 @@ If the `KEEP_INPUT_FILE` flag is not present, this function will delete the `INP
 
 A typical way to integrate this functionality into a project is to write property info into the intermediate "property list file" as soon as they are defined, for example:
 
-```cmake
+```
 
 # in top-level CMakeLists.txt:
 

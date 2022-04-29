@@ -76,9 +76,7 @@ Options
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored.
-I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure.
-Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ${CMAKE_SOURCE_DIR}/Cache.
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

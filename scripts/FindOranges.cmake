@@ -45,7 +45,7 @@ include (FeatureSummary)
 
 set_package_properties (
 	Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
-	DESCRIPTION "CMake modules and toolchains")
+	DESCRIPTION "Library of CMake modules")
 
 set (Oranges_FOUND FALSE)
 

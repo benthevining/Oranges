@@ -35,10 +35,10 @@ include (FindPackageMessage)
 
 set_package_properties (
 	Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
-	DESCRIPTION "CMake modules and toolchains")
+	DESCRIPTION "Library of CMake modules")
 
 find_package_message (Oranges "Oranges package found -- installed on system"
-					  "Oranges (system install)")
+					  "Oranges (system install) [${CMAKE_CURRENT_LIST_DIR}]")
 
 #
 
