@@ -32,7 +32,7 @@ Adds a command to call the Faust compiler to generate the `<generatedClassName>`
 
 
 Wrap multiple generated Faust sources into a library
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: faust_add_library
 

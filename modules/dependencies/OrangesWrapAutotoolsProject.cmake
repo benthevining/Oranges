@@ -13,7 +13,7 @@
 #[=======================================================================[.rst:
 
 OrangesWrapAutotoolsProject
--------------------------
+----------------------------
 
 Functions to integrate a project that uses GNU autotools.
 
@@ -31,7 +31,7 @@ Configure an autotools project
 
 
 Add a target to build an autotools project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: autotools_add_build_target
 

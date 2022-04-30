@@ -13,7 +13,7 @@
 #[=======================================================================[.rst:
 
 OrangesDefaultCPackSettings
--------------------------
+----------------------------
 
 Sets up some default configuration settings for CPack.
 

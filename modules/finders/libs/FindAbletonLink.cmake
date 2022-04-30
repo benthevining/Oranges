@@ -50,10 +50,6 @@ set (AbletonLink_FOUND FALSE)
 
 #
 
-find_package_try_pkgconfig (Ableton::Link link)
-
-#
-
 include (CPackComponent)
 
 cpack_add_component (AbletonLink DISPLAY_NAME "Ableton Link"

@@ -13,12 +13,12 @@
 #[=======================================================================[.rst:
 
 OrangesGeneratePropertiesJSON
--------------------------
+------------------------------
 
 This module provides the function :command:`oranges_generate_properties_json()`.
 
 Generating a JSON file listing all properties defined by a CMake project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_generate_properties_json
 
@@ -45,7 +45,6 @@ If the `KEEP_INPUT_FILE` flag is not present, this function will delete the `INP
 A typical way to integrate this functionality into a project is to write property info into the intermediate "property list file" as soon as they are defined, for example:
 
 ```
-
 # in top-level CMakeLists.txt:
 
 set (MYPROJ_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}" CACHE INTERNAL "")
@@ -83,10 +82,9 @@ include (OrangesGeneratePropertiesJSON)
 oranges_generate_properties_json (
 	INPUT_FILE "${MYPROJ_PROPERTIES_LIST_FILE}"
 	OUTPUT_FILE "${PROJECT_BINARY_DIR}/properties.json")
-
 ```
 
-You can alternatively hand-write a (persistent) input file for this function and use the `KEEP_INPUT_FILE` flag when calling it.
+You can alternatively hand-write a persistent input file for this function and use the `KEEP_INPUT_FILE` flag when calling it.
 
 #]=======================================================================]
 

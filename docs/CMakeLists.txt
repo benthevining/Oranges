@@ -78,19 +78,12 @@ set (
 	conf_version
 	"${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}"
 	)
+# conf_copyright
 
 configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
 
 unset (conf_path)
 unset (conf_version)
-
-# we provide the path to the produced html output in the console for tools that
-# support URI protocol schemes
-set (
-	html_extra_commands
-	COMMAND "${CMAKE_COMMAND}" -E echo
-	"sphinx-build html: HTML documentation generated in file://${CMAKE_CURRENT_BINARY_DIR}/html/index.html"
-	)
 
 find_program (MAKEINFO_EXECUTABLE NAMES makeinfo DOC "makeinfo tool")
 
@@ -150,34 +143,59 @@ foreach (format IN ITEMS html singlehtml man latexpdf ${texinfo_flag})
 	set (doc_format_last "${doc_format_output}")
 endforeach ()
 
+unset (doc_format_last)
+
 #
 
 add_custom_target (OrangesDocs DEPENDS "${doc_format_outputs}"
 				   COMMENT "Building Oranges documentation...")
 
+unset (doc_format_outputs)
+
 #
 
 include (GNUInstallDirs)
+include (CPackComponent)
 
 if (texinfo_flag)
 	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/texinfo/oranges.info"
-			 DESTINATION "${CMAKE_INSTALL_INFODIR}" COMPONENT oranges_docs)
+			 DESTINATION "${CMAKE_INSTALL_INFODIR}"
+			 COMPONENT oranges_doc_texinfo)
+
+	cpack_add_component (
+		oranges_doc_texinfo DISPLAY_NAME "Oranges texinfo docs"
+		DESCRIPTION "Install the Oranges texinfo documentation"
+		GROUP oranges_docs)
 endif ()
 
 # TODO: install man pages
 
-install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" COMPONENT oranges_docs
+install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" COMPONENT oranges_doc_html
 		 DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
+cpack_add_component (
+	oranges_doc_html DISPLAY_NAME "Oranges HTML docs"
+	DESCRIPTION "Install the Oranges HTML documentation" GROUP oranges_docs)
+
 install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml"
-		 COMPONENT oranges_docs DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+		 COMPONENT oranges_doc_singlehtml DESTINATION "${CMAKE_INSTALL_DOCDIR}"
 		 PATTERN .buildinfo EXCLUDE)
 
-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
-		 DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT oranges_docs OPTIONAL)
+cpack_add_component (
+	oranges_doc_singlehtml DISPLAY_NAME "Oranges single-page HTML docs"
+	DESCRIPTION "Install the Oranges single-page HTML documentation"
+	GROUP oranges_docs)
 
-include (CPackComponent)
+install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
+		 DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT oranges_doc_latex
+		 OPTIONAL)
 
 cpack_add_component (
+	oranges_doc_latex DISPLAY_NAME "Oranges Latex docs"
+	DESCRIPTION "Install the Oranges Latex PDF documentation"
+	GROUP oranges_docs)
+
+cpack_add_component_group (
 	oranges_docs DISPLAY_NAME "Oranges documentation"
-	DESCRIPTION "Installs all Oranges documentation" GROUP Oranges)
+	DESCRIPTION "Install all Oranges documentation"
+	PARENT_GROUP oranges INSTALL_TYPES Developer)

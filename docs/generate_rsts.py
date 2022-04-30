@@ -29,7 +29,8 @@ RST_OUTPUT_DIR: Final[str] = "@RST_OUTPUT_DIR@"
 
 INPUT_INDEX_FILE: Final[str] = "@INPUT_INDEX_FILE@"
 
-os.makedirs (RST_OUTPUT_DIR)
+if not os.path.isdir(RST_OUTPUT_DIR):
+	os.makedirs (RST_OUTPUT_DIR)
 
 generated_files: list[str] = []
 
@@ -51,18 +52,20 @@ def process_directory(dir_path) -> None:
 			process_directory(entry_path)
 			continue
 
-		if os.path.isfile(entry_path):
-			if not entry.endswith(".cmake"):
-				continue
+		if not os.path.isfile(entry_path):
+			continue
 
-			output_file: Final[str] = os.path.join(RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
+		if not entry.endswith(".cmake"):
+			continue
 
-			output_path: Final[str] = os.path.relpath (entry_path, start=RST_OUTPUT_DIR)
+		output_file: Final[str] = os.path.join(RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
 
-			with open(output_file, "w", encoding="utf-8") as rst_out:
-				rst_out.write(f".. cmake-module:: {output_path}")
+		output_path: Final[str] = os.path.relpath (entry_path, start=RST_OUTPUT_DIR)
 
-			generated_files.append(output_file)
+		with open(output_file, "w", encoding="utf-8") as rst_out:
+			rst_out.write(f".. cmake-module:: {output_path}")
+
+		generated_files.append(output_file)
 
 #
 
@@ -77,16 +80,55 @@ for dirname in os.listdir(MODULES_ROOT):
 
 	process_directory(DIRPATH)
 
+#
+
 with open(INPUT_INDEX_FILE, "r", encoding="utf-8") as index_in:
 	index_lines = index_in.readlines()
 
 OUTPUT_TREE_ROOT: Final[str] = os.path.abspath(os.path.dirname(RST_OUTPUT_DIR))
 
+module_files: list[str] = []
+find_modules: list[str] = []
+
 for filepath in generated_files:
-	rel_path = os.path.relpath(filepath, start=OUTPUT_TREE_ROOT)
-	index_lines.append(f"\n   {rel_path}")
+	REL_PATH: Final[str] = os.path.relpath(filepath, start=OUTPUT_TREE_ROOT)
 
-output_index = os.path.join(OUTPUT_TREE_ROOT, "index.rst")
+	if os.path.basename(filepath).startswith("Find"):
+		find_modules.append(REL_PATH)
+	else:
+		module_files.append(REL_PATH)
 
-with open(output_index, "w", encoding="utf-8") as index_out:
+del generated_files
+
+module_files.sort()
+find_modules.sort()
+
+index_lines.append("\nModules\n")
+index_lines.append("##################\n")
+index_lines.append("\n")
+index_lines.append(".. toctree::\n")
+index_lines.append("   :maxdepth: 1\n")
+index_lines.append("   :caption: CMake modules provided by Oranges:\n")
+
+for module in module_files:
+	index_lines.append(f"\n   {module}")
+
+del module_files
+
+index_lines.append("\n")
+index_lines.append("\nFind Modules\n")
+index_lines.append("##################\n")
+index_lines.append("\n")
+index_lines.append(".. toctree::\n")
+index_lines.append("   :maxdepth: 1\n")
+index_lines.append("   :caption: Find modules provided by Oranges:\n")
+
+for module in find_modules:
+	index_lines.append(f"\n   {module}")
+
+del find_modules
+
+OUTPUT_INDEX: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "index.rst")
+
+with open(OUTPUT_INDEX, "w", encoding="utf-8") as index_out:
 	index_out.write("".join(index_lines))

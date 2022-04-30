@@ -18,7 +18,7 @@ OrangesFetchRepository
 This module is a light wrapper around CMake's FetchContent, and provides the function :command:`oranges_fetch_repository()`.
 
 Download and cache a git repository at configure time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_fetch_repository
 

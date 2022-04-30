@@ -126,6 +126,11 @@ See the `FindOranges` file for more documentation on what it does.
 
 ## CMake install components
   * oranges_modules
+  * oranges_doc_texinfo
+  * oranges_doc_html
+  * oranges_doc_singlehtml
+  * oranges_doc_latex
+  * oranges_docs - installs all Oranges documentation
   * oranges - installs all Oranges components
 
 ## Dependency graph

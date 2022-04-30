@@ -13,12 +13,12 @@
 #[=======================================================================[.rst:
 
 OrangesGenerateBuildTypeHeader
--------------------------
+-------------------------------
 
 This module provides the function :command:`oranges_generate_build_type_header()`.
 
 Generating a build type header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_generate_build_type_header
 

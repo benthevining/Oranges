@@ -28,6 +28,13 @@
         "OrangesReadme",
         "DependencyGraph"
       ]
+    },
+    {
+      "cleanFirst": true,
+      "configurePreset": "default",
+      "displayName": "Build the documentation",
+      "name": "docs",
+      "targets": "OrangesDocs"
     }
   ],
   "cmakeMinimumRequired": {

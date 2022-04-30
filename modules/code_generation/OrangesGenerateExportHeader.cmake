@@ -13,12 +13,12 @@
 #[=======================================================================[.rst:
 
 OrangesGenerateExportHeader
--------------------------
+----------------------------
 
 This module is a thin wrapper around CMake's generate_export_header, and adds the :command:`oranges_generate_export_header()` command.
 
 Generating an export header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_generate_export_header
 

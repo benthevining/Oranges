@@ -259,6 +259,7 @@ package_manager/scripts/helper_functions.cmake benthevining
 package_manager/scripts/parse_json_file.cmake benthevining
 package_manager/scripts/parse_system_packages.cmake benthevining
 package_manager/scripts/shim_template.cmake benthevining
+requirements.txt benthevining
 scripts/OrangesConfig.cmake benthevining
 scripts/OrangesMacros.cmake benthevining
 scripts/alphabetize_codeowners.py benthevining

@@ -10,6 +10,19 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+CXXConcepts
+-------------------------
+
+This module provides a target with any flags necessary to ensure C++20 concepts are available.
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::CXXConcepts
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

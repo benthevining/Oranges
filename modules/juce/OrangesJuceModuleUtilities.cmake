@@ -10,20 +10,14 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
+
+OrangesJuceModuleUtilities
+---------------------------
+
 Utilities for adding custom JUCE modules to projects.
 
-## Function:
-
-### lemons_add_juce_modules
-```
-lemons_add_juce_modules (DIR <directory>
-						 [AGGREGATE <aggregateTarget>]
-						 [ALIAS_NAMESPACE <aliasNamespace>])
-```
-Adds any/all JUCE modules that are nested subdirectories within the specified directory.
-
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 

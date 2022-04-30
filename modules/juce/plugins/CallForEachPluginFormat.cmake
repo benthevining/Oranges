@@ -18,7 +18,7 @@ CallForEachPluginFormat
 This module provides the function :command:`call_for_each_plugin_format()`.
 
 Calling a function for each plugin format
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: call_for_each_plugin_format
 

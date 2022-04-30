@@ -51,10 +51,6 @@ set (MIPP_FOUND FALSE)
 
 #
 
-find_package_try_pkgconfig (aff3ct::MIPP mipp)
-
-#
-
 if (MIPP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif ()

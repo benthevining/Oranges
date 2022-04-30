@@ -13,12 +13,12 @@
 #[=======================================================================[.rst:
 
 OrangesGeneratePlatformHeader
--------------------------
+------------------------------
 
 This module provides the function :command:`oranges_generate_platform_header()`.
 
 Generating a platform header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_generate_platform_header
 

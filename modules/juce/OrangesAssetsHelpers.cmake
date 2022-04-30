@@ -20,7 +20,7 @@ This module provides the function :command:`lemons_add_resources_folder()`.
 
 
 Add a binary data target to a JUCE project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: lemons_add_resources_folder
 

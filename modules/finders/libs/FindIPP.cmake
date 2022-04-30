@@ -56,15 +56,23 @@ Each one produces an imported target named Intel::ipp_lib_<Component>.
 
 Each component imports its dependencies as well:
 
-Domain             Domain Code  Depends on
-----------------------------------------------
-Color Conversion   CC           Core, VM, S, I
-String Operations  CH           Core, VM, S
-Computer Vision    CV           Core, VM, S, I
-Data Compression   DC           Core, VM, S
-Image Processing   I            Core, VM, S
-Signal Processing  S            Core, VM
-Vector Math        VM           Core
++---------------------+--------------+-----------------+
+| Domain              | Domain Code  | Depends On      |
++=====================+==============+=================+
+| Color Conversion    | CC           | Core, VM, S, I  |
++---------------------+--------------+-----------------+
+| String Operations   | CH           | Core, VM, S     |
++---------------------+--------------+-----------------+
+| Computer Vision     | CV           | Core, VM, S, I  |
++---------------------+--------------+-----------------+
+| Data Compression    | DC           | Core, VM, S     |
++---------------------+--------------+-----------------+
+| Image Processing    | I            | Core, VM, S     |
++---------------------+--------------+-----------------+
+| Signal Processing   | S            | Core, VM        |
++---------------------+--------------+-----------------+
+| Vector Math         | VM           | Core            |
++---------------------+--------------+-----------------+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -107,10 +115,6 @@ option (IPP_STATIC "Use static IPP libraries" ON)
 option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
 
 mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
-
-#
-
-find_package_try_pkgconfig (Intel::IntelIPP IntelIPP)
 
 #
 

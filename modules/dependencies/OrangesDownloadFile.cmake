@@ -18,7 +18,7 @@ OrangesDownloadFile
 This module provides the function :command:`oranges_download_file()`.
 
 Download and cache a file at configure time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_download_file
 

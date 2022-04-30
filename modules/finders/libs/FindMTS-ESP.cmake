@@ -52,10 +52,6 @@ set (MTS-ESP_FOUND FALSE)
 
 #
 
-find_package_try_pkgconfig (ODDSound::MTS-ESP)
-
-#
-
 if (MTS-ESP_FIND_QUIETLY)
 	set (quiet_flag QUIET)
 endif ()

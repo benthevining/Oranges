@@ -20,9 +20,14 @@ The Oranges CMake library.
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
+- oranges_doc_texinfo
+- oranges_doc_html
+- oranges_doc_singlehtml
+- oranges_doc_latex
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- oranges_docs
 - oranges
 
 #]=======================================================================]
@@ -149,7 +154,7 @@ install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}"
 
 include (CPackComponent)
 
-cpack_add_component (oranges_base HIDDEN)
+cpack_add_component (oranges_base HIDDEN GROUP oranges)
 
 cpack_add_component (
 	oranges_modules

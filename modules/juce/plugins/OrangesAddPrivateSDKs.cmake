@@ -10,20 +10,24 @@
 #
 # ======================================================================================
 
-#[[
+#[=======================================================================[.rst:
 
-Fetches the PrivateSDKs repository.
+OrangesAddPrivateSDKs
+-------------------------
 
-Inclusion style: once globally
+This module fetches the PrivateSDKs repository, populating the AAX and VST2 SDK paths for use with JUCE.
 
-Options:
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^
 - FETCHCONTENT_SOURCE_DIR_PrivateSDKs
-- GITHUB_USERNAME, GITHUB_ACCESS_TOKEN
+- GITHUB_USERNAME
+- GITHUB_ACCESS_TOKEN
 
-Environment variables:
-- LEMONS_PRIVATE_SDKS
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^
+- LEMONS_PRIVATE_SDKS - may be set to the path of the PrivateSDKs repository
 
-]]
+#]=======================================================================]
 
 include_guard (GLOBAL)
 
