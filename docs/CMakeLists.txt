@@ -105,38 +105,19 @@ endif ()
 set (doc_format_outputs "")
 set (doc_format_last "")
 
-foreach (format IN ITEMS html singlehtml man latexpdf ${texinfo_flag})
+foreach (format IN ITEMS html singlehtml man ${texinfo_flag})
 	set (doc_format_output "doc_format_${format}")
 
-	if ("${format}" STREQUAL latexpdf)
-		# This format does not use builder (-b) but make_mode (-M) which expects
-		# arguments in peculiar order
-		add_custom_command (
-			OUTPUT "${doc_format_output}"
-			COMMAND
-				"${SPHINX_EXECUTABLE}" -M "${format}"
-				"${ORANGES_DOCS_BUILD_TREE}"
-				"${CMAKE_CURRENT_BINARY_DIR}/${format}" -c
-				"${CMAKE_CURRENT_BINARY_DIR}" -d
-				"${CMAKE_CURRENT_BINARY_DIR}/doctrees" ${sphinx_flags}
-				${${format}_extra_commands}
-			DEPENDS ${doc_format_last}
-			COMMENT "sphinx-build ${format}..."
-			VERBATIM USES_TERMINAL)
-	else ()
-		# other formats use standard builder (-b) mode
-		add_custom_command (
-			OUTPUT "${doc_format_output}"
-			COMMAND
-				"${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
-				"${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}"
-				${sphinx_flags} "${ORANGES_DOCS_BUILD_TREE}"
-				"${CMAKE_CURRENT_BINARY_DIR}/${format}"
-				${${format}_extra_commands}
-			DEPENDS ${doc_format_last}
-			COMMENT "sphinx-build ${format}..."
-			VERBATIM USES_TERMINAL)
-	endif ()
+	add_custom_command (
+		OUTPUT "${doc_format_output}"
+		COMMAND
+			"${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
+			"${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}"
+			${sphinx_flags} "${ORANGES_DOCS_BUILD_TREE}"
+			"${CMAKE_CURRENT_BINARY_DIR}/${format}" ${${format}_extra_commands}
+		DEPENDS ${doc_format_last}
+		COMMENT "sphinx-build ${format}..."
+		VERBATIM USES_TERMINAL)
 
 	set_property (SOURCE "${doc_format_output}" PROPERTY SYMBOLIC 1)
 	list (APPEND doc_format_outputs "${doc_format_output}")
@@ -149,6 +130,14 @@ unset (doc_format_last)
 
 add_custom_target (OrangesDocs DEPENDS "${doc_format_outputs}"
 				   COMMENT "Building Oranges documentation...")
+
+if (TARGET OrangesReadme)
+	add_dependencies (OrangesDocs OrangesReadme)
+endif ()
+
+if (TARGET DependencyGraph)
+	add_dependencies (OrangesDocs DependencyGraph)
+endif ()
 
 unset (doc_format_outputs)
 
@@ -184,15 +173,6 @@ install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml"
 cpack_add_component (
 	oranges_doc_singlehtml DISPLAY_NAME "Oranges single-page HTML docs"
 	DESCRIPTION "Install the Oranges single-page HTML documentation"
-	GROUP oranges_docs)
-
-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/latexpdf/latex/Oranges.pdf"
-		 DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT oranges_doc_latex
-		 OPTIONAL)
-
-cpack_add_component (
-	oranges_doc_latex DISPLAY_NAME "Oranges Latex docs"
-	DESCRIPTION "Install the Oranges Latex PDF documentation"
 	GROUP oranges_docs)
 
 cpack_add_component_group (

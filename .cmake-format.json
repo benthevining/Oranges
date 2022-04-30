@@ -63,7 +63,7 @@
     "fence_pattern": "^\\s*([`~]{3}[`~]*)(.*)$",
     "first_comment_is_literal": true,
     "hashruler_min_length": 10,
-    "literal_comment_pattern": "^#\\[\\[",
+    "literal_comment_pattern": "\\.rst:$",
     "ruler_pattern": "^\\s*[^\\w\\s]{3}.*[^\\w\\s]{3}$"
   },
   "parse": {

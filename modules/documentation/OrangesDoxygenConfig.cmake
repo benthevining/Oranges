@@ -17,26 +17,25 @@ OrangesDoxygenConfig
 
 This module provides the function :command:`oranges_create_doxygen_target()`.
 
-Generating a Doxygen target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_create_doxygen_target
 
-	oranges_create_doxygen_target (INPUT_PATHS <inputPaths...>
-								   [TARGET <docsTargetName>]
-								   [OUTPUT_DIR <docsOutputDir>]
-								   [MAIN_PAGE_MD_FILE <mainPageFile>]
-								   [LOGO <logoFile>]
-								   [FILE_PATTERNS <filePatterns...>]
-								   [IMAGE_PATHS <imagePaths...>]
-								   [NO_VERSION_DISPLAY]
-								   [NO_INSTALL] | [INSTALL_COMPONENT <componentName>])
+  ::
+
+    oranges_create_doxygen_target (INPUT_PATHS <inputPaths...>
+                                  [TARGET <docsTargetName>]
+                                  [OUTPUT_DIR <docsOutputDir>]
+                                  [MAIN_PAGE_MD_FILE <mainPageFile>]
+                                  [LOGO <logoFile>]
+                                  [FILE_PATTERNS <filePatterns...>]
+                                  [IMAGE_PATHS <imagePaths...>]
+                                  [NO_VERSION_DISPLAY]
+                                  [NO_INSTALL] | [INSTALL_COMPONENT <componentName>])
 
 Creates a target to execute Doxygen.
 
-The only required argument is the INPUT_PATHS.
-TARGET defaults to ${PROJECT_NAME}Doxygen.
-OUTPUT_DIR defaults to ${PROJECT_SOURCE_DIR}/doc.
+The only required argument is the ``INPUT_PATHS``.
+``TARGET`` defaults to ``${PROJECT_NAME}Doxygen``.
+``OUTPUT_DIR`` defaults to ``${PROJECT_SOURCE_DIR}/doc``.
 
 #]=======================================================================]
 

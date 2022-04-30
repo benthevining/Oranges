@@ -17,56 +17,56 @@ OrangesFetchRepository
 
 This module is a light wrapper around CMake's FetchContent, and provides the function :command:`oranges_fetch_repository()`.
 
-Download and cache a git repository at configure time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_fetch_repository
 
-	oranges_fetch_repository (NAME <name>
-							  GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
-							  [GIT_TAG <ref>]
-							  [NEVER_LOCAL]
-							  [QUIET]
-							  [DOWNLOAD_ONLY] [EXCLUDE_FROM_ALL]
-							  [FULL] [NO_SUBMODULES] [NO_RECURSE_SUBMODULES]
-							  [CMAKE_SUBDIR <rel_path>]
-							  [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
-							  [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
-							  [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
+  ::
 
-Fetches a git repository, with options for routing the call to `find_package()` or a local location.
+    oranges_fetch_repository (NAME <name>
+                              GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
+                              [GIT_TAG <ref>]
+                              [NEVER_LOCAL]
+                              [QUIET]
+                              [DOWNLOAD_ONLY] [EXCLUDE_FROM_ALL]
+                              [FULL] [NO_SUBMODULES] [NO_RECURSE_SUBMODULES]
+                              [CMAKE_SUBDIR <rel_path>]
+                              [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
+                              [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
+                              [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
+
+Fetches a git repository at configure time, with options for routing the call to ``find_package()`` or a local location.
 
 Output variables (set in the scope of the caller):
-- `<name>_SOURCE_DIR`
-- `<name>_BINARY_DIR`
 
-If the variable `FETCHCONTENT_SOURCE_DIR_<name>` is set, this function will simply call `add_subdirectory()` on that directory.
+- ``<name>_SOURCE_DIR``
+- ``<name>_BINARY_DIR``
 
-The variables `GITHUB_USERNAME`, `GITHUB_ACCESS_TOKEN`, `BITBUCKET_USERNAME`, and `BITBUCKET_PASSWORD` can be set to enable fetching private/protected repositories.
+If the variable ``FETCHCONTENT_SOURCE_DIR_<name>`` is set, this function will simply call ``add_subdirectory()`` on that directory.
 
-`GIT_TAG` can be an exact commit ref, or the name of a branch.
+The variables ``GITHUB_USERNAME``, ``GITHUB_ACCESS_TOKEN``, ``BITBUCKET_USERNAME``, and ``BITBUCKET_PASSWORD`` can be set to enable fetching private/protected repositories.
 
-If `DOWNLOAD_ONLY` is present, `add_subdirectory()` will not be called on the fetched repository.
+``GIT_TAG`` can be an exact commit ref, or the name of a branch.
 
-If `CMAKE_SUBDIR` is set, `add_subdirectory()` will be called on `<pkgName_SOURCE_DIR>/${CMAKE_SUBDIR}` (if a CMakeLists.txt exists in that directory).
+If ``DOWNLOAD_ONLY`` is present, ``add_subdirectory()`` will not be called on the fetched repository.
+
+If ``CMAKE_SUBDIR`` is set, ``add_subdirectory()`` will be called on ``<pkgName_SOURCE_DIR>/${CMAKE_SUBDIR}`` (if a CMakeLists.txt exists in that directory).
 This is useful for projects which have their CMakeLists.txt in a subdirectory, instead of in the root of their source tree.
 
-If the `FULL` option is present, the full git history will be pulled (the default behavior is a shallow clone).
+If the ``FULL`` option is present, the full git history will be pulled (the default behavior is a shallow clone).
 
-If the `QUIET` option is present, this function will not output status updates.
+If the ``QUIET`` option is present, this function will not output status updates.
 
-If the `EXCLUDE_FROM_ALL` option is present, it will be forwarded to the `add_subdirectory()` call for the fetched dependency (if `add_subdirectory()` is called).
+If the ``EXCLUDE_FROM_ALL`` option is present, it will be forwarded to the ``add_subdirectory()`` call for the fetched dependency (if ``add_subdirectory()`` is called).
 
-If the `NEVER_LOCAL` option is present, then this function will never be routed to a `find_package()` call.
+If the ``NEVER_LOCAL`` option is present, then this function will never be routed to a ``find_package()`` call.
 
-`CMAKE_OPTIONS` is an optional list of space-separated key-value pairs, which will be set as variables before calling `add_subdirectory()` on the fetched dependency (if `add_subdirectory()` is called).
+``CMAKE_OPTIONS`` is an optional list of space-separated key-value pairs, which will be set as variables before calling ``add_subdirectory()`` on the fetched dependency (if ``add_subdirectory()`` is called).
 
-`GIT_STRATEGY` may be one of `CHECKOUT`, `REBASE`, or `REBASE_CHECKOUT` and defines how the git repository is checked out and pulled.
+``GIT_STRATEGY`` may be one of ``CHECKOUT``, ``REBASE``, or ``REBASE_CHECKOUT`` and defines how the git repository is checked out and pulled.
 
-`GIT_OPTIONS` is an optional list of "key=value" pairs that will be passed to the git pull's command line with --config.
+``GIT_OPTIONS`` is an optional list of ``"key=value"`` pairs that will be passed to the git pull's command line with --config.
 
-If the `NO_SUBMODULES` option is present, no git submodules will be pulled or updated.
-If the `NO_RECURSE_SUBMODULES` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
+If the ``NO_SUBMODULES`` option is present, no git submodules will be pulled or updated.
+If the ``NO_RECURSE_SUBMODULES`` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
 If neither option is given, all submodules will be updated recursively.
 
 

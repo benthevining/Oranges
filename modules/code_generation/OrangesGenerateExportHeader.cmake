@@ -17,21 +17,20 @@ OrangesGenerateExportHeader
 
 This module is a thin wrapper around CMake's generate_export_header, and adds the :command:`oranges_generate_export_header()` command.
 
-Generating an export header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_generate_export_header
 
-	oranges_generate_export_header (TARGET <targetName>
-									[BASE_NAME <baseName>]
-									[HEADER <exportHeaderName>]
-									[INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
+  ::
+
+    oranges_generate_export_header (TARGET <targetName>
+                                   [BASE_NAME <baseName>]
+                                   [HEADER <exportHeaderName>]
+                                   [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesABIControlledLibrary
 
-Note that OrangesABIControlledLibrary is a build-only target. If you link against it, you must do so using the `$<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>` syntax.
+Note that OrangesABIControlledLibrary is a build-only target. If you link against it, you must do so using the ``$<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>`` syntax.
 
 #]=======================================================================]
 

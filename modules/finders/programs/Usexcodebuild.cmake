@@ -16,7 +16,7 @@ Usexcodebuild
 -------------------------
 
 Include external Xcode projects in your build.
-If xcodebuild hasn't already been found, including this module will call `find_package(xcodebuild)`.
+If xcodebuild hasn't already been found, including this module will call ``find_package(xcodebuild)``.
 
 
 Include an external XCode project
@@ -24,11 +24,13 @@ Include an external XCode project
 
 .. command:: include_external_xcode_project
 
-	include_external_xcode_project (TARGET <targetName>
-									DIRECTORY <dirOfXcodeProject>
-									SCHEME <nameOfScheme>
-									[EXTRA_ARGS <extraXcodebuildArgs>]
-									[COMMENT <buildComment>])
+  ::
+
+    include_external_xcode_project (TARGET <targetName>
+                                    DIRECTORY <dirOfXcodeProject>
+                                    SCHEME <nameOfScheme>
+                                   [EXTRA_ARGS <extraXcodebuildArgs>]
+                                   [COMMENT <buildComment>])
 
 Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
 

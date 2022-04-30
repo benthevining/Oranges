@@ -23,7 +23,6 @@ Install components
 - oranges_doc_texinfo
 - oranges_doc_html
 - oranges_doc_singlehtml
-- oranges_doc_latex
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,10 +117,10 @@ unset (oranges_properties_output)
 
 #
 
+include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
+
 add_subdirectory (help)
 add_subdirectory (docs)
-
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
 
 #
 

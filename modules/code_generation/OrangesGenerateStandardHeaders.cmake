@@ -22,19 +22,21 @@ Generating some standard headers for a target
 
 .. command:: oranges_generate_standard_headers
 
-	oranges_generate_standard_headers (TARGET <targetName>
-									   [BASE_NAME <baseName>]
-									   [HEADER <mainHeaderName>] | [NO_AGGREGATE_HEADER]
-									   [FEATURE_TEST_LANGUAGE <lang>]
-									   [BUILD_TYPE_HEADER <buildTypeHeaderName>]
-									   [EXPORT_HEADER <exportHeaderName>]
-									   [PLATFORM_HEADER <platformHeaderName>]
-									   [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
-									   [INTERFACE]
-									   [SOURCE_GROUP_NAME <groupName>])
+  ::
+
+    oranges_generate_standard_headers (TARGET <targetName>
+                                      [BASE_NAME <baseName>]
+                                      [HEADER <mainHeaderName>] | [NO_AGGREGATE_HEADER]
+                                      [FEATURE_TEST_LANGUAGE <lang>]
+                                      [BUILD_TYPE_HEADER <buildTypeHeaderName>]
+                                      [EXPORT_HEADER <exportHeaderName>]
+                                      [PLATFORM_HEADER <platformHeaderName>]
+                                      [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
+                                      [INTERFACE]
+                                      [SOURCE_GROUP_NAME <groupName>])
 
 This calls :command:`oranges_generate_build_type_header()`, :command:`oranges_generate_export_header()`, and :command:`oranges_generate_platform_header()`,
-then generates another header named `<mainHeaderName>` that includes all the other generated headers.
+then generates another header named ``<mainHeaderName>`` that includes all the other generated headers.
 
 #]=======================================================================]
 

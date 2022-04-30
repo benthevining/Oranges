@@ -17,26 +17,26 @@ OrangesGenerateBuildTypeHeader
 
 This module provides the function :command:`oranges_generate_build_type_header()`.
 
-Generating a build type header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. cmake:command:: oranges_generate_build_type_header
 
-.. command:: oranges_generate_build_type_header
+  ::
 
-	oranges_generate_build_type_header (TARGET <targetName>
-										[BASE_NAME <baseName>]
-										[HEADER <exportHeaderName>]
-										[INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
-										[INTERFACE])
+    oranges_generate_build_type_header (TARGET <targetName>
+                                       [BASE_NAME <baseName>]
+                                       [HEADER <exportHeaderName>]
+                                       [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
+                                       [INTERFACE])
 
 Generates a header file containing various macros identifiying the build type for the given target.
 
 The generated header will contain the following macros:
-<baseName>_DEBUG - 0 or 1
-<baseName>_RELEASE - 0 or 1
-<baseName>_BUILD_TYPE - string describing the current build type
+
+- <baseName>_DEBUG: 0 or 1
+- <baseName>_RELEASE: 0 or 1
+- <baseName>_BUILD_TYPE: string literal describing the current build type
 
 Because a multiconfig generator may generate multiple headers at once (and they obviously must be separate files),
-the way this works is that a header is generated for each build configuration, named <build_type_$<CONFIG>.h>,
+the way this works is that a header is generated for each build configuration, named ``<build_type_$<CONFIG>.h>``,
 and then one "wrapper header" is created, which includes the correct configuration header using compile definitions passed at build time.
 
 The advantage of generating a header containing the build type macros, instead of simply passing them as compile definitions,

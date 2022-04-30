@@ -17,74 +17,74 @@ OrangesGeneratePropertiesJSON
 
 This module provides the function :command:`oranges_generate_properties_json()`.
 
-Generating a JSON file listing all properties defined by a CMake project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_generate_properties_json
 
-	oranges_generate_properties_json (INPUT_FILE <filePath>
-									  OUTPUT_FILE <filePath>
-									  [USE_TARGET <target>]
-									  [KEEP_INPUT_FILE])
+  ::
+
+    oranges_generate_properties_json (INPUT_FILE <filePath>
+                                      OUTPUT_FILE <filePath>
+                                     [USE_TARGET <target>]
+                                     [KEEP_INPUT_FILE])
 
 This function parses an input file containing a list of property names and scopes, and produces a JSON file containing each property as an object with name, scope, brief docs and full docs fields.
 
 The input file should be a simple text file with one line per property, and each line beginning with the name of a property, followed by a space and the property's scope.
 
-For example:
-```
-Property1 GLOBAL
-Property2 TARGET
-Property3 GLOBAL
-```
+For example: ::
 
-The `<target>` option will be passed to `get_property()`, since you must specify a target name even for retrieving docstrings. (If none is specified, the default is OrangesDefaultTarget.)
+    Property1 GLOBAL
+    Property2 TARGET
+    Property3 GLOBAL
 
-If the `KEEP_INPUT_FILE` flag is not present, this function will delete the `INPUT_FILE` as its final operation. This is to prevent successive runs of CMake from re-populating the input file.
+The ``<target>`` option will be passed to ``get_property()``, since you must specify a target name even for retrieving docstrings. (If none is specified, the default is OrangesDefaultTarget.)
+
+If the ``KEEP_INPUT_FILE`` flag is not present, this function will delete the ``INPUT_FILE`` as its final operation. This is to prevent successive runs of CMake from re-populating the input file.
 
 A typical way to integrate this functionality into a project is to write property info into the intermediate "property list file" as soon as they are defined, for example:
 
-```
-# in top-level CMakeLists.txt:
+.. code-block:: cmake
 
-set (MYPROJ_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}" CACHE INTERNAL "")
+    # in top-level CMakeLists.txt:
 
-add_subdirectory (MySubdir)
+    set (MYPROJ_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}" CACHE INTERNAL "")
+
+    add_subdirectory (MySubdir)
+
+    #
+
+    # in subdirectory MySubdir:
+
+    define_property (
+        TARGET PROPERTY MyCoolProperty
+        BRIEF_DOCS "..."
+        FULL_DOCS "..."
+        )
+
+    define_property (
+        GLOBAL PROPERTY MyOtherCoolProperty
+        BRIEF_DOCS "..."
+        FULL_DOCS "..."
+        )
+
+    if(MYPROJ_PROPERTIES_LIST_FILE)
+        file (
+            APPEND "${MYPROJ_PROPERTIES_LIST_FILE}"
+            "MyCoolProperty TARGET\nMyOtherCoolProperty GLOBAL\n"
+        )
+    endif()
+
+    #
+
+    # back in top-level CMakeLists.txt, after add_subdirectory (MySubdir):
+
+    include (OrangesGeneratePropertiesJSON)
+
+    oranges_generate_properties_json (
+        INPUT_FILE "${MYPROJ_PROPERTIES_LIST_FILE}"
+        OUTPUT_FILE "${PROJECT_BINARY_DIR}/properties.json")
 
 
-# in subdirectory MySubdir:
-
-define_property (
-	TARGET PROPERTY MyCoolProperty
-	BRIEF_DOCS "..."
-	FULL_DOCS "..."
-	)
-
-define_property (
-	GLOBAL PROPERTY MyOtherCoolProperty
-	BRIEF_DOCS "..."
-	FULL_DOCS "..."
-	)
-
-if(MYPROJ_PROPERTIES_LIST_FILE)
-	file (
-		APPEND "${MYPROJ_PROPERTIES_LIST_FILE}"
-		"MyCoolProperty TARGET\nMyOtherCoolProperty GLOBAL\n"
-	)
-endif()
-
-
-
-# back in top-level CMakeLists.txt, after add_subdirectory (MySubdir):
-
-include (OrangesGeneratePropertiesJSON)
-
-oranges_generate_properties_json (
-	INPUT_FILE "${MYPROJ_PROPERTIES_LIST_FILE}"
-	OUTPUT_FILE "${PROJECT_BINARY_DIR}/properties.json")
-```
-
-You can alternatively hand-write a persistent input file for this function and use the `KEEP_INPUT_FILE` flag when calling it.
+You can alternatively hand-write a persistent input file for this function and use the ``KEEP_INPUT_FILE`` flag when calling it.
 
 #]=======================================================================]
 

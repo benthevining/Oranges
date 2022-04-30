@@ -24,9 +24,9 @@ Configure a headless application
 
 .. command:: lemons_configure_headless_app
 
-	lemons_configure_headless_app ()
+    lemons_configure_headless_app ()
 
-	Forwards `${ARGN}` to lemons_configure_juce_target.
+	Forwards `${ARGN}` to :command:`lemons_configure_juce_target`.
 
 
 Configure a GUI application
@@ -34,9 +34,9 @@ Configure a GUI application
 
 .. command:: lemons_configure_juce_app
 
-	lemons_configure_juce_app ()
+    lemons_configure_juce_app ()
 
-	Forwards `${ARGN}` to lemons_configure_juce_target.
+	Forwards `${ARGN}` to :command:`lemons_configure_juce_target`.
 
 #]=======================================================================]
 

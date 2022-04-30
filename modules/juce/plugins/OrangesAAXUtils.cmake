@@ -22,15 +22,17 @@ Configure an AAX plugin target
 
 .. command:: lemons_configure_aax_plugin
 
-	lemons_configure_aax_plugin (TARGET <target>
-								 [PAGETABLE_FILE <file>]
-								 [GUID <guid>])
+  ::
 
-Configures default settings for the specified AAX plugin target. Note that `<target>` is the *literal* name of this plugin target, not the shared plugin target name!
+    lemons_configure_aax_plugin (TARGET <target>
+                                [PAGETABLE_FILE <file>]
+                                [GUID <guid>])
 
-`PAGETABLE_FILE` is optional and specifies the name of an AAX pagetable file within your resources target to use.
+Configures default settings for the specified AAX plugin target. Note that ``<target>`` is the *literal* name of this plugin target, not the shared plugin target name!
 
-If `GUID` is present, `${ARGN}` will be forwarded to lemons_configure_aax_plugin_signing.
+``PAGETABLE_FILE`` is optional and specifies the name of an AAX pagetable file within your resources target to use.
+
+If ``GUID`` is present, ``${ARGN}`` will be forwarded to :command:`lemons_configure_aax_plugin_signing`.
 
 
 #]=======================================================================]

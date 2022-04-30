@@ -24,13 +24,13 @@ Add a binary data target to a JUCE project
 
 .. command:: lemons_add_resources_folder
 
-	lemons_add_resources_folder (TARGET <target> ASSET_FOLDER <folder>
-								 [OUTPUT_TARGET <targetName>])
+    lemons_add_resources_folder (TARGET <target> ASSET_FOLDER <folder>
+                                [OUTPUT_TARGET <targetName>])
 
-Adds a JUCE binary data folder for the specified `<target>`, and populates it with all the files found in `<folder>`.
-if `<folder>` is a relative path, it will be evaluated relative to your project's root directory (ie, the value of `${PROJECT_SOURCE_DIR}` when this function is called). You may also pass an absolute path.
+Adds a JUCE binary data folder for the specified ``<target>``, and populates it with all the files found in ``<folder>``.
+if ``<folder>`` is a relative path, it will be evaluated relative to your project's root directory (ie, the value of ``${PROJECT_SOURCE_DIR}`` when this function is called). You may also pass an absolute path.
 
-If `[OUTPUT_TARGET]` is present, `targetName` will be the name of the generated resources target; otherwise, it will default to `${PROJECT_NAME}-Assets`.
+If ``OUTPUT_TARGET`` is present, ``<targetName>`` will be the name of the generated resources target; otherwise, it will default to ``${PROJECT_NAME}-Assets``.
 
 #]=======================================================================]
 

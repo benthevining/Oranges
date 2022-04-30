@@ -25,7 +25,7 @@ release = '@conf_version@'  # full version string
 
 language = 'en'
 primary_domain = 'cmake'
-highlight_language = 'none'
+highlight_language = 'cmake'
 
 needs_sphinx = '1.1'
 

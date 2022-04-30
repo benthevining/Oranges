@@ -15,7 +15,7 @@
 OrangesDocsBuildConfig
 -------------------------
 
-An aggregate helper module that includes OrangesDoxygenConfig and, if the including project is the top level project, also includes OrangesGraphVizConfig.
+An aggregate helper module that includes :module:`OrangesDoxygenConfig` and, if the including project is the top level project, also includes :module:`OrangesGraphVizConfig`.
 
 Inclusion style: In each project
 

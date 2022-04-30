@@ -24,7 +24,7 @@ Enable plugin hosting for a JUCE target
 
 .. command:: lemons_enable_plugin_hosting
 
-	lemons_enable_plugin_hosting (target)
+    lemons_enable_plugin_hosting (target)
 
 
 Configure a JUCE target
@@ -32,17 +32,19 @@ Configure a JUCE target
 
 .. command:: lemons_configure_juce_target
 
-	lemons_configure_juce_target (TARGET <target>
-								  [ASSET_FOLDER <folder>]
-								  [PLUGIN_HOST] [BROWSER] [CAMERA] [MICROPHONE]
-								  [NO_MODULES])
+  ::
 
-Configures default settings for JUCE targets that are common to apps and plugins. `TARGET` is required and, for plugins, must be the name of the plugin's shared code target (usually your product name).
-The specified target will be linked to `LemonsCommonModules`, unless the `NO_MODULES` option is present.
+    lemons_configure_juce_target (TARGET <target>
+                                 [ASSET_FOLDER <folder>]
+                                 [PLUGIN_HOST] [BROWSER] [CAMERA] [MICROPHONE]
+                                 [NO_MODULES])
 
-If `ASSET_FOLDER` is specified, [lemons_add_resources_folder()](@ref lemons_add_resources_folder) will be called for you with the specified folder name; the `TRANSLATIONS` option may also optionally be present.
+Configures default settings for JUCE targets that are common to apps and plugins. ``TARGET`` is required and, for plugins, must be the name of the plugin's shared code target (usually your product name).
+The specified target will be linked to ``LemonsCommonModules``, unless the ``NO_MODULES`` option is present.
 
-The `PLUGIN_HOST`, `BROWSER`, `CAMERA`, and `MICROPHONE` options are all optional, and enable additional functionality for this plugin's targets.
+If ``ASSET_FOLDER`` is specified, :command:`lemons_add_resources_folder()` will be called for you with the specified folder name.
+
+The ``PLUGIN_HOST``, ``BROWSER``, ``CAMERA``, and ``MICROPHONE`` options are all optional, and enable additional functionality for this plugin's targets.
 
 
 #]=======================================================================]

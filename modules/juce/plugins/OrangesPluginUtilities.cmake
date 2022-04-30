@@ -37,13 +37,13 @@ Configure a JUCE plugin target
 
 .. command:: lemons_configure_juce_plugin
 
-	lemons_configure_juce_plugin (TARGET <target>
-								  [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>]
-								  [CLAP_FORMAT] [CLAP_FEATURES <features...>])
+    lemons_configure_juce_plugin (TARGET <target>
+                                 [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>]
+                                 [CLAP_FORMAT] [CLAP_FEATURES <features...>])
 
-Forwards `${ARGN}` to lemons_configure_juce_target.
+Forwards ``${ARGN}`` to :command:`lemons_configure_juce_target`.
 
-If an AAX-format target exists for this plugin, then [lemons_configure_aax_plugin()](@ref lemons_configure_aax_plugin) will be called for you. The `AAX_PAGETABLE_FILE` and `AAX_GUID` options will be forwarded, if present.
+If an AAX-format target exists for this plugin, then :command:`lemons_configure_aax_plugin` will be called for you. The ``AAX_PAGETABLE_FILE`` and ``AAX_GUID`` options will be forwarded, if present.
 
 
 #]=======================================================================]

@@ -22,16 +22,18 @@ Calling a function for each plugin format
 
 .. command:: call_for_each_plugin_format
 
-	call_for_each_plugin_format (TARGET <pluginTarget>
-								 FUNCTION <functionName>)
+    call_for_each_plugin_format (TARGET <pluginTarget>
+                                 FUNCTION <functionName>)
 
 This function calls a given command for each plugin format of the given plugin base target.
 
-The passed `FUNCTION` must have the signature:
-```
-your_callback (targetName formatName)
-```
-where `targetName` is the name of the plugin format's specific target, that has already been checked for existence, and `formatName` is the name of the plugin format (eg, 'AAX' or 'VST3').
+The passed ``FUNCTION`` must have the signature:
+
+.. code-block:: cmake
+
+    your_callback (targetName formatName)
+
+where ``targetName`` is the name of the plugin format's specific target, and ``formatName`` is the name of the plugin format (eg, 'AAX' or 'VST3').
 
 
 #]=======================================================================]

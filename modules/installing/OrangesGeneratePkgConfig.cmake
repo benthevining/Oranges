@@ -17,20 +17,19 @@ OrangesGeneratePkgConfig
 
 This module provides the function :command:`oranges_create_pkgconfig_file()`.
 
-Generating a pkgconfig file for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_create_pkgconfig_file
 
-	oranges_create_pkgconfig_file (TARGET <targetName>
-								   [OUTPUT_DIR <outputDir>]
-								   [NAME <packageName>]
-								   [INCLUDE_REL_PATH <basePath>]
-								   [DESCRIPTION <projectDescription>]
-								   [URL <projectURL>]
-								   [VERSION <projectVersion>]
-								   [NO_INSTALL]|[INSTALL_DEST <installDestination>] [INSTALL_COMPONENT <componentName>]
-								   [REQUIRES <requiredPackages...>])
+  ::
+
+    oranges_create_pkgconfig_file (TARGET <targetName>
+                                  [OUTPUT_DIR <outputDir>]
+                                  [NAME <packageName>]
+                                  [INCLUDE_REL_PATH <basePath>]
+                                  [DESCRIPTION <projectDescription>]
+                                  [URL <projectURL>]
+                                  [VERSION <projectVersion>]
+                                  [NO_INSTALL]|[INSTALL_DEST <installDestination>] [INSTALL_COMPONENT <componentName>]
+                                  [REQUIRES <requiredPackages...>])
 
 #]=======================================================================]
 

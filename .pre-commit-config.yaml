@@ -110,11 +110,11 @@ repos:
             exclude: CHANGELOG.md
 
   # CMake
-    - repo: https://github.com/cheshirekow/cmake-format-precommit
-      rev: v0.6.13
-      hooks:
-          - id: cmake-format
-            args: [--in-place]
+    # - repo: https://github.com/cheshirekow/cmake-format-precommit
+    #   rev: v0.6.13
+    #   hooks:
+    #       - id: cmake-format
+    #         args: [--in-place]
           #- id: cmake-lint
 
   # YAML
@@ -193,6 +193,7 @@ repos:
       hooks:
           - id: editorconfig-checker
             exclude: oranges_header.txt|LICENSE|index.rst
+            exclude_types: [cmake]
 
 ci:
     skip: [gitown, check-jsonschema, pylint, run-cmake, update-readme]

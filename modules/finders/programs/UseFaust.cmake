@@ -16,7 +16,7 @@ UseFaust
 -------------------------
 
 Integrate Faust DSP code into your project.
-If the Faust compiler hasn't already been found, including this module will call `find_package(faust)`.
+If the Faust compiler hasn't already been found, including this module will call ``find_package(faust)``.
 
 
 Generate C++ code for Faust sources
@@ -24,11 +24,13 @@ Generate C++ code for Faust sources
 
 .. command:: faust_add_generation_command
 
-	faust_add_generation_command (INPUT_FILE <inputFile>
-								  CLASS_NAME <generatedClassName>
-								  [OUTPUT_FILE <outputFile>])
+  ::
 
-Adds a command to call the Faust compiler to generate the `<generatedClassName>` C++ class in the file `<outputFile>` from the `<inputFile>` Faust .dsp file.
+    faust_add_generation_command (INPUT_FILE <inputFile>
+                                  CLASS_NAME <generatedClassName>
+                                 [OUTPUT_FILE <outputFile>])
+
+Adds a command to call the Faust compiler to generate the ``<generatedClassName>`` C++ class in the file ``<outputFile>`` from the ``<inputFile>`` Faust .dsp file.
 
 
 Wrap multiple generated Faust sources into a library
@@ -36,13 +38,15 @@ Wrap multiple generated Faust sources into a library
 
 .. command:: faust_add_library
 
-	faust_add_library (TARGET_NAME <targetName>
-					   INPUT_FILES <fileNames...>
-					   CLASS_NAMES <classNames...>
-					   [INSTALL_REL_PATH <relPath>]
-					   [INSTALL_COMPONENT <compName>])
+  ::
 
-Calls `faust_add_generation_command` for each pair of passed `fileNames` and `classNames`, and creates an interface library target that contains all the generated sources.
+    faust_add_library (TARGET_NAME <targetName>
+                       INPUT_FILES <fileNames...>
+                       CLASS_NAMES <classNames...>
+                      [INSTALL_REL_PATH <relPath>]
+                      [INSTALL_COMPONENT <compName>])
+
+Calls :command:`faust_add_generation_command` for each pair of passed ``fileNames`` and ``classNames``, and creates an interface library target that contains all the generated sources.
 
 #]=======================================================================]
 

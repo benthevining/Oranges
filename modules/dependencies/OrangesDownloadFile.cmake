@@ -17,33 +17,34 @@ OrangesDownloadFile
 
 This module provides the function :command:`oranges_download_file()`.
 
-Download and cache a file at configure time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_download_file
 
-	oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot>] [GIT_BRANCH <branchName>]
-						   [PATH_OUTPUT <outputVar>]
-						   [NO_CACHE] [QUIET] [NEVER_LOCAL]
-						   [COPY_TO <path>]
-						   [TIMEOUT <timeoutSeconds>]
-						   [USERNAME <username>]
-						   [PASSWORD <password>]
-						   [EXPECTED_HASH <alg=expectedHash>])
+  ::
 
-If the `URL` argument is not given, then you must specify the GitHub repository, branch, and relative path to the file from the root of the repository.
+    oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot>] [GIT_BRANCH <branchName>]
+                          [PATH_OUTPUT <outputVar>]
+                          [NO_CACHE] [QUIET] [NEVER_LOCAL]
+                          [COPY_TO <path>]
+                          [TIMEOUT <timeoutSeconds>]
+                          [USERNAME <username>]
+                          [PASSWORD <password>]
+                          [EXPECTED_HASH <alg=expectedHash>])
 
-`PATH_OUTPUT` may name a variable that will be set with the absolute path of the downloaded file, in the scope of the caller.
-If `PATH_OUTPUT` isn't specified, the variable `${FILENAME}_PATH` will be set to the absolute path of the downloaded file in the scope of the caller.
+Download and cache a file at configure time.
 
-If the variable `FILE_${FILENAME}_PATH` is set, this function will only set the path output variable to that path, not downloading anything.
-However, if the `NEVER_LOCAL` option is present, the local filepath is ignored and the file will always be downloaded.
+If the ``URL`` argument is not given, then you must specify the GitHub repository, branch, and relative path to the file from the root of the repository.
 
-If the `QUIET` option is present, this function won't output status updates.
+``PATH_OUTPUT`` may name a variable that will be set with the absolute path of the downloaded file, in the scope of the caller.
+If ``PATH_OUTPUT`` isn't specified, the variable ``${FILENAME}_PATH`` will be set to the absolute path of the downloaded file in the scope of the caller.
 
-If the `NO_CACHE` option is present, the file will downloaded into the binary tree, instead of the cache folder.
+If the variable ``FILE_${FILENAME}_PATH`` is set, this function will only set the path output variable to that path, not downloading anything.
+However, if the ``NEVER_LOCAL`` option is present, the local filepath is ignored and the file will always be downloaded.
 
-If the `COPY_TO` argument is present, the downloaded file will be copied to the specified path once it has been fetched.
+If the ``QUIET`` option is present, this function won't output status updates.
+
+If the ``NO_CACHE`` option is present, the file will downloaded into the binary tree, instead of the cache folder.
+
+If the ``COPY_TO`` argument is present, the downloaded file will be copied to the specified path once it has been fetched.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -17,20 +17,19 @@ OrangesSourceFileUtils
 
 Utility function for adding source files to a target, and generating install rules for any header files.
 
-Add source files to a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_add_source_files
 
-	oranges_add_source_files (TARGET <target>
-							  DIRECTORY_NAME <directory>
-							  FILES <filenames...>
-							  [INSTALL_DIR <installBaseDir>]
-							  [INSTALL_COMPONENT <component>])
+  ::
 
-This function adds the source files to the given target, and adds rules for any headers to be installed to `<installBaseDir>/<directory>`.
+    oranges_add_source_files (TARGET <target>
+                              DIRECTORY_NAME <directory>
+                              FILES <filenames...>
+                             [INSTALL_DIR <installBaseDir>]
+                             [INSTALL_COMPONENT <component>])
 
-The variable `<directory>_files` will be set in the scope of the caller as a list of filenames, in the form `<directory>/<filename>`.
+This function adds the source files to the given target, and adds rules for any headers to be installed to ``<installBaseDir>/<directory>``.
+
+The variable ``<directory>_files`` will be set in the scope of the caller as a list of filenames, in the form ``<directory>/<filename>``.
 
 #]=======================================================================]
 

@@ -18,14 +18,16 @@ OrangesDefaultWarnings
 Provides a helper target for configuring some default compiler warnings.
 
 Note that this is a build-only target! You should always link to it using the following command:
-```cmake
-target_link_libraries (YourTarget YOUR_SCOPE
-	$<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>)
-```
-If you get an error similar to:
-```
-CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesDefaultWarnings" that is not in any export set.
-```
+
+.. code-block:: cmake
+
+    target_link_libraries (YourTarget YOUR_SCOPE
+        $<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
+
+If you get an error similar to: ::
+
+    CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesAllIntegrations" that is not in any export set.
+
 then this is why. You're linking to OrangesDefaultWarnings unconditionally (or with incorrect generator expressions).
 
 

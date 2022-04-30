@@ -17,65 +17,71 @@ OrangesGeneratePlatformHeader
 
 This module provides the function :command:`oranges_generate_platform_header()`.
 
-Generating a platform header for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_generate_platform_header
 
-	oranges_generate_platform_header (TARGET <targetName>
-									  [BASE_NAME <baseName>]
-									  [HEADER <headerName>]
-									  [LANGUAGE <languageToUseForTestFeastures>]
-									  [INTERFACE]
-									  [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
+  ::
+
+    oranges_generate_platform_header (TARGET <targetName>
+                                     [BASE_NAME <baseName>]
+                                     [HEADER <headerName>]
+                                     [LANGUAGE <languageToUseForFeatureTests>]
+                                     [INTERFACE]
+                                     [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 Generates a header file containing various platform identifying macros for the current target platform.
 
-The generated file will contain the following macros, where `baseName` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
+The generated file will contain the following macros, where ``<baseName>`` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
 
 OS type macros:
-<baseName>_UNIX
-<baseName>_POSIX
-<baseName>_WINDOWS
-<baseName>_MINGW
-<baseName>_LINUX
-<baseName>_APPLE
-<baseName>_OSX
-<baseName>_IOS
-<baseName>_ANDROID
-<baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'Windows', 'Linux', or 'Android'
+
+- <baseName>_UNIX
+- <baseName>_POSIX
+- <baseName>_WINDOWS
+- <baseName>_MINGW
+- <baseName>_LINUX
+- <baseName>_APPLE
+- <baseName>_OSX
+- <baseName>_IOS
+- <baseName>_ANDROID
+- <baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'Windows', 'Linux', or 'Android'
 
 Compiler type macros:
-<baseName>_CLANG
-<baseName>_GCC
-<baseName>_MSVC
-<baseName>_INTEL_COMPILER
-<baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
+
+- <baseName>_CLANG
+- <baseName>_GCC
+- <baseName>_MSVC
+- <baseName>_INTEL_COMPILER
+- <baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
 
 Processor and architecture macros:
-<baseName>_ARM
-<baseName>_INTEL
-<baseName>_CPU_TYPE - a string literal describing the CPU. Either 'ARM', 'Intel', or 'Unknown'
-<baseName>_32BIT
-<baseName>_64BIT
-<baseName>_BIG_ENDIAN
-<baseName>_LITTLE_ENDIAN
 
-SIMD instruction capabilities
-<baseName>_ARM_NEON
-<baseName>_AVX
-<baseName>_AVX512
-<baseName>_SSE
+- <baseName>_ARM
+- <baseName>_INTEL
+- <baseName>_CPU_TYPE - a string literal describing the CPU. Either 'ARM', 'Intel', or 'Unknown'
+- <baseName>_32BIT
+- <baseName>_64BIT
+- <baseName>_BIG_ENDIAN
+- <baseName>_LITTLE_ENDIAN
 
-Function inlining macros
-<baseName>_FORCE_INLINE
-<baseName>_NEVER_INLINE
+SIMD instruction capabilities:
 
-Pure function attribute macro
-<baseName>_PURE_FUNCTION
+- <baseName>_ARM_NEON
+- <baseName>_AVX
+- <baseName>_AVX512
+- <baseName>_SSE
 
-Pointer anti-aliasing macro
-<baseName>_RESTRICT
+Function inlining macros:
+
+- <baseName>_FORCE_INLINE
+- <baseName>_NEVER_INLINE
+
+Pure function attribute macro:
+
+- <baseName>_PURE_FUNCTION
+
+Pointer anti-aliasing macro:
+
+- <baseName>_RESTRICT
 
 #]=======================================================================]
 

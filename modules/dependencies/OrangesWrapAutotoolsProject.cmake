@@ -23,11 +23,13 @@ Configure an autotools project
 
 .. command:: autotools_run_configure
 
-	autotools_run_configure (SOURCE_DIR <sourceDir>
-							 [C_FLAGS <c_flags...>]
-							 [CXX_FLAGS <cxx_flags...>]
-							 [LD_FLAGS <linkerFlags...>]
-							 [STATIC] [SHARED])
+  ::
+
+    autotools_run_configure (SOURCE_DIR <sourceDir>
+                            [C_FLAGS <c_flags...>]
+                            [CXX_FLAGS <cxx_flags...>]
+                            [LD_FLAGS <linkerFlags...>]
+                            [STATIC] [SHARED])
 
 
 Add a target to build an autotools project
@@ -35,9 +37,11 @@ Add a target to build an autotools project
 
 .. command:: autotools_add_build_target
 
-	autotools_add_build_target (SOURCE_DIR <sourceDir>
-								TARGET <targetName>
-								[COMMENT <buildComment>])
+  ::
+
+    autotools_add_build_target (SOURCE_DIR <sourceDir>
+                                TARGET <targetName>
+                               [COMMENT <buildComment>])
 
 #]=======================================================================]
 
