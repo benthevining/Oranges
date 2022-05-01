@@ -34,8 +34,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	faust PROPERTIES URL "https://faust.grame.fr/"
-	DESCRIPTION "Compiler for Faust .dsp files into c++ source code")
+    faust PROPERTIES URL "https://faust.grame.fr/"
+    DESCRIPTION "Compiler for Faust .dsp files into c++ source code")
 
 oranges_file_scoped_message_context ("Findfaust")
 
@@ -46,14 +46,14 @@ find_program (PROGRAM_FAUST faust DOC "Faust compiler")
 mark_as_advanced (FORCE PROGRAM_FAUST)
 
 if (PROGRAM_FAUST)
-	add_executable (faust IMPORTED GLOBAL)
+    add_executable (faust IMPORTED GLOBAL)
 
-	set_target_properties (faust PROPERTIES IMPORTED_LOCATION
-											"${PROGRAM_FAUST}")
+    set_target_properties (faust PROPERTIES IMPORTED_LOCATION
+                                            "${PROGRAM_FAUST}")
 
-	add_executable (faust::faust ALIAS faust)
+    add_executable (faust::faust ALIAS faust)
 
-	set (faust_FOUND TRUE)
+    set (faust_FOUND TRUE)
 else ()
-	find_package_warning_or_error ("faust compiler cannot be found!")
+    find_package_warning_or_error ("faust compiler cannot be found!")
 endif ()

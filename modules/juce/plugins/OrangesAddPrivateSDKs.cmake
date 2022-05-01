@@ -39,18 +39,18 @@ include (OrangesFetchRepository)
 oranges_file_scoped_message_context ("LemonsAddPrivateSDKs")
 
 if (DEFINED ENV{LEMONS_PRIVATE_SDKS})
-	file (REAL_PATH "$ENV{LEMONS_PRIVATE_SDKS}"
-		  FETCHCONTENT_SOURCE_DIR_PrivateSDKs EXPAND_TILDE)
+    file (REAL_PATH "$ENV{LEMONS_PRIVATE_SDKS}"
+          FETCHCONTENT_SOURCE_DIR_PrivateSDKs EXPAND_TILDE)
 endif ()
 
 if (NOT FETCHCONTENT_SOURCE_DIR_PrivateSDKs)
-	if (NOT (GITHUB_USERNAME AND GITHUB_ACCESS_TOKEN))
-		message (WARNING "Github credentials missing!")
-	endif ()
+    if (NOT (GITHUB_USERNAME AND GITHUB_ACCESS_TOKEN))
+        message (WARNING "Github credentials missing!")
+    endif ()
 endif ()
 
 oranges_fetch_repository (
-	NAME PrivateSDKs GITHUB_REPOSITORY benthevining/PrivateSDKs
-	GIT_TAG origin/main QUIET NEVER_LOCAL)
+    NAME PrivateSDKs GITHUB_REPOSITORY benthevining/PrivateSDKs
+    GIT_TAG origin/main QUIET NEVER_LOCAL)
 
 mark_as_advanced (FORCE LEMONS_AAX_SDK_PATH LEMONS_VST2_SDK_PATH)

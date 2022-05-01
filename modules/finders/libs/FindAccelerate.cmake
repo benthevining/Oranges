@@ -41,9 +41,9 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	Accelerate PROPERTIES
-	URL "https://developer.apple.com/documentation/accelerate"
-	DESCRIPTION "Apple's optimized high performance libraries")
+    Accelerate PROPERTIES
+    URL "https://developer.apple.com/documentation/accelerate"
+    DESCRIPTION "Apple's optimized high performance libraries")
 
 #
 
@@ -60,14 +60,14 @@ find_package_default_component_list (BNNS vImage vDSP vForce BLAS)
 find_library (AccelerateLib Accelerate DOC "Accelerate framework path")
 
 if (NOT AccelerateLib)
-	find_package_warning_or_error ("Accelerate framework not found")
-	return ()
+    find_package_warning_or_error ("Accelerate framework not found")
+    return ()
 endif ()
 
 add_library (Apple_Accelerate IMPORTED UNKNOWN)
 
 set_target_properties (Apple_Accelerate PROPERTIES IMPORTED_LOCATION
-												   "${AccelerateLib}")
+                                                   "${AccelerateLib}")
 
 add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 
@@ -98,13 +98,13 @@ add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 # endforeach()
 
 if (TARGET Apple_vDSP)
-	# fixes a bug present when compiling vDSP with GCC
-	target_compile_options (
-		Apple_vDSP INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
+    # fixes a bug present when compiling vDSP with GCC
+    target_compile_options (
+        Apple_vDSP INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
 endif ()
 
 if (NOT TARGET Apple::Accelerate)
-	add_library (Apple::Accelerate ALIAS Apple_Accelerate)
+    add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 endif ()
 
 set (MTS-ESP_FOUND TRUE)
@@ -112,8 +112,8 @@ set (MTS-ESP_FOUND TRUE)
 install (TARGETS Apple_Accelerate EXPORT AccelerateTargets)
 
 install (EXPORT AccelerateTargets
-		 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Accelerate" NAMESPACE Apple::
-		 COMPONENT Accelerate)
+         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Accelerate" NAMESPACE Apple::
+         COMPONENT Accelerate)
 
 include (CPackComponent)
 

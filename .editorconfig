@@ -19,3 +19,9 @@ indent_size = 2
 
 [*.{xml,cff}]
 indent_style = space
+
+[*.cmake]
+indent_style = space
+
+[CMakeLists.txt]
+indent_style = space

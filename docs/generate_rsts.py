@@ -30,13 +30,14 @@ RST_OUTPUT_DIR: Final[str] = "@RST_OUTPUT_DIR@"
 INPUT_INDEX_FILE: Final[str] = "@INPUT_INDEX_FILE@"
 
 if not os.path.isdir(RST_OUTPUT_DIR):
-	os.makedirs (RST_OUTPUT_DIR)
+	os.makedirs(RST_OUTPUT_DIR)
 
 generated_files: list[str] = []
 
 #
 
-def process_directory(dir_path) -> None:
+
+def process_directory(dir_path: str) -> None:
 	"""
 	Processes all CMake modules in a directory, recursively.
 	"""
@@ -58,14 +59,17 @@ def process_directory(dir_path) -> None:
 		if not entry.endswith(".cmake"):
 			continue
 
-		output_file: Final[str] = os.path.join(RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
+		output_file: Final[str] = os.path.join(
+		    RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
 
-		output_path: Final[str] = os.path.relpath (entry_path, start=RST_OUTPUT_DIR)
+		output_path: Final[str] = os.path.relpath(entry_path,
+		                                          start=RST_OUTPUT_DIR)
 
 		with open(output_file, "w", encoding="utf-8") as rst_out:
 			rst_out.write(f".. cmake-module:: {output_path}")
 
 		generated_files.append(output_file)
+
 
 #
 

@@ -53,36 +53,36 @@ lemons_warn_if_not_processing_project ()
 #
 
 macro (_lemons_configure_app_internal)
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	lemons_configure_juce_target (${ARGN})
+    lemons_configure_juce_target (${ARGN})
 
-	cmake_parse_arguments (LEMONS_APP "" "TARGET" "" ${ARGN})
+    cmake_parse_arguments (LEMONS_APP "" "TARGET" "" ${ARGN})
 
-	_lemons_add_to_all_apps_target (${LEMONS_APP_TARGET})
+    _lemons_add_to_all_apps_target (${LEMONS_APP_TARGET})
 endmacro ()
 
 #
 
 function (lemons_configure_headless_app)
-	oranges_add_function_message_context ()
-	_lemons_configure_app_internal (${ARGN})
+    oranges_add_function_message_context ()
+    _lemons_configure_app_internal (${ARGN})
 endfunction ()
 
 #
 
 function (lemons_configure_juce_app)
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	_lemons_configure_app_internal (${ARGN})
+    _lemons_configure_app_internal (${ARGN})
 
-	if (TARGET Lemons::LemonsAppModules)
-		target_link_libraries (${LEMONS_APP_TARGET}
-							   PRIVATE Lemons::LemonsAppModules)
-	else ()
-		message (
-			DEBUG
-			"No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}..."
-			)
-	endif ()
+    if (TARGET Lemons::LemonsAppModules)
+        target_link_libraries (${LEMONS_APP_TARGET}
+                               PRIVATE Lemons::LemonsAppModules)
+    else ()
+        message (
+            DEBUG
+            "No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}..."
+            )
+    endif ()
 endfunction ()

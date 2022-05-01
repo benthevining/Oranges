@@ -64,157 +64,157 @@ include (OrangesSetUpCache)
 
 function (oranges_download_file)
 
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	macro (_oranges_copy_downloaded_file source_path dest_path)
-		if (NOT "${${source_path}}" STREQUAL "${dest_path}")
-			# cmake-lint: disable=E1126
-			file (COPY_FILE "${${source_path}}" "${dest_path}")
-		endif ()
-	endmacro ()
+    macro (_oranges_copy_downloaded_file source_path dest_path)
+        if (NOT "${${source_path}}" STREQUAL "${dest_path}")
+            # cmake-lint: disable=E1126
+            file (COPY_FILE "${${source_path}}" "${dest_path}")
+        endif ()
+    endmacro ()
 
-	set (options NO_CACHE QUIET NEVER_LOCAL)
-	set (
-		oneValueArgs
-		URL
-		FILENAME
-		GITHUB_REPOSITORY
-		REPO_REL_PATH
-		GIT_BRANCH
-		PACKAGE_NAME
-		TIMEOUT
-		USERNAME
-		PASSWORD
-		EXPECTED_HASH
-		PATH_OUTPUT
-		COPY_TO)
+    set (options NO_CACHE QUIET NEVER_LOCAL)
+    set (
+        oneValueArgs
+        URL
+        FILENAME
+        GITHUB_REPOSITORY
+        REPO_REL_PATH
+        GIT_BRANCH
+        PACKAGE_NAME
+        TIMEOUT
+        USERNAME
+        PASSWORD
+        EXPECTED_HASH
+        PATH_OUTPUT
+        COPY_TO)
 
-	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" ""
-						   ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" ""
+                           ${ARGN})
 
-	lemons_require_function_arguments (ORANGES_ARG URL FILENAME)
-	lemons_check_for_unparsed_args (ORANGES_ARG)
+    lemons_require_function_arguments (ORANGES_ARG URL FILENAME)
+    lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if (ORANGES_ARG_COPY_TO)
-		cmake_language (DEFER CALL _oranges_copy_downloaded_file
-						"${ORANGES_ARG_PATH_OUTPUT}" "${ORANGES_ARG_COPY_TO}")
-	endif ()
+    if (ORANGES_ARG_COPY_TO)
+        cmake_language (DEFER CALL _oranges_copy_downloaded_file
+                        "${ORANGES_ARG_PATH_OUTPUT}" "${ORANGES_ARG_COPY_TO}")
+    endif ()
 
-	if (NOT ORANGES_ARG_PATH_OUTPUT)
-		set (ORANGES_ARG_PATH_OUTPUT "${FILENAME}_PATH")
-	endif ()
+    if (NOT ORANGES_ARG_PATH_OUTPUT)
+        set (ORANGES_ARG_PATH_OUTPUT "${FILENAME}_PATH")
+    endif ()
 
-	if (FILE_${ORANGES_ARG_FILENAME}_PATH AND NOT ORANGES_ARG_NEVER_LOCAL)
-		set (local_file_location "${FILE_${ORANGES_ARG_FILENAME}_PATH}")
+    if (FILE_${ORANGES_ARG_FILENAME}_PATH AND NOT ORANGES_ARG_NEVER_LOCAL)
+        set (local_file_location "${FILE_${ORANGES_ARG_FILENAME}_PATH}")
 
-		if (EXISTS "${local_file_location}")
-			set (${ORANGES_ARG_PATH_OUTPUT} "${local_file_location}"
-				 PARENT_SCOPE)
-			message (
-				DEBUG
-				" -- file ${ORANGES_ARG_FILENAME} found locally at ${local_file_location}"
-				)
-			return ()
-		endif ()
-	endif ()
+        if (EXISTS "${local_file_location}")
+            set (${ORANGES_ARG_PATH_OUTPUT} "${local_file_location}"
+                 PARENT_SCOPE)
+            message (
+                DEBUG
+                " -- file ${ORANGES_ARG_FILENAME} found locally at ${local_file_location}"
+                )
+            return ()
+        endif ()
+    endif ()
 
-	if (ORANGES_ARG_NO_CACHE)
-		set (cached_file_location
-			 "${CMAKE_CURRENT_BINARY_DIR}/_deps/${ORANGES_ARG_FILENAME}")
-	else ()
-		set (cached_file_location
-			 "${ORANGES_FILE_DOWNLOAD_CACHE}/${ORANGES_ARG_FILENAME}")
-	endif ()
+    if (ORANGES_ARG_NO_CACHE)
+        set (cached_file_location
+             "${CMAKE_CURRENT_BINARY_DIR}/_deps/${ORANGES_ARG_FILENAME}")
+    else ()
+        set (cached_file_location
+             "${ORANGES_FILE_DOWNLOAD_CACHE}/${ORANGES_ARG_FILENAME}")
+    endif ()
 
-	set (${ORANGES_ARG_PATH_OUTPUT} "${cached_file_location}" PARENT_SCOPE)
+    set (${ORANGES_ARG_PATH_OUTPUT} "${cached_file_location}" PARENT_SCOPE)
 
-	if (EXISTS "${cached_file_location}")
-		message (
-			DEBUG
-			" -- file ${ORANGES_ARG_FILENAME} found in cache at ${cached_file_location}"
-			)
-		return ()
-	else ()
-		if (ORANGES_FILE_DOWNLOAD_DISCONNECTED)
-			message (
-				WARNING
-					"ORANGES_FILE_DOWNLOAD_DISCONNECTED is on, and file ${ORANGES_ARG_FILENAME} was not found in the cache!"
-				)
-			return ()
-		endif ()
-	endif ()
+    if (EXISTS "${cached_file_location}")
+        message (
+            DEBUG
+            " -- file ${ORANGES_ARG_FILENAME} found in cache at ${cached_file_location}"
+            )
+        return ()
+    else ()
+        if (ORANGES_FILE_DOWNLOAD_DISCONNECTED)
+            message (
+                WARNING
+                    "ORANGES_FILE_DOWNLOAD_DISCONNECTED is on, and file ${ORANGES_ARG_FILENAME} was not found in the cache!"
+                )
+            return ()
+        endif ()
+    endif ()
 
-	if (ORANGES_ARG_GITHUB_REPOSITORY OR ORANGES_ARG_REPO_REL_PATH)
-		if ((NOT ORANGES_ARG_GITHUB_REPOSITORY) OR (NOT
-													ORANGES_ARG_REPO_REL_PATH))
-			message (
-				WARNING
-					"${CMAKE_CURRENT_FUNCTION} - GITHUB_REPOSITORY and REPO_REL_PATH must both be specified!"
-				)
-		else ()
-			# check if this repository has been downloaded via
-			# OrangesFetchRepository...
-			if (ORANGES_ARG_PACKAGE_NAME)
-				if (${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR)
-					set (
-						git_repo_file_location
-						"${${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR}/${ORANGES_ARG_REPO_REL_PATH}"
-						)
+    if (ORANGES_ARG_GITHUB_REPOSITORY OR ORANGES_ARG_REPO_REL_PATH)
+        if ((NOT ORANGES_ARG_GITHUB_REPOSITORY) OR (NOT
+                                                    ORANGES_ARG_REPO_REL_PATH))
+            message (
+                WARNING
+                    "${CMAKE_CURRENT_FUNCTION} - GITHUB_REPOSITORY and REPO_REL_PATH must both be specified!"
+                )
+        else ()
+            # check if this repository has been downloaded via
+            # OrangesFetchRepository...
+            if (ORANGES_ARG_PACKAGE_NAME)
+                if (${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR)
+                    set (
+                        git_repo_file_location
+                        "${${ORANGES_ARG_PACKAGE_NAME}_SOURCE_DIR}/${ORANGES_ARG_REPO_REL_PATH}"
+                        )
 
-					if (EXISTS "${git_repo_file_location}")
-						set (${ORANGES_ARG_PATH_OUTPUT}
-							 "${git_repo_file_location}" PARENT_SCOPE)
-						message (
-							DEBUG
-							" -- file ${ORANGES_ARG_FILENAME} found in downloaded git repo ${ORANGES_ARG_PACKAGE_NAME} at ${git_repo_file_location}"
-							)
-						return ()
-					endif ()
-				endif ()
-			endif ()
+                    if (EXISTS "${git_repo_file_location}")
+                        set (${ORANGES_ARG_PATH_OUTPUT}
+                             "${git_repo_file_location}" PARENT_SCOPE)
+                        message (
+                            DEBUG
+                            " -- file ${ORANGES_ARG_FILENAME} found in downloaded git repo ${ORANGES_ARG_PACKAGE_NAME} at ${git_repo_file_location}"
+                            )
+                        return ()
+                    endif ()
+                endif ()
+            endif ()
 
-			if (NOT ORANGES_ARG_GIT_BRANCH)
-				set (ORANGES_ARG_GIT_BRANCH main)
-			endif ()
+            if (NOT ORANGES_ARG_GIT_BRANCH)
+                set (ORANGES_ARG_GIT_BRANCH main)
+            endif ()
 
-			set (
-				ORANGES_ARG_URL
-				"https://raw.githubusercontent.com/${ORANGES_ARG_GITHUB_REPOSITORY}/${ORANGES_ARG_GIT_BRANCH}/${ORANGES_ARG_REPO_REL_PATH}"
-				)
-		endif ()
-	else ()
-		if (ORANGES_ARG_USERNAME OR ORANGES_ARG_PASSWORD)
-			if ((NOT ORANGES_ARG_USERNAME) OR (NOT ORANGES_ARG_PASSWORD))
-				message (
-					FATAL_ERROR
-						"${CMAKE_CURRENT_FUNCTION} - if specifying USERNAME or PASSWORD, both must be specified!"
-					)
-			endif ()
+            set (
+                ORANGES_ARG_URL
+                "https://raw.githubusercontent.com/${ORANGES_ARG_GITHUB_REPOSITORY}/${ORANGES_ARG_GIT_BRANCH}/${ORANGES_ARG_REPO_REL_PATH}"
+                )
+        endif ()
+    else ()
+        if (ORANGES_ARG_USERNAME OR ORANGES_ARG_PASSWORD)
+            if ((NOT ORANGES_ARG_USERNAME) OR (NOT ORANGES_ARG_PASSWORD))
+                message (
+                    FATAL_ERROR
+                        "${CMAKE_CURRENT_FUNCTION} - if specifying USERNAME or PASSWORD, both must be specified!"
+                    )
+            endif ()
 
-			set (pwd_flag USERPWD
-						  "${ORANGES_ARG_USERNAME}:${ORANGES_ARG_PASSWORD}")
-		endif ()
-	endif ()
+            set (pwd_flag USERPWD
+                          "${ORANGES_ARG_USERNAME}:${ORANGES_ARG_PASSWORD}")
+        endif ()
+    endif ()
 
-	oranges_forward_function_arguments (
-		PREFIX
-		ORANGES_ARG
-		KIND
-		oneVal
-		ARGS
-		TIMEOUT
-		EXPECTED_HASH)
+    oranges_forward_function_arguments (
+        PREFIX
+        ORANGES_ARG
+        KIND
+        oneVal
+        ARGS
+        TIMEOUT
+        EXPECTED_HASH)
 
-	if (NOT ORANGES_ARG_QUIET)
-		set (progress_flag SHOW_PROGRESS)
+    if (NOT ORANGES_ARG_QUIET)
+        set (progress_flag SHOW_PROGRESS)
 
-		message (
-			STATUS
-				"Downloading file ${ORANGES_ARG_FILENAME} from ${ORANGES_ARG_URL} to ${cached_file_location}..."
-			)
-	endif ()
+        message (
+            STATUS
+                "Downloading file ${ORANGES_ARG_FILENAME} from ${ORANGES_ARG_URL} to ${cached_file_location}..."
+            )
+    endif ()
 
-	file (DOWNLOAD "${ORANGES_ARG_URL}" "${cached_file_location}"
-		  ${progress_flag} ${pwd_flag} ${ORANGES_FORWARDED_ARGUMENTS})
+    file (DOWNLOAD "${ORANGES_ARG_URL}" "${cached_file_location}"
+          ${progress_flag} ${pwd_flag} ${ORANGES_FORWARDED_ARGUMENTS})
 
 endfunction ()

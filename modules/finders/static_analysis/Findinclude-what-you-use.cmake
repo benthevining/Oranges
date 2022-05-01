@@ -36,51 +36,51 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	include-what-you-use PROPERTIES
-	URL "https://include-what-you-use.org/"
-	DESCRIPTION "Static analysis for C++ includes"
-	TYPE OPTIONAL
-	PURPOSE "Static analysis")
+    include-what-you-use PROPERTIES
+    URL "https://include-what-you-use.org/"
+    DESCRIPTION "Static analysis for C++ includes"
+    TYPE OPTIONAL
+    PURPOSE "Static analysis")
 
 oranges_file_scoped_message_context ("Findinclude-what-you-use")
 
 set (include-what-you-use_FOUND FALSE)
 
 find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu
-			  DOC "include-what-you-use executable")
+              DOC "include-what-you-use executable")
 
 mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
 
 if (NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
-	find_package_warning_or_error (
-		"include-what-you-use program cannot be found!")
-	return ()
+    find_package_warning_or_error (
+        "include-what-you-use program cannot be found!")
+    return ()
 endif ()
 
 if (NOT include-what-you-use_FIND_QUIETLY)
-	message (VERBOSE "Using include-what-you-use!")
+    message (VERBOSE "Using include-what-you-use!")
 endif ()
 
 add_executable (include-what-you-use IMPORTED GLOBAL)
 
 set_target_properties (
-	include-what-you-use PROPERTIES IMPORTED_LOCATION
-									"${PROGRAM_INCLUDE_WHAT_YOU_USE}")
+    include-what-you-use PROPERTIES IMPORTED_LOCATION
+                                    "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
 
 add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
 set (include-what-you-use_FOUND TRUE)
 
 if (NOT TARGET Google::include-what-you-use-interface)
-	add_library (include-what-you-use-interface INTERFACE)
+    add_library (include-what-you-use-interface INTERFACE)
 
-	set_target_properties (
-		include-what-you-use-interface
-		PROPERTIES
-			CXX_INCLUDE_WHAT_YOU_USE
-			"${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns"
-		)
+    set_target_properties (
+        include-what-you-use-interface
+        PROPERTIES
+            CXX_INCLUDE_WHAT_YOU_USE
+            "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns"
+        )
 
-	add_library (Google::include-what-you-use-interface ALIAS
-				 include-what-you-use-interface)
+    add_library (Google::include-what-you-use-interface ALIAS
+                 include-what-you-use-interface)
 endif ()

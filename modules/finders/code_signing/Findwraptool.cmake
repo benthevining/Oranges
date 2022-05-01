@@ -34,31 +34,31 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (wraptool PROPERTIES URL "https://paceap.com/pro-audio/"
-						DESCRIPTION "AAX plugin signing tool provided by PACE")
+                        DESCRIPTION "AAX plugin signing tool provided by PACE")
 
 oranges_file_scoped_message_context ("Findwraptool")
 
 #
 
 if (TARGET PACE::wraptool)
-	set (wraptool_FOUND TRUE)
+    set (wraptool_FOUND TRUE)
 else ()
-	set (wraptool_FOUND FALSE)
+    set (wraptool_FOUND FALSE)
 
-	find_program (WRAPTOOL_PROGRAM wraptool DOC "PACE wraptool program")
+    find_program (WRAPTOOL_PROGRAM wraptool DOC "PACE wraptool program")
 
-	mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
+    mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
 
-	if (WRAPTOOL_PROGRAM)
-		add_executable (wraptool IMPORTED GLOBAL)
+    if (WRAPTOOL_PROGRAM)
+        add_executable (wraptool IMPORTED GLOBAL)
 
-		set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION
-												   "${WRAPTOOL_PROGRAM}")
+        set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION
+                                                   "${WRAPTOOL_PROGRAM}")
 
-		add_executable (PACE::wraptool ALIAS wraptool)
+        add_executable (PACE::wraptool ALIAS wraptool)
 
-		set (wraptool_FOUND TRUE)
-	else ()
-		find_package_warning_or_error ("wraptool program cannot be found!")
-	endif ()
+        set (wraptool_FOUND TRUE)
+    else ()
+        find_package_warning_or_error ("wraptool program cannot be found!")
+    endif ()
 endif ()

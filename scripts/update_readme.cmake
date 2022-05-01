@@ -17,39 +17,36 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 find_package (Python3 COMPONENTS Interpreter)
 
 if (NOT TARGET Python3::Interpreter)
-	message (WARNING "Python3 interpreter not found!")
-	return ()
+    message (WARNING "Python3 interpreter not found!")
+    return ()
 endif ()
 
-set (modules_output "${CMAKE_CURRENT_BINARY_DIR}/module_list.txt")
-set (readme "${CMAKE_CURRENT_LIST_DIR}/../README.md")
+set (ORANGES_MODULES_ROOT "${CMAKE_CURRENT_BINARY_DIR}/../modules")
+set (ORANGES_README "${CMAKE_CURRENT_LIST_DIR}/../README.md")
 
 configure_file (
-	"${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
-	"${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
+    "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
+    "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
 
-unset (readme)
+unset (ORANGES_README)
+unset (ORANGES_MODULES_ROOT)
 
 add_custom_target (
-	OrangesReadme
-	COMMAND Python3::Interpreter "${CMAKE_CURRENT_LIST_DIR}/../help/help.py"
-			--list-all-modules --output "${modules_output}"
-	COMMAND Python3::Interpreter "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py"
-	COMMENT "Updating Oranges readme..."
-	DEPENDS "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
-	VERBATIM USES_TERMINAL)
+    OrangesReadme
+    COMMAND Python3::Interpreter "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py"
+    COMMENT "Updating Oranges readme..."
+    DEPENDS "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
+    VERBATIM USES_TERMINAL)
 
 set_property (
-	TARGET OrangesReadme APPEND
-	PROPERTY ADDITIONAL_CLEAN_FILES
-			 "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
+    TARGET OrangesReadme APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES
+             "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
 
 set_target_properties (
-	OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
-							 XCODE_GENERATE_SCHEME OFF)
-
-unset (modules_output)
+    OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
+                             XCODE_GENERATE_SCHEME OFF)
 
 if (TARGET DependencyGraph)
-	add_dependencies (OrangesReadme DependencyGraph)
+    add_dependencies (OrangesReadme DependencyGraph)
 endif ()

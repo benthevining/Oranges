@@ -46,90 +46,90 @@ lemons_warn_if_not_processing_project ()
 
 function (lemons_add_resources_folder)
 
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET ASSET_FOLDER OUTPUT_TARGET)
+    set (oneValueArgs TARGET ASSET_FOLDER OUTPUT_TARGET)
 
-	cmake_parse_arguments (LEMONS_RSRC_FLDR "SHIM" "${oneValueArgs}" "" ${ARGN})
+    cmake_parse_arguments (LEMONS_RSRC_FLDR "SHIM" "${oneValueArgs}" "" ${ARGN})
 
-	lemons_require_function_arguments (LEMONS_RSRC_FLDR TARGET ASSET_FOLDER)
-	lemons_check_for_unparsed_args (LEMONS_RSRC_FLDR)
-	oranges_assert_target_argument_is_target (LEMONS_RSRC_FLDR)
+    lemons_require_function_arguments (LEMONS_RSRC_FLDR TARGET ASSET_FOLDER)
+    lemons_check_for_unparsed_args (LEMONS_RSRC_FLDR)
+    oranges_assert_target_argument_is_target (LEMONS_RSRC_FLDR)
 
-	lemons_make_path_absolute (VAR LEMONS_RSRC_FLDR_ASSET_FOLDER
-							   BASE_DIR "${PROJECT_SOURCE_DIR}")
+    lemons_make_path_absolute (VAR LEMONS_RSRC_FLDR_ASSET_FOLDER
+                               BASE_DIR "${PROJECT_SOURCE_DIR}")
 
-	if (LEMONS_RSRC_FLDR_OUTPUT_TARGET)
-		set (resourcesTarget "${LEMONS_RSRC_FLDR_OUTPUT_TARGET}")
-	else ()
-		set (resourcesTarget "${PROJECT_NAME}-Assets")
-	endif ()
+    if (LEMONS_RSRC_FLDR_OUTPUT_TARGET)
+        set (resourcesTarget "${LEMONS_RSRC_FLDR_OUTPUT_TARGET}")
+    else ()
+        set (resourcesTarget "${PROJECT_NAME}-Assets")
+    endif ()
 
-	lemons_make_variable_const (resourcesTarget)
+    lemons_make_variable_const (resourcesTarget)
 
-	message (DEBUG "Assets target name: ${resourcesTarget}")
-	message (DEBUG
-			 "Assets target source folder: ${LEMONS_RSRC_FLDR_ASSET_FOLDER}")
+    message (DEBUG "Assets target name: ${resourcesTarget}")
+    message (DEBUG
+             "Assets target source folder: ${LEMONS_RSRC_FLDR_ASSET_FOLDER}")
 
-	if (NOT TARGET ${resourcesTarget})
-		if (TARGET ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
-			message (
-				AUTHOR_WARNING
-					"Target ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget} exists, but target ${resourcesTarget} not found!"
-				)
-		endif ()
+    if (NOT TARGET ${resourcesTarget})
+        if (TARGET ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
+            message (
+                AUTHOR_WARNING
+                    "Target ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget} exists, but target ${resourcesTarget} not found!"
+                )
+        endif ()
 
-		lemons_subdir_list (DIR "${LEMONS_RSRC_FLDR_ASSET_FOLDER}"
-							FILES FULL_PATHS RECURSE RESULT files)
+        lemons_subdir_list (DIR "${LEMONS_RSRC_FLDR_ASSET_FOLDER}"
+                            FILES FULL_PATHS RECURSE RESULT files)
 
-		if (NOT files)
-			message (
-				AUTHOR_WARNING
-					"No files found for inclusion in resources target!")
-			return ()
-		endif ()
+        if (NOT files)
+            message (
+                AUTHOR_WARNING
+                    "No files found for inclusion in resources target!")
+            return ()
+        endif ()
 
-		juce_add_binary_data (${resourcesTarget} SOURCES ${files})
+        juce_add_binary_data (${resourcesTarget} SOURCES ${files})
 
-		if (NOT TARGET ${resourcesTarget})
-			message (WARNING "Error creating resources target.")
-			return ()
-		endif ()
+        if (NOT TARGET ${resourcesTarget})
+            message (WARNING "Error creating resources target.")
+            return ()
+        endif ()
 
-		set_target_properties (${resourcesTarget}
-							   PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-		target_compile_definitions (${resourcesTarget}
-									INTERFACE LEMONS_HAS_BINARY_DATA=1)
+        set_target_properties (${resourcesTarget}
+                               PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+        target_compile_definitions (${resourcesTarget}
+                                    INTERFACE LEMONS_HAS_BINARY_DATA=1)
 
-		if (LEMONS_RSRC_FLDR_SHIM OR "$ENV{LEMONS_FORCE_BINARY_SHIM}")
-			# cmake-lint: disable=E1126
-			file (REAL_PATH "${LEMONS_RSRC_FLDR_ASSET_FOLDER}" abs_path)
-			target_compile_definitions (
-				${resourcesTarget}
-				INTERFACE LEMONS_BINARY_SHIM_ROOT=${abs_path})
-			message (
-				STATUS
-					"Enabling filesystem shim for binary data target: ${resourcesTarget}. Root dir: ${abs_path}"
-				)
-		endif ()
+        if (LEMONS_RSRC_FLDR_SHIM OR "$ENV{LEMONS_FORCE_BINARY_SHIM}")
+            # cmake-lint: disable=E1126
+            file (REAL_PATH "${LEMONS_RSRC_FLDR_ASSET_FOLDER}" abs_path)
+            target_compile_definitions (
+                ${resourcesTarget}
+                INTERFACE LEMONS_BINARY_SHIM_ROOT=${abs_path})
+            message (
+                STATUS
+                    "Enabling filesystem shim for binary data target: ${resourcesTarget}. Root dir: ${abs_path}"
+                )
+        endif ()
 
-		oranges_export_alias_target ("${resourcesTarget}"
-									 "${LEMONS_RSRC_FLDR_TARGET}")
-	endif ()
+        oranges_export_alias_target ("${resourcesTarget}"
+                                     "${LEMONS_RSRC_FLDR_TARGET}")
+    endif ()
 
-	if (NOT TARGET ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
-		message (
-			AUTHOR_WARNING
-				"Error creating resources target - target ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget} not found."
-			)
-		return ()
-	endif ()
+    if (NOT TARGET ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
+        message (
+            AUTHOR_WARNING
+                "Error creating resources target - target ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget} not found."
+            )
+        return ()
+    endif ()
 
-	juce_add_bundle_resources_directory (${LEMONS_RSRC_FLDR_TARGET}
-										 ${LEMONS_RSRC_FLDR_ASSET_FOLDER})
+    juce_add_bundle_resources_directory (${LEMONS_RSRC_FLDR_TARGET}
+                                         ${LEMONS_RSRC_FLDR_ASSET_FOLDER})
 
-	target_link_libraries (
-		${LEMONS_RSRC_FLDR_TARGET}
-		PRIVATE ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
+    target_link_libraries (
+        ${LEMONS_RSRC_FLDR_TARGET}
+        PRIVATE ${LEMONS_RSRC_FLDR_TARGET}::${resourcesTarget})
 
 endfunction ()

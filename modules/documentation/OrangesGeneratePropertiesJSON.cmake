@@ -97,83 +97,83 @@ include (OrangesDefaultTarget)
 
 function (oranges_generate_properties_json)
 
-	set (oneValueArgs INPUT_FILE OUTPUT_FILE USE_TARGET)
+    set (oneValueArgs INPUT_FILE OUTPUT_FILE USE_TARGET)
 
-	cmake_parse_arguments (ORANGES_ARG "KEEP_INPUT_FILE" "${oneValueArgs}" ""
-						   ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "KEEP_INPUT_FILE" "${oneValueArgs}" ""
+                           ${ARGN})
 
-	lemons_require_function_arguments (ORANGES_ARG INPUT_FILE OUTPUT_FILE)
+    lemons_require_function_arguments (ORANGES_ARG INPUT_FILE OUTPUT_FILE)
 
-	if (NOT EXISTS "${ORANGES_ARG_INPUT_FILE}")
-		message (
-			WARNING
-				"Cannot generate properties docs, list file ${ORANGES_ARG_INPUT_FILE} does not exist!"
-			)
-		return ()
-	endif ()
+    if (NOT EXISTS "${ORANGES_ARG_INPUT_FILE}")
+        message (
+            WARNING
+                "Cannot generate properties docs, list file ${ORANGES_ARG_INPUT_FILE} does not exist!"
+            )
+        return ()
+    endif ()
 
-	if (NOT ORANGES_ARG_USE_TARGET)
-		set (ORANGES_ARG_USE_TARGET OrangesDefaultTarget)
-	endif ()
+    if (NOT ORANGES_ARG_USE_TARGET)
+        set (ORANGES_ARG_USE_TARGET OrangesDefaultTarget)
+    endif ()
 
-	file (STRINGS "${ORANGES_ARG_INPUT_FILE}" prop_lines)
+    file (STRINGS "${ORANGES_ARG_INPUT_FILE}" prop_lines)
 
-	set (properties_json "{ \"properties\": [ ] }")
+    set (properties_json "{ \"properties\": [ ] }")
 
-	set (property_idx 0)
+    set (property_idx 0)
 
-	foreach (line IN LISTS prop_lines)
+    foreach (line IN LISTS prop_lines)
 
-		string (STRIP "${line}" line)
+        string (STRIP "${line}" line)
 
-		if (NOT line)
-			continue ()
-		endif ()
+        if (NOT line)
+            continue ()
+        endif ()
 
-		string (FIND "${line}" " " space_pos)
+        string (FIND "${line}" " " space_pos)
 
-		string (SUBSTRING "${line}" 0 "${space_pos}" property_name)
-		string (SUBSTRING "${line}" "${space_pos}" -1 property_scope)
+        string (SUBSTRING "${line}" 0 "${space_pos}" property_name)
+        string (SUBSTRING "${line}" "${space_pos}" -1 property_scope)
 
-		string (STRIP "${property_name}" property_name)
-		string (STRIP "${property_scope}" property_scope)
+        string (STRIP "${property_name}" property_name)
+        string (STRIP "${property_scope}" property_scope)
 
-		if ("${property_scope}" MATCHES TARGET)
-			set (scope TARGET "${ORANGES_ARG_USE_TARGET}")
-		else ()
-			set (scope "${property_scope}")
-		endif ()
+        if ("${property_scope}" MATCHES TARGET)
+            set (scope TARGET "${ORANGES_ARG_USE_TARGET}")
+        else ()
+            set (scope "${property_scope}")
+        endif ()
 
-		get_property (prop_brief_docs ${scope} PROPERTY "${property_name}"
-					  BRIEF_DOCS)
+        get_property (prop_brief_docs ${scope} PROPERTY "${property_name}"
+                      BRIEF_DOCS)
 
-		get_property (prop_full_docs ${scope} PROPERTY "${property_name}"
-					  FULL_DOCS)
+        get_property (prop_full_docs ${scope} PROPERTY "${property_name}"
+                      FULL_DOCS)
 
-		string (
-			JSON
-			properties_json
-			SET
-			"${properties_json}"
-			properties
-			"${property_idx}"
-			"{ \"name\": \"${property_name}\", \"kind\": \"${property_scope}\", \"briefDocs\": \"${prop_brief_docs}\", \"fullDocs\": \"${prop_full_docs}\" }"
-			)
+        string (
+            JSON
+            properties_json
+            SET
+            "${properties_json}"
+            properties
+            "${property_idx}"
+            "{ \"name\": \"${property_name}\", \"kind\": \"${property_scope}\", \"briefDocs\": \"${prop_brief_docs}\", \"fullDocs\": \"${prop_full_docs}\" }"
+            )
 
-		math (EXPR property_idx "${property_idx}+1" OUTPUT_FORMAT DECIMAL)
+        math (EXPR property_idx "${property_idx}+1" OUTPUT_FORMAT DECIMAL)
 
-	endforeach ()
+    endforeach ()
 
-	file (WRITE "${ORANGES_ARG_OUTPUT_FILE}" "${properties_json}")
+    file (WRITE "${ORANGES_ARG_OUTPUT_FILE}" "${properties_json}")
 
-	if (NOT ORANGES_ARG_KEEP_INPUT_FILE)
-		file (REMOVE "${ORANGES_ARG_INPUT_FILE}")
-	endif ()
+    if (NOT ORANGES_ARG_KEEP_INPUT_FILE)
+        file (REMOVE "${ORANGES_ARG_INPUT_FILE}")
+    endif ()
 
-	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-				  PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_INPUT_FILE}")
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+                  PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_INPUT_FILE}")
 
-	set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-				  PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_ARG_OUTPUT_FILE}")
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+                  PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_ARG_OUTPUT_FILE}")
 
 endfunction ()

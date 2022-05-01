@@ -34,7 +34,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (dot PROPERTIES URL "https://graphviz.org/"
-						DESCRIPTION "Graph image creation tool")
+                        DESCRIPTION "Graph image creation tool")
 
 oranges_file_scoped_message_context ("Finddot")
 
@@ -45,8 +45,8 @@ find_program (ORANGES_DOT dot DOC "graphviz dot tool")
 mark_as_advanced (FORCE ORANGES_DOT)
 
 if (NOT ORANGES_DOT)
-	find_package_warning_or_error ("dot program cannot be found!")
-	return ()
+    find_package_warning_or_error ("dot program cannot be found!")
+    return ()
 endif ()
 
 add_executable (dot IMPORTED GLOBAL)

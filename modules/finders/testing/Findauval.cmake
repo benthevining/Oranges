@@ -34,9 +34,9 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	auval PROPERTIES
-	URL "https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html"
-	DESCRIPTION "AudioUnit plugin validation tool")
+    auval PROPERTIES
+    URL "https://developer.apple.com/library/archive/documentation/MusicAudio/Conceptual/AudioUnitProgrammingGuide/AudioUnitDevelopmentFundamentals/AudioUnitDevelopmentFundamentals.html"
+    DESCRIPTION "AudioUnit plugin validation tool")
 
 #
 
@@ -45,8 +45,8 @@ oranges_file_scoped_message_context ("Findauval")
 #
 
 if (TARGET Apple::auval)
-	set (auval_FOUND TRUE)
-	return ()
+    set (auval_FOUND TRUE)
+    return ()
 endif ()
 
 set (auval_FOUND FALSE)
@@ -54,14 +54,14 @@ set (auval_FOUND FALSE)
 find_program (AUVAL_PROGRAM auval DOC "auval executable")
 
 if (AUVAL_PROGRAM)
-	add_executable (auval IMPORTED GLOBAL)
+    add_executable (auval IMPORTED GLOBAL)
 
-	set_target_properties (auval PROPERTIES IMPORTED_LOCATION
-											"${AUVAL_PROGRAM}")
+    set_target_properties (auval PROPERTIES IMPORTED_LOCATION
+                                            "${AUVAL_PROGRAM}")
 
-	add_executable (Apple::auval ALIAS auval)
+    add_executable (Apple::auval ALIAS auval)
 
-	set (auval_FOUND TRUE)
+    set (auval_FOUND TRUE)
 else ()
-	find_package_warning_or_error ("auval cannot be found!")
+    find_package_warning_or_error ("auval cannot be found!")
 endif ()

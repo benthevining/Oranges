@@ -32,18 +32,18 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	AbletonLink PROPERTIES
-	URL "https://www.ableton.com/en/link/"
-	DESCRIPTION
-		"Library for communicating tempo changes between devices in a session")
+    AbletonLink PROPERTIES
+    URL "https://www.ableton.com/en/link/"
+    DESCRIPTION
+        "Library for communicating tempo changes between devices in a session")
 
 #
 
 oranges_file_scoped_message_context ("FindAbletonLink")
 
 if (TARGET Ableton::Link)
-	set (AbletonLink_FOUND TRUE)
-	return ()
+    set (AbletonLink_FOUND TRUE)
+    return ()
 endif ()
 
 set (AbletonLink_FOUND FALSE)
@@ -53,7 +53,7 @@ set (AbletonLink_FOUND FALSE)
 include (CPackComponent)
 
 cpack_add_component (AbletonLink DISPLAY_NAME "Ableton Link"
-					 DESCRIPTION "Ableton Link library" INSTALL_TYPES Developer)
+                     DESCRIPTION "Ableton Link library" INSTALL_TYPES Developer)
 
 #
 
@@ -64,28 +64,28 @@ find_library (ABLETONLINK_LIBRARIES NAMES link DOC "Ableton link library")
 mark_as_advanced (FORCE ABLETONLINK_INCLUDES ABLETONLINK_LIBRARIES)
 
 if (ABLETONLINK_INCLUDES AND ABLETONLINK_LIBRARIES)
-	add_library (AbletonLink IMPORTED UNKNOWN)
+    add_library (AbletonLink IMPORTED UNKNOWN)
 
-	set_target_properties (AbletonLink PROPERTIES IMPORTED_LOCATION
-												  "${ABLETONLINK_LIBRARIES}")
+    set_target_properties (AbletonLink PROPERTIES IMPORTED_LOCATION
+                                                  "${ABLETONLINK_LIBRARIES}")
 
-	target_include_directories (AbletonLink PUBLIC "${ABLETONLINK_INCLUDES}")
+    target_include_directories (AbletonLink PUBLIC "${ABLETONLINK_INCLUDES}")
 
-	add_library (Ableton::Link ALIAS AbletonLink)
+    add_library (Ableton::Link ALIAS AbletonLink)
 
-	set (AbletonLink_FOUND TRUE)
+    set (AbletonLink_FOUND TRUE)
 
-	return ()
+    return ()
 endif ()
 
 include (OrangesFetchRepository)
 
 if (AbletonLink_FIND_QUIETLY)
-	set (quiet_flag QUIET)
+    set (quiet_flag QUIET)
 endif ()
 
 oranges_fetch_repository (NAME AbletonLink GITHUB_REPOSITORY Ableton/link
-						  GIT_TAG origin/master NEVER_LOCAL ${quiet_flag})
+                          GIT_TAG origin/master NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 

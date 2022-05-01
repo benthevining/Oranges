@@ -38,7 +38,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org"
-						DESCRIPTION "FFT library")
+                        DESCRIPTION "FFT library")
 
 oranges_file_scoped_message_context ("FindFFTW")
 
@@ -47,77 +47,77 @@ set (FFTW_FOUND FALSE)
 find_package_default_component_list (fftw3 fftw3f)
 
 if (FFTW_FIND_QUIETLY)
-	set (quiet_flag QUIET)
+    set (quiet_flag QUIET)
 endif ()
 
 if (fftw3 IN_LIST FFTW_FIND_COMPONENTS)
-	if (FFTW_FIND_REQUIRED_fftw3)
-		set (required_flag REQUIRED)
-	endif ()
+    if (FFTW_FIND_REQUIRED_fftw3)
+        set (required_flag REQUIRED)
+    endif ()
 
-	find_package (fftw3 ${quiet_flag} ${required_flag})
+    find_package (fftw3 ${quiet_flag} ${required_flag})
 
-	unset (required_flag)
+    unset (required_flag)
 endif ()
 
 if (fftw3f IN_LIST FFTW_FIND_COMPONENTS)
-	if (FFTW_FIND_REQUIRED_fftw3f)
-		set (required_flag REQUIRED)
-	endif ()
+    if (FFTW_FIND_REQUIRED_fftw3f)
+        set (required_flag REQUIRED)
+    endif ()
 
-	find_package (fftw3f ${quiet_flag} ${required_flag})
+    find_package (fftw3f ${quiet_flag} ${required_flag})
 
-	unset (required_flag)
+    unset (required_flag)
 endif ()
 
 unset (quiet_flag)
 
 if (NOT (TARGET FFTW3::fftw3 OR TARGET FFTW3::fftw3f))
-	find_package_warning_or_error ("FFTW could not be located!")
-	return ()
+    find_package_warning_or_error ("FFTW could not be located!")
+    return ()
 endif ()
 
 if (NOT TARGET FFTW)
-	add_library (FFTW INTERFACE)
+    add_library (FFTW INTERFACE)
 endif ()
 
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
-									  $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
+                                      $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
 
 # define FFTW_DOUBLE_ONLY to 1 if the double target exists and the float one
 # doesn't
 target_compile_definitions (
-	FFTW
-	INTERFACE
-		$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3f>>>:FFTW_DOUBLE_ONLY=1>
-	)
+    FFTW
+    INTERFACE
+        $<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3f>>>:FFTW_DOUBLE_ONLY=1>
+    )
 
 # define FFTW_SINGLE_ONLY to 1 if the float target exists and the double one
 # doesn't
 target_compile_definitions (
-	FFTW
-	INTERFACE
-		$<$<AND:$<TARGET_EXISTS:FFTW::fftw3f>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3>>>:FFTW_SINGLE_ONLY=1>
-	)
+    FFTW
+    INTERFACE
+        $<$<AND:$<TARGET_EXISTS:FFTW::fftw3f>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3>>>:FFTW_SINGLE_ONLY=1>
+    )
 
 # define both FFTW_DOUBLE_ONLY and FFTW_SINGLE_ONLY to 0 if both targets exist
 target_compile_definitions (
-	FFTW
-	INTERFACE
-		"$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<TARGET_EXISTS:FFTW::fftw3f>>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>"
-	)
+    FFTW
+    INTERFACE
+        "$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<TARGET_EXISTS:FFTW::fftw3f>>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>"
+    )
 
 install (TARGETS FFTW EXPORT FFTWTargets)
 
 install (EXPORT FFTWTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/FFTW"
-		 NAMESPACE FFTW:: COMPONENT FFTW)
+         NAMESPACE FFTW:: COMPONENT FFTW)
 
 include (CPackComponent)
 
 cpack_add_component (FFTW DESCRIPTION "FFTW FFT library")
 
 if (NOT TARGET FFTW::FFTW)
-	add_library (FFTW::FFTW ALIAS FFTW)
+    add_library (FFTW::FFTW ALIAS FFTW)
 endif ()
 
 set (FFTW_FOUND TRUE)

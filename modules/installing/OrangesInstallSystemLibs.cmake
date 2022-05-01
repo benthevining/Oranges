@@ -32,12 +32,12 @@ include (CPackComponent)
 #
 
 option (ORANGES_IGNORE_SYSTEM_LIBS
-		"Don't create install rules for compiler-provided system libraries" OFF)
+        "Don't create install rules for compiler-provided system libraries" OFF)
 
 mark_as_advanced (FORCE ORANGES_IGNORE_SYSTEM_LIBS)
 
 if (ORANGES_IGNORE_SYSTEM_LIBS)
-	return ()
+    return ()
 endif ()
 
 #
@@ -50,8 +50,8 @@ set (CMAKE_INSTALL_SYSTEM_LIBS_RUNTIME_COMPONENT SystemLibraries)
 include (InstallRequiredSystemLibraries)
 
 cpack_add_component (
-	SystemLibraries
-	DISPLAY_NAME "System libraries"
-	DESCRIPTION "Installs all required system libraries"
-	INSTALL_TYPES Developer
-	DISABLED)
+    SystemLibraries
+    DISPLAY_NAME "System libraries"
+    DESCRIPTION "Installs all required system libraries"
+    INSTALL_TYPES Developer
+    DISABLED)

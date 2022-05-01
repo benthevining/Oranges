@@ -53,141 +53,141 @@ include (OrangesGeneratePlatformHeader)
 
 function (oranges_generate_standard_headers)
 
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	set (options INTERFACE NO_AGGREGATE_HEADER)
+    set (options INTERFACE NO_AGGREGATE_HEADER)
 
-	set (
-		oneValueArgs
-		TARGET
-		BASE_NAME
-		HEADER
-		BUILD_TYPE_HEADER
-		EXPORT_HEADER
-		PLATFORM_HEADER
-		INSTALL_COMPONENT
-		REL_PATH
-		FEATURE_TEST_LANGUAGE
-		SOURCE_GROUP_NAME)
+    set (
+        oneValueArgs
+        TARGET
+        BASE_NAME
+        HEADER
+        BUILD_TYPE_HEADER
+        EXPORT_HEADER
+        PLATFORM_HEADER
+        INSTALL_COMPONENT
+        REL_PATH
+        FEATURE_TEST_LANGUAGE
+        SOURCE_GROUP_NAME)
 
-	cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" ""
-						   ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" ""
+                           ${ARGN})
 
-	oranges_assert_target_argument_is_target (ORANGES_ARG)
-	lemons_check_for_unparsed_args (ORANGES_ARG)
+    oranges_assert_target_argument_is_target (ORANGES_ARG)
+    lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if (NOT ORANGES_ARG_FEATURE_TEST_LANGUAGE)
-		set (ORANGES_ARG_FEATURE_TEST_LANGUAGE CXX)
-	endif ()
+    if (NOT ORANGES_ARG_FEATURE_TEST_LANGUAGE)
+        set (ORANGES_ARG_FEATURE_TEST_LANGUAGE CXX)
+    endif ()
 
-	if (NOT ORANGES_ARG_BASE_NAME)
-		set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
-	endif ()
+    if (NOT ORANGES_ARG_BASE_NAME)
+        set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
+    endif ()
 
-	if (NOT ORANGES_ARG_HEADER)
-		set (ORANGES_ARG_HEADER "${ORANGES_ARG_TARGET}_generated.h")
-	endif ()
+    if (NOT ORANGES_ARG_HEADER)
+        set (ORANGES_ARG_HEADER "${ORANGES_ARG_TARGET}_generated.h")
+    endif ()
 
-	if (NOT ORANGES_ARG_BUILD_TYPE_HEADER)
-		set (ORANGES_ARG_BUILD_TYPE_HEADER "${ORANGES_ARG_TARGET}_build_type.h")
-	endif ()
+    if (NOT ORANGES_ARG_BUILD_TYPE_HEADER)
+        set (ORANGES_ARG_BUILD_TYPE_HEADER "${ORANGES_ARG_TARGET}_build_type.h")
+    endif ()
 
-	if (NOT ORANGES_ARG_EXPORT_HEADER)
-		set (ORANGES_ARG_EXPORT_HEADER "${ORANGES_ARG_TARGET}_export.h")
-	endif ()
+    if (NOT ORANGES_ARG_EXPORT_HEADER)
+        set (ORANGES_ARG_EXPORT_HEADER "${ORANGES_ARG_TARGET}_export.h")
+    endif ()
 
-	if (NOT ORANGES_ARG_PLATFORM_HEADER)
-		set (ORANGES_ARG_PLATFORM_HEADER "${ORANGES_ARG_TARGET}_platform.h")
-	endif ()
+    if (NOT ORANGES_ARG_PLATFORM_HEADER)
+        set (ORANGES_ARG_PLATFORM_HEADER "${ORANGES_ARG_TARGET}_platform.h")
+    endif ()
 
-	if (ORANGES_ARG_INSTALL_COMPONENT)
-		set (install_component INSTALL_COMPONENT
-							   "${ORANGES_ARG_INSTALL_COMPONENT}")
-	endif ()
+    if (ORANGES_ARG_INSTALL_COMPONENT)
+        set (install_component INSTALL_COMPONENT
+                               "${ORANGES_ARG_INSTALL_COMPONENT}")
+    endif ()
 
-	if (ORANGES_ARG_REL_PATH)
-		set (relative_path REL_PATH "${ORANGES_ARG_REL_PATH}")
-	endif ()
+    if (ORANGES_ARG_REL_PATH)
+        set (relative_path REL_PATH "${ORANGES_ARG_REL_PATH}")
+    endif ()
 
-	oranges_generate_export_header (
-		TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-		HEADER "${ORANGES_ARG_EXPORT_HEADER}" ${install_component}
-											  ${relative_path})
+    oranges_generate_export_header (
+        TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
+        HEADER "${ORANGES_ARG_EXPORT_HEADER}" ${install_component}
+                                              ${relative_path})
 
-	if (ORANGES_ARG_INTERFACE)
-		set (interface_flag INTERFACE)
-	endif ()
+    if (ORANGES_ARG_INTERFACE)
+        set (interface_flag INTERFACE)
+    endif ()
 
-	oranges_generate_build_type_header (
-		TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-		HEADER "${ORANGES_ARG_BUILD_TYPE_HEADER}"
-			   ${install_component} ${relative_path} ${interface_flag})
+    oranges_generate_build_type_header (
+        TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
+        HEADER "${ORANGES_ARG_BUILD_TYPE_HEADER}"
+               ${install_component} ${relative_path} ${interface_flag})
 
-	oranges_generate_platform_header (
-		TARGET "${ORANGES_ARG_TARGET}"
-		BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-		HEADER "${ORANGES_ARG_PLATFORM_HEADER}"
-		LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}"
-				 ${install_component} ${relative_path} ${interface_flag})
+    oranges_generate_platform_header (
+        TARGET "${ORANGES_ARG_TARGET}"
+        BASE_NAME "${ORANGES_ARG_BASE_NAME}"
+        HEADER "${ORANGES_ARG_PLATFORM_HEADER}"
+        LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}"
+                 ${install_component} ${relative_path} ${interface_flag})
 
-	if (NOT ORANGES_ARG_NO_AGGREGATE_HEADER)
-		set (configured_file
-			 "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+    if (NOT ORANGES_ARG_NO_AGGREGATE_HEADER)
+        set (configured_file
+             "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-		set (input_file
-			 "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/standard_header.h")
+        set (input_file
+             "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/standard_header.h")
 
-		configure_file ("${input_file}" "${configured_file}" @ONLY
-						NEWLINE_STYLE UNIX)
+        configure_file ("${input_file}" "${configured_file}" @ONLY
+                        NEWLINE_STYLE UNIX)
 
-		set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
-					  APPEND CMAKE_CONFIGURE_DEPENDS "${input_file}")
+        set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+                      APPEND CMAKE_CONFIGURE_DEPENDS "${input_file}")
 
-		set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-					  PROPERTY ADDITIONAL_CLEAN_FILES "${configured_file}")
+        set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+                      PROPERTY ADDITIONAL_CLEAN_FILES "${configured_file}")
 
-		set_source_files_properties (
-			"${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-			PROPERTIES GENERATED ON)
+        set_source_files_properties (
+            "${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+            PROPERTIES GENERATED ON)
 
-		if (ORANGES_ARG_INTERFACE)
-			set (public_vis INTERFACE)
-		else ()
-			set (public_vis PUBLIC)
-		endif ()
+        if (ORANGES_ARG_INTERFACE)
+            set (public_vis INTERFACE)
+        else ()
+            set (public_vis PUBLIC)
+        endif ()
 
-		target_sources (
-			"${ORANGES_ARG_TARGET}"
-			"${public_vis}"
-			$<BUILD_INTERFACE:${configured_file}>
-			$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
-			)
+        target_sources (
+            "${ORANGES_ARG_TARGET}"
+            "${public_vis}"
+            $<BUILD_INTERFACE:${configured_file}>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
+            )
 
-		if (ORANGES_ARG_INSTALL_COMPONENT)
-			set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-		endif ()
+        if (ORANGES_ARG_INSTALL_COMPONENT)
+            set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+        endif ()
 
-		install (
-			FILES "${configured_file}"
-			DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}"
-			${install_component})
+        install (
+            FILES "${configured_file}"
+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}"
+            ${install_component})
 
-		target_include_directories (
-			"${ORANGES_ARG_TARGET}"
-			"${public_vis}"
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-			$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>
-			)
-	endif ()
+        target_include_directories (
+            "${ORANGES_ARG_TARGET}"
+            "${public_vis}"
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>
+            )
+    endif ()
 
-	if (ORANGES_ARG_SOURCE_GROUP_NAME)
-		source_group (
-			TREE "${CMAKE_CURRENT_BINARY_DIR}"
-			PREFIX "${ORANGES_ARG_SOURCE_GROUP_NAME}"
-			FILES ${configured_file}
-				  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_EXPORT_HEADER}"
-				  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_BUILD_TYPE_HEADER}"
-				  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_PLATFORM_HEADER}")
-	endif ()
+    if (ORANGES_ARG_SOURCE_GROUP_NAME)
+        source_group (
+            TREE "${CMAKE_CURRENT_BINARY_DIR}"
+            PREFIX "${ORANGES_ARG_SOURCE_GROUP_NAME}"
+            FILES ${configured_file}
+                  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_EXPORT_HEADER}"
+                  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_BUILD_TYPE_HEADER}"
+                  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_PLATFORM_HEADER}")
+    endif ()
 
 endfunction ()

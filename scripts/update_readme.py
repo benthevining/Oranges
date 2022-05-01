@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Simple script that inserts the list of CMake modules (output by the help script) into the appropriate section of the readme.
+Simple script that inserts the list of CMake modules into the appropriate section of the readme.
 
 This script is meant to be configured and invoked by CMake.
 """
@@ -19,55 +19,96 @@ This script is meant to be configured and invoked by CMake.
 # ======================================================================================
 
 from typing import Final
+import os
 
 
-MODULE_LIST: Final[str] = "@modules_output@"
-README: Final[str] = "@readme@"
+MODULES_ROOT: Final[str] = "@ORANGES_MODULES_ROOT@"
 
-MODULES_SECTION_START: Final[str] = "## What's here"
-MODULES_SECTION_END: Final[str] = "## Using Oranges"
+README: Final[str] = "@ORANGES_README@"
 
-if __name__ == "__main__":
-	with open(README, "r", encoding="utf-8") as f:
-		README_LINES: Final[list[str]] = f.readlines()
+#
 
-	stripped_lines: list[str] = []
+module_names: list[str] = []
+find_modules: list[str] = []
 
-	inModulesSection: bool = False
 
-	for line in README_LINES:
-		if line.startswith(MODULES_SECTION_START):
-			inModulesSection = True  # pylint: disable=invalid-name
-			stripped_lines.append(line)
+def process_directory(dir_path: str) -> None:
+	"""
+	Processes all CMake modules in a directory, recursively.
+	"""
+
+	for entry in os.listdir(dir_path):
+
+		if entry == "scripts":
 			continue
 
-		if line.startswith(MODULES_SECTION_END):
-			inModulesSection = False  # pylint: disable=invalid-name
-			stripped_lines.append(line)
+		entry_path: Final[str] = os.path.join(dir_path, entry)
+
+		if os.path.isdir(entry_path):
+			process_directory(entry_path)
 			continue
 
-		if not inModulesSection:
-			stripped_lines.append(line)
+		if not os.path.isfile(entry_path):
+			continue
 
-	del README_LINES
-	del inModulesSection
+		if not entry.endswith(".cmake"):
+			continue
 
-	with open(MODULE_LIST, "r", encoding="utf-8") as f:
-		module_lines: list[str] = f.readlines()
+		entry = entry.removesuffix(".cmake")
 
-	for idx, line in enumerate(module_lines):
-		if line.startswith("Oranges provides"):
-			module_lines[idx] = f"### {line}"
+		if entry.startswith("Find"):
+			find_modules.append(entry)
+		else:
+			module_names.append(entry)
 
-	output_lines: list[str] = []
 
-	for line in stripped_lines:
-		output_lines.append(line)
+#
 
-		if line.startswith(MODULES_SECTION_START):
-			output_lines.append("\n")
-			output_lines.extend(module_lines)
-			output_lines.append("\n")
+for dirname in os.listdir(MODULES_ROOT):
+	if dirname == "internal":
+		continue
 
-	with open(README, "w", encoding="utf-8") as f:
-		f.write("".join(output_lines))
+	DIRPATH: Final[str] = os.path.join(MODULES_ROOT, dirname)
+
+	if not os.path.isdir(DIRPATH):
+		continue
+
+	process_directory(DIRPATH)
+
+find_modules.sort()
+module_names.sort()
+
+#
+
+with open(README, "r", encoding="utf-8") as f:
+	README_LINES: Final[list[str]] = f.readlines()
+
+START_LINE: Final[str] = "## What's here\n"
+END_LINE: Final[str] = "## Using Oranges\n"
+
+output_lines: list[str] = README_LINES[0:README_LINES.index(START_LINE) + 1]
+AFTER_LINES: Final[list[str]] = README_LINES[README_LINES.index(END_LINE):]
+
+output_lines.append("\n")
+output_lines.append("### Oranges provides the following CMake modules:\n")
+output_lines.append("\n")
+
+for module in module_names:
+	output_lines.append(f"  * {module}\n")
+
+del module_names
+
+output_lines.append("\n")
+output_lines.append("### Oranges provides the following find modules:\n")
+output_lines.append("\n")
+
+for module in find_modules:
+	output_lines.append(f"  * {module}\n")
+
+del find_modules
+
+output_lines.append("\n")
+output_lines.extend(AFTER_LINES)
+
+with open(README, "w", encoding="utf-8") as f:
+	f.write("".join(output_lines))

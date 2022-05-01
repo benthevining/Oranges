@@ -44,46 +44,46 @@ include (OrangesFunctionArgumentHelpers)
 
 function (oranges_add_source_files)
 
-	set (oneValueArgs DIRECTORY_NAME TARGET INSTALL_COMPONENT INSTALL_DIR)
+    set (oneValueArgs DIRECTORY_NAME TARGET INSTALL_COMPONENT INSTALL_DIR)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
 
-	oranges_assert_target_argument_is_target (ORANGES_ARG)
-	lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
+    oranges_assert_target_argument_is_target (ORANGES_ARG)
+    lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
 
-	foreach (filename IN LISTS ORANGES_ARG_FILES)
-		target_sources (
-			"${ORANGES_ARG_TARGET}"
-			PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
-	endforeach ()
+    foreach (filename IN LISTS ORANGES_ARG_FILES)
+        target_sources (
+            "${ORANGES_ARG_TARGET}"
+            PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
+    endforeach ()
 
-	set (headers ${ORANGES_ARG_FILES})
+    set (headers ${ORANGES_ARG_FILES})
 
-	list (FILTER headers INCLUDE REGEX "\\.\\h")
+    list (FILTER headers INCLUDE REGEX "\\.\\h")
 
-	if (NOT ORANGES_ARG_INSTALL_DIR)
-		set (ORANGES_ARG_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
-	endif ()
+    if (NOT ORANGES_ARG_INSTALL_DIR)
+        set (ORANGES_ARG_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
+    endif ()
 
-	if (ORANGES_ARG_INSTALL_COMPONENT)
-		set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-	endif ()
+    if (ORANGES_ARG_INSTALL_COMPONENT)
+        set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+    endif ()
 
-	install (
-		FILES ${headers}
-		DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
-		${install_component})
+    install (
+        FILES ${headers}
+        DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
+        ${install_component})
 
-	foreach (header IN LISTS headers)
-		target_sources (
-			"${ORANGES_ARG_TARGET}"
-			PRIVATE
-				$<INSTALL_INTERFACE:${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}/${header}>
-			)
-	endforeach ()
+    foreach (header IN LISTS headers)
+        target_sources (
+            "${ORANGES_ARG_TARGET}"
+            PRIVATE
+                $<INSTALL_INTERFACE:${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}/${header}>
+            )
+    endforeach ()
 
-	list (TRANSFORM ORANGES_ARG_FILES PREPEND "${ORANGES_ARG_DIRECTORY_NAME}/")
+    list (TRANSFORM ORANGES_ARG_FILES PREPEND "${ORANGES_ARG_DIRECTORY_NAME}/")
 
-	set (${ORANGES_ARG_DIRECTORY_NAME}_files ${ORANGES_ARG_FILES} PARENT_SCOPE)
+    set (${ORANGES_ARG_DIRECTORY_NAME}_files ${ORANGES_ARG_FILES} PARENT_SCOPE)
 
 endfunction ()

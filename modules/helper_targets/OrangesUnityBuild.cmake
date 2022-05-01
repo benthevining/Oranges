@@ -42,12 +42,12 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (TARGET Oranges::OrangesUnityBuild)
-	return ()
+    return ()
 endif ()
 
 add_library (OrangesUnityBuild INTERFACE)
 
 set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH
-													UNITY_BUILD ON)
+                                                    UNITY_BUILD ON)
 
 add_library (Oranges::OrangesUnityBuild ALIAS OrangesUnityBuild)

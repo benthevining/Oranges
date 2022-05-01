@@ -43,41 +43,41 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesCmakeDevTools)
 
 if (NOT TARGET Apple::xcodebuild)
-	find_package (xcodebuild REQUIRED)
+    find_package (xcodebuild REQUIRED)
 endif ()
 
 #
 
 function (include_external_xcode_project)
 
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	set (oneValueArgs TARGET DIRECTORY SCHEME EXTRA_ARGS COMMENT)
+    set (oneValueArgs TARGET DIRECTORY SCHEME EXTRA_ARGS COMMENT)
 
-	cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
-	lemons_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
-	lemons_check_for_unparsed_args (ORANGES_ARG)
+    lemons_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
+    lemons_check_for_unparsed_args (ORANGES_ARG)
 
-	if (NOT TARGET Apple::xcodebuild)
-		message (
-			FATAL_ERROR
-				"xcodebuild cannot be found, xcode project target cannot be created!"
-			)
-		return ()
-	endif ()
+    if (NOT TARGET Apple::xcodebuild)
+        message (
+            FATAL_ERROR
+                "xcodebuild cannot be found, xcode project target cannot be created!"
+            )
+        return ()
+    endif ()
 
-	if (NOT ORANGES_ARG_COMMENT)
-		set (ORANGES_ARG_COMMENT "Building ${ORANGES_ARG_TARGET}...")
-	endif ()
+    if (NOT ORANGES_ARG_COMMENT)
+        set (ORANGES_ARG_COMMENT "Building ${ORANGES_ARG_TARGET}...")
+    endif ()
 
-	add_custom_target (
-		"${ORANGES_ARG_TARGET}"
-		COMMAND Apple::xcodebuild -scheme "${ORANGES_ARG_SCHEME}" -configuration
-				$<COMMAND_CONFIG:$<CONFIG>> ${ORANGES_ARG_EXTRA_ARGS} build
-		COMMAND_EXPAND_LISTS VERBATIM USES_TERMINAL
-		WORKING_DIRECTORY "${ORANGES_ARG_DIRECTORY}"
-		COMMENT "${ORANGES_ARG_COMMENT}"
-		COMMAND_ECHO STDOUT)
+    add_custom_target (
+        "${ORANGES_ARG_TARGET}"
+        COMMAND Apple::xcodebuild -scheme "${ORANGES_ARG_SCHEME}" -configuration
+                $<COMMAND_CONFIG:$<CONFIG>> ${ORANGES_ARG_EXTRA_ARGS} build
+        COMMAND_EXPAND_LISTS VERBATIM USES_TERMINAL
+        WORKING_DIRECTORY "${ORANGES_ARG_DIRECTORY}"
+        COMMENT "${ORANGES_ARG_COMMENT}"
+        COMMAND_ECHO STDOUT)
 
 endfunction ()

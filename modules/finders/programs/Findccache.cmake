@@ -43,16 +43,16 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	ccache PROPERTIES
-	URL "https://ccache.dev/"
-	DESCRIPTION "C/C++ compiler cache"
-	TYPE RECOMMENDED
-	PURPOSE "Speed up compilation with caching")
+    ccache PROPERTIES
+    URL "https://ccache.dev/"
+    DESCRIPTION "C/C++ compiler cache"
+    TYPE RECOMMENDED
+    PURPOSE "Speed up compilation with caching")
 
 option (CCACHE_DISABLE "Disable ccache for this build" OFF)
 
 if (CCACHE_DISABLE)
-	return ()
+    return ()
 endif ()
 
 #
@@ -62,13 +62,13 @@ oranges_file_scoped_message_context ("Findccache")
 #
 
 define_property (
-	TARGET INHERITED
-	PROPERTY ORANGES_USING_CCACHE
-	BRIEF_DOCS
-		"Boolean that indicates whether this target is using the ccache compiler cache"
-	FULL_DOCS
-		"Boolean that indicates whether this target is using the ccache compiler cache"
-	)
+    TARGET INHERITED
+    PROPERTY ORANGES_USING_CCACHE
+    BRIEF_DOCS
+        "Boolean that indicates whether this target is using the ccache compiler cache"
+    FULL_DOCS
+        "Boolean that indicates whether this target is using the ccache compiler cache"
+    )
 
 set (ccache_FOUND FALSE)
 
@@ -77,12 +77,12 @@ find_program (CCACHE_PROGRAM ccache DOC "ccache executable")
 mark_as_advanced (FORCE CCACHE_PROGRAM)
 
 if (NOT CCACHE_PROGRAM)
-	find_package_warning_or_error ("ccache program cannot be found!")
-	return ()
+    find_package_warning_or_error ("ccache program cannot be found!")
+    return ()
 endif ()
 
 if (NOT ccache_FIND_QUIETLY)
-	message (VERBOSE "Using ccache!")
+    message (VERBOSE "Using ccache!")
 endif ()
 
 add_executable (ccache IMPORTED GLOBAL)
@@ -96,18 +96,18 @@ set (ccache_FOUND TRUE)
 #
 
 if (NOT CMAKE_CXX_COMPILER)
-	enable_language (CXX)
+    enable_language (CXX)
 endif ()
 
 if (NOT CMAKE_C_COMPILER)
-	enable_language (C)
+    enable_language (C)
 endif ()
 
 #
 
 set (CCACHE_OPTIONS
-	 "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M"
-	 CACHE STRING "")
+     "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M"
+     CACHE STRING "")
 
 mark_as_advanced (FORCE CCACHE_OPTIONS)
 
@@ -122,19 +122,19 @@ list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 
 function (_lemons_configure_compiler_launcher language)
 
-	oranges_add_function_message_context ()
+    oranges_add_function_message_context ()
 
-	string (TOUPPER "${language}" lang_upper)
+    string (TOUPPER "${language}" lang_upper)
 
-	set (CCACHE_COMPILER_BEING_CONFIGURED "${CMAKE_${lang_upper}_COMPILER}")
+    set (CCACHE_COMPILER_BEING_CONFIGURED "${CMAKE_${lang_upper}_COMPILER}")
 
-	set (script_name "launch-${language}")
+    set (script_name "launch-${language}")
 
-	configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in"
-					"${script_name}" @ONLY NEWLINE_STYLE UNIX)
+    configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in"
+                    "${script_name}" @ONLY NEWLINE_STYLE UNIX)
 
-	set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}"
-		 PARENT_SCOPE)
+    set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}"
+         PARENT_SCOPE)
 endfunction ()
 
 _lemons_configure_compiler_launcher (c)
@@ -152,26 +152,26 @@ add_library (ccache-interface INTERFACE)
 set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
 
 if (XCODE)
-	set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
-	set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}")
-	set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}")
-	set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+    set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
+    set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}")
+    set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}")
+    set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 
-	set_target_properties (
-		ccache-interface
-		PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}"
-				   XCODE_ATTRIBUTE_CXX "${cxx_script}"
-				   XCODE_ATTRIBUTE_LD "${c_script}"
-				   XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+    set_target_properties (
+        ccache-interface
+        PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}"
+                   XCODE_ATTRIBUTE_CXX "${cxx_script}"
+                   XCODE_ATTRIBUTE_LD "${c_script}"
+                   XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 else ()
-	set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
-	set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
+    set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
+    set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
 
-	set_target_properties (
-		ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-									CXX_COMPILER_LAUNCHER "${cxx_script}")
+    set_target_properties (
+        ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+                                    CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif ()
 
 if (NOT TARGET ccache::ccache-interface)
-	add_library (ccache::ccache-interface ALIAS ccache-interface)
+    add_library (ccache::ccache-interface ALIAS ccache-interface)
 endif ()

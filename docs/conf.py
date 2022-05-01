@@ -12,6 +12,10 @@
 #
 # ======================================================================================
 
+from sys import path as sys_path
+
+
+sys_path.insert(0, r'@conf_path@')
 
 source_suffix = '.rst'
 root_doc = 'index'
@@ -21,7 +25,7 @@ author = 'Ben Vining'
 copyright = '@conf_copyright@'
 version = '@conf_version@'  # feature version
 release = '@conf_version@'  # full version string
-#pygments_style = 'colors.CMakeTemplateStyle'
+pygments_style = 'colors.OrangesTemplateStyle'
 
 language = 'en'
 primary_domain = 'cmake'
@@ -29,10 +33,7 @@ highlight_language = 'cmake'
 
 needs_sphinx = '1.1'
 
-exclude_patterns = []
-
 extensions = ['sphinxcontrib.moderncmakedomain']
-#templates_path = ['@conf_path@/templates']
 
 nitpicky = True
 smartquotes = False
@@ -41,9 +42,10 @@ numfig = True
 man_show_urls = False
 man_make_section_directory = False
 
+# html_baseurl
 html_show_sourcelink = True
-#html_static_path = ['@conf_path@/static']
-#html_style = 'cmake.css'
+html_static_path = ['@conf_path@']
+html_style = 'oranges.css'
 html_theme = 'default'
 
 # editorconfig-checker-disable
@@ -71,9 +73,4 @@ html_theme_options = {
 
 html_title = f'Oranges {release} Documentation'
 html_short_title = f'Oranges {release} Documentation'
-#html_favicon = '@conf_path@/static/cmake-favicon.ico'
-
-# Not supported yet by sphinx:
-# https://bitbucket.org/birkenfeld/sphinx/issue/1448/make-qthelp-more-configurable
-# qthelp_namespace = "org.cmake"
-# qthelp_qch_name = "CMake.qch"
+# html_favicon

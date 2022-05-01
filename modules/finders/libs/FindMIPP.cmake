@@ -35,14 +35,14 @@ include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
 
 set_package_properties (
-	MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
-	DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
+    MIPP PROPERTIES URL "https://github.com/aff3ct/MIPP"
+    DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
 
 #
 
 if (TARGET aff3ct::MIPP)
-	set (MIPP_FOUND TRUE)
-	return ()
+    set (MIPP_FOUND TRUE)
+    return ()
 endif ()
 
 oranges_file_scoped_message_context ("FindMIPP")
@@ -52,32 +52,32 @@ set (MIPP_FOUND FALSE)
 #
 
 if (MIPP_FIND_QUIETLY)
-	set (quiet_flag QUIET)
+    set (quiet_flag QUIET)
 endif ()
 
 oranges_fetch_repository (
-	NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
-	DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
+    NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
+    DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 
 add_library (MIPP INTERFACE)
 
 target_include_directories (
-	MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
-				   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP>)
+    MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src>
+                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP>)
 
 target_sources (
-	MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
-				   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP/mipp.h>)
+    MIPP INTERFACE $<BUILD_INTERFACE:${MIPP_SOURCE_DIR}/src/mipp.h>
+                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/MIPP/mipp.h>)
 
 install (DIRECTORY "${MIPP_SOURCE_DIR}/src"
-		 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP" COMPONENT MIPP)
+         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP" COMPONENT MIPP)
 
 install (TARGETS MIPP EXPORT MIPPTargets)
 
 install (EXPORT MIPPTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/MIPP"
-		 NAMESPACE aff3ct:: COMPONENT MIPP)
+         NAMESPACE aff3ct:: COMPONENT MIPP)
 
 include (CPackComponent)
 

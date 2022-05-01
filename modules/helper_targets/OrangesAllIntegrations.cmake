@@ -52,7 +52,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (TARGET Oranges::OrangesAllIntegrations)
-	return ()
+    return ()
 endif ()
 
 include (OrangesCmakeDevTools)
@@ -68,13 +68,13 @@ find_package (include-what-you-use MODULE QUIET)
 add_library (OrangesAllIntegrations INTERFACE)
 
 target_link_libraries (
-	OrangesAllIntegrations
-	INTERFACE
-		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>>
-		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>>
-		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>>
-		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>>
-		$<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>>
-	)
+    OrangesAllIntegrations
+    INTERFACE
+        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>>
+        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>>
+        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>>
+        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>>
+        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>>
+    )
 
 add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)

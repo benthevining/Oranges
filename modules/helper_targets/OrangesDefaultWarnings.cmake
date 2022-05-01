@@ -42,85 +42,85 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (TARGET Oranges::OrangesDefaultWarnings)
-	return ()
+    return ()
 endif ()
 
 add_library (OrangesDefaultWarnings INTERFACE)
 
 target_compile_options (OrangesDefaultWarnings
-						INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+                        INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 
 set (
-	gcclike_comp_opts
-	# cmake-format: sortable
-	-Wall
-	-Wcast-align
-	-Wno-ignored-qualifiers
-	-Wno-missing-field-initializers
-	-Woverloaded-virtual
-	-Wpedantic
-	-Wreorder
-	-Wshadow
-	-Wsign-compare
-	-Wsign-conversion
-	-Wstrict-aliasing
-	-Wuninitialized
-	-Wunreachable-code
-	-Wunused-parameter)
+    gcclike_comp_opts
+    # cmake-format: sortable
+    -Wall
+    -Wcast-align
+    -Wno-ignored-qualifiers
+    -Wno-missing-field-initializers
+    -Woverloaded-virtual
+    -Wpedantic
+    -Wreorder
+    -Wshadow
+    -Wsign-compare
+    -Wsign-conversion
+    -Wstrict-aliasing
+    -Wuninitialized
+    -Wunreachable-code
+    -Wunused-parameter)
 
 target_compile_options (
-	OrangesDefaultWarnings
-	INTERFACE "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>")
+    OrangesDefaultWarnings
+    INTERFACE "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>")
 
 unset (gcclike_comp_opts)
 
 set (
-	gcc_comp_opts
-	# cmake-format: sortable
-	-Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
-	-Wno-strict-overflow -Wredundant-decls)
+    gcc_comp_opts
+    # cmake-format: sortable
+    -Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
+    -Wno-strict-overflow -Wredundant-decls)
 
 target_compile_options (OrangesDefaultWarnings
-						INTERFACE "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>")
+                        INTERFACE "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>")
 
 unset (gcc_comp_opts)
 
 target_compile_options (
-	OrangesDefaultWarnings
-	INTERFACE
-		"$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>")
+    OrangesDefaultWarnings
+    INTERFACE
+        "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>")
 
 set (
-	clang_cxx_opts
-	# cmake-format: sortable
-	-Wbool-conversion
-	-Wconditional-uninitialized
-	-Wconstant-conversion
-	-Wconversion
-	-Wextra-semi
-	-Wint-conversion
-	-Wnon-virtual-dtor
-	-Wnullable-to-nonnull-conversion
-	-Wshadow-all
-	-Wshift-sign-overflow
-	-Wshorten-64-to-32
-	-Wunused-variable)
+    clang_cxx_opts
+    # cmake-format: sortable
+    -Wbool-conversion
+    -Wconditional-uninitialized
+    -Wconstant-conversion
+    -Wconversion
+    -Wextra-semi
+    -Wint-conversion
+    -Wnon-virtual-dtor
+    -Wnullable-to-nonnull-conversion
+    -Wshadow-all
+    -Wshift-sign-overflow
+    -Wshorten-64-to-32
+    -Wunused-variable)
 
 target_compile_options (
-	OrangesDefaultWarnings
-	INTERFACE "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_cxx_opts}>")
+    OrangesDefaultWarnings
+    INTERFACE "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_cxx_opts}>")
 
 set (
-	clang_cxx_opts
-	# cmake-format: sortable
-	-Winconsistent-missing-destructor-override -Woverloaded-virtual
-	-Wunused-private-field -Wzero-as-null-pointer-constant)
+    clang_cxx_opts
+    # cmake-format: sortable
+    -Winconsistent-missing-destructor-override -Woverloaded-virtual
+    -Wunused-private-field -Wzero-as-null-pointer-constant)
 
 target_compile_options (
-	OrangesDefaultWarnings
-	INTERFACE
-		"$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
-		"$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>")
+    OrangesDefaultWarnings
+    INTERFACE
+        "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
+        "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>")
 
 unset (clang_cxx_opts)
 

@@ -42,7 +42,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (TARGET Oranges::OrangesCoverageFlags)
-	return ()
+    return ()
 endif ()
 
 add_library (OrangesCoverageFlags INTERFACE)
@@ -50,7 +50,7 @@ add_library (OrangesCoverageFlags INTERFACE)
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
 if (NOT debug_configs)
-	set (debug_configs Debug)
+    set (debug_configs Debug)
 endif ()
 
 set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
@@ -60,13 +60,13 @@ unset (debug_configs)
 set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
 
 target_compile_options (
-	OrangesCoverageFlags
-	INTERFACE
-		"$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
+    OrangesCoverageFlags
+    INTERFACE
+        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
 
 target_link_options (
-	OrangesCoverageFlags INTERFACE
-	"$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
+    OrangesCoverageFlags INTERFACE
+    "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
 
 unset (config_is_debug)
 unset (compiler_gcclike)

@@ -35,41 +35,41 @@ include (OrangesCmakeDevTools)
 oranges_file_scoped_message_context ("OrangesWipeCacheTarget")
 
 if (TARGET wipe_cache)
-	message (AUTHOR_WARNING "wipe_cache target already exists!")
-	return ()
+    message (AUTHOR_WARNING "wipe_cache target already exists!")
+    return ()
 endif ()
 
 include (OrangesSetUpCache)
 
 if (PROJECT_IS_TOP_LEVEL)
-	message (DEBUG
-			 "Oranges - adding wipe_cache target in project ${PROJECT_NAME}")
+    message (DEBUG
+             "Oranges - adding wipe_cache target in project ${PROJECT_NAME}")
 else ()
-	message (
-		AUTHOR_WARNING
-			"Creating wipe_cache target in non-top-level project ${PROJECT_NAME}!"
-		)
+    message (
+        AUTHOR_WARNING
+            "Creating wipe_cache target in non-top-level project ${PROJECT_NAME}!"
+        )
 endif ()
 
 set (configured_script "${CMAKE_BINARY_DIR}/wipe_cache.cmake")
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/wipe_cache.cmake"
-				"${configured_script}" @ONLY)
+                "${configured_script}" @ONLY)
 
 find_program (PROGRAM_SUDO sudo)
 
 mark_as_advanced (FORCE PROGRAM_SUDO)
 
 add_custom_target (
-	wipe_cache
-	COMMAND "${PROGRAM_SUDO}" "${CMAKE_COMMAND} -P ${configured_script}"
-	COMMENT "Wiping cache..."
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	VERBATIM USES_TERMINAL)
+    wipe_cache
+    COMMAND "${PROGRAM_SUDO}" "${CMAKE_COMMAND} -P ${configured_script}"
+    COMMENT "Wiping cache..."
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    VERBATIM USES_TERMINAL)
 
 set_target_properties (
-	wipe_cache
-	PROPERTIES FOLDER Utility LABELS Utility XCODE_GENERATE_SCHEME OFF
-			   EchoString "Clearing cache of downloaded dependencies...")
+    wipe_cache
+    PROPERTIES FOLDER Utility LABELS Utility XCODE_GENERATE_SCHEME OFF
+               EchoString "Clearing cache of downloaded dependencies...")
 
 unset (configured_script)

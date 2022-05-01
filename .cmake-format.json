@@ -25,7 +25,7 @@
     "separate_ctrl_name_with_space": true,
     "separate_fn_name_with_space": true,
     "tab_size": 4,
-    "use_tabchars": true
+    "use_tabchars": false
   },
   "lint": {
     "argument_var_pattern": "[a-z][a-z0-9_]+",

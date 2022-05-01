@@ -85,20 +85,20 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	IPP PROPERTIES
-	URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
-	DESCRIPTION
-		"Hardware-accelerated functions for signal and image processing provided by Intel"
-	)
+    IPP PROPERTIES
+    URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
+    DESCRIPTION
+        "Hardware-accelerated functions for signal and image processing provided by Intel"
+    )
 
 #
 
 macro (_ipp_unset_vars)
-	unset (IPP_ROOT)
-	unset (IPP_LIBNAME_SUFFIX)
-	unset (IPP_LIB_TYPE)
-	unset (IPP_LIBTYPE_PREFIX)
-	unset (IPP_LIBTYPE_SUFFIX)
+    unset (IPP_ROOT)
+    unset (IPP_LIBNAME_SUFFIX)
+    unset (IPP_LIB_TYPE)
+    unset (IPP_LIBTYPE_PREFIX)
+    unset (IPP_LIBTYPE_SUFFIX)
 endmacro ()
 
 cmake_language (DEFER CALL _ipp_unset_vars)
@@ -119,42 +119,42 @@ mark_as_advanced (FORCE IPP_STATIC IPP_MULTI_THREADED)
 #
 
 find_path (
-	IPP_INCLUDE_DIR ipp.h
-	PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
-		  /opt/intel/oneapi/ipp/include "${IPP_ROOT}/include"
-	DOC "Intel IPP root directory")
+    IPP_INCLUDE_DIR ipp.h
+    PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
+          /opt/intel/oneapi/ipp/include "${IPP_ROOT}/include"
+    DOC "Intel IPP root directory")
 
 mark_as_advanced (FORCE IPP_INCLUDE_DIR)
 
 if (NOT IPP_INCLUDE_DIR OR NOT IS_DIRECTORY "${IPP_INCLUDE_DIR}")
-	find_package_warning_or_error (
-		"IPP include directory could not be located!")
-	return ()
+    find_package_warning_or_error (
+        "IPP include directory could not be located!")
+    return ()
 endif ()
 
 set (IPP_ROOT "${IPP_INCLUDE_DIR}/.."
-	 CACHE PATH "Path to the root of the Intel IPP installation")
+     CACHE PATH "Path to the root of the Intel IPP installation")
 
 mark_as_advanced (FORCE IPP_ROOT)
 
 if (NOT IS_DIRECTORY "${IPP_ROOT}")
-	find_package_warning_or_error ("IPP root directory could not be located!")
-	return ()
+    find_package_warning_or_error ("IPP root directory could not be located!")
+    return ()
 endif ()
 
 #
 
 if (IPP_STATIC)
-	if (IPP_MULTI_THREADED)
-		set (IPP_LIBNAME_SUFFIX _t)
-	else ()
-		set (IPP_LIBNAME_SUFFIX _l)
-	endif ()
+    if (IPP_MULTI_THREADED)
+        set (IPP_LIBNAME_SUFFIX _t)
+    else ()
+        set (IPP_LIBNAME_SUFFIX _l)
+    endif ()
 
-	set (IPP_LIB_TYPE STATIC)
+    set (IPP_LIB_TYPE STATIC)
 else ()
-	set (IPP_LIBNAME_SUFFIX "")
-	set (IPP_LIB_TYPE SHARED)
+    set (IPP_LIBNAME_SUFFIX "")
+    set (IPP_LIB_TYPE SHARED)
 endif ()
 
 set (IPP_LIBTYPE_PREFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_PREFIX}")
@@ -164,166 +164,166 @@ set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
 
 function (_oranges_find_ipp_library lib_name comp_required)
 
-	list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_library")
+    list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_library")
 
-	if (TARGET ipp_lib_${lib_name})
-		return ()
-	endif ()
+    if (TARGET ipp_lib_${lib_name})
+        return ()
+    endif ()
 
-	string (TOLOWER "${lib_name}" IPP_COMPONENT_LOWER)
+    string (TOLOWER "${lib_name}" IPP_COMPONENT_LOWER)
 
-	set (baseName "ipp${IPP_COMPONENT_LOWER}")
+    set (baseName "ipp${IPP_COMPONENT_LOWER}")
 
-	find_library (
-		IPP_LIB_${lib_name}
-		NAMES "${baseName}" "${IPP_LIBTYPE_PREFIX}${baseName}"
-			  "${IPP_LIBTYPE_PREFIX}${baseName}${IPP_LIBTYPE_SUFFIX}"
-			  "${baseName}${IPP_LIBTYPE_SUFFIX}"
-		PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
-		DOC "Intel IPP ${lib_name} library"
-		NO_DEFAULT_PATH)
+    find_library (
+        IPP_LIB_${lib_name}
+        NAMES "${baseName}" "${IPP_LIBTYPE_PREFIX}${baseName}"
+              "${IPP_LIBTYPE_PREFIX}${baseName}${IPP_LIBTYPE_SUFFIX}"
+              "${baseName}${IPP_LIBTYPE_SUFFIX}"
+        PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
+        DOC "Intel IPP ${lib_name} library"
+        NO_DEFAULT_PATH)
 
-	mark_as_advanced (FORCE IPP_LIB_${lib_name})
+    mark_as_advanced (FORCE IPP_LIB_${lib_name})
 
-	if (NOT IPP_LIB_${lib_name} OR NOT EXISTS "${IPP_LIB_${lib_name}}")
-		if (comp_required)
-			find_package_warning_or_error (
-				"IPP component ${lib_name} could not be found!")
-		endif ()
-	endif ()
+    if (NOT IPP_LIB_${lib_name} OR NOT EXISTS "${IPP_LIB_${lib_name}}")
+        if (comp_required)
+            find_package_warning_or_error (
+                "IPP component ${lib_name} could not be found!")
+        endif ()
+    endif ()
 
-	find_package_message (
-		IPP "IPP - found component library ${lib_name}"
-		"IPP - ${lib_name} - ${IPP_LIBTYPE_PREFIX} - ${IPP_LIBTYPE_SUFFIX}")
+    find_package_message (
+        IPP "IPP - found component library ${lib_name}"
+        "IPP - ${lib_name} - ${IPP_LIBTYPE_PREFIX} - ${IPP_LIBTYPE_SUFFIX}")
 
-	add_library (ipp_lib_${lib_name} IMPORTED ${IPP_LIB_TYPE})
+    add_library (ipp_lib_${lib_name} IMPORTED ${IPP_LIB_TYPE})
 
-	set_target_properties (
-		ipp_lib_${lib_name} PROPERTIES IMPORTED_LOCATION
-									   "${IPP_LIB_${lib_name}}")
+    set_target_properties (
+        ipp_lib_${lib_name} PROPERTIES IMPORTED_LOCATION
+                                       "${IPP_LIB_${lib_name}}")
 
-	if (NOT TARGET Intel::ipp_lib_${lib_name})
-		add_library (Intel::ipp_lib_${lib_name} ALIAS ipp_lib_${lib_name})
-	endif ()
+    if (NOT TARGET Intel::ipp_lib_${lib_name})
+        add_library (Intel::ipp_lib_${lib_name} ALIAS ipp_lib_${lib_name})
+    endif ()
 
-	if (NOT TARGET IntelIPP)
-		add_library (IntelIPP INTERFACE)
-	endif ()
+    if (NOT TARGET IntelIPP)
+        add_library (IntelIPP INTERFACE)
+    endif ()
 
-	target_link_libraries (IntelIPP INTERFACE Intel::ipp_lib_${lib_name})
+    target_link_libraries (IntelIPP INTERFACE Intel::ipp_lib_${lib_name})
 endfunction ()
 
 #
 
 function (_oranges_find_ipp_component lib_name comp_required)
 
-	list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_component")
+    list (APPEND CMAKE_MESSAGE_CONTEXT "_oranges_find_ipp_component")
 
-	if ("${lib_name}" STREQUAL CC)
-		set (comp_dependencies CORE VM S I)
-	elseif ("${lib_name}" STREQUAL CH)
-		set (comp_dependencies CORE VM S)
-	elseif ("${lib_name}" STREQUAL CV)
-		set (comp_dependencies CORE VM S I)
-	elseif ("${lib_name}" STREQUAL DC)
-		set (comp_dependencies CORE VM S)
-	elseif ("${lib_name}" STREQUAL I)
-		set (comp_dependencies CORE VM S)
-	elseif ("${lib_name}" STREQUAL S)
-		set (comp_dependencies CORE VM)
-	elseif ("${lib_name}" STREQUAL VM)
-		set (comp_dependencies CORE)
-	else ()
-		set (comp_dependencies "")
-	endif ()
+    if ("${lib_name}" STREQUAL CC)
+        set (comp_dependencies CORE VM S I)
+    elseif ("${lib_name}" STREQUAL CH)
+        set (comp_dependencies CORE VM S)
+    elseif ("${lib_name}" STREQUAL CV)
+        set (comp_dependencies CORE VM S I)
+    elseif ("${lib_name}" STREQUAL DC)
+        set (comp_dependencies CORE VM S)
+    elseif ("${lib_name}" STREQUAL I)
+        set (comp_dependencies CORE VM S)
+    elseif ("${lib_name}" STREQUAL S)
+        set (comp_dependencies CORE VM)
+    elseif ("${lib_name}" STREQUAL VM)
+        set (comp_dependencies CORE)
+    else ()
+        set (comp_dependencies "")
+    endif ()
 
-	foreach (dep_component IN LISTS comp_dependencies)
-		if (NOT TARGET ipp_lib_${dep_component})
-			_oranges_find_ipp_component ("${dep_component}" TRUE)
-		endif ()
+    foreach (dep_component IN LISTS comp_dependencies)
+        if (NOT TARGET ipp_lib_${dep_component})
+            _oranges_find_ipp_component ("${dep_component}" TRUE)
+        endif ()
 
-		if (NOT TARGET ipp_lib_${dep_component})
-			if (NOT IPP_FIND_QUIETLY)
-				message (
-					WARNING
-						"IPP component ${lib_name} is missing dependent IPP component library ${dep_component}!"
-					)
-			endif ()
+        if (NOT TARGET ipp_lib_${dep_component})
+            if (NOT IPP_FIND_QUIETLY)
+                message (
+                    WARNING
+                        "IPP component ${lib_name} is missing dependent IPP component library ${dep_component}!"
+                    )
+            endif ()
 
-			return ()
-		endif ()
-	endforeach ()
+            return ()
+        endif ()
+    endforeach ()
 
-	_oranges_find_ipp_library ("${ipp_component}" "${comp_required}")
+    _oranges_find_ipp_library ("${ipp_component}" "${comp_required}")
 
 endfunction ()
 
 #
 
 find_package_default_component_list (
-	CORE
-	AC
-	CC
-	CH
-	CP
-	CV
-	DC
-	DI
-	GEN
-	I
-	J
-	R
-	M
-	S
-	SC
-	SR
-	VC
-	VM)
+    CORE
+    AC
+    CC
+    CH
+    CP
+    CV
+    DC
+    DI
+    GEN
+    I
+    J
+    R
+    M
+    S
+    SC
+    SR
+    VC
+    VM)
 
 foreach (ipp_component ${IPP_FIND_COMPONENTS})
 
-	_oranges_find_ipp_component ("${ipp_component}"
-								 "${IPP_FIND_REQUIRED_${ipp_component}}")
+    _oranges_find_ipp_component ("${ipp_component}"
+                                 "${IPP_FIND_REQUIRED_${ipp_component}}")
 
-	if (IPP_FIND_REQUIRED_${ipp_component} AND NOT TARGET
-											   ipp_lib_${ipp_component})
-		if (NOT IPP_FIND_QUIETLY)
-			message (
-				WARNING
-					"IPP required component ${ipp_component} cannot be found!")
-		endif ()
+    if (IPP_FIND_REQUIRED_${ipp_component} AND NOT TARGET
+                                               ipp_lib_${ipp_component})
+        if (NOT IPP_FIND_QUIETLY)
+            message (
+                WARNING
+                    "IPP required component ${ipp_component} cannot be found!")
+        endif ()
 
-		return ()
-	endif ()
+        return ()
+    endif ()
 endforeach ()
 
 #
 
 if (NOT TARGET IntelIPP)
-	find_package_warning_or_error ("Error creating IntelIPP library target!")
-	return ()
+    find_package_warning_or_error ("Error creating IntelIPP library target!")
+    return ()
 endif ()
 
 #
 
 target_include_directories (
-	IntelIPP
-	INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
-			  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP>)
+    IntelIPP
+    INTERFACE $<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>
+              $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP>)
 
 install (TARGETS IntelIPP EXPORT IntelIPPTargets)
 
 install (EXPORT IntelIPPTargets
-		 DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP" NAMESPACE Intel::
-		 COMPONENT IntelIPP)
+         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Intel/IPP" NAMESPACE Intel::
+         COMPONENT IntelIPP)
 
 include (CPackComponent)
 
 cpack_add_component (IntelIPP DISPLAY_NAME "Intel IPP"
-					 DESCRIPTION "Intel IPP libraries")
+                     DESCRIPTION "Intel IPP libraries")
 
 if (NOT TARGET Intel::IntelIPP)
-	add_library (Intel::IntelIPP ALIAS IntelIPP)
+    add_library (Intel::IntelIPP ALIAS IntelIPP)
 endif ()
 
 set (IPP_FOUND TRUE)

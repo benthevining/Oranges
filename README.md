@@ -24,97 +24,74 @@
 
 A library of CMake modules.
 
-For quick CLI reference, run the `help.py` script in the `help/` directory.
-
 ## What's here
 
 ### Oranges provides the following CMake modules:
 
-Code generation
-  * OrangesGenerateBuildTypeHeader
-  * OrangesGenerateExportHeader
-  * OrangesGeneratePlatformHeader
-  * OrangesGenerateStandardHeaders
-
-Dependencies
-  * OrangesDownloadFile
-  * OrangesFetchRepository
-  * OrangesWipeCacheTarget
-  * OrangesWrapAutotoolsProject
-
-Documentation
-  * OrangesDocsBuildConfig
-  * OrangesDoxygenConfig
-  * OrangesGeneratePropertiesJSON
-  * OrangesGraphVizConfig
-
-General
-  * LinuxLSBInfo
-  * OrangesSourceFileUtils
-
-Helper targets
   * CXXConcepts
-  * OrangesAllIntegrations
-  * OrangesCoverageFlags
-  * OrangesDefaultTarget
-  * OrangesDefaultWarnings
-  * OrangesUnityBuild
-
-Installing
-  * OrangesDefaultCPackSettings
-  * OrangesGeneratePkgConfig
-  * OrangesInstallSystemLibs
-  * OrangesSetDefaultCpackGenerator
-  * OrangesUninstallTarget
-
-Juce
-  * OrangesAppUtilities
-  * OrangesAssetsHelpers
-  * OrangesJuceModuleUtilities
-  * OrangesJuceUtilities
-
-Plugins
   * CallForEachPluginFormat
+  * LinuxLSBInfo
   * OrangesAAXUtils
   * OrangesAddPrivateSDKs
+  * OrangesAllIntegrations
+  * OrangesAppUtilities
+  * OrangesAssetsHelpers
   * OrangesClapFormat
+  * OrangesCoverageFlags
   * OrangesCreateAAXSDKTarget
+  * OrangesDefaultCPackSettings
+  * OrangesDefaultTarget
+  * OrangesDefaultWarnings
+  * OrangesDocsBuildConfig
+  * OrangesDownloadFile
+  * OrangesDoxygenConfig
+  * OrangesFetchRepository
+  * OrangesFindPackageHelpers
+  * OrangesGenerateBuildTypeHeader
+  * OrangesGenerateExportHeader
+  * OrangesGeneratePkgConfig
+  * OrangesGeneratePlatformHeader
+  * OrangesGeneratePropertiesJSON
+  * OrangesGenerateStandardHeaders
+  * OrangesGraphVizConfig
+  * OrangesInstallSystemLibs
+  * OrangesJuceModuleUtilities
+  * OrangesJuceUtilities
   * OrangesPluginUtilities
+  * OrangesSetDefaultCpackGenerator
+  * OrangesSourceFileUtils
+  * OrangesUninstallTarget
+  * OrangesUnityBuild
+  * OrangesWipeCacheTarget
+  * OrangesWrapAutotoolsProject
+  * UseFaust
+  * Usecodesign
+  * Usewraptool
+  * Usexcodebuild
 
 ### Oranges provides the following find modules:
 
-Code signing
-  * Findcodesign
-  * Findwraptool
-
-Fftw
-  * FindFFTW
-  * Findfftw3
-  * Findfftw3f
-
-Libs
   * FindAbletonLink
   * FindAccelerate
+  * FindFFTW
   * FindIPP
   * FindJUCE
   * FindMIPP
   * FindMTS-ESP
-
-Programs
+  * Findauval
   * Findccache
-  * Finddot
-  * Findfaust
-  * Findxcodebuild
-
-Static analysis
   * Findclang-tidy
+  * Findcodesign
   * Findcppcheck
   * Findcpplint
+  * Finddot
+  * Findfaust
+  * Findfftw3
+  * Findfftw3f
   * Findinclude-what-you-use
-
-Testing
-  * Findauval
   * Findpluginval
+  * Findwraptool
+  * Findxcodebuild
 
 ## Using Oranges
 
@@ -126,7 +103,6 @@ See the `FindOranges` file for more documentation on what it does.
 
 ## CMake install components
   * oranges_modules
-  * oranges_doc_texinfo
   * oranges_doc_html
   * oranges_doc_singlehtml
   * oranges_docs - installs all Oranges documentation

@@ -34,9 +34,9 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-	xcodebuild PROPERTIES
-	URL "https://developer.apple.com/library/archive/technotes/tn2339/_index.html"
-	DESCRIPTION "Command-line build tool for XCode")
+    xcodebuild PROPERTIES
+    URL "https://developer.apple.com/library/archive/technotes/tn2339/_index.html"
+    DESCRIPTION "Command-line build tool for XCode")
 
 oranges_file_scoped_message_context ("Findxcodebuild")
 
@@ -47,14 +47,14 @@ find_program (XCODE_BUILD xcodebuild DOC "xcodebuild executable")
 mark_as_advanced (FORCE XCODE_BUILD)
 
 if (XCODE_BUILD)
-	add_executable (xcodebuild IMPORTED GLOBAL)
+    add_executable (xcodebuild IMPORTED GLOBAL)
 
-	set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION
-												 "${XCODE_BUILD}")
+    set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION
+                                                 "${XCODE_BUILD}")
 
-	add_executable (Apple::xcodebuild ALIAS xcodebuild)
+    add_executable (Apple::xcodebuild ALIAS xcodebuild)
 
-	set (xcodebuild_FOUND TRUE) # cmake-lint: disable=W0105
+    set (xcodebuild_FOUND TRUE) # cmake-lint: disable=W0105
 else ()
-	find_package_warning_or_error ("xcodebuild program cannot be found!")
+    find_package_warning_or_error ("xcodebuild program cannot be found!")
 endif ()
