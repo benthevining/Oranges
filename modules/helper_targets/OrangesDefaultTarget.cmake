@@ -174,6 +174,8 @@ unset (ios_like_systems)
 
 set (any_apple_system "$<OR:$<PLATFORM_ID:Darwin>,${ios_like}>")
 
+set (sign_id "\"iPhone Developer\"")
+
 # cmake-format: off
 set_target_properties (
 	OrangesDefaultTarget
@@ -184,17 +186,23 @@ set_target_properties (
 			   $<${ios_like}:XCODE_ATTRIBUTE_INSTALL_PATH $(LOCAL_APPS_DIR)>
 			   $<${ios_like}:XCODE_ATTRIBUTE_SKIP_INSTALL NO>
 			   $<${ios_like}:XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>
-			   $<${ios_like}:IOS_INSTALL_COMBINED ON>)
+			   $<${ios_like}:IOS_INSTALL_COMBINED ON>
+               $<${ios_like}:XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${sign_id}>)
+
+unset (any_apple_system)
+unset (sign_id)
 
 if (ORANGES_IOS_DEV_TEAM_ID)
+    set (dev_team_id "\"${ORANGES_IOS_DEV_TEAM_ID}\"")
+
 	set_target_properties (
 		OrangesDefaultTarget
-		PROPERTIES $<${ios_like}:XCODE_ATTRIBUTE_DEVELOPMENT_TEAM \"${ORANGES_IOS_DEV_TEAM_ID}\">
-				   $<${ios_like}:XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY \"iPhone Developer\">)
+		PROPERTIES $<${ios_like}:XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${dev_team_id}>)
+
+    unset (dev_team_id)
 endif ()
 # cmake-format: on
 
-unset (any_apple_system)
 unset (ios_like)
 
 if (APPLE)
