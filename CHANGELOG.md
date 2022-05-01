@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.23.1](http://github.com/benthevining/Oranges/compare/v2.23.0...v2.23.1) (2022-05-01)
+
+
+### Bug Fixes
+
+* generator expression escaping bug ([2138b66](http://github.com/benthevining/Oranges/commit/2138b666c030ef958f95749f5e58e208ceeea3b8))
+
 ## [2.23.0](http://github.com/benthevining/Oranges/compare/v2.22.0...v2.23.0) (2022-04-29)
 
 
