@@ -87,13 +87,6 @@ define_property (
         "String describing this Mac's native processor architecture; either x86_64 (Intel) or arm64 (M1). Undefined on non-MacOSX platforms."
     )
 
-if (ORANGES_PROPERTIES_LIST_FILE)
-    file (
-        APPEND "${ORANGES_PROPERTIES_LIST_FILE}"
-        "ORANGES_USING_INSTALLED_PACKAGE TARGET\nORANGES_MAC_UNIVERSAL_BINARY TARGET\nORANGES_MAC_NATIVE_ARCH GLOBAL\n"
-        )
-endif ()
-
 #
 
 add_library (OrangesDefaultTarget INTERFACE)

@@ -52,9 +52,6 @@ include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
 
 #
 
-set (ORANGES_PROPERTIES_LIST_FILE "${PROJECT_BINARY_DIR}/properties.txt"
-     CACHE INTERNAL "")
-
 if (PROJECT_IS_TOP_LEVEL)
     enable_language (CXX)
 

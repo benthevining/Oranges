@@ -85,6 +85,8 @@ configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
 unset (conf_path)
 unset (conf_version)
 
+set (docs_output "${Oranges_SOURCE_DIR}/doc")
+
 set (doc_format_outputs "")
 set (doc_format_last "")
 
@@ -97,7 +99,7 @@ foreach (format IN ITEMS html singlehtml man)
             "${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
             "${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}"
             ${sphinx_flags} "${ORANGES_DOCS_BUILD_TREE}"
-            "${Oranges_SOURCE_DIR}/doc/${format}" ${${format}_extra_commands}
+            "${docs_output}/${format}" ${${format}_extra_commands}
         DEPENDS ${doc_format_last}
         COMMENT "sphinx-build ${format}..."
         VERBATIM USES_TERMINAL)
@@ -111,8 +113,14 @@ unset (doc_format_last)
 
 #
 
-add_custom_target (OrangesDocs DEPENDS "${doc_format_outputs}"
+if (Oranges_IS_TOP_LEVEL)
+    set (all_flag ALL)
+endif ()
+
+add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
                    COMMENT "Building Oranges documentation...")
+
+unset (all_flag)
 
 set_target_properties (
     OrangesDocs PROPERTIES FOLDER Utility LABELS "Oranges;Utility;Documentation"
@@ -135,16 +143,15 @@ include (CPackComponent)
 
 # TODO: install man pages
 
-install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html" COMPONENT oranges_doc_html
+install (DIRECTORY "${docs_output}/html" COMPONENT oranges_doc_html
          DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
 cpack_add_component (
     oranges_doc_html DISPLAY_NAME "Oranges HTML docs"
     DESCRIPTION "Install the Oranges HTML documentation" GROUP oranges_docs)
 
-install (DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/singlehtml"
-         COMPONENT oranges_doc_singlehtml DESTINATION "${CMAKE_INSTALL_DOCDIR}"
-         PATTERN .buildinfo EXCLUDE)
+install (DIRECTORY "${docs_output}/singlehtml" COMPONENT oranges_doc_singlehtml
+         DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
 cpack_add_component (
     oranges_doc_singlehtml DISPLAY_NAME "Oranges single-page HTML docs"
