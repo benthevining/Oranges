@@ -18,17 +18,12 @@ OrangesJUCEUtilities
 General JUCE CMake utilities.
 This module finds the JUCE package and provides the functions :command:`lemons_enable_plugin_hosting()` and :command:`lemons_configure_juce_target()`.
 
-
-Enable plugin hosting for a JUCE target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: lemons_enable_plugin_hosting
+
+  ::
 
     lemons_enable_plugin_hosting (target)
 
-
-Configure a JUCE target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: lemons_configure_juce_target
 

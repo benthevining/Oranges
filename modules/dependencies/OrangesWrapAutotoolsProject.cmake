@@ -18,9 +18,6 @@ OrangesWrapAutotoolsProject
 Functions to integrate a project that uses GNU autotools.
 
 
-Configure an autotools project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: autotools_run_configure
 
   ::
@@ -32,8 +29,6 @@ Configure an autotools project
                             [STATIC] [SHARED])
 
 
-Add a target to build an autotools project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: autotools_add_build_target
 

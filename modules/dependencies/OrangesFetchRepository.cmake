@@ -23,15 +23,15 @@ This module is a light wrapper around CMake's FetchContent, and provides the fun
 
     oranges_fetch_repository (NAME <name>
                               GIT_REPOSITORY <URL> | GITHUB_REPOSITORY <user/repository> | GITLAB_REPOSITORY <user/repository> | BITBUCKET_REPOSITORY <user/repository>
-                              [GIT_TAG <ref>]
-                              [NEVER_LOCAL]
-                              [QUIET]
-                              [DOWNLOAD_ONLY] [EXCLUDE_FROM_ALL]
-                              [FULL] [NO_SUBMODULES] [NO_RECURSE_SUBMODULES]
-                              [CMAKE_SUBDIR <rel_path>]
-                              [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
-                              [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
-                              [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
+                             [GIT_TAG <ref>]
+                             [NEVER_LOCAL]
+                             [QUIET]
+                             [DOWNLOAD_ONLY] [EXCLUDE_FROM_ALL]
+                             [FULL] [NO_SUBMODULES] [NO_RECURSE_SUBMODULES]
+                             [CMAKE_SUBDIR <rel_path>]
+                             [CMAKE_OPTIONS "OPTION1 Value" "Option2 Value" ...]
+                             [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
+                             [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
 
 Fetches a git repository at configure time, with options for routing the call to ``find_package()`` or a local location.
 

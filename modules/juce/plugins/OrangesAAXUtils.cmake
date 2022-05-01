@@ -15,10 +15,7 @@
 OrangesAAXUtils
 -------------------------
 
-Utilities for AAX plugins.
-
-Configure an AAX plugin target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This module provides the function :command:`lemons_configure_aax_plugin()`.
 
 .. command:: lemons_configure_aax_plugin
 

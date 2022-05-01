@@ -15,7 +15,7 @@
 OrangesInstallSystemLibs
 -------------------------
 
-When this modules is included, it configures installation of system libraries, unless the `ORANGES_IGNORE_SYSTEM_LIBS` option is set to ON.
+When this modules is included, it configures installation of system libraries, unless the ``ORANGES_IGNORE_SYSTEM_LIBS`` option is set to ON.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

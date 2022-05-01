@@ -17,9 +17,6 @@ OrangesGenerateStandardHeaders
 
 This module provides the function :command:`oranges_generate_standard_headers()`.
 
-Generating some standard headers for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: oranges_generate_standard_headers
 
   ::

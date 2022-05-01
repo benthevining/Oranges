@@ -18,21 +18,17 @@ OrangesAppUtilities
 Utilities for configuring JUCE apps.
 This module provides the functions :command:`lemons_configure_headless_app()` and :command:`lemons_configure_juce_app()`.
 
-
-Configure a headless application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: lemons_configure_headless_app
+
+  ::
 
     lemons_configure_headless_app ()
 
 	Forwards `${ARGN}` to :command:`lemons_configure_juce_target`.
 
-
-Configure a GUI application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: lemons_configure_juce_app
+
+  ::
 
     lemons_configure_juce_app ()
 

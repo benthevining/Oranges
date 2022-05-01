@@ -18,11 +18,9 @@ Usecodesign
 Configure code signing of targets using Apple's codesign tool.
 If codesign hasn't already been found, including this module will call ``find_package(codesign)``.
 
-
-Configure code signing for a target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: codesign_sign_target
+
+  ::
 
     codesign_sign_target (TARGET <targetName>)
 
@@ -30,6 +28,8 @@ Configure code signing for a target
 Adds a post-build command to the specified target to run codesign on the target's bundle.
 
 .. command:: codesign_sign_plugin_targets
+
+  ::
 
     codesign_sign_plugin_targets (TARGET <pluginTarget>)
 

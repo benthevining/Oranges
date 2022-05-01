@@ -19,9 +19,6 @@ Integrate Faust DSP code into your project.
 If the Faust compiler hasn't already been found, including this module will call ``find_package(faust)``.
 
 
-Generate C++ code for Faust sources
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: faust_add_generation_command
 
   ::
@@ -32,9 +29,6 @@ Generate C++ code for Faust sources
 
 Adds a command to call the Faust compiler to generate the ``<generatedClassName>`` C++ class in the file ``<outputFile>`` from the ``<inputFile>`` Faust .dsp file.
 
-
-Wrap multiple generated Faust sources into a library
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: faust_add_library
 

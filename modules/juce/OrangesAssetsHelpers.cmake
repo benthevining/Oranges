@@ -15,14 +15,12 @@
 OrangesAssetsHelpers
 -------------------------
 
-Utilities for adding binary data targets to JUCE projects.
 This module provides the function :command:`lemons_add_resources_folder()`.
 
 
-Add a binary data target to a JUCE project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: lemons_add_resources_folder
+
+  ::
 
     lemons_add_resources_folder (TARGET <target> ASSET_FOLDER <folder>
                                 [OUTPUT_TARGET <targetName>])

@@ -22,13 +22,13 @@ This module provides the function :command:`oranges_download_file()`.
   ::
 
     oranges_download_file ([URL <url> FILENAME <localFilename>] | [PACKAGE_NAME <name>] [GITHUB_REPOSITORY <username/repoName> REPO_REL_PATH <pathRelToRepoRoot>] [GIT_BRANCH <branchName>]
-                          [PATH_OUTPUT <outputVar>]
-                          [NO_CACHE] [QUIET] [NEVER_LOCAL]
-                          [COPY_TO <path>]
-                          [TIMEOUT <timeoutSeconds>]
-                          [USERNAME <username>]
-                          [PASSWORD <password>]
-                          [EXPECTED_HASH <alg=expectedHash>])
+                           [PATH_OUTPUT <outputVar>]
+                           [NO_CACHE] [QUIET] [NEVER_LOCAL]
+                           [COPY_TO <path>]
+                           [TIMEOUT <timeoutSeconds>]
+                           [USERNAME <username>]
+                           [PASSWORD <password>]
+                           [EXPECTED_HASH <alg=expectedHash>])
 
 Download and cache a file at configure time.
 

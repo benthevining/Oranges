@@ -32,10 +32,9 @@ Output variables
 - LEMONS_PLUGIN_FORMATS
 
 
-Configure a JUCE plugin target
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. command:: lemons_configure_juce_plugin
+
+  ::
 
     lemons_configure_juce_plugin (TARGET <target>
                                  [AAX_PAGETABLE_FILE <file>] [AAX_GUID <guid>]
