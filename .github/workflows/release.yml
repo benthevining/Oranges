@@ -32,6 +32,10 @@ jobs:
                   submodules: recursive
                   fetch-depth: 1
 
+            - uses: actions/setup-python@v3
+              with:
+                  python-version: '3.9'
+
             - name: Configure CMake
               run: cmake --preset maintainer
 
