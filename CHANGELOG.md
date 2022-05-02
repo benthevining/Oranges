@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.23.2](http://github.com/benthevining/Oranges/compare/v2.23.1...v2.23.2) (2022-05-02)
+
+
+### Bug Fixes
+
+* updating python version in readme workflow ([671030d](http://github.com/benthevining/Oranges/commit/671030d7a3680e128f4423698bebfa20b935c355))
+
 ### [2.23.1](http://github.com/benthevining/Oranges/compare/v2.23.0...v2.23.1) (2022-05-01)
 
 
