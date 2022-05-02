@@ -27,9 +27,8 @@ elseif ("${CPACK_GENERATOR}" STREQUAL "DEB")
     mark_as_advanced (FORCE DPKG)
 
     if (DPKG)
-        execute_process (
-            COMMAND "${DPKG}" --print-architecture OUTPUT_VARIABLE deb_arch
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
+        execute_process (COMMAND "${DPKG}" --print-architecture OUTPUT_VARIABLE deb_arch
+                         OUTPUT_STRIP_TRAILING_WHITESPACE)
 
         set (CPACK_PACKAGE_FILE_NAME
              "@CPACK_PACKAGE_NAME@_@CPACK_DEBIAN_PACKAGE_VERSION@_${deb_arch}"
@@ -40,8 +39,7 @@ elseif ("${CPACK_GENERATOR}" STREQUAL "DEB")
     else ()
         if (NOT CPACK_PACKAGE_FILE_NAME)
             message (
-                AUTHOR_WARNING
-                    "Cannot locate dpkg, please manually specify CPACK_PACKAGE_FILE_NAME"
+                AUTHOR_WARNING "Cannot locate dpkg, please manually specify CPACK_PACKAGE_FILE_NAME"
                 )
         endif ()
     endif ()

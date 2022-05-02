@@ -55,8 +55,7 @@ mark_as_advanced (FORCE CODESIGN_PROGRAM)
 if (CODESIGN_PROGRAM)
     add_executable (codesign IMPORTED GLOBAL)
 
-    set_target_properties (codesign PROPERTIES IMPORTED_LOCATION
-                                               "${CODESIGN_PROGRAM}")
+    set_target_properties (codesign PROPERTIES IMPORTED_LOCATION "${CODESIGN_PROGRAM}")
 
     add_executable (Apple::codesign ALIAS codesign)
 

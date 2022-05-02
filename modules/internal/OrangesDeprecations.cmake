@@ -16,8 +16,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 #
 
-function (_lemons_deprecated_variable_watch variableName access value
-          current_file stack)
+function (_lemons_deprecated_variable_watch variableName access value current_file stack)
     message (DEPRECATION "${access} of deprecated variable ${variableName}!")
 endfunction ()
 
@@ -31,8 +30,7 @@ macro (lemons_deprecate_function functionName)
     if (NOT COMMAND ${functionName})
         message (
             AUTHOR_WARNING
-                "Attempting to deprecate function ${functionName}, but command is not defined!"
-            )
+                "Attempting to deprecate function ${functionName}, but command is not defined!")
     endif ()
 
     function ("${functionName}")

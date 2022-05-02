@@ -101,6 +101,12 @@ You can run `cmake --install`, and then call `find_package (Oranges)` from any c
 If your project depends on Oranges, I recommend copying the `FindOranges` script from the `scripts/` directory into your project's source tree (and adding its location to the `CMAKE_MODULE_PATH` before calling `find_package (Oranges)`), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
 See the `FindOranges` file for more documentation on what it does.
 
+### CMake options
+
+* ORANGES_BUILD_DOCS
+
+Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in.
+
 ## CMake install components
   * oranges_modules
   * oranges_doc_html

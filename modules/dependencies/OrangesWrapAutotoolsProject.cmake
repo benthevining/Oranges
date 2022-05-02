@@ -88,9 +88,8 @@ function (autotools_run_configure)
 
     execute_process (
         COMMAND
-            ./configure "CC=${CMAKE_C_COMPILER}" "CXX=${CMAKE_CXX_COMPILER}"
-            "${static_flag}" "${shared_flag}" ${c_flags_arg} ${cxx_flags_arg}
-            ${ld_flags_arg}
+            ./configure "CC=${CMAKE_C_COMPILER}" "CXX=${CMAKE_CXX_COMPILER}" "${static_flag}"
+            "${shared_flag}" ${c_flags_arg} ${cxx_flags_arg} ${ld_flags_arg}
             "--cache-file=${CMAKE_CURRENT_BINARY_DIR}/config.cache"
         WORKING_DIRECTORY "${ORANGES_ARG_SOURCE_DIR}" COMMAND_ECHO STDOUT)
 

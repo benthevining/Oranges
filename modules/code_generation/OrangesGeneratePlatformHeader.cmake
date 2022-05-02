@@ -91,10 +91,8 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-option (
-    ORANGES_DISABLE_SIMD
-    "Disable all SIMD macros in generated platform headers (ie, set them all to 0)"
-    OFF)
+option (ORANGES_DISABLE_SIMD
+        "Disable all SIMD macros in generated platform headers (ie, set them all to 0)" OFF)
 
 mark_as_advanced (FORCE ORANGES_DISABLE_SIMD)
 
@@ -182,13 +180,10 @@ elseif (APPLE)
 
     unset (_apple_plat_var_to_check)
 else ()
-    try_compile (
-        compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-        "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm.cpp"
-        OUTPUT_VARIABLE compile_output)
+    try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+                 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm.cpp" OUTPUT_VARIABLE compile_output)
 
-    string (REGEX REPLACE ".*ORANGES_ARM ([a-zA-Z0-9_-]*).*" "\\1" is_arm
-                          "${compile_output}")
+    string (REGEX REPLACE ".*ORANGES_ARM ([a-zA-Z0-9_-]*).*" "\\1" is_arm "${compile_output}")
 
     if (is_arm)
         set (ORANGES_ARM 1 CACHE INTERNAL "")
@@ -225,19 +220,17 @@ if (MSVC)
     set (ORANGES_FORCE_INLINE "__forceinline" CACHE INTERNAL "")
     set (ORANGES_NEVER_INLINE "__declspec(noinline)" CACHE INTERNAL "")
 else ()
-    set (ORANGES_FORCE_INLINE "inline __attribute__((always_inline))"
-         CACHE INTERNAL "")
+    set (ORANGES_FORCE_INLINE "inline __attribute__((always_inline))" CACHE INTERNAL "")
     set (ORANGES_NEVER_INLINE "__attribute__((__noinline__))" CACHE INTERNAL "")
 endif ()
 
 if (ORANGES_ARM)
     try_compile (
         compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-        "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm_neon.cpp"
-        OUTPUT_VARIABLE compile_output)
+        "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm_neon.cpp" OUTPUT_VARIABLE compile_output)
 
-    string (REGEX REPLACE ".*ORANGES_ARM_NEON ([a-zA-Z0-9_-]*).*" "\\1"
-                          has_arm_neon "${compile_output}")
+    string (REGEX REPLACE ".*ORANGES_ARM_NEON ([a-zA-Z0-9_-]*).*" "\\1" has_arm_neon
+                          "${compile_output}")
 
     if (has_arm_neon)
         set (ORANGES_ARM_NEON 1 CACHE INTERNAL "")
@@ -252,13 +245,10 @@ else ()
     set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
 endif ()
 
-try_compile (
-    compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-    "${CMAKE_CURRENT_LIST_DIR}/scripts/check_sse.cpp"
-    OUTPUT_VARIABLE compile_output)
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_sse.cpp" OUTPUT_VARIABLE compile_output)
 
-string (REGEX REPLACE ".*ORANGES_SSE ([a-zA-Z0-9_-]*).*" "\\1" has_sse
-                      "${compile_output}")
+string (REGEX REPLACE ".*ORANGES_SSE ([a-zA-Z0-9_-]*).*" "\\1" has_sse "${compile_output}")
 
 if (has_sse)
     set (ORANGES_SSE 1 CACHE INTERNAL "")
@@ -270,13 +260,10 @@ unset (compile_result)
 unset (compile_output)
 unset (has_sse)
 
-try_compile (
-    compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-    "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx.cpp"
-    OUTPUT_VARIABLE compile_output)
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx.cpp" OUTPUT_VARIABLE compile_output)
 
-string (REGEX REPLACE ".*ORANGES_AVX ([a-zA-Z0-9_-]*).*" "\\1" has_avx
-                      "${compile_output}")
+string (REGEX REPLACE ".*ORANGES_AVX ([a-zA-Z0-9_-]*).*" "\\1" has_avx "${compile_output}")
 
 if (has_avx)
     set (ORANGES_AVX 1 CACHE INTERNAL "")
@@ -288,13 +275,10 @@ unset (compile_result)
 unset (compile_output)
 unset (has_avx)
 
-try_compile (
-    compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-    "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx512.cpp"
-    OUTPUT_VARIABLE compile_output)
+try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx512.cpp" OUTPUT_VARIABLE compile_output)
 
-string (REGEX REPLACE ".*ORANGES_AVX512 ([a-zA-Z0-9_-]*).*" "\\1" has_avx512
-                      "${compile_output}")
+string (REGEX REPLACE ".*ORANGES_AVX512 ([a-zA-Z0-9_-]*).*" "\\1" has_avx512 "${compile_output}")
 
 if (has_avx512)
     set (ORANGES_AVX512 1 CACHE INTERNAL "")
@@ -312,8 +296,7 @@ function (oranges_generate_platform_header)
 
     oranges_add_function_message_context ()
 
-    set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE
-                      INSTALL_COMPONENT)
+    set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE INSTALL_COMPONENT)
 
     cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
 
@@ -375,18 +358,12 @@ function (oranges_generate_platform_header)
             set (ORANGES_BIG_ENDIAN 0)
             set (ORANGES_LITTLE_ENDIAN 1)
         else ()
-            message (
-                WARNING
-                    "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!"
-                )
+            message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
             set (ORANGES_BIG_ENDIAN 1)
             set (ORANGES_LITTLE_ENDIAN 0)
         endif ()
     else ()
-        message (
-            WARNING
-                "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!"
-            )
+        message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
         set (ORANGES_BIG_ENDIAN 1)
         set (ORANGES_LITTLE_ENDIAN 0)
     endif ()
@@ -400,22 +377,19 @@ function (oranges_generate_platform_header)
         set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
     endif ()
 
-    set (input_file
-         "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")
+    set (input_file "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")
     set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-    configure_file ("${input_file}" "${generated_file}" @ONLY
-                    NEWLINE_STYLE UNIX)
+    configure_file ("${input_file}" "${generated_file}" @ONLY NEWLINE_STYLE UNIX)
 
-    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-                  PROPERTY CMAKE_CONFIGURE_DEPENDS "${input_file}")
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+                                                                        "${input_file}")
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-                  PROPERTY ADDITIONAL_CLEAN_FILES "${generated_file}")
+    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                                 "${generated_file}")
 
-    set_source_files_properties (
-        "${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-        PROPERTIES GENERATED ON)
+    set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+                                 PROPERTIES GENERATED ON)
 
     target_sources (
         "${ORANGES_ARG_TARGET}"
@@ -429,13 +403,10 @@ function (oranges_generate_platform_header)
     endif ()
 
     install (FILES "${generated_file}"
-             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}"
-             ${install_component})
+             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${ORANGES_ARG_TARGET}" "${public_vis}"
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>
-        )
+        "${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction ()

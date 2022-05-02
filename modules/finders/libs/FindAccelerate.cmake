@@ -41,8 +41,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-    Accelerate PROPERTIES
-    URL "https://developer.apple.com/documentation/accelerate"
+    Accelerate PROPERTIES URL "https://developer.apple.com/documentation/accelerate"
     DESCRIPTION "Apple's optimized high performance libraries")
 
 #
@@ -66,22 +65,19 @@ endif ()
 
 add_library (Apple_Accelerate IMPORTED UNKNOWN)
 
-set_target_properties (Apple_Accelerate PROPERTIES IMPORTED_LOCATION
-                                                   "${AccelerateLib}")
+set_target_properties (Apple_Accelerate PROPERTIES IMPORTED_LOCATION "${AccelerateLib}")
 
 add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 
 #
 
-# if(NOT TARGET Apple_Accelerate) add_library (Apple_Accelerate INTERFACE)
-# endif()
+# if(NOT TARGET Apple_Accelerate) add_library (Apple_Accelerate INTERFACE) endif()
 
-# foreach(lib_name IN LISTS Accelerate_FIND_COMPONENTS) if(NOT TARGET
-# Apple_${lib_name}) find_library (lib_${lib_name} ${lib_name} DOC "Apple
-# framework ${lib_name}")
+# foreach(lib_name IN LISTS Accelerate_FIND_COMPONENTS) if(NOT TARGET Apple_${lib_name})
+# find_library (lib_${lib_name} ${lib_name} DOC "Apple framework ${lib_name}")
 
-# if(NOT lib_${lib_name}) find_package_warning_or_error ("Framework ${lib_name}
-# not found") continue() endif()
+# if(NOT lib_${lib_name}) find_package_warning_or_error ("Framework ${lib_name} not found")
+# continue() endif()
 
 # add_library (Apple_${lib_name} IMPORTED UNKNOWN)
 
@@ -94,13 +90,11 @@ add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 
 # target_link_libraries (Apple_Accelerate INTERFACE Apple::${lib_name})
 
-# #install (TARGETS Apple_${lib_name} EXPORT AccelerateTargets) endif()
-# endforeach()
+# #install (TARGETS Apple_${lib_name} EXPORT AccelerateTargets) endif() endforeach()
 
 if (TARGET Apple_vDSP)
     # fixes a bug present when compiling vDSP with GCC
-    target_compile_options (
-        Apple_vDSP INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
+    target_compile_options (Apple_vDSP INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
 endif ()
 
 if (NOT TARGET Apple::Accelerate)
@@ -111,9 +105,8 @@ set (MTS-ESP_FOUND TRUE)
 
 install (TARGETS Apple_Accelerate EXPORT AccelerateTargets)
 
-install (EXPORT AccelerateTargets
-         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Accelerate" NAMESPACE Apple::
-         COMPONENT Accelerate)
+install (EXPORT AccelerateTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Accelerate"
+         NAMESPACE Apple:: COMPONENT Accelerate)
 
 include (CPackComponent)
 

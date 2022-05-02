@@ -33,13 +33,11 @@ endif ()
 
 add_library (CXXConcepts INTERFACE)
 
-set_target_properties (CXXConcepts PROPERTIES CXX_STANDARD 20
-                                              CXX_STANDARD_REQUIRED ON)
+set_target_properties (CXXConcepts PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 
 target_compile_features (CXXConcepts INTERFACE cxx_std_20)
 
-target_compile_options (CXXConcepts
-                        INTERFACE $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
+target_compile_options (CXXConcepts INTERFACE $<$<CXX_COMPILER_ID:GNU>:-fconcepts>)
 
 install (TARGETS CXXConcepts EXPORT OrangesTargets)
 

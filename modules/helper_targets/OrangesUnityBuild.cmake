@@ -47,7 +47,8 @@ endif ()
 
 add_library (OrangesUnityBuild INTERFACE)
 
-set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH
-                                                    UNITY_BUILD ON)
+set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
+
+install (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
 
 add_library (Oranges::OrangesUnityBuild ALIAS OrangesUnityBuild)

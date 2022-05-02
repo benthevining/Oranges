@@ -52,8 +52,7 @@ find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu
 mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
 
 if (NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
-    find_package_warning_or_error (
-        "include-what-you-use program cannot be found!")
+    find_package_warning_or_error ("include-what-you-use program cannot be found!")
     return ()
 endif ()
 
@@ -63,9 +62,8 @@ endif ()
 
 add_executable (include-what-you-use IMPORTED GLOBAL)
 
-set_target_properties (
-    include-what-you-use PROPERTIES IMPORTED_LOCATION
-                                    "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
+set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION
+                                                       "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
 
 add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
@@ -76,11 +74,8 @@ if (NOT TARGET Google::include-what-you-use-interface)
 
     set_target_properties (
         include-what-you-use-interface
-        PROPERTIES
-            CXX_INCLUDE_WHAT_YOU_USE
-            "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns"
-        )
+        PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+                   "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns")
 
-    add_library (Google::include-what-you-use-interface ALIAS
-                 include-what-you-use-interface)
+    add_library (Google::include-what-you-use-interface ALIAS include-what-you-use-interface)
 endif ()

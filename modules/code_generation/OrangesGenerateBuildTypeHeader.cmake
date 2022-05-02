@@ -79,8 +79,7 @@ function (oranges_generate_build_type_header)
         set (public_vis PUBLIC)
     endif ()
 
-    get_property (ORANGES_DEBUG_CONFIGS_LIST GLOBAL
-                  PROPERTY DEBUG_CONFIGURATIONS)
+    get_property (ORANGES_DEBUG_CONFIGS_LIST GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
     if (NOT ORANGES_DEBUG_CONFIGS_LIST)
         message (
@@ -91,13 +90,11 @@ function (oranges_generate_build_type_header)
         set (ORANGES_DEBUG_CONFIGS_LIST Debug)
     endif ()
 
-    set (intermediate_file_in
-         "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h")
-    set (intermediate_file
-         "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
+    set (intermediate_file_in "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header.h")
+    set (intermediate_file "${CMAKE_CURRENT_BINARY_DIR}/intermediate_build_type_header.h")
 
-    configure_file ("${intermediate_file_in}" "${intermediate_file}" @ONLY
-                    NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+    configure_file ("${intermediate_file_in}" "${intermediate_file}" @ONLY NEWLINE_STYLE UNIX
+                    ESCAPE_QUOTES)
 
     set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/build_type_$<CONFIG>.h")
 
@@ -105,34 +102,23 @@ function (oranges_generate_build_type_header)
           TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
 
     target_compile_definitions (
-        "${ORANGES_ARG_TARGET}"
-        "${public_vis}"
-        "ORANGES_BUILD_TYPE_HEADER_NAME=<build_type_$<CONFIG>.h>")
+        "${ORANGES_ARG_TARGET}" "${public_vis}"
+                                "ORANGES_BUILD_TYPE_HEADER_NAME=<build_type_$<CONFIG>.h>")
 
-    set (configured_includer
-         "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+    set (configured_includer "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-    set (
-        includer_input
-        "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h"
-        )
+    set (includer_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/build_type_header_includer.h")
 
-    configure_file ("${includer_input}" "${configured_includer}" @ONLY
-                    NEWLINE_STYLE UNIX)
+    configure_file ("${includer_input}" "${configured_includer}" @ONLY NEWLINE_STYLE UNIX)
 
-    set_property (
-        DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-        PROPERTY CMAKE_CONFIGURE_DEPENDS "${intermediate_file_in}"
-                 "${includer_input}")
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+                  PROPERTY CMAKE_CONFIGURE_DEPENDS "${intermediate_file_in}" "${includer_input}")
 
-    set_property (
-        TARGET "${ORANGES_ARG_TARGET}" APPEND
-        PROPERTY ADDITIONAL_CLEAN_FILES "${intermediate_file}"
-                 "${configured_includer}")
+    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
+                  PROPERTY ADDITIONAL_CLEAN_FILES "${intermediate_file}" "${configured_includer}")
 
-    set_source_files_properties (
-        "${configured_includer}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
-        PROPERTIES GENERATED ON)
+    set_source_files_properties ("${configured_includer}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+                                 PROPERTIES GENERATED ON)
 
     target_sources (
         "${ORANGES_ARG_TARGET}"
@@ -146,13 +132,10 @@ function (oranges_generate_build_type_header)
     endif ()
 
     install (FILES "${configured_file}" "${configured_includer}"
-             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}"
-             ${install_component})
+             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${ORANGES_ARG_TARGET}" "${public_vis}"
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>
-        )
+        "${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction ()

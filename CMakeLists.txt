@@ -17,6 +17,10 @@ Oranges
 
 The Oranges CMake library.
 
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- ORANGES_BUILD_DOCS
+
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
@@ -34,15 +38,19 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
-        "Prefer config files to find modules in find_package search" ON)
-
 project (
     Oranges
     VERSION 2.23.2
     DESCRIPTION "CMake modules, scripts, and utilities"
     HOMEPAGE_URL "www.github.com/benthevining/Oranges"
     LANGUAGES NONE)
+
+option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
+        "Prefer config files to find modules in find_package search" ON)
+
+option (ORANGES_BUILD_DOCS "Build the documentation" "${PROJECT_IS_TOP_LEVEL}")
+
+mark_as_advanced (CMAKE_FIND_PACKAGE_PREFER_CONFIG)
 
 enable_testing ()
 
@@ -83,23 +91,29 @@ endif ()
 include (GNUInstallDirs)
 
 set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/Oranges"
-     CACHE STRING
-           "Directory below INSTALL_PREFIX where Oranges will be installed to")
+     CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
-# include any modules that create exported targets (for installing)
-include (OrangesDefaultTarget)
+# include any modules that create targets (for installing)
 include (CXXConcepts)
+include (OrangesAllIntegrations)
+include (OrangesCoverageFlags)
+include (OrangesDefaultTarget)
+include (OrangesDefaultWarnings)
+include (OrangesGenerateExportHeader)
+include (OrangesUnityBuild)
 
-set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-              PROPERTY ADDITIONAL_CLEAN_FILES "${CMAKE_CURRENT_LIST_DIR}/doc")
+set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                                    "${CMAKE_CURRENT_LIST_DIR}/doc")
 
 #
 
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
+if (ORANGES_BUILD_DOCS)
+    include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
 
-add_subdirectory (docs)
+    add_subdirectory (docs)
+endif ()
 
 #
 
@@ -112,9 +126,8 @@ install (
 
 include (CMakePackageConfigHelpers)
 
-write_basic_package_version_file (
-    "OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
-    COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
+                                  COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 configure_package_config_file (
     "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
@@ -127,8 +140,8 @@ install (
     DESTINATION "${ORANGES_INSTALL_DEST}"
     COMPONENT oranges_base)
 
-install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}"
-         COMPONENT oranges_modules PATTERN .DS_Store EXCLUDE)
+install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_modules
+         PATTERN .DS_Store EXCLUDE)
 
 include (CPackComponent)
 
@@ -163,13 +176,11 @@ feature_summary (
         "This version of Oranges was configured with the following features and third party libraries:"
     )
 
-install (FILES "${PROJECT_BINARY_DIR}/package_features.txt"
-         DESTINATION "${ORANGES_INSTALL_DEST}" CONFIGURATIONS Debug
-         COMPONENT oranges_base)
+install (FILES "${PROJECT_BINARY_DIR}/package_features.txt" DESTINATION "${ORANGES_INSTALL_DEST}"
+         CONFIGURATIONS Debug COMPONENT oranges_base)
 
 if (PROJECT_IS_TOP_LEVEL)
-    feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY
-                     WHAT ALL)
+    feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
 
     include (OrangesUninstallTarget)
 endif ()

@@ -69,12 +69,12 @@ add_library (OrangesAllIntegrations INTERFACE)
 
 target_link_libraries (
     OrangesAllIntegrations
-    INTERFACE
-        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>>
-        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>>
-        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>>
-        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>>
-        $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>>
-    )
+    INTERFACE $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:ccache::ccache-interface>>
+              $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Clang::clang-tidy-interface>>
+              $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:cppcheck::cppcheck-interface>>
+              $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::cpplint-interface>>
+              $<BUILD_INTERFACE:$<TARGET_NAME_IF_EXISTS:Google::include-what-you-use-interface>>)
+
+install (TARGETS OrangesAllIntegrations EXPORT OrangesTargets)
 
 add_library (Oranges::OrangesAllIntegrations ALIAS OrangesAllIntegrations)

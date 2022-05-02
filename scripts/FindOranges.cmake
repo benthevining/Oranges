@@ -44,10 +44,10 @@ include (FindPackageMessage)
 include (FeatureSummary)
 
 set_package_properties (
-    Oranges PROPERTIES URL "https://github.com/benthevining/Oranges"
+    "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://github.com/benthevining/Oranges"
     DESCRIPTION "Library of CMake modules")
 
-set (Oranges_FOUND FALSE)
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
 #
 
@@ -60,29 +60,23 @@ endif ()
 # cmake-lint: disable=C0103
 function (_find_oranges_try_local_dir)
     if (NOT IS_DIRECTORY "${ORANGES_PATH}")
-        message (
-            WARNING
-                "ORANGES_PATH set to non-existent directory ${ORANGES_PATH}!")
+        message (WARNING "ORANGES_PATH set to non-existent directory ${ORANGES_PATH}!")
         return ()
     endif ()
 
     set (oranges_cmakelists "${ORANGES_PATH}/CMakeLists.txt")
 
     if (NOT EXISTS "${oranges_cmakelists}")
-        message (
-            WARNING
-                "CMakeLists.txt does not exist in supplied ORANGES_PATH: ${ORANGES_PATH}!"
-            )
+        message (WARNING "CMakeLists.txt does not exist in supplied ORANGES_PATH: ${ORANGES_PATH}!")
         return ()
     endif ()
 
-    if (Oranges_FIND_VERSION)
+    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION)
         file (READ "${oranges_cmakelists}" cmakelists_text)
 
         string (FIND "${cmakelists_text}" "project (" project_pos)
 
-        string (SUBSTRING "${cmakelists_text}" "${project_pos}" 50
-                          project_string)
+        string (SUBSTRING "${cmakelists_text}" "${project_pos}" 50 project_string)
 
         string (FIND "${project_string}" "VERSION" version_pos)
 
@@ -90,19 +84,19 @@ function (_find_oranges_try_local_dir)
 
         string (SUBSTRING "${project_string}" "${version_pos}" 6 version_string)
 
-        if (Oranges_FIND_VERSION_EXACT)
-            if (NOT "${version_string}" VERSION_EQUAL "${Oranges_FIND_VERSION}")
+        if (${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION_EXACT)
+            if (NOT "${version_string}" VERSION_EQUAL "${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION}")
                 message (
                     WARNING
-                        "Local version of Oranges doesn't have EXACT version requested (${version_string}, requested ${Oranges_FIND_VERSION})"
+                        "Local version of Oranges doesn't have EXACT version requested (${version_string}, requested ${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION})"
                     )
                 return ()
             endif ()
         else ()
-            if ("${version_string}" VERSION_LESS "${Oranges_FIND_VERSION}")
+            if ("${version_string}" VERSION_LESS "${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION}")
                 message (
                     WARNING
-                        "Local version of Oranges has too old version (${version_string}, requested ${Oranges_FIND_VERSION})"
+                        "Local version of Oranges has too old version (${version_string}, requested ${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION})"
                     )
                 return ()
             endif ()
@@ -111,41 +105,37 @@ function (_find_oranges_try_local_dir)
 
     add_subdirectory ("${ORANGES_PATH}" "${CMAKE_BINARY_DIR}/Oranges")
 
-    find_package_message (Oranges "Oranges package found -- local"
+    find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "Oranges package found -- local"
                           "Oranges (local)[${ORANGES_PATH}]")
 
-    set (Oranges_FOUND TRUE PARENT_SCOPE)
+    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE PARENT_SCOPE)
 endfunction ()
 
 if (ORANGES_PATH)
     _find_oranges_try_local_dir ()
 endif ()
 
-unset (ORANGES_PATH)
-
-if (Oranges_FOUND)
+if (${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
     return ()
 endif ()
 
 #
 
-set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache"
-     CACHE PATH "FetchContent dependency cache")
+set (FETCHCONTENT_BASE_DIR "${CMAKE_SOURCE_DIR}/Cache" CACHE PATH "FetchContent dependency cache")
 
 mark_as_advanced (FORCE FETCHCONTENT_BASE_DIR)
 
 include (FetchContent)
 
-FetchContent_Declare (
-    Oranges GIT_REPOSITORY https://github.com/benthevining/Oranges.git
-    GIT_TAG origin/main)
+FetchContent_Declare (Oranges GIT_REPOSITORY https://github.com/benthevining/Oranges.git
+                      GIT_TAG origin/main)
 
 FetchContent_MakeAvailable (Oranges)
 
 list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
 
-find_package_message (Oranges "Oranges package found -- Sources downloaded"
+find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "Oranges package found -- Sources downloaded"
                       "Oranges (GitHub)")
 
-set (Oranges_FOUND TRUE)
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)

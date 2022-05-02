@@ -37,8 +37,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org"
-                        DESCRIPTION "FFT library")
+set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org" DESCRIPTION "FFT library")
 
 oranges_file_scoped_message_context ("FindFFTW")
 
@@ -84,16 +83,14 @@ endif ()
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
                                       $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
 
-# define FFTW_DOUBLE_ONLY to 1 if the double target exists and the float one
-# doesn't
+# define FFTW_DOUBLE_ONLY to 1 if the double target exists and the float one doesn't
 target_compile_definitions (
     FFTW
     INTERFACE
         $<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3f>>>:FFTW_DOUBLE_ONLY=1>
     )
 
-# define FFTW_SINGLE_ONLY to 1 if the float target exists and the double one
-# doesn't
+# define FFTW_SINGLE_ONLY to 1 if the float target exists and the double one doesn't
 target_compile_definitions (
     FFTW
     INTERFACE
@@ -109,8 +106,8 @@ target_compile_definitions (
 
 install (TARGETS FFTW EXPORT FFTWTargets)
 
-install (EXPORT FFTWTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/FFTW"
-         NAMESPACE FFTW:: COMPONENT FFTW)
+install (EXPORT FFTWTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/FFTW" NAMESPACE FFTW::
+         COMPONENT FFTW)
 
 include (CPackComponent)
 

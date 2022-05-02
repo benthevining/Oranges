@@ -61,14 +61,14 @@ set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
 
 target_compile_options (
     OrangesCoverageFlags
-    INTERFACE
-        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
+    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
 
-target_link_options (
-    OrangesCoverageFlags INTERFACE
-    "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
+target_link_options (OrangesCoverageFlags INTERFACE
+                     "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
 
 unset (config_is_debug)
 unset (compiler_gcclike)
+
+install (TARGETS OrangesCoverageFlags EXPORT OrangesTargets)
 
 add_library (Oranges::OrangesCoverageFlags ALIAS OrangesCoverageFlags)

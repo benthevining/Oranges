@@ -60,26 +60,21 @@ function (codesign_sign_target)
     lemons_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT TARGET Apple::codesign)
-        message (
-            FATAL_ERROR
-                "Codesign cannot be found, plugin signing cannot be configured!"
-            )
+        message (FATAL_ERROR "Codesign cannot be found, plugin signing cannot be configured!")
         return ()
     endif ()
 
     if (NOT TARGET "${ORANGES_ARG_TARGET}")
         message (
             FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!"
-            )
+                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
     endif ()
 
     set (dest "$<TARGET_BUNDLE_DIR:${ORANGES_ARG_TARGET}>")
 
     add_custom_command (
         TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-        COMMAND Apple::codesign -s - --force "${dest}"
-        COMMENT "Signing ${ORANGES_ARG_TARGET}...")
+        COMMAND Apple::codesign -s - --force "${dest}" COMMENT "Signing ${ORANGES_ARG_TARGET}...")
 
     add_custom_command (
         TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
@@ -102,8 +97,7 @@ function (codesign_sign_plugin_targets)
     if (NOT TARGET "${ORANGES_ARG_TARGET}")
         message (
             FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!"
-            )
+                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${ORANGES_ARG_TARGET}!")
     endif ()
 
     macro (_codesign_config_plugin_format_sign targetName formatName)

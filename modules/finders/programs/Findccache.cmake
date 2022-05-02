@@ -62,13 +62,9 @@ oranges_file_scoped_message_context ("Findccache")
 #
 
 define_property (
-    TARGET INHERITED
-    PROPERTY ORANGES_USING_CCACHE
-    BRIEF_DOCS
-        "Boolean that indicates whether this target is using the ccache compiler cache"
-    FULL_DOCS
-        "Boolean that indicates whether this target is using the ccache compiler cache"
-    )
+    TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
+    BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
+    FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
 
 set (ccache_FOUND FALSE)
 
@@ -105,9 +101,8 @@ endif ()
 
 #
 
-set (CCACHE_OPTIONS
-     "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M"
-     CACHE STRING "")
+set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
+                                                                                            "")
 
 mark_as_advanced (FORCE CCACHE_OPTIONS)
 
@@ -130,11 +125,10 @@ function (_lemons_configure_compiler_launcher language)
 
     set (script_name "launch-${language}")
 
-    configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in"
-                    "${script_name}" @ONLY NEWLINE_STYLE UNIX)
+    configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/launcher.in" "${script_name}" @ONLY
+                    NEWLINE_STYLE UNIX)
 
-    set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}"
-         PARENT_SCOPE)
+    set (${language}_script "${CMAKE_CURRENT_BINARY_DIR}/${script_name}" PARENT_SCOPE)
 endfunction ()
 
 _lemons_configure_compiler_launcher (c)
@@ -159,17 +153,14 @@ if (XCODE)
 
     set_target_properties (
         ccache-interface
-        PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}"
-                   XCODE_ATTRIBUTE_CXX "${cxx_script}"
-                   XCODE_ATTRIBUTE_LD "${c_script}"
-                   XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+        PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
+                   XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
 else ()
     set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
     set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
 
-    set_target_properties (
-        ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-                                    CXX_COMPILER_LAUNCHER "${cxx_script}")
+    set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+                                                       CXX_COMPILER_LAUNCHER "${cxx_script}")
 endif ()
 
 if (NOT TARGET ccache::ccache-interface)

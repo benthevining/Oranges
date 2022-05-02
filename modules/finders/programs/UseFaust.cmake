@@ -87,11 +87,9 @@ function (faust_add_library)
     set (oneValueArgs TARGET_NAME INSTALL_REL_PATH INSTALL_COMPONENT)
     set (multiValueArgs INPUT_FILES CLASS_NAMES)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}"
-                           ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    lemons_require_function_arguments (ORANGES_ARG TARGET_NAME INPUT_FILES
-                                       CLASS_NAMES)
+    lemons_require_function_arguments (ORANGES_ARG TARGET_NAME INPUT_FILES CLASS_NAMES)
 
     list (LENGTH "${ORANGES_ARG_INPUT_FILES}" numInputFiles)
     list (LENGTH "${ORANGES_ARG_CLASS_NAMES}" numClassNames)
@@ -106,13 +104,11 @@ function (faust_add_library)
     if (TARGET "${ORANGES_ARG_TARGET_NAME}")
         message (
             FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} - target ${ORANGES_ARG_TARGET_NAME} already exists!"
-            )
+                "${CMAKE_CURRENT_FUNCTION} - target ${ORANGES_ARG_TARGET_NAME} already exists!")
     endif ()
 
     if (ORANGES_ARG_INSTALL_REL_PATH)
-        set (install_dir
-             "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_INSTALL_REL_PATH}")
+        set (install_dir "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_INSTALL_REL_PATH}")
     else ()
         set (install_dir "${CMAKE_INSTALL_INCLUDEDIR}")
     endif ()
@@ -123,16 +119,13 @@ function (faust_add_library)
 
     add_library ("${ORANGES_ARG_TARGET_NAME}" INTERFACE)
 
-    set (generated_dir
-         "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_TARGET_NAME}/Faust")
+    set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_TARGET_NAME}/Faust")
 
     target_include_directories (
-        "${ORANGES_ARG_TARGET_NAME}"
-        INTERFACE $<BUILD_INTERFACE:${generated_dir}>
-                  $<INSTALL_INTERFACE:${install_dir}>)
+        "${ORANGES_ARG_TARGET_NAME}" INTERFACE $<BUILD_INTERFACE:${generated_dir}>
+                                               $<INSTALL_INTERFACE:${install_dir}>)
 
-    # target_include_directories(${target} PRIVATE
-    # ${Faust_SOURCE_DIR}/architecture)
+    # target_include_directories(${target} PRIVATE ${Faust_SOURCE_DIR}/architecture)
 
     foreach (idx RANGE numInputFiles)
 
@@ -141,9 +134,8 @@ function (faust_add_library)
 
         set (generated_file "${generated_dir}/${class_name}.h")
 
-        faust_add_generation_command (
-            INPUT_FILE "${input_file}" CLASS_NAME "${class_name}"
-            OUTPUT_FILE "${generated_file}")
+        faust_add_generation_command (INPUT_FILE "${input_file}" CLASS_NAME "${class_name}"
+                                      OUTPUT_FILE "${generated_file}")
 
         target_sources (
             "${ORANGES_ARG_TARGET_NAME}"

@@ -60,8 +60,7 @@ function (oranges_create_pkgconfig_file)
         INSTALL_COMPONENT)
     set (multiValueArgs REQUIRES)
 
-    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}"
-                           "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     lemons_require_function_arguments (ORANGES_ARG TARGET)
     lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -107,22 +106,19 @@ function (oranges_create_pkgconfig_file)
 
     list (JOIN ORANGES_ARG_REQUIRES " " ORANGES_ARG_REQUIRES)
 
-    set (pc_file_configured
-         "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
+    set (pc_file_configured "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}.pc.in")
 
     set (pc_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/config.pc")
 
-    configure_file ("${pc_input}" "${pc_file_configured}" @ONLY
-                    NEWLINE_STYLE UNIX ESCAPE_QUOTES)
+    configure_file ("${pc_input}" "${pc_file_configured}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-                  PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
+    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+                                                                 "${pc_input}")
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND
-                  PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")
+    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                                 "${pc_file_configured}")
 
-    set (pc_file_output
-         "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
+    set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
     file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}"
           TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
@@ -132,8 +128,8 @@ function (oranges_create_pkgconfig_file)
             set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
         endif ()
 
-        install (FILES "${pc_file_output}"
-                 DESTINATION "${ORANGES_ARG_INSTALL_DEST}" ${component_flag})
+        install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}"
+                 ${component_flag})
     endif ()
 
 endfunction ()

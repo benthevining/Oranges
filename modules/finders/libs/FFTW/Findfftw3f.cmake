@@ -45,8 +45,7 @@ endif ()
 
 set (fftw3f_FOUND FALSE)
 
-find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h
-           DOC "FFTW [float] includes directory")
+find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h DOC "FFTW [float] includes directory")
 
 find_library (FFTW_F_LIBRARIES NAMES fftw3f sfftw3 DOC "FFTW [float] library")
 
@@ -55,8 +54,7 @@ mark_as_advanced (FORCE FFTW_F_INCLUDES FFTW_F_LIBRARIES)
 if (FFTW_F_INCLUDES AND FFTW_F_LIBRARIES)
     add_library (fftw3f IMPORTED UNKNOWN)
 
-    set_target_properties (fftw3f PROPERTIES IMPORTED_LOCATION
-                                             "${FFTW_F_LIBRARIES}")
+    set_target_properties (fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARIES}")
 
     target_include_directories (fftw3f INTERFACE "${FFTW_F_INCLUDES}")
 

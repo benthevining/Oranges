@@ -34,9 +34,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
 
-set_package_properties (
-    JUCE PROPERTIES URL "https://juce.com/"
-    DESCRIPTION "Cross platform framework for plugin and app development")
+set_package_properties (JUCE PROPERTIES URL "https://juce.com/"
+                        DESCRIPTION "Cross platform framework for plugin and app development")
 
 #
 
@@ -44,8 +43,7 @@ oranges_file_scoped_message_context ("FindJUCE")
 
 #
 
-set (LEMONS_JUCE_BRANCH "develop"
-     CACHE STRING "The branch of the JUCE GitHub repository to use")
+set (LEMONS_JUCE_BRANCH "develop" CACHE STRING "The branch of the JUCE GitHub repository to use")
 set_property (CACHE LEMONS_JUCE_BRANCH PROPERTY STRINGS "develop;master")
 mark_as_advanced (FORCE LEMONS_JUCE_BRANCH)
 
@@ -57,8 +55,8 @@ oranges_fetch_repository (
     NAME JUCE
     GITHUB_REPOSITORY juce-framework/JUCE
     GIT_TAG "origin/${LEMONS_JUCE_BRANCH}"
-    CMAKE_OPTIONS "JUCE_ENABLE_MODULE_SOURCE_GROUPS ON"
-                  "JUCE_BUILD_EXAMPLES OFF" "JUCE_BUILD_EXTRAS OFF"
+    CMAKE_OPTIONS "JUCE_ENABLE_MODULE_SOURCE_GROUPS ON" "JUCE_BUILD_EXAMPLES OFF"
+                  "JUCE_BUILD_EXTRAS OFF"
     NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)

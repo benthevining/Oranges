@@ -49,10 +49,9 @@ set_package_properties (
 
 oranges_file_scoped_message_context ("Findcpplint")
 
-set (
-    CPPLINT_IGNORE
-    "-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo"
-    CACHE STRING "List of cpplint checks to ignore")
+set (CPPLINT_IGNORE
+     "-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo"
+     CACHE STRING "List of cpplint checks to ignore")
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
@@ -73,8 +72,7 @@ endif ()
 
 add_executable (cpplint IMPORTED GLOBAL)
 
-set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION
-                                          "${PROGRAM_CPPLINT}")
+set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPLINT}")
 
 add_executable (Google::cpplint ALIAS cpplint)
 
@@ -88,12 +86,10 @@ if (NOT TARGET Google::cpplint-interface)
 
     set_target_properties (
         cpplint-interface
-        PROPERTIES
-            CXX_CPPLINT
-            "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
-            C_CPPLINT
-            "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
-        )
+        PROPERTIES CXX_CPPLINT
+                   "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
+                   C_CPPLINT
+                   "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}")
 
     add_library (Google::cpplint-interface ALIAS cpplint-interface)
 endif ()

@@ -74,8 +74,7 @@ endif ()
 
 add_executable (cppcheck IMPORTED GLOBAL)
 
-set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION
-                                           "${PROGRAM_CPPCHECK}")
+set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPCHECK}")
 
 add_executable (cppcheck::cppcheck ALIAS cppcheck)
 
@@ -95,9 +94,8 @@ if (NOT TARGET cppcheck::cppcheck-interface)
 
     add_library (cppcheck-interface INTERFACE)
 
-    set_target_properties (
-        cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-                                      CXX_CPPCHECK "${cppcheck_cmd}")
+    set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+                                                         CXX_CPPCHECK "${cppcheck_cmd}")
 
     unset (cppcheck_cmd)
 

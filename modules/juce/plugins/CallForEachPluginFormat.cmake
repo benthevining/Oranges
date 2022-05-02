@@ -61,21 +61,18 @@ function (call_for_each_plugin_format)
             )
     endif ()
 
-    get_required_target_property (plugin_formats "${ORANGES_ARG_TARGET}"
-                                  JUCE_FORMATS)
+    get_required_target_property (plugin_formats "${ORANGES_ARG_TARGET}" JUCE_FORMATS)
 
     foreach (format IN LISTS plugin_formats)
 
         set (targetName "${ORANGES_ARG_TARGET}_${format}")
 
         if (NOT TARGET "${targetName}")
-            message (
-                WARNING "Plugin format target ${targetName} does not exist!")
+            message (WARNING "Plugin format target ${targetName} does not exist!")
             continue ()
         endif ()
 
-        cmake_language (CALL "${ORANGES_ARG_FUNCTION}" "${targetName}"
-                        "${format}")
+        cmake_language (CALL "${ORANGES_ARG_FUNCTION}" "${targetName}" "${format}")
 
     endforeach ()
 

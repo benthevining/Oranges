@@ -24,28 +24,29 @@ endif ()
 set (ORANGES_MODULES_ROOT "${CMAKE_CURRENT_BINARY_DIR}/../modules")
 set (ORANGES_README "${CMAKE_CURRENT_LIST_DIR}/../README.md")
 
-configure_file (
-    "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
-    "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
+configure_file ("${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
+                "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
 
 unset (ORANGES_README)
 unset (ORANGES_MODULES_ROOT)
 
+if (Oranges_IS_TOP_LEVEL)
+    set (all_flag ALL)
+endif ()
+
 add_custom_target (
     OrangesReadme
+    ${all_flag}
     COMMAND Python3::Interpreter "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py"
     COMMENT "Updating Oranges readme..."
     DEPENDS "${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
     VERBATIM USES_TERMINAL)
 
-set_property (
-    TARGET OrangesReadme APPEND
-    PROPERTY ADDITIONAL_CLEAN_FILES
-             "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
+set_property (TARGET OrangesReadme APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                   "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py")
 
-set_target_properties (
-    OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
-                             XCODE_GENERATE_SCHEME OFF)
+set_target_properties (OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
+                                                XCODE_GENERATE_SCHEME OFF)
 
 if (TARGET DependencyGraph)
     add_dependencies (OrangesReadme DependencyGraph)

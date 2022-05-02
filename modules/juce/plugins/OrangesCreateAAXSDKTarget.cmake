@@ -55,10 +55,7 @@ if (NOT LEMONS_AAX_SDK_PATH)
 endif ()
 
 if (NOT IS_DIRECTORY "${LEMONS_AAX_SDK_PATH}")
-    message (
-        WARNING
-            "LEMONS_AAX_SDK_PATH has been specified, but the directory does not exist!"
-        )
+    message (WARNING "LEMONS_AAX_SDK_PATH has been specified, but the directory does not exist!")
     return ()
 endif ()
 
@@ -89,9 +86,7 @@ elseif (WIN32)
 
     if (NOT EXISTS "${aax_msvc_proj_file}")
         message (
-            AUTHOR_WARNING
-                "${aax_msvc_proj_file} could not be found, AAX SDK cannot be built!"
-            )
+            AUTHOR_WARNING "${aax_msvc_proj_file} could not be found, AAX SDK cannot be built!")
         return ()
     endif ()
 

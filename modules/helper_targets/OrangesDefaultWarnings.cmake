@@ -47,8 +47,7 @@ endif ()
 
 add_library (OrangesDefaultWarnings INTERFACE)
 
-target_compile_options (OrangesDefaultWarnings
-                        INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 
 set (
     gcclike_comp_opts
@@ -68,17 +67,16 @@ set (
     -Wunreachable-code
     -Wunused-parameter)
 
-target_compile_options (
-    OrangesDefaultWarnings
-    INTERFACE "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>")
+target_compile_options (OrangesDefaultWarnings
+                        INTERFACE "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>")
 
 unset (gcclike_comp_opts)
 
 set (
     gcc_comp_opts
     # cmake-format: sortable
-    -Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized
-    -Wno-strict-overflow -Wredundant-decls)
+    -Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-strict-overflow
+    -Wredundant-decls)
 
 target_compile_options (OrangesDefaultWarnings
                         INTERFACE "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>")
@@ -87,8 +85,7 @@ unset (gcc_comp_opts)
 
 target_compile_options (
     OrangesDefaultWarnings
-    INTERFACE
-        "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>")
+    INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wzero-as-null-pointer-constant>")
 
 set (
     clang_cxx_opts
@@ -106,22 +103,22 @@ set (
     -Wshorten-64-to-32
     -Wunused-variable)
 
-target_compile_options (
-    OrangesDefaultWarnings
-    INTERFACE "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_cxx_opts}>")
+target_compile_options (OrangesDefaultWarnings
+                        INTERFACE "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_cxx_opts}>")
 
 set (
     clang_cxx_opts
     # cmake-format: sortable
-    -Winconsistent-missing-destructor-override -Woverloaded-virtual
-    -Wunused-private-field -Wzero-as-null-pointer-constant)
+    -Winconsistent-missing-destructor-override -Woverloaded-virtual -Wunused-private-field
+    -Wzero-as-null-pointer-constant)
 
 target_compile_options (
     OrangesDefaultWarnings
-    INTERFACE
-        "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
-        "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>")
+    INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
+              "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>")
 
 unset (clang_cxx_opts)
+
+install (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets)
 
 add_library (Oranges::OrangesDefaultWarnings ALIAS OrangesDefaultWarnings)

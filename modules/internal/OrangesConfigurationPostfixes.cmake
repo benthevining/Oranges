@@ -15,12 +15,9 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 set (ORANGES_DEBUG_POSTFIX -d CACHE STRING "Postfix to append to debug targets")
-set (ORANGES_RELEASE_POSTFIX -r CACHE STRING
-                                      "Postfix to append to release targets")
-set (ORANGES_RELWITHDEBINFO_POSTFIX -rd
-     CACHE STRING "Postfix to append to RelWithDebInfo targets")
-set (ORANGES_MINSIZEREL_POSTFIX -mr
-     CACHE STRING "Postfix to append to MinSizeRel targets")
+set (ORANGES_RELEASE_POSTFIX -r CACHE STRING "Postfix to append to release targets")
+set (ORANGES_RELWITHDEBINFO_POSTFIX -rd CACHE STRING "Postfix to append to RelWithDebInfo targets")
+set (ORANGES_MINSIZEREL_POSTFIX -mr CACHE STRING "Postfix to append to MinSizeRel targets")
 
 mark_as_advanced (FORCE ORANGES_DEBUG_POSTFIX ORANGES_RELEASE_POSTFIX
                   ORANGES_RELWITHDEBINFO_POSTFIX ORANGES_MINSIZEREL_POSTFIX)

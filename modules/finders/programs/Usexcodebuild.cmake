@@ -60,10 +60,7 @@ function (include_external_xcode_project)
     lemons_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT TARGET Apple::xcodebuild)
-        message (
-            FATAL_ERROR
-                "xcodebuild cannot be found, xcode project target cannot be created!"
-            )
+        message (FATAL_ERROR "xcodebuild cannot be found, xcode project target cannot be created!")
         return ()
     endif ()
 

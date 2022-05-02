@@ -57,13 +57,12 @@ include (lemons_AggregateTargets)
 
 oranges_file_scoped_message_context ("OrangesPluginUtilities")
 
-option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake"
-        OFF)
+option (LEMONS_INCLUDE_PRIVATE_SDKS "Add the PrivateSDKs repo via CPM.cmake" OFF)
 
 mark_as_advanced (FORCE LEMONS_INCLUDE_PRIVATE_SDKS)
 
-if (LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs
-    OR DEFINED ENV{LEMONS_PRIVATE_SDKS})
+if (LEMONS_INCLUDE_PRIVATE_SDKS OR FETCHCONTENT_SOURCE_DIR_PrivateSDKs OR DEFINED
+                                                                          ENV{LEMONS_PRIVATE_SDKS})
     include (OrangesAddPrivateSDKs)
 endif ()
 
@@ -101,14 +100,12 @@ if (NOT LEMONS_PLUGIN_FORMATS)
             else ()
                 message (
                     AUTHOR_WARNING
-                        "LEMONS_VST2_SDK_PATH specified, but the directory does not exist!"
-                    )
+                        "LEMONS_VST2_SDK_PATH specified, but the directory does not exist!")
             endif ()
         endif ()
     endif ()
 
-    set (LEMONS_PLUGIN_FORMATS ${available_formats}
-         CACHE STRING "Available plugin formats")
+    set (LEMONS_PLUGIN_FORMATS ${available_formats} CACHE STRING "Available plugin formats")
 
     unset (available_formats)
 
@@ -130,8 +127,7 @@ function (lemons_configure_juce_plugin)
     lemons_configure_juce_target (${ARGN})
 
     set (oneValueArgs TARGET AAX_PAGETABLE_FILE AAX_GUID)
-    cmake_parse_arguments (LEMONS_PLUGIN "CLAP_FORMAT" "${oneValueArgs}"
-                           "CLAP_FEATURES" ${ARGN})
+    cmake_parse_arguments (LEMONS_PLUGIN "CLAP_FORMAT" "${oneValueArgs}" "CLAP_FEATURES" ${ARGN})
 
     oranges_assert_target_argument_is_target (LEMONS_PLUGIN)
 
@@ -140,19 +136,15 @@ function (lemons_configure_juce_plugin)
         message (DEBUG "Configuring AAX plugin target...")
 
         lemons_configure_aax_plugin (
-            TARGET ${aax_target} PAGETABLE_FILE
-            "${LEMONS_PLUGIN_AAX_PAGETABLE_FILE}" GUID
+            TARGET ${aax_target} PAGETABLE_FILE "${LEMONS_PLUGIN_AAX_PAGETABLE_FILE}" GUID
             "${LEMONS_PLUGIN_AAX_GUID}")
     endif ()
 
     if (TARGET Lemons::LemonsPluginModules)
-        target_link_libraries (${LEMONS_PLUGIN_TARGET}
-                               PRIVATE Lemons::LemonsPluginModules)
+        target_link_libraries (${LEMONS_PLUGIN_TARGET} PRIVATE Lemons::LemonsPluginModules)
     else ()
-        message (
-            DEBUG
-            "No target Lemons::LemonsPluginModules in call to ${CMAKE_CURRENT_FUNCTION}..."
-            )
+        message (DEBUG
+                 "No target Lemons::LemonsPluginModules in call to ${CMAKE_CURRENT_FUNCTION}...")
     endif ()
 
     target_compile_definitions (${LEMONS_PLUGIN_TARGET}
@@ -160,13 +152,11 @@ function (lemons_configure_juce_plugin)
 
     _lemons_add_to_all_plugins_target (${LEMONS_PLUGIN_TARGET})
 
-    # This dependency is needed to build Standalone and AUv3 targets, but isn't
-    # needed directly by my lemons_plugin module, so add it to those targets
-    # here...
+    # This dependency is needed to build Standalone and AUv3 targets, but isn't needed directly by
+    # my lemons_plugin module, so add it to those targets here...
     function (_lemons_add_extra_pluginformat_modules formatTarget)
         if (TARGET ${formatTarget})
-            target_link_libraries (${formatTarget}
-                                   PRIVATE juce::juce_audio_devices)
+            target_link_libraries (${formatTarget} PRIVATE juce::juce_audio_devices)
         endif ()
     endfunction ()
 
@@ -176,12 +166,10 @@ function (lemons_configure_juce_plugin)
     if (LEMONS_PLUGIN_CLAP_FORMAT OR LEMONS_PLUGIN_CLAP_FEATURES)
         include (OrangesClapFormat)
 
-        get_required_target_property (clapID "${LEMONS_PLUGIN_TARGET}"
-                                      BUNDLE_ID)
+        get_required_target_property (clapID "${LEMONS_PLUGIN_TARGET}" BUNDLE_ID)
 
-        clap_juce_extensions_plugin (
-            TARGET "${LEMONS_PLUGIN_TARGET}" CLAP_ID "${clapID}" CLAP_FEATURES
-            "${LEMONS_PLUGIN_CLAP_FEATURES}")
+        clap_juce_extensions_plugin (TARGET "${LEMONS_PLUGIN_TARGET}" CLAP_ID "${clapID}"
+                                     CLAP_FEATURES "${LEMONS_PLUGIN_CLAP_FEATURES}")
     endif ()
 
 endfunction ()

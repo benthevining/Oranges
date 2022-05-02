@@ -108,22 +108,19 @@ set_target_properties (
                $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
 set_property (
-    TARGET OrangesDefaultTarget APPEND
-    PROPERTY EXPORT_PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY
-             ORANGES_USING_INSTALLED_PACKAGE)
+    TARGET OrangesDefaultTarget APPEND PROPERTY EXPORT_PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY
+                                                ORANGES_USING_INSTALLED_PACKAGE)
 
-target_compile_definitions (
-    OrangesDefaultTarget
-    INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT>")
+target_compile_definitions (OrangesDefaultTarget
+                            INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT>")
 
 set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
 
 target_compile_options (
     OrangesDefaultTarget
-    INTERFACE
-        "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
-        "$<$<AND:$<PLATFORM_ID:Windows>,$<NOT:$<CXX_COMPILER_ID:Clang>>>:/EHsc>"
-        "$<${compiler_gcclike}:-g>")
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
+              "$<$<AND:$<PLATFORM_ID:Windows>,$<NOT:$<CXX_COMPILER_ID:Clang>>>:/EHsc>"
+              "$<${compiler_gcclike}:-g>")
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
@@ -137,22 +134,19 @@ unset (debug_configs)
 
 set (config_is_release "$<NOT:${config_is_debug}>")
 
-set_target_properties (
-    OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
-                                    "MultiThreaded$<${config_is_debug}:Debug>")
+set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
+                                                       "MultiThreaded$<${config_is_debug}:Debug>")
 
 target_compile_options (
     OrangesDefaultTarget
-    INTERFACE
-        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
-        "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3>"
-        "$<$<AND:${compiler_gcclike},${config_is_release},$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>"
-        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/Od;/Zi>"
-        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:/Ox;-GL>")
+    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
+              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3>"
+              "$<$<AND:${compiler_gcclike},${config_is_release},$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>"
+              "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/Od;/Zi>"
+              "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:/Ox;-GL>")
 
-target_link_libraries (
-    OrangesDefaultTarget
-    INTERFACE "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:-LTCG>")
+target_link_libraries (OrangesDefaultTarget
+                       INTERFACE "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:-LTCG>")
 
 unset (compiler_gcclike)
 unset (config_is_debug)
@@ -162,8 +156,8 @@ unset (config_is_release)
 
 # cmake-lint: disable=W0106
 if (DEFINED ENV{APPLE_DEV_ID})
-    set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}"
-         CACHE STRING "10-character Apple Developer ID")
+    set (ORANGES_IOS_DEV_TEAM_ID "$ENV{APPLE_DEV_ID}" CACHE STRING
+                                                            "10-character Apple Developer ID")
 endif ()
 
 set (ios_like_systems iOS tvOS watchOS)
@@ -242,15 +236,12 @@ if (NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 endif ()
 
 if (CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-    set_target_properties (OrangesDefaultTarget
-                           PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
+    set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
 else ()
-    set_target_properties (OrangesDefaultTarget
-                           PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+    set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 endif ()
 
-set_target_properties (OrangesDefaultTarget
-                       PROPERTIES INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
+set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
 
 #
 

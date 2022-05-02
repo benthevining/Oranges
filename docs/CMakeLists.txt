@@ -62,8 +62,7 @@ set (INPUT_INDEX_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst")
 
 set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
-configure_file (generate_rsts.py "${configured_script}" @ONLY
-                NEWLINE_STYLE UNIX)
+configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
 
 execute_process (COMMAND python3 "${configured_script}")
 
@@ -74,10 +73,7 @@ unset (INPUT_INDEX_FILE)
 #
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")
-set (
-    conf_version
-    "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}"
-    )
+set (conf_version "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}")
 # conf_copyright
 
 configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
@@ -97,9 +93,8 @@ foreach (format IN ITEMS html singlehtml man)
         OUTPUT "${doc_format_output}"
         COMMAND
             "${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
-            "${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}"
-            ${sphinx_flags} "${ORANGES_DOCS_BUILD_TREE}"
-            "${docs_output}/${format}" ${${format}_extra_commands}
+            "${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}" ${sphinx_flags}
+            "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}/${format}" ${${format}_extra_commands}
         DEPENDS ${doc_format_last}
         COMMENT "sphinx-build ${format}..."
         VERBATIM USES_TERMINAL)
@@ -122,9 +117,8 @@ add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
 
 unset (all_flag)
 
-set_target_properties (
-    OrangesDocs PROPERTIES FOLDER Utility LABELS "Oranges;Utility;Documentation"
-                           XCODE_GENERATE_SCHEME OFF)
+set_target_properties (OrangesDocs PROPERTIES FOLDER Utility LABELS "Oranges;Utility;Documentation"
+                                              XCODE_GENERATE_SCHEME OFF)
 
 if (TARGET OrangesReadme)
     add_dependencies (OrangesDocs OrangesReadme)
@@ -146,19 +140,16 @@ include (CPackComponent)
 install (DIRECTORY "${docs_output}/html" COMPONENT oranges_doc_html
          DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
-cpack_add_component (
-    oranges_doc_html DISPLAY_NAME "Oranges HTML docs"
-    DESCRIPTION "Install the Oranges HTML documentation" GROUP oranges_docs)
+cpack_add_component (oranges_doc_html DISPLAY_NAME "Oranges HTML docs"
+                     DESCRIPTION "Install the Oranges HTML documentation" GROUP oranges_docs)
 
 install (DIRECTORY "${docs_output}/singlehtml" COMPONENT oranges_doc_singlehtml
          DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
 cpack_add_component (
     oranges_doc_singlehtml DISPLAY_NAME "Oranges single-page HTML docs"
-    DESCRIPTION "Install the Oranges single-page HTML documentation"
-    GROUP oranges_docs)
+    DESCRIPTION "Install the Oranges single-page HTML documentation" GROUP oranges_docs)
 
 cpack_add_component_group (
     oranges_docs DISPLAY_NAME "Oranges documentation"
-    DESCRIPTION "Install all Oranges documentation"
-    PARENT_GROUP oranges INSTALL_TYPES Developer)
+    DESCRIPTION "Install all Oranges documentation" PARENT_GROUP oranges INSTALL_TYPES Developer)

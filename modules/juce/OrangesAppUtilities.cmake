@@ -73,12 +73,8 @@ function (lemons_configure_juce_app)
     _lemons_configure_app_internal (${ARGN})
 
     if (TARGET Lemons::LemonsAppModules)
-        target_link_libraries (${LEMONS_APP_TARGET}
-                               PRIVATE Lemons::LemonsAppModules)
+        target_link_libraries (${LEMONS_APP_TARGET} PRIVATE Lemons::LemonsAppModules)
     else ()
-        message (
-            DEBUG
-            "No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}..."
-            )
+        message (DEBUG "No target Lemons::LemonsAppModules in call to ${CMAKE_CURRENT_FUNCTION}...")
     endif ()
 endfunction ()

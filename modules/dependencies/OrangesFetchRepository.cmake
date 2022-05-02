@@ -115,12 +115,10 @@ function (oranges_fetch_repository)
         NEVER_LOCAL
         NO_SUBMODULES
         NO_RECURSE_SUBMODULES)
-    set (oneValueArgs NAME GIT_TAG GIT_REPOSITORY GITHUB_REPOSITORY
-                      CMAKE_SUBDIR GIT_STRATEGY)
+    set (oneValueArgs NAME GIT_TAG GIT_REPOSITORY GITHUB_REPOSITORY CMAKE_SUBDIR GIT_STRATEGY)
     set (multiValueArgs CMAKE_OPTIONS GIT_OPTIONS)
 
-    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}"
-                           "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     lemons_require_function_arguments (ORANGES_ARG NAME)
     lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -131,12 +129,9 @@ function (oranges_fetch_repository)
         if (${ORANGES_ARG_NAME}_FOUND)
 
             # cmake-lint: disable=C0103
-            set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${${ORANGES_ARG_NAME}_DIR}"
-                 PARENT_SCOPE)
+            set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${${ORANGES_ARG_NAME}_DIR}" PARENT_SCOPE)
 
-            message (
-                VERBOSE
-                " -- package ${ORANGES_ARG_NAME} found using find_package()")
+            message (VERBOSE " -- package ${ORANGES_ARG_NAME} found using find_package()")
             return ()
         endif ()
     endif ()
@@ -144,14 +139,11 @@ function (oranges_fetch_repository)
     if (ORANGES_ARG_GIT_REPOSITORY)
         set (git_repo_flag "${ORANGES_ARG_GIT_REPOSITORY}")
     elseif (ORANGES_ARG_GITHUB_REPOSITORY)
-        _oranges_set_git_repo_flag (GITHUB github.com
-                                    "${ORANGES_ARG_GITHUB_REPOSITORY}")
+        _oranges_set_git_repo_flag (GITHUB github.com "${ORANGES_ARG_GITHUB_REPOSITORY}")
     elseif (ORANGES_ARG_GITLAB_REPOSITORY)
-        _oranges_set_git_repo_flag (GITLAB gitlab.com
-                                    "${ORANGES_ARG_GITHUB_REPOSITORY}")
+        _oranges_set_git_repo_flag (GITLAB gitlab.com "${ORANGES_ARG_GITHUB_REPOSITORY}")
     elseif (ORANGES_ARG_BITBUCKET_REPOSITORY)
-        _oranges_set_git_repo_flag (BITBUCKET bitbucket.org
-                                    "${ORANGES_ARG_GITHUB_REPOSITORY}")
+        _oranges_set_git_repo_flag (BITBUCKET bitbucket.org "${ORANGES_ARG_GITHUB_REPOSITORY}")
     else ()
         message (
             FATAL_ERROR
@@ -181,16 +173,15 @@ function (oranges_fetch_repository)
     endif ()
 
     if (ORANGES_ARG_GIT_STRATEGY)
-        if (NOT ("${ORANGES_ARG_GIT_STRATEGY}" STREQUAL CHECKOUT
-                 OR "${ORANGES_ARG_GIT_STRATEGY}" STREQUAL REBASE
+        if (NOT ("${ORANGES_ARG_GIT_STRATEGY}" STREQUAL CHECKOUT OR "${ORANGES_ARG_GIT_STRATEGY}"
+                                                                    STREQUAL REBASE
                  OR "${ORANGES_ARG_GIT_STRATEGY}" STREQUAL REBASE_CHECKOUT))
             message (
                 WARNING
                     "${CMAKE_CURRENT_FUNCTION} - GIT_STRATEGY must be CHECKOUT, REBASE, or REBASE_CHECKOUT"
                 )
         else ()
-            set (git_strategy GIT_REMOTE_UPDATE_STRATEGY
-                              "${ORANGES_ARG_GIT_STRATEGY}")
+            set (git_strategy GIT_REMOTE_UPDATE_STRATEGY "${ORANGES_ARG_GIT_STRATEGY}")
         endif ()
     endif ()
 
@@ -214,9 +205,8 @@ function (oranges_fetch_repository)
         ${submodules_flag}
         ${submodules_recurse_flag})
 
-    _oranges_populate_repository (
-        "${ORANGES_ARG_NAME}" "${ORANGES_ARG_DOWNLOAD_ONLY}"
-        "${ORANGES_ARG_CMAKE_OPTIONS}" "${ORANGES_ARG_CMAKE_SUBDIR}")
+    _oranges_populate_repository ("${ORANGES_ARG_NAME}" "${ORANGES_ARG_DOWNLOAD_ONLY}"
+                                  "${ORANGES_ARG_CMAKE_OPTIONS}" "${ORANGES_ARG_CMAKE_SUBDIR}")
 
     # cmake-lint: disable=C0103
     set ("${ORANGES_ARG_NAME}_SOURCE_DIR" "${pkg_source_dir}" PARENT_SCOPE)
@@ -229,10 +219,8 @@ endfunction ()
 
 macro (_oranges_set_git_repo_flag kind baseUrl repoID)
     if (DEFINED ENV{${kind}_USERNAME} AND DEFINED ENV{${kind}_PASSWORD})
-        set (
-            git_repo_flag
-            "https://$ENV{${kind}_USERNAME}:$ENV{${kind}_PASSWORD}@${baseUrl}/${repoID}.git"
-            )
+        set (git_repo_flag
+             "https://$ENV{${kind}_USERNAME}:$ENV{${kind}_PASSWORD}@${baseUrl}/${repoID}.git")
     else ()
         set (git_repo_flag "https://${baseUrl}/${repoID}.git")
     endif ()
@@ -240,14 +228,12 @@ endmacro ()
 
 #
 
-function (_oranges_populate_repository pkg_name download_only cmake_options
-          cmake_subdir)
+function (_oranges_populate_repository pkg_name download_only cmake_options cmake_subdir)
 
     oranges_add_function_message_context ()
 
-    FetchContent_GetProperties (
-        "${pkg_name}" POPULATED fc_populated SOURCE_DIR pkg_source_dir
-        BINARY_DIR pkg_bin_dir)
+    FetchContent_GetProperties ("${pkg_name}" POPULATED fc_populated SOURCE_DIR pkg_source_dir
+                                BINARY_DIR pkg_bin_dir)
 
     if (fc_populated)
         set (pkg_source_dir "${pkg_source_dir}" PARENT_SCOPE)
@@ -262,8 +248,7 @@ function (_oranges_populate_repository pkg_name download_only cmake_options
 
     FetchContent_Populate ("${pkg_name}")
 
-    FetchContent_GetProperties ("${pkg_name}" SOURCE_DIR pkg_source_dir
-                                BINARY_DIR pkg_bin_dir)
+    FetchContent_GetProperties ("${pkg_name}" SOURCE_DIR pkg_source_dir BINARY_DIR pkg_bin_dir)
 
     message (DEBUG " -- package ${pkg_name} populated to ${pkg_source_dir}")
 
@@ -285,10 +270,8 @@ function (_oranges_populate_repository pkg_name download_only cmake_options
 
         # cmake-lint: disable=C0103
         set ("${OPTION_KEY}" "${OPTION_VALUE}")
-        message (
-            TRACE
-            " -- package ${pkg_name}: setting CMake option ${OPTION_KEY} to ${OPTION_VALUE}"
-            )
+        message (TRACE
+                 " -- package ${pkg_name}: setting CMake option ${OPTION_KEY} to ${OPTION_VALUE}")
     endforeach ()
 
     if (ORANGES_ARG_EXCLUDE_FROM_ALL)

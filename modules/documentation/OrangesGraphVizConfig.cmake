@@ -34,8 +34,8 @@ Targets
 
 #]=======================================================================]
 
-# NB. becuase cmake only outputs a dependency graph for the top-level project, I
-# use variables CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.
+# NB. becuase cmake only outputs a dependency graph for the top-level project, I use variables
+# CMAKE_SOURCE_DIR and CMAKE_BINARY_DIR in this module.
 
 include_guard (GLOBAL)
 
@@ -47,9 +47,7 @@ oranges_file_scoped_message_context ("OrangesGraphVizConfig")
 
 if (NOT PROJECT_IS_TOP_LEVEL)
     message (
-        WARNING
-            "OrangesGraphVizConfig.cmake included from non-top-level project ${PROJECT_NAME}!"
-        )
+        WARNING "OrangesGraphVizConfig.cmake included from non-top-level project ${PROJECT_NAME}!")
 endif ()
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake"
@@ -58,9 +56,7 @@ configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake"
 find_package (dot MODULE QUIET)
 
 if (NOT ORANGES_DOT)
-    message (
-        AUTHOR_WARNING
-            "dot cannot be found, dependency graph images cannot be generated")
+    message (AUTHOR_WARNING "dot cannot be found, dependency graph images cannot be generated")
     return ()
 endif ()
 
@@ -72,15 +68,13 @@ else ()
          CACHE PATH "Location to output the generated documentation files")
 endif ()
 
-set (input_file
-     "${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake")
+set (input_file "${CMAKE_CURRENT_LIST_DIR}/scripts/generate_deps_graph_image.cmake")
 
 configure_file ("${input_file}" generate_deps_graph_image.cmake @ONLY)
 
 set_property (
-    DIRECTORY "${}" APPEND
-    PROPERTY CMAKE_CONFIGURE_DEPENDS "${input_file}"
-             "${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake")
+    DIRECTORY "${}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${input_file}"
+                                    "${CMAKE_CURRENT_LIST_DIR}/scripts/CMakeGraphVizOptions.cmake")
 
 set (dot_file_output "${ORANGES_DOC_OUTPUT_DIR}/deps_graph.dot")
 
@@ -95,25 +89,20 @@ add_custom_target (
 add_custom_command (
     TARGET DependencyGraph
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -P
-            "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     DEPENDS "${dot_file_output}"
     COMMENT "Generating dependency graph image..."
     VERBATIM USES_TERMINAL)
 
 set_property (
-    TARGET DependencyGraph
-    APPEND
-    PROPERTY ADDITIONAL_CLEAN_FILES
-             "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
-             "${dot_file_output}"
-             "${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake")
+    TARGET DependencyGraph APPEND
+    PROPERTY ADDITIONAL_CLEAN_FILES "${CMAKE_CURRENT_BINARY_DIR}/generate_deps_graph_image.cmake"
+             "${dot_file_output}" "${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake")
 
 set_target_properties (
-    DependencyGraph
-    PROPERTIES FOLDER Utility LABELS Utility XCODE_GENERATE_SCHEME OFF
-               EchoString "Generating dependency graph...")
+    DependencyGraph PROPERTIES FOLDER Utility LABELS Utility XCODE_GENERATE_SCHEME OFF
+                               EchoString "Generating dependency graph...")
 
 if (NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
 
@@ -128,8 +117,7 @@ if (NOT "${${PROJECT_NAME}_DEPS_GRAPH_OUTPUT_TO_SOURCE}" STREQUAL "")
     add_custom_command (
         TARGET DependencyGraph
         POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${graph_image_output}"
-                "${image_dest}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${graph_image_output}" "${image_dest}"
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
         DEPENDS "${graph_image_output}"
         COMMENT "Copying generated dependency graph image to source tree..."

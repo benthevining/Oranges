@@ -99,8 +99,7 @@ function (oranges_generate_properties_json)
 
     set (oneValueArgs INPUT_FILE OUTPUT_FILE USE_TARGET)
 
-    cmake_parse_arguments (ORANGES_ARG "KEEP_INPUT_FILE" "${oneValueArgs}" ""
-                           ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "KEEP_INPUT_FILE" "${oneValueArgs}" "" ${ARGN})
 
     lemons_require_function_arguments (ORANGES_ARG INPUT_FILE OUTPUT_FILE)
 
@@ -144,11 +143,9 @@ function (oranges_generate_properties_json)
             set (scope "${property_scope}")
         endif ()
 
-        get_property (prop_brief_docs ${scope} PROPERTY "${property_name}"
-                      BRIEF_DOCS)
+        get_property (prop_brief_docs ${scope} PROPERTY "${property_name}" BRIEF_DOCS)
 
-        get_property (prop_full_docs ${scope} PROPERTY "${property_name}"
-                      FULL_DOCS)
+        get_property (prop_full_docs ${scope} PROPERTY "${property_name}" FULL_DOCS)
 
         string (
             JSON
@@ -170,8 +167,8 @@ function (oranges_generate_properties_json)
         file (REMOVE "${ORANGES_ARG_INPUT_FILE}")
     endif ()
 
-    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
-                  PROPERTY CMAKE_CONFIGURE_DEPENDS "${ORANGES_ARG_INPUT_FILE}")
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+                                                                        "${ORANGES_ARG_INPUT_FILE}")
 
     set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
                   PROPERTY ADDITIONAL_CLEAN_FILES "${ORANGES_ARG_OUTPUT_FILE}")

@@ -19,8 +19,7 @@ include (OrangesFunctionArgumentHelpers)
 
 #
 
-function (_lemons_const_variable_watch variableName access value current_file
-          stack)
+function (_lemons_const_variable_watch variableName access value current_file stack)
     if (access STREQUAL "WRITE_ACCESS")
         message (AUTHOR_WARNING "Writing to const variable ${variableName}!")
     endif ()
@@ -39,18 +38,13 @@ endmacro ()
 
 function (get_required_target_property output target property)
     if (NOT TARGET ${target})
-        message (
-            FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!"
-            )
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${target}!")
     endif ()
 
     get_target_property (property_value "${target}" "${property}")
 
     if (NOT property_value)
-        message (
-            FATAL_ERROR
-                "Error retrieving property ${property} from target ${target}!")
+        message (FATAL_ERROR "Error retrieving property ${property} from target ${target}!")
     endif ()
 
     set (${output} ${property_value} PARENT_SCOPE)

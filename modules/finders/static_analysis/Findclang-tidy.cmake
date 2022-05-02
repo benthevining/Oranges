@@ -61,8 +61,7 @@ endif ()
 
 add_executable (clang-tidy IMPORTED GLOBAL)
 
-set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION
-                                             "${PROGRAM_CLANG_TIDY}")
+set_target_properties (clang-tidy PROPERTIES IMPORTED_LOCATION "${PROGRAM_CLANG_TIDY}")
 
 add_executable (Clang::clang-tidy ALIAS clang-tidy)
 
@@ -72,9 +71,8 @@ if (NOT TARGET Clang::clang-tidy-interface)
 
     add_library (clang-tidy-interface INTERFACE)
 
-    set_target_properties (
-        clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-                                        CXX_CLANG_TIDY "${PROGRAM_CLANG_TIDY}")
+    set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+                                                           CXX_CLANG_TIDY "${PROGRAM_CLANG_TIDY}")
 
     add_library (Clang::clang-tidy-interface ALIAS clang-tidy-interface)
 endif ()

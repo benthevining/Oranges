@@ -52,8 +52,7 @@ else ()
     if (WRAPTOOL_PROGRAM)
         add_executable (wraptool IMPORTED GLOBAL)
 
-        set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION
-                                                   "${WRAPTOOL_PROGRAM}")
+        set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${WRAPTOOL_PROGRAM}")
 
         add_executable (PACE::wraptool ALIAS wraptool)
 

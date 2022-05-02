@@ -16,9 +16,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if ((NOT ORANGES_ROOT_DIR) OR NOT IS_DIRECTORY "${ORANGES_ROOT_DIR}")
     message (
-        FATAL_ERROR
-            "Oranges root directory ${ORANGES_ROOT_DIR} not specified or does not exist!"
-        )
+        FATAL_ERROR "Oranges root directory ${ORANGES_ROOT_DIR} not specified or does not exist!")
 endif ()
 
 #
@@ -47,8 +45,7 @@ endfunction ()
 
 #
 
-file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}"
-      "${ORANGES_ROOT_DIR}/modules/*")
+file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
 
 foreach (child IN LISTS children)
     _oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")

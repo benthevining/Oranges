@@ -52,9 +52,8 @@ function (oranges_add_source_files)
     lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
 
     foreach (filename IN LISTS ORANGES_ARG_FILES)
-        target_sources (
-            "${ORANGES_ARG_TARGET}"
-            PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
+        target_sources ("${ORANGES_ARG_TARGET}"
+                        PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
     endforeach ()
 
     set (headers ${ORANGES_ARG_FILES})
@@ -69,10 +68,8 @@ function (oranges_add_source_files)
         set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
     endif ()
 
-    install (
-        FILES ${headers}
-        DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
-        ${install_component})
+    install (FILES ${headers} DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
+             ${install_component})
 
     foreach (header IN LISTS headers)
         target_sources (

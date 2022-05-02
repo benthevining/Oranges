@@ -44,8 +44,7 @@ macro (oranges_assert_target_argument_is_target prefix)
     if (NOT TARGET "${${prefix}_TARGET}")
         message (
             FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${${prefix}_TARGET}!"
-            )
+                "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${${prefix}_TARGET}!")
     endif ()
 endmacro ()
 
@@ -70,8 +69,7 @@ function (oranges_forward_function_argument)
             set (new_flag "${ORANGES_ARG_ARG}" ${variable_name})
         else ()
             message (
-                FATAL_ERROR
-                    "${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
+                FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - invalid KIND argument ${ORANGES_ARG_KIND}!"
                 )
         endif ()
     endif ()
@@ -79,8 +77,7 @@ function (oranges_forward_function_argument)
     if (new_flag)
         list (APPEND ORANGES_FORWARDED_ARGUMENTS ${new_flag})
 
-        set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS}
-             PARENT_SCOPE)
+        set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
     endif ()
 
 endfunction ()
@@ -96,12 +93,10 @@ function (oranges_forward_function_arguments)
     lemons_require_function_arguments (ORANGES_ARG PREFIX KIND ARGS)
 
     foreach (argument ${ORANGES_ARG_ARGS})
-        oranges_forward_function_argument (
-            PREFIX "${ORANGES_ARG_PREFIX}" ARG "${argument}" KIND
-            "${ORANGES_ARG_KIND}")
+        oranges_forward_function_argument (PREFIX "${ORANGES_ARG_PREFIX}" ARG "${argument}" KIND
+                                           "${ORANGES_ARG_KIND}")
     endforeach ()
 
-    set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS}
-         PARENT_SCOPE)
+    set (ORANGES_FORWARDED_ARGUMENTS ${ORANGES_FORWARDED_ARGUMENTS} PARENT_SCOPE)
 
 endfunction ()

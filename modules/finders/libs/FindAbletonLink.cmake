@@ -32,10 +32,8 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (OrangesFindPackageHelpers)
 
 set_package_properties (
-    AbletonLink PROPERTIES
-    URL "https://www.ableton.com/en/link/"
-    DESCRIPTION
-        "Library for communicating tempo changes between devices in a session")
+    AbletonLink PROPERTIES URL "https://www.ableton.com/en/link/"
+    DESCRIPTION "Library for communicating tempo changes between devices in a session")
 
 #
 
@@ -52,8 +50,8 @@ set (AbletonLink_FOUND FALSE)
 
 include (CPackComponent)
 
-cpack_add_component (AbletonLink DISPLAY_NAME "Ableton Link"
-                     DESCRIPTION "Ableton Link library" INSTALL_TYPES Developer)
+cpack_add_component (AbletonLink DISPLAY_NAME "Ableton Link" DESCRIPTION "Ableton Link library"
+                     INSTALL_TYPES Developer)
 
 #
 
@@ -66,8 +64,7 @@ mark_as_advanced (FORCE ABLETONLINK_INCLUDES ABLETONLINK_LIBRARIES)
 if (ABLETONLINK_INCLUDES AND ABLETONLINK_LIBRARIES)
     add_library (AbletonLink IMPORTED UNKNOWN)
 
-    set_target_properties (AbletonLink PROPERTIES IMPORTED_LOCATION
-                                                  "${ABLETONLINK_LIBRARIES}")
+    set_target_properties (AbletonLink PROPERTIES IMPORTED_LOCATION "${ABLETONLINK_LIBRARIES}")
 
     target_include_directories (AbletonLink PUBLIC "${ABLETONLINK_INCLUDES}")
 
@@ -84,8 +81,8 @@ if (AbletonLink_FIND_QUIETLY)
     set (quiet_flag QUIET)
 endif ()
 
-oranges_fetch_repository (NAME AbletonLink GITHUB_REPOSITORY Ableton/link
-                          GIT_TAG origin/master NEVER_LOCAL ${quiet_flag})
+oranges_fetch_repository (NAME AbletonLink GITHUB_REPOSITORY Ableton/link GIT_TAG origin/master
+                          NEVER_LOCAL ${quiet_flag})
 
 unset (quiet_flag)
 

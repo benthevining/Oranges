@@ -38,8 +38,7 @@ if (NOT SOURCE_DIR)
 
     set (tarball "${CACHE_DIR}/fftw-3.3.10.tar.gz")
 
-    file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}"
-          SHOW_PROGRESS)
+    file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}" SHOW_PROGRESS)
 
     set (SOURCE_DIR "${CACHE_DIR}/FFTW")
 
@@ -90,20 +89,15 @@ function (install_fftw_library buildDir isFloat)
     endif ()
 
     execute_process (
-        COMMAND
-            "${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D
-            BUILD_TESTS=OFF --log-level=VERBOSE ${float_flag} ${sse_flag}
-            ${sse2_flag}
-        WORKING_DIRECTORY "${SOURCE_DIR}" COMMAND_ECHO STDOUT
-                          COMMAND_ERROR_IS_FATAL ANY)
+        COMMAND "${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D BUILD_TESTS=OFF
+                --log-level=VERBOSE ${float_flag} ${sse_flag} ${sse2_flag}
+        WORKING_DIRECTORY "${SOURCE_DIR}" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
 
-    execute_process (
-        COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel
-                "${numCores}" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+    execute_process (COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel "${numCores}"
+                             COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
 
-    execute_process (
-        COMMAND ${SUDO_PROGRAM} "${CMAKE_COMMAND}" --install "${buildDir}"
-                COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+    execute_process (COMMAND ${SUDO_PROGRAM} "${CMAKE_COMMAND}" --install "${buildDir}"
+                             COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
 
 endfunction ()
 

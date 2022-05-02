@@ -56,8 +56,7 @@ find_program (AUVAL_PROGRAM auval DOC "auval executable")
 if (AUVAL_PROGRAM)
     add_executable (auval IMPORTED GLOBAL)
 
-    set_target_properties (auval PROPERTIES IMPORTED_LOCATION
-                                            "${AUVAL_PROGRAM}")
+    set_target_properties (auval PROPERTIES IMPORTED_LOCATION "${AUVAL_PROGRAM}")
 
     add_executable (Apple::auval ALIAS auval)
 
