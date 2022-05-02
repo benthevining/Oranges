@@ -31,5 +31,9 @@ jobs:
                   submodules: recursive
                   fetch-depth: 1
 
+            - uses: actions/setup-python@v3
+              with:
+                  python-version: '3.9'
+
             - name: Run docs build script
               run: export GH_REPO_TOKEN=${{ secrets.ACCESS_TOKEN }} && bash .github/publish_docs.sh
