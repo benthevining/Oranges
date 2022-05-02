@@ -103,7 +103,7 @@ repos:
           - id: fix-smartquotes
           - id: forbid-bidi-controls
     - repo: https://github.com/crate-ci/typos
-      rev: typos-dict-v0.8.1
+      rev: typos-dict-v0.8.2
       hooks:
           - id: typos
             args: [--write-changes]
@@ -177,7 +177,7 @@ repos:
           - id: yapf
             args: [-i]
     - repo: https://github.com/PyCQA/pylint
-      rev: v2.13.7
+      rev: v2.13.8
       hooks:
           - id: pylint
             args: [--disable=bad-indentation, --disable=line-too-long, --disable=duplicate-code, --check-quote-consistency=yes, --max-args=5, --max-branches=15, --max-statements=55, --good-names=f]
