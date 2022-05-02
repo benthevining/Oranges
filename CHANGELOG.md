@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.23.3](http://github.com/benthevining/Oranges/compare/v2.23.2...v2.23.3) (2022-05-02)
+
+
+### Bug Fixes
+
+* setting up graphviz in readme action ([ca27bfc](http://github.com/benthevining/Oranges/commit/ca27bfc060ea09cfc56465e9e4d5c9bf3023c300))
+
 ### [2.23.2](http://github.com/benthevining/Oranges/compare/v2.23.1...v2.23.2) (2022-05-02)
 
 
