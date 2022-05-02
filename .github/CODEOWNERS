@@ -107,6 +107,7 @@ modules/finders/libs/FFTW/FindFFTW.cmake benthevining
 modules/finders/libs/FFTW/Findfftw3.cmake benthevining
 modules/finders/libs/FFTW/Findfftw3f.cmake benthevining
 modules/finders/libs/FindAbletonLink.cmake benthevining
+modules/finders/libs/FindAccelerate.cmake benthevining
 modules/finders/libs/FindIPP.cmake benthevining
 modules/finders/libs/FindJUCE.cmake benthevining
 modules/finders/libs/FindMIPP.cmake benthevining
