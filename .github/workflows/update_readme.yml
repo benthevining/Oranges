@@ -31,6 +31,8 @@ jobs:
               with:
                   python-version: '3.9'
 
+            - uses: ts-graphviz/setup-graphviz@v1
+
             - name: Configure CMake
               run: cmake --preset default
 

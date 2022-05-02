@@ -24,10 +24,7 @@
       "configurePreset": "maintainer",
       "displayName": "Update the ReadMe with the list of all modules",
       "name": "readme",
-      "targets": [
-        "OrangesReadme",
-        "DependencyGraph"
-      ]
+      "targets": "OrangesReadme"
     },
     {
       "cleanFirst": true,
