@@ -186,7 +186,3 @@ if (PROJECT_IS_TOP_LEVEL)
 endif ()
 
 export (PACKAGE Oranges)
-
-unset (ORANGES_ROOT_DIR)
-
-set (Oranges_FOUND TRUE CACHE INTERNAL "")

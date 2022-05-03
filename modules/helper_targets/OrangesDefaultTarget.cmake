@@ -229,20 +229,6 @@ if (APPLE)
     unset (osx_native_arch)
 endif ()
 
-if (NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-    include (CheckIPOSupported)
-
-    check_ipo_supported (RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-endif ()
-
-if (CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-    set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
-else ()
-    set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
-endif ()
-
-set_target_properties (OrangesDefaultTarget PROPERTIES INTERPROCEDURAL_OPTIMIZATION_DEBUG OFF)
-
 #
 
 install (TARGETS OrangesDefaultTarget EXPORT OrangesTargets)
