@@ -177,7 +177,7 @@ feature_summary (
     )
 
 install (FILES "${PROJECT_BINARY_DIR}/package_features.txt" DESTINATION "${ORANGES_INSTALL_DEST}"
-         CONFIGURATIONS Debug COMPONENT oranges_base)
+         COMPONENT oranges_base)
 
 if (PROJECT_IS_TOP_LEVEL)
     feature_summary (INCLUDE_QUIET_PACKAGES DEFAULT_DESCRIPTION QUIET_ON_EMPTY WHAT ALL)
