@@ -54,6 +54,7 @@ A library of CMake modules.
   * OrangesGeneratePropertiesJSON
   * OrangesGenerateStandardHeaders
   * OrangesGraphVizConfig
+  * OrangesIPO
   * OrangesInstallSystemLibs
   * OrangesJuceModuleUtilities
   * OrangesJuceUtilities

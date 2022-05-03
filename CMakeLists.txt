@@ -102,6 +102,7 @@ include (OrangesCoverageFlags)
 include (OrangesDefaultTarget)
 include (OrangesDefaultWarnings)
 include (OrangesGenerateExportHeader)
+include (OrangesIPO)
 include (OrangesUnityBuild)
 
 set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES

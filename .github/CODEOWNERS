@@ -44,6 +44,7 @@ age.cmake benthevining
 conanfile.py benthevining
 docs/CMakeLists.txt benthevining
 docs/conf.py benthevining
+docs/index.rst benthevining
 evining
 help/CMakeLists.txt benthevining
 help/oranges_help/__init__.py benthevining
@@ -61,6 +62,7 @@ modules/code_generation/OrangesGeneratePlatformHeader.cmake benthevining
 modules/code_generation/OrangesGenerateStandardHeaders.cmake benthevining
 modules/code_generation/scripts/build_type_header.h benthevining
 modules/code_generation/scripts/build_type_header_includer.h benthevining
+modules/code_generation/scripts/check_arm_neon.cpp benthevining
 modules/code_generation/scripts/platform_header.h benthevining
 modules/code_generation/scripts/standard_header.h benthevining
 modules/config_files/LemonsParseProjectConfigFile.cmake benthevining
