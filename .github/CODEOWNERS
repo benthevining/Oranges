@@ -184,6 +184,7 @@ modules/helper_targets/OrangesAllIntegrations.cmake benthevining
 modules/helper_targets/OrangesCoverageFlags.cmake benthevining
 modules/helper_targets/OrangesDefaultTarget.cmake benthevining
 modules/helper_targets/OrangesDefaultWarnings.cmake benthevining
+modules/helper_targets/OrangesIPO.cmake benthevining
 modules/helper_targets/OrangesUnityBuild.cmake benthevining
 modules/installing/LemonsDefaultCPackSettings.cmake benthevining
 modules/installing/LemonsSetDefaultCpackGenerator.cmake benthevining

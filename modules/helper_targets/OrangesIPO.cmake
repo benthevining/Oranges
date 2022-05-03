@@ -20,38 +20,30 @@ endif ()
 
 add_library (OrangesIPO INTERFACE)
 
-if (NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-    include (CheckIPOSupported)
+set_target_properties (OrangesIPO PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 
-    check_ipo_supported (RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
-endif ()
+# if (NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION) include (CheckIPOSupported)
 
-if (CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+# check_ipo_supported (RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION) endif ()
 
-    set (clangAndLinux "$<AND:$<CXX_COMPILER_ID:Clang>,$<PLATFORM_ID:Linux>>")
+# if (CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 
-    # cmake-format: off
-    set_target_properties (
-        OrangesIPO PROPERTIES
-            $<BUILD_INTERFACE:$<$<NOT:${clangAndLinux}>:INTERPROCEDURAL_OPTIMIZATION ON>>
-            $<BUILD_INTERFACE:$<${clangAndLinux}:INTERPROCEDURAL_OPTIMIZATION OFF>>)
-else ()
-    set_target_properties (OrangesIPO PROPERTIES $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION OFF>)
-    # cmake-format: on
-endif ()
+# set (clangAndLinux "$<AND:$<CXX_COMPILER_ID:Clang>,$<PLATFORM_ID:Linux>>")
 
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
+# # cmake-format: off set_target_properties ( OrangesIPO PROPERTIES
+# $<BUILD_INTERFACE:$<$<NOT:${clangAndLinux}>:INTERPROCEDURAL_OPTIMIZATION ON>>
+# $<BUILD_INTERFACE:$<${clangAndLinux}:INTERPROCEDURAL_OPTIMIZATION OFF>>) else ()
+# set_target_properties (OrangesIPO PROPERTIES $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION OFF>)
+# # cmake-format: on endif ()
 
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
+# get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
-foreach (config IN LISTS debug_configs)
-    string (TOUPPER "${config}" config)
+# if (NOT debug_configs) set (debug_configs Debug) endif ()
 
-    set_target_properties (OrangesIPO
-                           PROPERTIES $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION_${config} OFF>)
-endforeach ()
+# foreach (config IN LISTS debug_configs) string (TOUPPER "${config}" config)
+
+# set_target_properties (OrangesIPO PROPERTIES
+# $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION_${config} OFF>) endforeach ()
 
 install (TARGETS OrangesIPO EXPORT OrangesTargets)
 
