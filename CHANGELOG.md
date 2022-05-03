@@ -1,5 +1,12 @@
 # Oranges changelog
 
+### [2.23.4](http://github.com/benthevining/Oranges/compare/v2.23.3...v2.23.4) (2022-05-03)
+
+
+### Bug Fixes
+
+* not messing with IPO in default target ([861a477](http://github.com/benthevining/Oranges/commit/861a477183e2d4fbc1d62836eeb8723dd169f73a))
+
 ### [2.23.3](http://github.com/benthevining/Oranges/compare/v2.23.2...v2.23.3) (2022-05-02)
 
 
