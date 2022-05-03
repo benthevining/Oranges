@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [2.24.0](http://github.com/benthevining/Oranges/compare/v2.23.4...v2.24.0) (2022-05-03)
+
+
+### Features
+
+* added a new IPO module ([b75d346](http://github.com/benthevining/Oranges/commit/b75d346ed87117c208fd3c86390a51e19684e81f))
+
 ### [2.23.4](http://github.com/benthevining/Oranges/compare/v2.23.3...v2.23.4) (2022-05-03)
 
 
