@@ -41,9 +41,9 @@ OS type macros:
 - <baseName>_LINUX
 - <baseName>_APPLE
 - <baseName>_OSX
-- <baseName>_IOS
+- <baseName>_IOS - true for any iOS-like OS (iOS, tvOS, or watchOS)
 - <baseName>_ANDROID
-- <baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'Windows', 'Linux', or 'Android'
+- <baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'tvOS', 'watchOS', 'Windows', 'Linux', or 'Android'
 
 Compiler type macros:
 
@@ -110,11 +110,20 @@ _oranges_plat_header_set_option (UNIX ORANGES_UNIX)
 _oranges_plat_header_set_option (MINGW ORANGES_MINGW)
 _oranges_plat_header_set_option (APPLE ORANGES_APPLE)
 
-if (APPLE AND NOT IOS)
-    set (ORANGES_MACOSX 1 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE MacOSX CACHE INTERNAL "")
-else ()
+if (IOS OR ("${CMAKE_SYSTEM_NAME}" STREQUAL iOS) OR ("${CMAKE_SYSTEM_NAME}" STREQUAL tvOS)
+    OR ("${CMAKE_SYSTEM_NAME}" STREQUAL watchOS))
+    set (ORANGES_IOS 1 CACHE INTERNAL "")
     set (ORANGES_MACOSX 0 CACHE INTERNAL "")
+    set (ORANGES_OS_TYPE "${CMAKE_SYSTEM_NAME}" CACHE INTERNAL "")
+else ()
+    set (ORANGES_IOS 0 CACHE INTERNAL "")
+
+    if (APPLE)
+        set (ORANGES_MACOSX 1 CACHE INTERNAL "")
+        set (ORANGES_OS_TYPE MacOSX CACHE INTERNAL "")
+    else ()
+        set (ORANGES_MACOSX 0 CACHE INTERNAL "")
+    endif ()
 endif ()
 
 if (WIN32)
@@ -136,13 +145,6 @@ if (ANDROID)
     set (ORANGES_OS_TYPE Android CACHE INTERNAL "")
 else ()
     set (ORANGES_ANDROID 0 CACHE INTERNAL "")
-endif ()
-
-if (IOS)
-    set (ORANGES_IOS 1 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE iOS CACHE INTERNAL "")
-else ()
-    set (ORANGES_IOS 0 CACHE INTERNAL "")
 endif ()
 
 cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)

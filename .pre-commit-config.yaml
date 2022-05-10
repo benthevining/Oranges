@@ -20,11 +20,6 @@ repos:
       hooks:
           - id: gitlint
             always_run: true
-    - repo: https://github.com/milin/gitown
-      rev: v0.1.7
-      hooks:
-          - id: gitown
-            args: [--codeowners_filename=.github/CODEOWNERS]
     - repo: https://github.com/mattlqx/pre-commit-sign
       rev: v1.1.3
       hooks:
@@ -32,12 +27,6 @@ repos:
 
     - repo: local
       hooks:
-          - id: sort-codeowners
-            name: alphabetize codeowners
-            entry: scripts/alphabetize_codeowners.py
-            language: python
-            files: .github/CODEOWNERS
-
           # run cmake & update dependency graph & readme
           - id: run-cmake
             name: Run CMake
@@ -195,6 +184,6 @@ repos:
             exclude: oranges_header.txt|LICENSE|index.rst
 
 ci:
-    skip: [gitown, check-jsonschema, pylint, run-cmake, update-readme]
+    skip: [check-jsonschema, pylint, run-cmake, update-readme]
     autofix_commit_msg: 'style: pre-commit autofixes [skip ci]'
     autoupdate_commit_msg: 'chore: pre-commit autoupdate [skip ci]'
