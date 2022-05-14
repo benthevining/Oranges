@@ -174,8 +174,8 @@ function (oranges_create_doxygen_target)
     set (doxyfile_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/Doxyfile")
     set (doxylayout_input "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/DoxygenLayout.xml")
 
-    set (doxyfile_output "${CMAKE_BINARY_DIR}/Doxyfile")
-    set (doxylayout_output "${CMAKE_BINARY_DIR}/DoxygenLayout.xml")
+    set (doxyfile_output "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile")
+    set (doxylayout_output "${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml")
 
     configure_file ("${doxyfile_input}" "${doxyfile_output}" @ONLY)
     configure_file ("${doxylayout_input}" "${doxylayout_output}" @ONLY)

@@ -66,9 +66,6 @@ repos:
             args: [--fix=lf]
           - id: trailing-whitespace
 
-      # shell scripts
-          #- id: check-executables-have-shebangs
-
       # Python
           - id: check-ast
           - id: check-builtin-literals
@@ -181,7 +178,7 @@ repos:
       rev: 2.4.0
       hooks:
           - id: editorconfig-checker
-            exclude: oranges_header.txt|LICENSE|index.rst
+            exclude: oranges_header.txt|LICENSE|index.rst|Doxyfile
 
 ci:
     skip: [check-jsonschema, pylint, run-cmake, update-readme]
