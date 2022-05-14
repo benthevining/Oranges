@@ -111,8 +111,9 @@ set_property (
     TARGET OrangesDefaultTarget APPEND PROPERTY EXPORT_PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY
                                                 ORANGES_USING_INSTALLED_PACKAGE)
 
-target_compile_definitions (OrangesDefaultTarget
-                            INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT>")
+target_compile_definitions (
+    OrangesDefaultTarget
+    INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT;_CRT_SECURE_NO_WARNINGS>")
 
 set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
 

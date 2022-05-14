@@ -3,11 +3,11 @@
   <!-- Navigation index tabs for HTML output -->
   <navindex>
     <tab type="mainpage" visible="yes" title=""/>
-    <tab type="pages" visible="yes" title="" intro=""/>
-    <tab type="modules" visible="yes" title="" intro=""/>
+    <tab type="pages" visible="yes" title="" intro="Related documentation pages:"/>
+    <tab type="modules" visible="yes" title="" intro="Here is a list of all modules with brief descriptions:"/>
     <tab type="namespaces" visible="yes" title="">
-      <tab type="namespacelist" visible="yes" title="" intro=""/>
-      <tab type="namespacemembers" visible="yes" title="" intro=""/>
+      <tab type="namespacelist" visible="yes" title="" intro="Here is a list of all namespaces with brief descriptions:"/>
+      <tab type="namespacemembers" visible="yes" title="" intro="Here is a list of all namespace members:"/>
     </tab>
     <tab type="interfaces" visible="no" title="">
       <tab type="interfacelist" visible="yes" title="" intro=""/>
@@ -15,10 +15,10 @@
       <tab type="interfacehierarchy" visible="yes" title="" intro=""/>
     </tab>
     <tab type="classes" visible="yes" title="">
-      <tab type="classlist" visible="yes" title="" intro=""/>
+      <tab type="classlist" visible="yes" title="" intro="Here is a list of all classes with brief descriptions:"/>
       <tab type="classindex" visible="yes" title=""/>
-      <tab type="hierarchy" visible="yes" title="" intro=""/>
-      <tab type="classmembers" visible="yes" title="" intro=""/>
+      <tab type="hierarchy" visible="yes" title="" intro="Class inheritance hierarchy, sorted roughly alphabetically"/>
+      <tab type="classmembers" visible="no" title="" intro=""/>
     </tab>
     <tab type="structs" visible="no" title="">
       <tab type="structlist" visible="yes" title="" intro=""/>
@@ -29,9 +29,9 @@
       <tab type="exceptionindex" visible="$ALPHABETICAL_INDEX" title=""/>
       <tab type="exceptionhierarchy" visible="yes" title="" intro=""/>
     </tab>
-    <tab type="files" visible="no" title="">
-      <tab type="filelist" visible="yes" title="" intro=""/>
-      <tab type="globals" visible="yes" title="" intro=""/>
+    <tab type="files" visible="yes" title="">
+      <tab type="filelist" visible="yes" title="" intro="Here is a list of all files with brief descriptions:"/>
+      <tab type="globals" visible="yes" title="Globals" intro="Here is a list of all global declarations"/>
     </tab>
     <tab type="examples" visible="no" title="" intro=""/>
   </navindex>
@@ -39,7 +39,7 @@
   <!-- Layout definition for a class page -->
   <class>
     <briefdescription visible="yes"/>
-    <includes visible="no"/>
+    <includes visible="yes"/>
     <inheritancegraph visible="yes"/>
     <collaborationgraph visible="$COLLABORATION_GRAPH"/>
     <memberdecl>
@@ -91,7 +91,7 @@
       <events title=""/>
     </memberdef>
     <allmemberslink visible="yes"/>
-    <usedfiles visible="$SHOW_USED_FILES"/>
+    <usedfiles visible="yes"/>
     <authorsection visible="yes"/>
   </class>
 
@@ -129,9 +129,9 @@
   <!-- Layout definition for a file page -->
   <file>
     <briefdescription visible="yes"/>
-    <includes visible="$SHOW_INCLUDE_FILES"/>
-    <includegraph visible="$INCLUDE_GRAPH"/>
-    <includedbygraph visible="$INCLUDED_BY_GRAPH"/>
+    <includes visible="yes"/>
+    <includegraph visible="yes"/>
+    <includedbygraph visible="yes"/>
     <sourcelink visible="yes"/>
     <memberdecl>
       <interfaces visible="yes" title=""/>
