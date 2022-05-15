@@ -59,20 +59,47 @@ unset (debug_configs)
 
 set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
 
+set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
+
+if (WIN32)
+    set (intel_cov_flags /Z7 /debug:all)
+else ()
+    set (intel_cov_flags -g3 -debug all)
+endif ()
+
+set (gcclike_flags -O0 -g --coverage)
+
+set (gcc_flags # cmake-format: sortable
+               -fno-merge-debug-strings -ftest-coverage -ggdb)
+
+set (clang_flags # cmake-format: sortable
+                 -fcoverage-mapping -fdebug-macro -g3)
+
 target_compile_options (
     OrangesCoverageFlags
-    INTERFACE
-        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/fsanitize-coverage=edge>"
-        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>"
-        "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_debug}>:-ggdb;-fno-merge-debug-strings;-ftest-coverage>"
-        "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_debug}>:-fcoverage-mapping;-fdebug-macro;-g3>"
-    )
+    INTERFACE "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/fsanitize-coverage=edge>"
+              "$<$<AND:${compiler_gcclike},${config_is_debug}>:${gcclike_flags}>"
+              "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_debug}>:${gcc_flags}>"
+              "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_debug}>:${clang_flags}>"
+              "$<$<AND:${compiler_intel},${config_is_debug}>:${intel_cov_flags}>")
 
 target_link_options (OrangesCoverageFlags INTERFACE
                      "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
 
-unset (config_is_debug)
+unset (gcc_flags)
+unset (clang_flags)
 unset (compiler_gcclike)
+unset (intel_cov_flags)
+unset (intel_cov_flags)
+
+target_compile_options (
+    OrangesCoverageFlags
+    INTERFACE "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:-g>")
+
+target_compile_options (OrangesCoverageFlags
+                        INTERFACE $<$<AND:$<CXX_COMPILER_ID:Cray>,${config_is_debug}>:-G 0>)
+
+unset (config_is_debug)
 
 install (TARGETS OrangesCoverageFlags EXPORT OrangesTargets)
 

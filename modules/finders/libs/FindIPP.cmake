@@ -147,13 +147,27 @@ if (IPP_STATIC)
     endif ()
 
     set (IPP_LIB_TYPE STATIC)
+    set (ipp_type static)
 else ()
     set (IPP_LIBNAME_SUFFIX "")
     set (IPP_LIB_TYPE SHARED)
+    set (ipp_type dynamic)
 endif ()
 
 set (IPP_LIBTYPE_PREFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_PREFIX}")
 set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
+
+if (WIN32)
+    set (ipp_type_flag "/Qipp-link:${ipp_type}")
+else ()
+    set (ipp_type_flag "-ipp-link=${ipp_type}")
+endif ()
+
+unset (ipp_type)
+
+set (ipp_linker_flags "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${ipp_type_flag}>")
+
+unset (ipp_type_flag)
 
 #
 
@@ -291,6 +305,10 @@ if (NOT TARGET IntelIPP)
     find_package_warning_or_error ("Error creating IntelIPP library target!")
     return ()
 endif ()
+
+target_compile_options (IntelIPP INTERFACE "${ipp_linker_flags}")
+
+unset (ipp_linker_flags)
 
 #
 

@@ -117,16 +117,29 @@ set_property (
     TARGET OrangesDefaultTarget APPEND PROPERTY EXPORT_PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY
                                                 ORANGES_USING_INSTALLED_PACKAGE)
 
-target_compile_definitions (
-    OrangesDefaultTarget
-    INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX>" "$<$<PLATFORM_ID:Windows>:UNICODE>"
-              "$<$<PLATFORM_ID:Windows>:STRICT>"
-              "$<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>")
+set (windowsDefs # cmake-format: sortable
+                 _CRT_SECURE_NO_WARNINGS NOMINMAX STRICT UNICODE)
+
+target_compile_definitions (OrangesDefaultTarget
+                            INTERFACE "$<$<PLATFORM_ID:Windows>:${windowsDefs}>")
+
+unset (windowsDefs)
+
+set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
+
+if (WIN32)
+    set (intel_opts /Gm)
+else ()
+    set (intel_opts -multiple-processes=4 -static-intel)
+endif ()
 
 target_compile_options (
     OrangesDefaultTarget
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
-              "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>")
+              "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
+              "$<${compiler_intel}:${intel_opts}>")
+
+unset (intel_opts)
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
@@ -298,13 +311,24 @@ target_compile_features (
               cxx_variable_templates
               cxx_variadic_templates)
 
+if (WIN32)
+    set (intel_opts /GR /EHsc)
+else ()
+    set (intel_opts -fexceptions)
+endif ()
+
 target_compile_options (
     OrangesDefaultCXXTarget
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc;/GR>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
               "$<$<CXX_COMPILER_ID:GNU>:-fconcepts>"
               "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
-              "$<$<CXX_COMPILER_ID:Clang>:-ffile-reproducible>")
+              "$<${compiler_intel}:${intel_opts}>"
+              $<$<CXX_COMPILER_ID:Cray>:-h
+              exceptions>)
+
+unset (intel_opts)
+unset (compiler_intel)
 
 add_library (Oranges::OrangesDefaultCXXTarget ALIAS OrangesDefaultCXXTarget)
 

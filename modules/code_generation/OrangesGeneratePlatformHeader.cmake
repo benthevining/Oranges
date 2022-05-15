@@ -52,6 +52,8 @@ Compiler type macros:
 - <baseName>_GCC
 - <baseName>_MSVC
 - <baseName>_INTEL_COMPILER
+- <baseName>_CRAY_COMPILER
+- <baseName>_ARM_COMPILER
 - <baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
 - <baseName>_COMPILER_VERSION - a string literal describing the version of the compiler being used
 
@@ -71,19 +73,6 @@ SIMD instruction capabilities:
 - <baseName>_AVX
 - <baseName>_AVX512
 - <baseName>_SSE
-
-Function inlining macros:
-
-- <baseName>_FORCE_INLINE
-- <baseName>_NEVER_INLINE
-
-Pure function attribute macro:
-
-- <baseName>_PURE_FUNCTION
-
-Pointer anti-aliasing macro:
-
-- <baseName>_RESTRICT
 
 #]=======================================================================]
 
@@ -227,14 +216,6 @@ else ()
     set (ORANGES_POSIX 0 CACHE INTERNAL "")
 endif ()
 
-if (MSVC)
-    set (ORANGES_FORCE_INLINE "__forceinline" CACHE INTERNAL "")
-    set (ORANGES_NEVER_INLINE "__declspec(noinline)" CACHE INTERNAL "")
-else ()
-    set (ORANGES_FORCE_INLINE "inline __attribute__((always_inline))" CACHE INTERNAL "")
-    set (ORANGES_NEVER_INLINE "__attribute__((__noinline__))" CACHE INTERNAL "")
-endif ()
-
 if (ORANGES_ARM)
     try_compile (
         compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
@@ -355,10 +336,12 @@ function (oranges_generate_platform_header)
         endif ()
     endmacro ()
 
-    _oranges_plat_header_compiler_id_opt ("Clang" ORANGES_CLANG)
-    _oranges_plat_header_compiler_id_opt ("GNU" ORANGES_GCC)
-    _oranges_plat_header_compiler_id_opt ("MSVC" ORANGES_MSVC)
-    _oranges_plat_header_compiler_id_opt ("Intel" ORANGES_INTEL_COMPILER)
+    _oranges_plat_header_compiler_id_opt (Clang ORANGES_CLANG)
+    _oranges_plat_header_compiler_id_opt (GNU ORANGES_GCC)
+    _oranges_plat_header_compiler_id_opt (MSVC ORANGES_MSVC)
+    _oranges_plat_header_compiler_id_opt (Intel ORANGES_INTEL_COMPILER)
+    _oranges_plat_header_compiler_id_opt (Cray ORANGES_CRAY_COMPILER)
+    _oranges_plat_header_compiler_id_opt (ARM ORANGES_ARM_COMPILER)
 
     if (NOT ORANGES_COMPILER_TYPE)
         set (ORANGES_COMPILER_TYPE "Unknown")
@@ -382,15 +365,6 @@ function (oranges_generate_platform_header)
         message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
         set (ORANGES_BIG_ENDIAN 1)
         set (ORANGES_LITTLE_ENDIAN 0)
-    endif ()
-
-    if (MSVC)
-        set (ORANGES_RESTRICT "__restrict" CACHE INTERNAL "")
-    elseif ("${compilerID}" MATCHES "Clang|GNU")
-        set (ORANGES_RESTRICT "__restrict__" CACHE INTERNAL "")
-        set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
-    elseif ("${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}" MATCHES "Intel")
-        set (ORANGES_PURE_FUNCTION "__attribute__((pure))" CACHE INTERNAL "")
     endif ()
 
     set (input_file "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")

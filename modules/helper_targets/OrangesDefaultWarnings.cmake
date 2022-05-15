@@ -122,6 +122,27 @@ set (clang_cxx_opts
      # cmake-format: sortable
      -Winconsistent-missing-destructor-override -Woverloaded-virtual -Wunused-private-field)
 
+if (WIN32)
+    set (intel_flags /W5 /Wall)
+else ()
+    set (
+        intel_flags
+        # cmake-format: sortable
+        -w3
+        -Wall
+        -Wextra-tokens
+        -Wformat
+        -Wmain
+        -Wpointer-arith
+        -Wreorder
+        -Wreturn-type
+        -Wshadow
+        -Wsign-compare
+        -Wstrict-aliasing
+        -Wuninitialized
+        -Wwrite-strings)
+endif ()
+
 target_compile_options (
     OrangesDefaultWarnings
     INTERFACE # cmake-format: sortable
@@ -134,7 +155,8 @@ target_compile_options (
               "$<$<COMPILE_LANG_AND_ID:OBJCXX,GNU>:${gcc_cxx_opts}>"
               "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
               "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>"
-              "$<$<AND:${config_is_debug},$<CXX_COMPILER_ID:Clang>>:-fjmc>")
+              "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${intel_flags}>"
+              "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:-g>")
 
 unset (gcclike_comp_opts)
 unset (gcc_comp_opts)
