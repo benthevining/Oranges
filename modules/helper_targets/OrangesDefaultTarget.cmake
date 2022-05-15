@@ -135,7 +135,7 @@ endif ()
 
 target_compile_options (
     OrangesDefaultTarget
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/wd4464;/wd4514;/MP>"
               "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
               "$<${compiler_intel}:${intel_opts}>")
 
@@ -331,8 +331,9 @@ target_compile_options (
 unset (intel_opts)
 unset (compiler_intel)
 
-target_compile_definitions (OrangesDefaultCXXTarget
-                            INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:_HAS_STATIC_RTTI=1>")
+target_compile_definitions (
+    OrangesDefaultCXXTarget
+    INTERFACE "$<$<OR:$<CXX_COMPILER_ID:MSVC>,$<PLATFORM_ID:Windows>>:_HAS_STATIC_RTTI=1>")
 
 add_library (Oranges::OrangesDefaultCXXTarget ALIAS OrangesDefaultCXXTarget)
 
