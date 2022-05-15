@@ -101,7 +101,7 @@ set (clang_optimization_flags # cmake-format: sortable
 target_compile_options (
     OrangesOptimizationFlags
     INTERFACE
-        "$<$<AND:${compiler_gcclike},${config_is_debug}>:${gcclike_opts}>"
+        "$<$<AND:${compiler_gcclike},${config_is_release}>:${gcclike_opts}>"
         "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_release}>:${gcc_optimization_flags}>"
         "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_release}>:${clang_optimization_flags}>"
         "$<$<CXX_COMPILER_ID:AppleClang,GNU>:-ffinite-loops>")
@@ -169,14 +169,14 @@ set (cray_debug_opts vector0,scalar0,fp0)
 
 set (cray_release_opts vector3,scalar3,cache3,aggress,flex_mp=tolerant,wp,fp3)
 
+# cmake-format: off
 target_compile_options (
     OrangesOptimizationFlags
     INTERFACE "$<$<AND:${compiler_cray},${config_is_debug}>:-O0>"
               "$<$<AND:${compiler_cray},${config_is_release}>:-O3>"
-              $<$<AND:${compiler_cray},${config_is_debug}>:-h
-              ${cray_debug_opts}>
-              $<$<AND:${compiler_cray},${config_is_release}>:-h
-              ${cray_release_opts}>)
+              $<$<AND:${compiler_cray},${config_is_debug}>:-h ${cray_debug_opts}>
+              $<$<AND:${compiler_cray},${config_is_release}>:-h ${cray_release_opts}>)
+# cmake-format: on
 
 unset (compiler_cray)
 unset (cray_release_opts)

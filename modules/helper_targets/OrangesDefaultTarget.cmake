@@ -317,18 +317,22 @@ else ()
     set (intel_opts -fexceptions)
 endif ()
 
+# cmake-format: off
 target_compile_options (
     OrangesDefaultCXXTarget
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc>"
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc;/GR>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
               "$<$<CXX_COMPILER_ID:GNU>:-fconcepts>"
               "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
               "$<${compiler_intel}:${intel_opts}>"
-              $<$<CXX_COMPILER_ID:Cray>:-h
-              exceptions>)
+              $<$<CXX_COMPILER_ID:Cray>:-h exceptions>)
+# cmake-format: on
 
 unset (intel_opts)
 unset (compiler_intel)
+
+target_compile_definitions (OrangesDefaultCXXTarget
+                            INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:_HAS_STATIC_RTTI=1>")
 
 add_library (Oranges::OrangesDefaultCXXTarget ALIAS OrangesDefaultCXXTarget)
 
