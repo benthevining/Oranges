@@ -80,12 +80,7 @@ target_compile_options (
 set (
     gcclike_opts
     # cmake-format: sortable
-    -ffast-math
-    -ffinite-loops
-    -ffinite-math-only
-    -ffp-contract=fast
-    -fno-math-errno
-    -funroll-loops
+    -ffast-math -ffinite-math-only -ffp-contract=fast -fno-math-errno -funroll-loops
     -funsafe-math-optimizations)
 
 set (
@@ -109,7 +104,7 @@ target_compile_options (
         "$<$<AND:${compiler_gcclike},${config_is_debug}>:${gcclike_opts}>"
         "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_release}>:${gcc_optimization_flags}>"
         "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_release}>:${clang_optimization_flags}>"
-    )
+        "$<$<CXX_COMPILER_ID:AppleClang,GNU>:-ffinite-loops>")
 
 unset (gcclike_opts)
 unset (compiler_gcclike)

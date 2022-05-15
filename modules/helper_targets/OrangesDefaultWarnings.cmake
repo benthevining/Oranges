@@ -112,11 +112,8 @@ set (
 set (gcclike_cxx_opts # cmake-format: sortable
                       -Wnon-virtual-dtor -Wzero-as-null-pointer-constant)
 
-set (
-    gcc_cxx_opts
-    # cmake-format: sortable
-    -Wdelete-non-virtual-dtor -Wmismatched-new-delete -Wnoexcept -Wrange-loop-construct
-    -Wsuggest-override)
+set (gcc_cxx_opts # cmake-format: sortable
+                  -Wdelete-non-virtual-dtor -Wnoexcept -Wsuggest-override)
 
 set (clang_cxx_opts
      # cmake-format: sortable
