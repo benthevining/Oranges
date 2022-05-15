@@ -11,7 +11,7 @@
 # ======================================================================================
 
 include (OrangesAllIntegrations)
-include (OrangesCoverageFlags)
+include (OrangesDebugTarget)
 include (OrangesDefaultTarget)
 include (OrangesDefaultWarnings)
 include (OrangesIPO)

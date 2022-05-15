@@ -30,49 +30,83 @@ This module provides the function :command:`oranges_generate_platform_header()`.
 
 Generates a header file containing various platform identifying macros for the current target platform.
 
+A useful property of this module is that including it initializes all the `PLAT_` cache variables, so you can reference them.
+
 The generated file will contain the following macros, where ``<baseName>`` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
 
-OS type macros:
+.. table:: OS type macros
 
-- <baseName>_UNIX
-- <baseName>_POSIX
-- <baseName>_WINDOWS
-- <baseName>_MINGW
-- <baseName>_LINUX
-- <baseName>_APPLE
-- <baseName>_OSX
-- <baseName>_IOS - true for any iOS-like OS (iOS, tvOS, or watchOS)
-- <baseName>_ANDROID
-- <baseName>_MOBILE - true for iOS, watchOS, or Android
-- <baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'tvOS', 'watchOS', 'Windows', 'Linux', or 'Android'
++---------------------+-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Macro name          | Cache variable  | Value          | Notes                                                                                                                                       |
++=====================+=================+==============================================================================================================================================================+
+| <baseName>_UNIX     | PLAT_UNIX       | 0 or 1         |                                                                                                                                             |
+| <baseName>_POSIX    | PLAT_POSIX      | 0 or 1         |                                                                                                                                             |
+| <baseName>_WINDOWS  | PLAT_WIN        | 0 or 1         |                                                                                                                                             |
+| <baseName>_MINGW    | PLAT_MINGW      | 0 or 1         |                                                                                                                                             |
+| <baseName>_LINUX    | PLAT_LINUX      | 0 or 1         |                                                                                                                                             |
+| <baseName>_APPLE    | PLAT_APPLE      | 0 or 1         | True if the target platform is any Apple OS                                                                                                 |
+| <baseName>_OSX      | PLAT_MACOSX     | 0 or 1         | True if the target platform is desktop MacOS.                                                                                               |
+| <baseName>_IOS      | PLAT_IOS        | 0 or 1         | True for any iOS-like OS (iOS, tvOS, or watchOS)                                                                                            |
+| <baseName>_ANDROID  | PLAT_ANDROID    | 0 or 1         |                                                                                                                                             |
+| <baseName>_MOBILE   | PLAT_MOBILE     | 0 or 1         | True for iOS, watchOS, or Android                                                                                                           |
+| <baseName>_EMBEDDED | PLAT_EMBEDDED   | 0 or 1         | True if the target is an embedded platform. This defaults to true if CMAKE_SYSTEM_NAME is Generic.                                          |
+| <baseName>_OS_TYPE  | PLAT_OS_TYPE    | String literal | A string literal describing the OS type being run. Defaults to one of 'MacOSX', 'iOS', 'tvOS', 'watchOS', 'Windows', 'Linux', or 'Android'. |
++---------------------+-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-Compiler type macros:
+.. table: Compiler type macros
 
-- <baseName>_CLANG
-- <baseName>_GCC
-- <baseName>_MSVC
-- <baseName>_INTEL_COMPILER
-- <baseName>_CRAY_COMPILER
-- <baseName>_ARM_COMPILER
-- <baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
-- <baseName>_COMPILER_VERSION - a string literal describing the version of the compiler being used
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
+| Macro name                | Cache variable             | Value             | Notes                                                                                                |
++===========================+============================+===================+======================================================================================================+
+| <baseName>_CLANG          | PLAT_CLANG_<lang>          | 0 or 1            | True if the compiler is Clang or AppleClang                                                          |
+| <baseName>_GCC            | PLAT_GCC_<lang>            | 0 or 1            |                                                                                                      |
+| <baseName>_MSVC           | PLAT_MSVC_<lang>           | 0 or 1            |                                                                                                      |
+| <baseName>_INTEL_COMPILER | PLAT_INTEL_COMPILER_<lang> | 0 or 1            |                                                                                                      |
+| <baseName>_CRAY_COMPILER  | PLAT_CRAY_COMPILER_<lang>  | 0 or 1            |                                                                                                      |
+| <baseName>_ARM_COMPILER   | PLAT_ARM_COMPILER_<lang>   | 0 or 1            |                                                                                                      |
+| <baseName>_COMPILER_TYPE  | PLAT_COMPILER_TYPE_<lang>  | String literal    | A string literal describing the compiler used. Either Clang, GCC, MSVC, Intel, ARM, Cray, or Unknown |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 
-Processor and architecture macros:
+.. table: Compiler version macros
 
-- <baseName>_ARM
-- <baseName>_INTEL
-- <baseName>_CPU_TYPE - a string literal describing the CPU. Either 'ARM', 'Intel', or 'Unknown'
-- <baseName>_32BIT
-- <baseName>_64BIT
-- <baseName>_BIG_ENDIAN
-- <baseName>_LITTLE_ENDIAN
++-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
+| Macro name                        | Cache variable                     | Value           | Notes                                                                         |
++===================================+====================================+=================+===============================================================================+
+| <baseName>_COMPILER_VERSION_MAJOR | PLAT_COMPILER_VERSION_MAJOR_<lang> | Numeric literal | Number representing the compiler's major version, if available; otherwise, 0. |
+| <baseName>_COMPILER_VERSION_MINOR | PLAT_COMPILER_VERSION_MINOR_<lang> | Numeric literal | Number representing the compiler's minor version, if available; otherwise, 0. |
+| <baseName>_COMPILER_VERSION_PATCH | PLAT_COMPILER_VERSION_PATCH_<lang> | Numeric literal | Number representing the compiler's patch version, if available; otherwise, 0. |
+| <baseName>_COMPILER_VERSION       | PLAT_COMPILER_VERSION_<lang>       | String literal  | A string literal describing the version of the compiler being used            |
++-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
 
-SIMD instruction capabilities:
+.. table: Processor and architecture macros
 
-- <baseName>_ARM_NEON
-- <baseName>_AVX
-- <baseName>_AVX512
-- <baseName>_SSE
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
+| Macro name               | Cache variable            | Value          | Notes                                                              |
++==========================+===========================+================+====================================================================+
+| <baseName>_ARM           | PLAT_ARM                  | 0 or 1         |                                                                    |
+| <baseName>_INTEL         | PLAT_INTEL                | 0 or 1         |                                                                    |
+| <baseName>_CPU_TYPE      | PLAT_CPU_TYPE             | String literal | A string literal describing the CPU. Either ARM, Intel, or Unknown |
+| <baseName>_32BIT         | PLAT_32BIT                | 0 or 1         |                                                                    |
+| <baseName>_64BIT         | PLAT_64BIT                | 0 or 1         |                                                                    |
+| <baseName>_BIG_ENDIAN    | PLAT_BIG_ENDIAN_<lang>    | 0 or 1         |                                                                    |
+| <baseName>_LITTLE_ENDIAN | PLAT_LITTLE_ENDIAN_<lang> | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
+
+.. table: SIMD instruction capabilities
+
++---------------------+----------------+--------+
+| Macro name          | Cache variable | Value  |
++=====================+================+========+
+| <baseName>_ARM_NEON | PLAT_ARM_NEON  | 0 or 1 |
+| <baseName>_AVX      | PLAT_AVX       | 0 or 1 |
+| <baseName>_AVX512   | PLAT_AVX512    | 0 or 1 |
+| <baseName>_SSE      | PLAT_SSE       | 0 or 1 |
++---------------------+----------------+--------+
+
+Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- PLAT_DISABLE_SIMD - if on, initializes all SIMD capability macros to 0.
+- PLAT_DEFAULT_TESTING_LANGUAGE - specifies the language that will be used by default if none is specified when calling :command:`oranges_generate_platform_header()`. Additionally, the first time this file is included, all cache variables will be initialized using this language.
 
 #]=======================================================================]
 
@@ -82,205 +116,18 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-option (ORANGES_DISABLE_SIMD
+option (PLAT_DISABLE_SIMD
         "Disable all SIMD macros in generated platform headers (ie, set them all to 0)" OFF)
 
-mark_as_advanced (FORCE ORANGES_DISABLE_SIMD)
+set (PLAT_DEFAULT_TESTING_LANGUAGE CXX CACHE STRING
+        "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration")
 
-#
+set_property (CACHE PLAT_DEFAULT_TESTING_LANGUAGE PROPERTY
+    STRINGS "CXX;C;OBJCXX;OBJC;Fortran;ASM")
 
-macro (_oranges_plat_header_set_option inVar cacheVar)
-    if (${inVar})
-        set (${cacheVar} 1 CACHE INTERNAL "")
-    else ()
-        set (${cacheVar} 0 CACHE INTERNAL "")
-    endif ()
-endmacro ()
+include (scripts/plat_header_set_options)
 
-_oranges_plat_header_set_option (UNIX ORANGES_UNIX)
-_oranges_plat_header_set_option (MINGW ORANGES_MINGW)
-_oranges_plat_header_set_option (APPLE ORANGES_APPLE)
-
-if (IOS OR ("${CMAKE_SYSTEM_NAME}" STREQUAL iOS) OR ("${CMAKE_SYSTEM_NAME}" STREQUAL tvOS)
-    OR ("${CMAKE_SYSTEM_NAME}" STREQUAL watchOS))
-    set (ORANGES_IOS 1 CACHE INTERNAL "")
-    set (ORANGES_MACOSX 0 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE "${CMAKE_SYSTEM_NAME}" CACHE INTERNAL "")
-else ()
-    set (ORANGES_IOS 0 CACHE INTERNAL "")
-
-    if (APPLE)
-        set (ORANGES_MACOSX 1 CACHE INTERNAL "")
-        set (ORANGES_OS_TYPE MacOSX CACHE INTERNAL "")
-    else ()
-        set (ORANGES_MACOSX 0 CACHE INTERNAL "")
-    endif ()
-endif ()
-
-if (WIN32)
-    set (ORANGES_WIN 1 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE Windows CACHE INTERNAL "")
-else ()
-    set (ORANGES_WIN 0 CACHE INTERNAL "")
-endif ()
-
-if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
-    set (ORANGES_LINUX 1 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE Linux CACHE INTERNAL "")
-else ()
-    set (ORANGES_LINUX 0 CACHE INTERNAL "")
-endif ()
-
-if (ANDROID)
-    set (ORANGES_ANDROID 1 CACHE INTERNAL "")
-    set (ORANGES_OS_TYPE Android CACHE INTERNAL "")
-else ()
-    set (ORANGES_ANDROID 0 CACHE INTERNAL "")
-endif ()
-
-if (ANDROID OR IOS OR "${CMAKE_SYSTEM_NAME}" STREQUAL iOS OR "${CMAKE_SYSTEM_NAME}" STREQUAL
-                                                             watchOS)
-    set (ORANGES_MOBILE 1 CACHE INTERNAL "")
-else ()
-    set (ORANGES_MOBILE 0 CACHE INTERNAL "")
-endif ()
-
-cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)
-
-if (is_64_bit)
-    set (ORANGES_64BIT 1 CACHE INTERNAL "")
-    set (ORANGES_32BIT 0 CACHE INTERNAL "")
-else ()
-    set (ORANGES_64BIT 0 CACHE INTERNAL "")
-    set (ORANGES_32BIT 1 CACHE INTERNAL "")
-endif ()
-
-if (WIN32)
-    if ("${CMAKE_HOST_SYSTEM_PROCESSOR}" MATCHES "ARM64")
-        set (ORANGES_ARM 1 CACHE INTERNAL "")
-        set (ORANGES_INTEL 0 CACHE INTERNAL "")
-    else ()
-        set (ORANGES_ARM 0 CACHE INTERNAL "")
-        set (ORANGES_INTEL 1 CACHE INTERNAL "")
-    endif ()
-elseif (APPLE)
-    if (CMAKE_APPLE_SILICON_PROCESSOR)
-        set (_apple_plat_var_to_check CMAKE_APPLE_SILICON_PROCESSOR)
-    else ()
-        set (_apple_plat_var_to_check CMAKE_HOST_SYSTEM_PROCESSOR)
-    endif ()
-
-    if ("${${_apple_plat_var_to_check}}" MATCHES "arm64")
-        set (ORANGES_ARM 1 CACHE INTERNAL "")
-        set (ORANGES_INTEL 0 CACHE INTERNAL "")
-    elseif ("${${_apple_plat_var_to_check}}" MATCHES "x86_64")
-        set (ORANGES_ARM 0 CACHE INTERNAL "")
-        set (ORANGES_INTEL 1 CACHE INTERNAL "")
-    endif ()
-
-    unset (_apple_plat_var_to_check)
-else ()
-    try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                 "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm.cpp" OUTPUT_VARIABLE compile_output)
-
-    string (REGEX REPLACE ".*ORANGES_ARM ([a-zA-Z0-9_-]*).*" "\\1" is_arm "${compile_output}")
-
-    if (is_arm)
-        set (ORANGES_ARM 1 CACHE INTERNAL "")
-    else ()
-        set (ORANGES_ARM 0 CACHE INTERNAL "")
-    endif ()
-
-    unset (compile_result)
-    unset (compile_output)
-    unset (is_arm)
-
-    if (ORANGES_ARM)
-        set (ORANGES_INTEL 0 CACHE INTERNAL "")
-    else ()
-        set (ORANGES_INTEL 1 CACHE INTERNAL "")
-    endif ()
-endif ()
-
-if (ORANGES_ARM)
-    set (ORANGES_CPU_TYPE "ARM" CACHE INTERNAL "")
-elseif (ORANGES_INTEL)
-    set (ORANGES_CPU_TYPE "Intel" CACHE INTERNAL "")
-else ()
-    set (ORANGES_CPU_TYPE "Unknown" CACHE INTERNAL "")
-endif ()
-
-if (APPLE OR ANDROID OR MINGW OR ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux"))
-    set (ORANGES_POSIX 1 CACHE INTERNAL "")
-else ()
-    set (ORANGES_POSIX 0 CACHE INTERNAL "")
-endif ()
-
-if (ORANGES_ARM)
-    try_compile (
-        compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-        "${CMAKE_CURRENT_LIST_DIR}/scripts/check_arm_neon.cpp" OUTPUT_VARIABLE compile_output)
-
-    string (REGEX REPLACE ".*ORANGES_ARM_NEON ([a-zA-Z0-9_-]*).*" "\\1" has_arm_neon
-                          "${compile_output}")
-
-    if (has_arm_neon)
-        set (ORANGES_ARM_NEON 1 CACHE INTERNAL "")
-    else ()
-        set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
-    endif ()
-
-    unset (compile_result)
-    unset (compile_output)
-    unset (has_arm_neon)
-else ()
-    set (ORANGES_ARM_NEON 0 CACHE INTERNAL "")
-endif ()
-
-try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_sse.cpp" OUTPUT_VARIABLE compile_output)
-
-string (REGEX REPLACE ".*ORANGES_SSE ([a-zA-Z0-9_-]*).*" "\\1" has_sse "${compile_output}")
-
-if (has_sse)
-    set (ORANGES_SSE 1 CACHE INTERNAL "")
-else ()
-    set (ORANGES_SSE 0 CACHE INTERNAL "")
-endif ()
-
-unset (compile_result)
-unset (compile_output)
-unset (has_sse)
-
-try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx.cpp" OUTPUT_VARIABLE compile_output)
-
-string (REGEX REPLACE ".*ORANGES_AVX ([a-zA-Z0-9_-]*).*" "\\1" has_avx "${compile_output}")
-
-if (has_avx)
-    set (ORANGES_AVX 1 CACHE INTERNAL "")
-else ()
-    set (ORANGES_AVX 0 CACHE INTERNAL "")
-endif ()
-
-unset (compile_result)
-unset (compile_output)
-unset (has_avx)
-
-try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-             "${CMAKE_CURRENT_LIST_DIR}/scripts/check_avx512.cpp" OUTPUT_VARIABLE compile_output)
-
-string (REGEX REPLACE ".*ORANGES_AVX512 ([a-zA-Z0-9_-]*).*" "\\1" has_avx512 "${compile_output}")
-
-if (has_avx512)
-    set (ORANGES_AVX512 1 CACHE INTERNAL "")
-else ()
-    set (ORANGES_AVX512 0 CACHE INTERNAL "")
-endif ()
-
-unset (compile_result)
-unset (compile_output)
-unset (has_avx512)
+_oranges_plat_header_set_opts_for_language ("${PLAT_DEFAULT_TESTING_LANGUAGE}")
 
 #
 
@@ -316,56 +163,10 @@ function (oranges_generate_platform_header)
     endif ()
 
     if (NOT ORANGES_ARG_LANGUAGE)
-        set (ORANGES_ARG_LANGUAGE CXX)
+        set (ORANGES_ARG_LANGUAGE "${PLAT_DEFAULT_TESTING_LANGUAGE}")
     endif ()
 
-    if (CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_VERSION)
-        set (ORANGES_COMPILER_VERSION "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_VERSION}")
-    else ()
-        set (ORANGES_COMPILER_VERSION Unknown)
-    endif ()
-
-    set (compilerID "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}")
-
-    macro (_oranges_plat_header_compiler_id_opt compiler cacheVar)
-        if ("${compilerID}" MATCHES "${compiler}")
-            set (${cacheVar} 1)
-            set (ORANGES_COMPILER_TYPE "${compiler}")
-        else ()
-            set (${cacheVar} 0)
-        endif ()
-    endmacro ()
-
-    _oranges_plat_header_compiler_id_opt (Clang ORANGES_CLANG)
-    _oranges_plat_header_compiler_id_opt (GNU ORANGES_GCC)
-    _oranges_plat_header_compiler_id_opt (MSVC ORANGES_MSVC)
-    _oranges_plat_header_compiler_id_opt (Intel ORANGES_INTEL_COMPILER)
-    _oranges_plat_header_compiler_id_opt (Cray ORANGES_CRAY_COMPILER)
-    _oranges_plat_header_compiler_id_opt (ARM ORANGES_ARM_COMPILER)
-
-    if (NOT ORANGES_COMPILER_TYPE)
-        set (ORANGES_COMPILER_TYPE "Unknown")
-    endif ()
-
-    if (CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER)
-        set (byte_order "${CMAKE_${ORANGES_ARG_LANGUAGE}_BYTE_ORDER}")
-
-        if ("${byte_order}" STREQUAL "BIG_ENDIAN")
-            set (ORANGES_BIG_ENDIAN 1)
-            set (ORANGES_LITTLE_ENDIAN 0)
-        elseif ("${byte_order}" STREQUAL "LITTLE_ENDIAN")
-            set (ORANGES_BIG_ENDIAN 0)
-            set (ORANGES_LITTLE_ENDIAN 1)
-        else ()
-            message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
-            set (ORANGES_BIG_ENDIAN 1)
-            set (ORANGES_LITTLE_ENDIAN 0)
-        endif ()
-    else ()
-        message (WARNING "Cannot detect host byte order for language ${ORANGES_ARG_LANGUAGE}!")
-        set (ORANGES_BIG_ENDIAN 1)
-        set (ORANGES_LITTLE_ENDIAN 0)
-    endif ()
+    _oranges_plat_header_set_opts_for_language ("${ORANGES_ARG_LANGUAGE}")
 
     set (input_file "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")
     set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")

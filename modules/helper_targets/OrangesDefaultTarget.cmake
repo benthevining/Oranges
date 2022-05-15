@@ -51,6 +51,7 @@ endif ()
 
 include (OrangesCmakeDevTools)
 include (FeatureSummary)
+include (OrangesGeneratePlatformHeader)
 
 #
 
@@ -58,7 +59,7 @@ option (ORANGES_MAINTAINER_BUILD "Enables integrations and warnings in OrangesDe
 
 option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
 
-if (UNIX AND NOT (WIN32 OR APPLE))
+if (PLAT_LINUX)
     set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
     set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
 
@@ -137,7 +138,14 @@ target_compile_options (
     OrangesDefaultTarget
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/wd4464;/wd4514;/MP>"
               "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
-              "$<${compiler_intel}:${intel_opts}>")
+              "$<${compiler_intel}:${intel_opts}>"
+              "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<NOT:$<CONFIG:MINSIZEREL>>>:-g>"
+              "$<$<CXX_COMPILER_ID:GNU>:-march=native>")
+
+if(PLAT_ANDROID)
+    target_compile_options(OrangesDefaultTarget INTERFACE
+        "$<$<CXX_COMPILER_ID:GNU>:-mandroid>")
+endif()
 
 unset (intel_opts)
 
@@ -161,9 +169,6 @@ target_compile_definitions (
 
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")
-
-unset (config_is_debug)
-unset (config_is_release)
 
 #
 
@@ -215,7 +220,9 @@ if (APPLE)
 
     set_property (GLOBAL PROPERTY ORANGES_MAC_NATIVE_ARCH "${osx_native_arch}")
 
-    if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE)
+    include (OrangdsGeneratePlatformHeader)
+
+    if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE AND ("${CMAKE_${PLAT_DEFAULT_TESTING_LANGUAGE}_COMPILER_ID}" MATCHES Clang))
 
         set_target_properties (
             OrangesDefaultTarget
@@ -255,6 +262,10 @@ if (ORANGES_MAINTAINER_BUILD)
                                        $<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
 
 endif ()
+
+include (OrangesDebugTarget)
+
+target_link_libraries(OrangesDefaultTarget INTERFACE $<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>)
 
 add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 
@@ -320,7 +331,7 @@ endif ()
 # cmake-format: off
 target_compile_options (
     OrangesDefaultCXXTarget
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc;/GR>"
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
               "$<$<CXX_COMPILER_ID:GNU>:-fconcepts>"
               "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
@@ -331,12 +342,11 @@ target_compile_options (
 unset (intel_opts)
 unset (compiler_intel)
 
-target_compile_definitions (
-    OrangesDefaultCXXTarget
-    INTERFACE "$<$<OR:$<CXX_COMPILER_ID:MSVC>,$<PLATFORM_ID:Windows>>:_HAS_STATIC_RTTI=1>")
-
 add_library (Oranges::OrangesDefaultCXXTarget ALIAS OrangesDefaultCXXTarget)
 
 #
 
 install (TARGETS OrangesDefaultTarget OrangesDefaultCXXTarget EXPORT OrangesTargets)
+
+unset (config_is_debug)
+unset (config_is_release)
