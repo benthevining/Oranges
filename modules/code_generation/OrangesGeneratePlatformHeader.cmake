@@ -43,6 +43,7 @@ OS type macros:
 - <baseName>_OSX
 - <baseName>_IOS - true for any iOS-like OS (iOS, tvOS, or watchOS)
 - <baseName>_ANDROID
+- <baseName>_MOBILE - true for iOS, watchOS, or Android
 - <baseName>_OS_TYPE - a string literal describing the OS type being run. Either 'MacOSX', 'iOS', 'tvOS', 'watchOS', 'Windows', 'Linux', or 'Android'
 
 Compiler type macros:
@@ -52,6 +53,7 @@ Compiler type macros:
 - <baseName>_MSVC
 - <baseName>_INTEL_COMPILER
 - <baseName>_COMPILER_TYPE - a string literal describing the compiler used. Either 'Clang', 'GCC', 'MSVC', 'Intel', or 'Unknown'
+- <baseName>_COMPILER_VERSION - a string literal describing the version of the compiler being used
 
 Processor and architecture macros:
 
@@ -145,6 +147,13 @@ if (ANDROID)
     set (ORANGES_OS_TYPE Android CACHE INTERNAL "")
 else ()
     set (ORANGES_ANDROID 0 CACHE INTERNAL "")
+endif ()
+
+if (ANDROID OR IOS OR "${CMAKE_SYSTEM_NAME}" STREQUAL iOS OR "${CMAKE_SYSTEM_NAME}" STREQUAL
+                                                             watchOS)
+    set (ORANGES_MOBILE 1 CACHE INTERNAL "")
+else ()
+    set (ORANGES_MOBILE 0 CACHE INTERNAL "")
 endif ()
 
 cmake_host_system_information (RESULT is_64_bit QUERY IS_64BIT)
@@ -327,6 +336,12 @@ function (oranges_generate_platform_header)
 
     if (NOT ORANGES_ARG_LANGUAGE)
         set (ORANGES_ARG_LANGUAGE CXX)
+    endif ()
+
+    if (CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_VERSION)
+        set (ORANGES_COMPILER_VERSION "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_VERSION}")
+    else ()
+        set (ORANGES_COMPILER_VERSION Unknown)
     endif ()
 
     set (compilerID "${CMAKE_${ORANGES_ARG_LANGUAGE}_COMPILER_ID}")

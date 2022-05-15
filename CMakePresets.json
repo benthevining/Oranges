@@ -42,6 +42,9 @@
   "configurePresets": [
     {
       "binaryDir": "${sourceDir}/Builds",
+      "cacheVariables": {
+        "ORANGES_MAC_UNIVERSAL_BINARY": "ON"
+      },
       "displayName": "The default CMake configuration",
       "name": "default",
       "warnings": {
@@ -49,6 +52,9 @@
       }
     },
     {
+      "cacheVariables": {
+        "ORANGES_MAINTAINER_BUILD": "ON"
+      },
       "displayName": "CMake configuration for development of Oranges",
       "inherits": "default",
       "name": "maintainer",

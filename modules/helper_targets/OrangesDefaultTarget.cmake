@@ -17,6 +17,13 @@ OrangesDefaultTarget
 
 Provides a helper "default target" with some sensible defaults configured.
 
+The default target will have configuration postfixes and appropriate configuration-specific optimization flags configured.
+
+The default target will have the following compiler definitions added:
+- ORANGES_DEBUG : 1 if the configuration is a debug configuration, 0 otherwise
+- ORANGES_RELEASE: 1 if the configuration is a release configuration, 0 otherwise
+- ORANGES_BUILD_TYPE : A string literal with the exact name of the build configuration that was used.
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -24,7 +31,8 @@ Targets
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_MAC_UNIVERSAL_BINARY (macOS only)
+- ORANGES_MAINTAINER_BUILD
+- ORANGES_MAC_UNIVERSAL_BINARY
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -41,22 +49,19 @@ if (TARGET Oranges::OrangesDefaultTarget)
 endif ()
 
 include (OrangesCmakeDevTools)
-include (OrangesConfigurationPostfixes)
+include (FeatureSummary)
 
 #
 
-if (APPLE)
-    if (NOT IOS)
-        option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
-        mark_as_advanced (FORCE ORANGES_MAC_UNIVERSAL_BINARY)
-    endif ()
-else ()
-    if (UNIX AND NOT WIN32)
-        set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
-        set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
+option (ORANGES_MAINTAINER_BUILD "Enables integrations and warnings in OrangesDefaultTarget" OFF)
 
-        include (LinuxLSBInfo)
-    endif ()
+option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+
+if (UNIX AND NOT (WIN32 OR APPLE))
+    set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
+    set (CMAKE_RANLIB "${CMAKE_CXX_COMPILER_RANLIB}")
+
+    include (LinuxLSBInfo)
 endif ()
 
 #
@@ -100,10 +105,10 @@ set_target_properties (
                PCH_WARN_INVALID ON
                PCH_INSTANTIATE_TEMPLATES ON
                VISIBILITY_INLINES_HIDDEN ON
-               DEBUG_POSTFIX "${ORANGES_DEBUG_POSTFIX}"
-               MINSIZEREL_POSTFIX "${ORANGES_MINSIZEREL_POSTFIX}"
-               RELEASE_POSTFIX "${ORANGES_RELEASE_POSTFIX}"
-               RELWITHDEBINFO_POSTFIX "${ORANGES_RELWITHDEBINFO_POSTFIX}"
+               DEBUG_POSTFIX -d
+               MINSIZEREL_POSTFIX -rm
+               RELEASE_POSTFIX -r
+               RELWITHDEBINFO_POSTFIX -rd
                $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
                $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
 
@@ -115,13 +120,9 @@ target_compile_definitions (
     OrangesDefaultTarget
     INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT;_CRT_SECURE_NO_WARNINGS>")
 
-set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
-
 target_compile_options (
-    OrangesDefaultTarget
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
-              "$<$<AND:$<PLATFORM_ID:Windows>,$<NOT:$<CXX_COMPILER_ID:Clang>>>:/EHsc>"
-              "$<${compiler_gcclike}:-g>")
+    OrangesDefaultTarget INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
+                                   "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/EHsc>")
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
@@ -135,16 +136,26 @@ unset (debug_configs)
 
 set (config_is_release "$<NOT:${config_is_debug}>")
 
+target_compile_definitions (
+    OrangesDefaultTarget
+    INTERFACE "$<${config_is_debug}:ORANGES_DEBUG=1>" "$<${config_is_debug}:ORANGES_RELEASE=0>"
+              "$<${config_is_release}:ORANGES_DEBUG=0>" "$<${config_is_release}:ORANGES_RELEASE=1>"
+              "ORANGES_BUILD_TYPE=\"$<CONFIG>\"")
+
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")
 
+set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
+
 target_compile_options (
     OrangesDefaultTarget
-    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
-              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3>"
-              "$<$<AND:${compiler_gcclike},${config_is_release},$<NOT:$<PLATFORM_ID:MINGW>>>:-flto>"
-              "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/Od;/Zi>"
-              "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:/Ox;-GL>")
+    INTERFACE
+        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/Od;/Zi>"
+        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:/Ox;-GL>"
+        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
+        "$<$<AND:${compiler_gcclike},$<CONFIG:MINSIZEREL>>:-Os>"
+        "$<$<AND:${compiler_gcclike},${config_is_release},$<NOT:$<CONFIG:MINSIZEREL>>>:-O3;-Ofast>"
+        "$<$<AND:${compiler_gcclike},$<OR:${config_is_debug},$<CONFIG:RELWITHDEBINFO>>>:-g>")
 
 target_link_libraries (OrangesDefaultTarget
                        INTERFACE "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:-LTCG>")
@@ -167,36 +178,31 @@ set (ios_like "$<IN_LIST:$<PLATFORM_ID>,${ios_like_systems}>")
 
 unset (ios_like_systems)
 
-set (any_apple_system "$<OR:$<PLATFORM_ID:Darwin>,${ios_like}>")
-
 set (sign_id "\"iPhone Developer\"")
 
-# cmake-format: off
 set_target_properties (
-	OrangesDefaultTarget
-	PROPERTIES $<$<NOT:${any_apple_system}>:INSTALL_RPATH $ORIGIN>
-			   $<${any_apple_system}:XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES>
-			   $<${any_apple_system}:XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET}>
-			   $<${ios_like}:ARCHIVE_OUTPUT_DIRECTORY ./>
-			   $<${ios_like}:XCODE_ATTRIBUTE_INSTALL_PATH $(LOCAL_APPS_DIR)>
-			   $<${ios_like}:XCODE_ATTRIBUTE_SKIP_INSTALL NO>
-			   $<${ios_like}:XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>
-			   $<${ios_like}:IOS_INSTALL_COMBINED ON>
+    OrangesDefaultTarget
+    PROPERTIES $<$<NOT:$<OR:$<PLATFORM_ID:Darwin>,${ios_like}>>:INSTALL_RPATH $ORIGIN>
+               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
+               XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}"
+               $<${ios_like}:ARCHIVE_OUTPUT_DIRECTORY ./>
+               $<${ios_like}:XCODE_ATTRIBUTE_INSTALL_PATH $(LOCAL_APPS_DIR)>
+               $<${ios_like}:XCODE_ATTRIBUTE_SKIP_INSTALL NO>
+               $<${ios_like}:XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>
+               $<${ios_like}:IOS_INSTALL_COMBINED ON>
                $<${ios_like}:XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${sign_id}>)
 
-unset (any_apple_system)
 unset (sign_id)
 
 if (ORANGES_IOS_DEV_TEAM_ID)
     set (dev_team_id "\"${ORANGES_IOS_DEV_TEAM_ID}\"")
 
-	set_target_properties (
-		OrangesDefaultTarget
-		PROPERTIES $<${ios_like}:XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${dev_team_id}>)
+    set_target_properties (
+        OrangesDefaultTarget PROPERTIES $<${ios_like}:XCODE_ATTRIBUTE_DEVELOPMENT_TEAM
+                                        ${dev_team_id}>)
 
     unset (dev_team_id)
 endif ()
-# cmake-format: on
 
 unset (ios_like)
 
@@ -208,26 +214,45 @@ if (APPLE)
 
     set_property (GLOBAL PROPERTY ORANGES_MAC_NATIVE_ARCH "${osx_native_arch}")
 
-    # cmake-format: off
-	if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE)
+    if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE)
 
-		set_target_properties (
-			OrangesDefaultTarget
-			PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES x86_64$<SEMICOLON>arm64>
-					   $<$<PLATFORM_ID:Darwin>:ORANGES_MAC_UNIVERSAL_BINARY TRUE>)
+        set_target_properties (
+            OrangesDefaultTarget
+            PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES x86_64$<SEMICOLON>arm64>
+                       $<$<PLATFORM_ID:Darwin>:ORANGES_MAC_UNIVERSAL_BINARY TRUE>
+                       $<<NOT:$<PLATFORM_ID:Darwin>>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>)
 
-		message (VERBOSE "  -- Enabling universal binary")
-	else ()
-		set_target_properties (
-			OrangesDefaultTarget
-			PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES ${osx_native_arch}>
-					   $<$<PLATFORM_ID:Darwin>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>)
-		# cmake-format: on
+        add_feature_info (ORANGES_MAC_UNIVERSAL_BINARY ON "Building universal binaries for MacOSX")
 
-        message (VERBOSE "  -- DISABLING universal binary")
+        message (VERBOSE
+                 "  -- ENABLING universal binary in OrangesDefaultTarget in OrangesDefaultTarget")
+    else ()
+        set_target_properties (
+            OrangesDefaultTarget
+            PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES ${osx_native_arch}>
+                       $<$<PLATFORM_ID:Darwin>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>
+                       $<<NOT:$<PLATFORM_ID:Darwin>>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>)
+
+        add_feature_info (ORANGES_MAC_UNIVERSAL_BINARY OFF
+                          "Not building universal binaries for MacOSX in OrangesDefaultTarget")
+
+        message (VERBOSE "  -- DISABLING universal binary in OrangesDefaultTarget")
     endif ()
 
     unset (osx_native_arch)
+endif ()
+
+#
+
+if (ORANGES_MAINTAINER_BUILD)
+
+    include (OrangesDefaultWarnings)
+    include (OrangesAllIntegrations)
+
+    target_link_libraries (
+        OrangesDefaultTarget INTERFACE $<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>
+                                       $<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
+
 endif ()
 
 #

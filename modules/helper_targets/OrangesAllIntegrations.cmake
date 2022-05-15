@@ -56,6 +56,7 @@ if (TARGET Oranges::OrangesAllIntegrations)
 endif ()
 
 include (OrangesCmakeDevTools)
+include (FeatureSummary)
 
 oranges_file_scoped_message_context ("OrangesAllIntegrations")
 

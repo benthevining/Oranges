@@ -47,7 +47,7 @@ endif ()
 
 add_library (OrangesDefaultWarnings INTERFACE)
 
-target_compile_options (OrangesDefaultWarnings INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+target_compile_options (OrangesDefaultWarnings INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4>")
 
 set (
     gcclike_comp_opts
@@ -75,8 +75,14 @@ unset (gcclike_comp_opts)
 set (
     gcc_comp_opts
     # cmake-format: sortable
-    -Wextra -Wno-implicit-fallthrough -Wno-maybe-uninitialized -Wno-strict-overflow
-    -Wredundant-decls)
+    -Wextra
+    -Wno-implicit-fallthrough
+    -Wno-maybe-uninitialized
+    -Wno-strict-overflow
+    -Wpointer-arith
+    -Wredundant-decls
+    -Wundef
+    -Wwrite-strings)
 
 target_compile_options (OrangesDefaultWarnings
                         INTERFACE "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>")

@@ -47,7 +47,6 @@ A library of CMake modules.
   * OrangesDoxygenConfig
   * OrangesFetchRepository
   * OrangesFindPackageHelpers
-  * OrangesGenerateBuildTypeHeader
   * OrangesGenerateExportHeader
   * OrangesGeneratePkgConfig
   * OrangesGeneratePlatformHeader

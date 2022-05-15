@@ -25,14 +25,13 @@ This module provides the function :command:`oranges_generate_standard_headers()`
                                       [BASE_NAME <baseName>]
                                       [HEADER <mainHeaderName>] | [NO_AGGREGATE_HEADER]
                                       [FEATURE_TEST_LANGUAGE <lang>]
-                                      [BUILD_TYPE_HEADER <buildTypeHeaderName>]
                                       [EXPORT_HEADER <exportHeaderName>]
                                       [PLATFORM_HEADER <platformHeaderName>]
                                       [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
                                       [INTERFACE]
                                       [SOURCE_GROUP_NAME <groupName>])
 
-This calls :command:`oranges_generate_build_type_header()`, :command:`oranges_generate_export_header()`, and :command:`oranges_generate_platform_header()`,
+This calls :command:`oranges_generate_export_header()` and :command:`oranges_generate_platform_header()`,
 then generates another header named ``<mainHeaderName>`` that includes all the other generated headers.
 
 #]=======================================================================]
@@ -42,7 +41,6 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
-include (OrangesGenerateBuildTypeHeader)
 include (OrangesGenerateExportHeader)
 include (OrangesGeneratePlatformHeader)
 
@@ -59,7 +57,6 @@ function (oranges_generate_standard_headers)
         TARGET
         BASE_NAME
         HEADER
-        BUILD_TYPE_HEADER
         EXPORT_HEADER
         PLATFORM_HEADER
         INSTALL_COMPONENT
@@ -82,10 +79,6 @@ function (oranges_generate_standard_headers)
 
     if (NOT ORANGES_ARG_HEADER)
         set (ORANGES_ARG_HEADER "${ORANGES_ARG_TARGET}_generated.h")
-    endif ()
-
-    if (NOT ORANGES_ARG_BUILD_TYPE_HEADER)
-        set (ORANGES_ARG_BUILD_TYPE_HEADER "${ORANGES_ARG_TARGET}_build_type.h")
     endif ()
 
     if (NOT ORANGES_ARG_EXPORT_HEADER)
@@ -111,11 +104,6 @@ function (oranges_generate_standard_headers)
     if (ORANGES_ARG_INTERFACE)
         set (interface_flag INTERFACE)
     endif ()
-
-    oranges_generate_build_type_header (
-        TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-        HEADER "${ORANGES_ARG_BUILD_TYPE_HEADER}" ${install_component} ${relative_path}
-                                                  ${interface_flag})
 
     oranges_generate_platform_header (
         TARGET "${ORANGES_ARG_TARGET}"
@@ -167,12 +155,24 @@ function (oranges_generate_standard_headers)
     endif ()
 
     if (ORANGES_ARG_SOURCE_GROUP_NAME)
-        source_group (
-            TREE "${CMAKE_CURRENT_BINARY_DIR}"
-            PREFIX "${ORANGES_ARG_SOURCE_GROUP_NAME}"
-            FILES ${configured_file} "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_EXPORT_HEADER}"
-                  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_BUILD_TYPE_HEADER}"
-                  "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_PLATFORM_HEADER}")
+
+        set (generated_files "${ORANGES_ARG_EXPORT_HEADER}" "${ORANGES_ARG_PLATFORM_HEADER}"
+                             "${ORANGES_ARG_HEADER}")
+
+        list (TRANSFORM generated_files PREPEND "${CMAKE_CURRENT_BINARY_DIR}" OUTPUT_VARIABLE
+                                                                              build_tree_files)
+
+        source_group (TREE "${CMAKE_CURRENT_BINARY_DIR}" PREFIX "${ORANGES_ARG_SOURCE_GROUP_NAME}"
+                      FILES ${build_tree_files})
+
+        set (install_dest
+             "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}")
+
+        list (TRANSFORM generated_files PREPEND "${install_dest}" OUTPUT_VARIABLE
+                                                                  install_tree_files)
+
+        source_group (TREE "${install_dest}" PREFIX "${ORANGES_ARG_SOURCE_GROUP_NAME}"
+                      FILES ${install_tree_files})
     endif ()
 
 endfunction ()
