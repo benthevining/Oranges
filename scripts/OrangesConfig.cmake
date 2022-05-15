@@ -14,6 +14,11 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+option (
+    ORANGES_INCLUDE_ALL
+    "If on, all modules are included when the Oranges project is added (instead of allowing you to dynamically load only the ones you need)"
+    OFF)
+
 @PACKAGE_INIT@
 
 set_and_check (ORANGES_ROOT_DIR "@PACKAGE_ORANGES_ROOT_DIR@")
@@ -25,6 +30,10 @@ include ("${CMAKE_CURRENT_LIST_DIR}/OrangesMacros.cmake")
 list (APPEND CMAKE_MODULE_PATH "${ORANGES_CMAKE_MODULE_PATH}")
 
 include ("${CMAKE_CURRENT_LIST_DIR}/OrangesTargets.cmake")
+
+if (ORANGES_INCLUDE_ALL)
+    add_subdirectory (modules)
+endif ()
 
 #
 

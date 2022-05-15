@@ -20,6 +20,8 @@ The Oranges CMake library.
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ORANGES_BUILD_DOCS
+- ORANGES_INCLUDE_ALL : If on, all modules are included when the Oranges project is added (instead of allowing you to dynamically load only the ones you need)
+- ORANGES_NO_TARGETS : If on, does not bring the Oranges utility targets into the build tree. Use of this option is not recommended.
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,6 +46,16 @@ project (
     DESCRIPTION "CMake modules, scripts, and utilities"
     HOMEPAGE_URL "www.github.com/benthevining/Oranges"
     LANGUAGES NONE)
+
+option (
+    ORANGES_INCLUDE_ALL
+    "If on, all modules are included when the Oranges project is added (instead of allowing you to dynamically load only the ones you need)"
+    OFF)
+
+option (
+    ORANGES_NO_TARGETS
+    "If on, does not bring the Oranges utility targets into the build tree. Use of this option is not recommended."
+    OFF)
 
 option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
         "Prefer config files to find modules in find_package search" ON)
@@ -95,25 +107,30 @@ set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/Oranges"
 
 mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
-# include any modules that create targets (for installing)
-include (CXXConcepts)
-include (OrangesAllIntegrations)
-include (OrangesCoverageFlags)
-include (OrangesDefaultTarget)
-include (OrangesDefaultWarnings)
-include (OrangesGenerateExportHeader)
-include (OrangesIPO)
-include (OrangesUnityBuild)
+#
 
-set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                    "${CMAKE_CURRENT_LIST_DIR}/doc")
+if (ORANGES_INCLUDE_ALL)
+
+    add_subdirectory (modules)
+
+elseif (NOT ORANGES_NO_TARGETS)
+
+    include (OrangesGenerateExportHeader)
+
+    add_subdirectory (modules/helper_targets)
+endif ()
 
 #
+
+include (CPackComponent)
 
 if (ORANGES_BUILD_DOCS)
     include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
 
     add_subdirectory (docs)
+
+    set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND
+                  PROPERTY ADDITIONAL_CLEAN_FILES "${CMAKE_CURRENT_LIST_DIR}/doc")
 endif ()
 
 #
@@ -143,8 +160,6 @@ install (
 
 install (DIRECTORY modules DESTINATION "${ORANGES_INSTALL_DEST}" COMPONENT oranges_modules
          PATTERN .DS_Store EXCLUDE)
-
-include (CPackComponent)
 
 cpack_add_component (oranges_base HIDDEN GROUP oranges)
 

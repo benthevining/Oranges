@@ -10,27 +10,11 @@
 #
 # ======================================================================================
 
-#[=======================================================================[.rst:
-
-OrangesDocsBuildConfig
--------------------------
-
-An aggregate helper module that includes :module:`OrangesDoxygenConfig` and, if the including project is the top level project, also includes :module:`OrangesGraphVizConfig`.
-
-Inclusion style: In each project
-
-#]=======================================================================]
-
-# NO include_guard here - by design!
-
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
-
-include (OrangesCmakeDevTools)
-
-oranges_file_scoped_message_context ("OrangesDocsBuildConfig")
-
 if (PROJECT_IS_TOP_LEVEL)
-    include (OrangesGraphVizConfig)
+    include (OrangesDefaultCPackSettings)
+    include (OrangesUninstallTarget)
 endif ()
 
-include (OrangesDoxygenConfig)
+include (OrangesGeneratePkgConfig)
+include (OrangesInstallSystemLibs)
+include (OrangesSetDefaultCpackGenerator)

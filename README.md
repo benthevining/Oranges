@@ -28,7 +28,6 @@ A library of CMake modules.
 
 ### Oranges provides the following CMake modules:
 
-  * CXXConcepts
   * CallForEachPluginFormat
   * LinuxLSBInfo
   * OrangesAAXUtils
@@ -42,7 +41,6 @@ A library of CMake modules.
   * OrangesDefaultCPackSettings
   * OrangesDefaultTarget
   * OrangesDefaultWarnings
-  * OrangesDocsBuildConfig
   * OrangesDownloadFile
   * OrangesDoxygenConfig
   * OrangesFetchRepository
@@ -50,13 +48,13 @@ A library of CMake modules.
   * OrangesGenerateExportHeader
   * OrangesGeneratePkgConfig
   * OrangesGeneratePlatformHeader
-  * OrangesGeneratePropertiesJSON
   * OrangesGenerateStandardHeaders
   * OrangesGraphVizConfig
   * OrangesIPO
   * OrangesInstallSystemLibs
   * OrangesJuceModuleUtilities
   * OrangesJuceUtilities
+  * OrangesOptimizationFlags
   * OrangesPluginUtilities
   * OrangesSetDefaultCpackGenerator
   * OrangesSourceFileUtils

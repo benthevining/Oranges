@@ -132,9 +132,6 @@ unset (doc_format_outputs)
 
 #
 
-include (GNUInstallDirs)
-include (CPackComponent)
-
 # TODO: install man pages
 
 install (DIRECTORY "${docs_output}/html" COMPONENT oranges_doc_html

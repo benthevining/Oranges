@@ -28,6 +28,7 @@ The default target will have the following compiler definitions added:
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesDefaultTarget
+- Oranges::OrangesDefaultCXXTarget : links to OrangesDefaultTarget, but also has some default C++ compile features added. The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,11 +119,14 @@ set_property (
 
 target_compile_definitions (
     OrangesDefaultTarget
-    INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX;UNICODE;STRICT;_CRT_SECURE_NO_WARNINGS>")
+    INTERFACE "$<$<PLATFORM_ID:Windows>:NOMINMAX>" "$<$<PLATFORM_ID:Windows>:UNICODE>"
+              "$<$<PLATFORM_ID:Windows>:STRICT>"
+              "$<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>")
 
 target_compile_options (
-    OrangesDefaultTarget INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
-                                   "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/EHsc>")
+    OrangesDefaultTarget
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/wd4068;/MP>"
+              "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>")
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
@@ -145,22 +149,6 @@ target_compile_definitions (
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")
 
-set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
-
-target_compile_options (
-    OrangesDefaultTarget
-    INTERFACE
-        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/Od;/Zi>"
-        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:/Ox;-GL>"
-        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
-        "$<$<AND:${compiler_gcclike},$<CONFIG:MINSIZEREL>>:-Os>"
-        "$<$<AND:${compiler_gcclike},${config_is_release},$<NOT:$<CONFIG:MINSIZEREL>>>:-O3;-Ofast>"
-        "$<$<AND:${compiler_gcclike},$<OR:${config_is_debug},$<CONFIG:RELWITHDEBINFO>>>:-g>")
-
-target_link_libraries (OrangesDefaultTarget
-                       INTERFACE "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_release}>:-LTCG>")
-
-unset (compiler_gcclike)
 unset (config_is_debug)
 unset (config_is_release)
 
@@ -255,8 +243,71 @@ if (ORANGES_MAINTAINER_BUILD)
 
 endif ()
 
+add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
+
 #
 
-install (TARGETS OrangesDefaultTarget EXPORT OrangesTargets)
+add_library (OrangesDefaultCXXTarget INTERFACE)
 
-add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
+set_target_properties (OrangesDefaultCXXTarget PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
+                                                          CXX_EXTENSIONS OFF)
+
+target_link_libraries (OrangesDefaultCXXTarget INTERFACE Oranges::OrangesDefaultTarget)
+
+target_compile_features (
+    OrangesDefaultCXXTarget
+    INTERFACE # cmake-format: sortable
+              cxx_alias_templates
+              cxx_alignas
+              cxx_alignof
+              cxx_attributes
+              cxx_auto_type
+              cxx_constexpr
+              cxx_decltype
+              cxx_decltype_auto
+              cxx_default_function_template_args
+              cxx_defaulted_functions
+              cxx_defaulted_move_initializers
+              cxx_delegating_constructors
+              cxx_deleted_functions
+              cxx_explicit_conversions
+              cxx_final
+              cxx_func_identifier
+              cxx_generalized_initializers
+              cxx_generic_lambdas
+              cxx_inheriting_constructors
+              cxx_inline_namespaces
+              cxx_lambda_init_captures
+              cxx_lambdas
+              cxx_noexcept
+              cxx_nonstatic_member_init
+              cxx_nullptr
+              cxx_override
+              cxx_range_for
+              cxx_raw_string_literals
+              cxx_relaxed_constexpr
+              cxx_return_type_deduction
+              cxx_rvalue_references
+              cxx_sizeof_member
+              cxx_static_assert
+              cxx_std_20
+              cxx_strong_enums
+              cxx_template_template_parameters
+              cxx_trailing_return_types
+              cxx_user_literals
+              cxx_variable_templates
+              cxx_variadic_templates)
+
+target_compile_options (
+    OrangesDefaultCXXTarget
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc;/GR>"
+              "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
+              "$<$<CXX_COMPILER_ID:GNU>:-fimplicit-constexpr;-fconcepts>"
+              "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
+              "$<$<CXX_COMPILER_ID:Clang>:-ffile-reproducible>")
+
+add_library (Oranges::OrangesDefaultCXXTarget ALIAS OrangesDefaultCXXTarget)
+
+#
+
+install (TARGETS OrangesDefaultTarget OrangesDefaultCXXTarget EXPORT OrangesTargets)

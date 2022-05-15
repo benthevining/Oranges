@@ -61,7 +61,12 @@ set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
 
 target_compile_options (
     OrangesCoverageFlags
-    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>")
+    INTERFACE
+        "$<$<AND:$<CXX_COMPILER_ID:MSVC>,${config_is_debug}>:/fsanitize-coverage=edge>"
+        "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0;-g;--coverage>"
+        "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_debug}>:-ggdb;-fno-merge-debug-strings;-ftest-coverage>"
+        "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_debug}>:-fcoverage-mapping;-fdebug-macro;-g3>"
+    )
 
 target_link_options (OrangesCoverageFlags INTERFACE
                      "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
