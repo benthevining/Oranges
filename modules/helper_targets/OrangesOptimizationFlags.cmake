@@ -102,7 +102,7 @@ set (
     -fmodulo-sched-allow-regmoves)
 
 set (clang_optimization_flags # cmake-format: sortable
-                              -fast -fastcp -fastf -fvectorize)
+                              -fvectorize)
 
 target_compile_options (
     OrangesOptimizationFlags

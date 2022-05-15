@@ -357,7 +357,6 @@ function (oranges_generate_platform_header)
 
     _oranges_plat_header_compiler_id_opt ("Clang" ORANGES_CLANG)
     _oranges_plat_header_compiler_id_opt ("GNU" ORANGES_GCC)
-    _oranges_plat_header_compiler_id_opt ("GCC" ORANGES_GCC)
     _oranges_plat_header_compiler_id_opt ("MSVC" ORANGES_MSVC)
     _oranges_plat_header_compiler_id_opt ("Intel" ORANGES_INTEL_COMPILER)
 
@@ -401,9 +400,6 @@ function (oranges_generate_platform_header)
 
     set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
                                                                         "${input_file}")
-
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                 "${generated_file}")
 
     set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
                                  PROPERTIES GENERATED ON)

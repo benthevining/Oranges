@@ -302,7 +302,7 @@ target_compile_options (
     OrangesDefaultCXXTarget
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc;/GR>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
-              "$<$<CXX_COMPILER_ID:GNU>:-fimplicit-constexpr;-fconcepts>"
+              "$<$<CXX_COMPILER_ID:GNU>:-fconcepts>"
               "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
               "$<$<CXX_COMPILER_ID:Clang>:-ffile-reproducible>")
 

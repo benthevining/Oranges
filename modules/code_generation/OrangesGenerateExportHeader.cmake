@@ -105,9 +105,6 @@ function (oranges_generate_export_header)
 
     set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                 "${generated_file}")
-
     set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
                                  PROPERTIES GENERATED ON)
 

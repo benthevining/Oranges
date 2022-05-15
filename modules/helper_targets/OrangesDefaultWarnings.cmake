@@ -81,7 +81,6 @@ set (
 set (
     gcc_comp_opts
     # cmake-format: sortable
-    -Wabi
     -Wextra
     -Wno-implicit-fallthrough
     -Wno-maybe-uninitialized
@@ -111,28 +110,17 @@ set (
     -Wunused-variable)
 
 set (gcclike_cxx_opts # cmake-format: sortable
-                      -Wnon-virtual-dtor)
+                      -Wnon-virtual-dtor -Wzero-as-null-pointer-constant)
 
 set (
     gcc_cxx_opts
     # cmake-format: sortable
-    -Wdelete-non-virtual-dtor
-    -Wmismatched-new-delete
-    -Wnoexcept
-    -Wrange-loop-construct
-    -Wsuggest-final-methods
-    -Wsuggest-final-types
-    -Wsuggest-override
-    -Wzero-as-null-pointer-constant)
+    -Wdelete-non-virtual-dtor -Wmismatched-new-delete -Wnoexcept -Wrange-loop-construct
+    -Wsuggest-override)
 
-set (
-    clang_cxx_opts
-    # cmake-format: sortable
-    -Winconsistent-missing-destructor-override -Woverloaded-virtual -Wunused-private-field
-    -Wzero-as-null-pointer-constant)
-
-set (gcc_debug_only_opts # cmake-format: sortable
-                         -fharden-compares -fharden-conditional-branches)
+set (clang_cxx_opts
+     # cmake-format: sortable
+     -Winconsistent-missing-destructor-override -Woverloaded-virtual -Wunused-private-field)
 
 target_compile_options (
     OrangesDefaultWarnings
@@ -146,13 +134,11 @@ target_compile_options (
               "$<$<COMPILE_LANG_AND_ID:OBJCXX,GNU>:${gcc_cxx_opts}>"
               "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
               "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>"
-              "$<$<AND:${config_is_debug},$<CXX_COMPILER_ID:GNU>>:${gcc_debug_only_opts}>"
               "$<$<AND:${config_is_debug},$<CXX_COMPILER_ID:Clang>>:-fjmc>")
 
 unset (gcclike_comp_opts)
 unset (gcc_comp_opts)
 unset (clang_comp_opts)
-unset (gcc_debug_only_opts)
 unset (config_is_debug)
 unset (gcclike_cxx_opts)
 unset (gcc_cxx_opts)

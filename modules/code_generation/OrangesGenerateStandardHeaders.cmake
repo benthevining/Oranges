@@ -122,9 +122,6 @@ function (oranges_generate_standard_headers)
         set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND CMAKE_CONFIGURE_DEPENDS
                                                             "${input_file}")
 
-        set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                     "${configured_file}")
-
         set_source_files_properties ("${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
                                      PROPERTIES GENERATED ON)
 
