@@ -36,8 +36,8 @@ A library of CMake modules.
   * OrangesAppUtilities
   * OrangesAssetsHelpers
   * OrangesClapFormat
-  * OrangesCoverageFlags
   * OrangesCreateAAXSDKTarget
+  * OrangesDebugTarget
   * OrangesDefaultCPackSettings
   * OrangesDefaultTarget
   * OrangesDefaultWarnings
