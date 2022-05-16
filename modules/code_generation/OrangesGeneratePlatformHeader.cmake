@@ -36,22 +36,33 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 
 .. table:: OS type macros
 
-+---------------------+-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | Macro name          | Cache variable  | Value          | Notes                                                                                                                                       |
-+=====================+=================+==============================================================================================================================================================+
++=====================+=================+================+=============================================================================================================================================+
 | <baseName>_UNIX     | PLAT_UNIX       | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_POSIX    | PLAT_POSIX      | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_WINDOWS  | PLAT_WIN        | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_MINGW    | PLAT_MINGW      | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_LINUX    | PLAT_LINUX      | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_APPLE    | PLAT_APPLE      | 0 or 1         | True if the target platform is any Apple OS                                                                                                 |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_OSX      | PLAT_MACOSX     | 0 or 1         | True if the target platform is desktop MacOS.                                                                                               |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_IOS      | PLAT_IOS        | 0 or 1         | True for any iOS-like OS (iOS, tvOS, or watchOS)                                                                                            |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_ANDROID  | PLAT_ANDROID    | 0 or 1         |                                                                                                                                             |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_MOBILE   | PLAT_MOBILE     | 0 or 1         | True for iOS, watchOS, or Android                                                                                                           |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_EMBEDDED | PLAT_EMBEDDED   | 0 or 1         | True if the target is an embedded platform. This defaults to true if CMAKE_SYSTEM_NAME is Generic.                                          |
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | <baseName>_OS_TYPE  | PLAT_OS_TYPE    | String literal | A string literal describing the OS type being run. Defaults to one of 'MacOSX', 'iOS', 'tvOS', 'watchOS', 'Windows', 'Linux', or 'Android'. |
-+---------------------+-----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------+-----------------+----------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 .. table: Compiler type macros
 
@@ -59,11 +70,17 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 | Macro name                | Cache variable             | Value             | Notes                                                                                                |
 +===========================+============================+===================+======================================================================================================+
 | <baseName>_CLANG          | PLAT_CLANG_<lang>          | 0 or 1            | True if the compiler is Clang or AppleClang                                                          |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_GCC            | PLAT_GCC_<lang>            | 0 or 1            |                                                                                                      |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_MSVC           | PLAT_MSVC_<lang>           | 0 or 1            |                                                                                                      |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_INTEL_COMPILER | PLAT_INTEL_COMPILER_<lang> | 0 or 1            |                                                                                                      |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_CRAY_COMPILER  | PLAT_CRAY_COMPILER_<lang>  | 0 or 1            |                                                                                                      |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_ARM_COMPILER   | PLAT_ARM_COMPILER_<lang>   | 0 or 1            |                                                                                                      |
++---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 | <baseName>_COMPILER_TYPE  | PLAT_COMPILER_TYPE_<lang>  | String literal    | A string literal describing the compiler used. Either Clang, GCC, MSVC, Intel, ARM, Cray, or Unknown |
 +---------------------------+----------------------------+-------------------+------------------------------------------------------------------------------------------------------+
 
@@ -73,8 +90,11 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 | Macro name                        | Cache variable                     | Value           | Notes                                                                         |
 +===================================+====================================+=================+===============================================================================+
 | <baseName>_COMPILER_VERSION_MAJOR | PLAT_COMPILER_VERSION_MAJOR_<lang> | Numeric literal | Number representing the compiler's major version, if available; otherwise, 0. |
++-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
 | <baseName>_COMPILER_VERSION_MINOR | PLAT_COMPILER_VERSION_MINOR_<lang> | Numeric literal | Number representing the compiler's minor version, if available; otherwise, 0. |
++-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
 | <baseName>_COMPILER_VERSION_PATCH | PLAT_COMPILER_VERSION_PATCH_<lang> | Numeric literal | Number representing the compiler's patch version, if available; otherwise, 0. |
++-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
 | <baseName>_COMPILER_VERSION       | PLAT_COMPILER_VERSION_<lang>       | String literal  | A string literal describing the version of the compiler being used            |
 +-----------------------------------+------------------------------------+-----------------+-------------------------------------------------------------------------------+
 
@@ -84,11 +104,17 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 | Macro name               | Cache variable            | Value          | Notes                                                              |
 +==========================+===========================+================+====================================================================+
 | <baseName>_ARM           | PLAT_ARM                  | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_INTEL         | PLAT_INTEL                | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_CPU_TYPE      | PLAT_CPU_TYPE             | String literal | A string literal describing the CPU. Either ARM, Intel, or Unknown |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_32BIT         | PLAT_32BIT                | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_64BIT         | PLAT_64BIT                | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_BIG_ENDIAN    | PLAT_BIG_ENDIAN_<lang>    | 0 or 1         |                                                                    |
++--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 | <baseName>_LITTLE_ENDIAN | PLAT_LITTLE_ENDIAN_<lang> | 0 or 1         |                                                                    |
 +--------------------------+---------------------------+----------------+--------------------------------------------------------------------+
 
@@ -98,8 +124,11 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 | Macro name          | Cache variable | Value  |
 +=====================+================+========+
 | <baseName>_ARM_NEON | PLAT_ARM_NEON  | 0 or 1 |
++---------------------+----------------+--------+
 | <baseName>_AVX      | PLAT_AVX       | 0 or 1 |
++---------------------+----------------+--------+
 | <baseName>_AVX512   | PLAT_AVX512    | 0 or 1 |
++---------------------+----------------+--------+
 | <baseName>_SSE      | PLAT_SSE       | 0 or 1 |
 +---------------------+----------------+--------+
 
@@ -119,11 +148,15 @@ include (OrangesCmakeDevTools)
 option (PLAT_DISABLE_SIMD
         "Disable all SIMD macros in generated platform headers (ie, set them all to 0)" OFF)
 
-set (PLAT_DEFAULT_TESTING_LANGUAGE CXX CACHE STRING
-        "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration")
+set (
+    PLAT_DEFAULT_TESTING_LANGUAGE
+    CXX
+    CACHE
+        STRING
+        "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration"
+    )
 
-set_property (CACHE PLAT_DEFAULT_TESTING_LANGUAGE PROPERTY
-    STRINGS "CXX;C;OBJCXX;OBJC;Fortran;ASM")
+set_property (CACHE PLAT_DEFAULT_TESTING_LANGUAGE PROPERTY STRINGS "CXX;C;OBJCXX;OBJC;Fortran;ASM")
 
 include (scripts/plat_header_set_options)
 
@@ -170,6 +203,21 @@ function (oranges_generate_platform_header)
 
     set (input_file "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/platform_header.h")
     set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
+
+    # NB. configure_file doesn't expand variable names recursively
+    set (PLAT_CLANG "${PLAT_CLANG_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_GCC "${PLAT_GCC_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_MSVC "${PLAT_MSVC_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_INTEL_COMPILER "${PLAT_INTEL_COMPILER_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_CRAY_COMPILER "${PLAT_CRAY_COMPILER_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_ARM_COMPILER "${PLAT_ARM_COMPILER_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_COMPILER_TYPE "${PLAT_COMPILER_TYPE_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_COMPILER_VERSION_MAJOR "${PLAT_COMPILER_VERSION_MAJOR_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_COMPILER_VERSION_MINOR "${PLAT_COMPILER_VERSION_MINOR_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_COMPILER_VERSION_PATCH "${PLAT_COMPILER_VERSION_PATCH_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_COMPILER_VERSION "${PLAT_COMPILER_VERSION_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_BIG_ENDIAN "${PLAT_BIG_ENDIAN_${ORANGES_ARG_LANGUAGE}}")
+    set (PLAT_LITTLE_ENDIAN "${PLAT_LITTLE_ENDIAN_${ORANGES_ARG_LANGUAGE}}")
 
     configure_file ("${input_file}" "${generated_file}" @ONLY NEWLINE_STYLE UNIX)
 

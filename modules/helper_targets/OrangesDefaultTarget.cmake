@@ -140,12 +140,12 @@ target_compile_options (
               "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
               "$<${compiler_intel}:${intel_opts}>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<NOT:$<CONFIG:MINSIZEREL>>>:-g>"
+              "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fmessage-length=0>"
               "$<$<CXX_COMPILER_ID:GNU>:-march=native>")
 
-if(PLAT_ANDROID)
-    target_compile_options(OrangesDefaultTarget INTERFACE
-        "$<$<CXX_COMPILER_ID:GNU>:-mandroid>")
-endif()
+if (PLAT_ANDROID)
+    target_compile_options (OrangesDefaultTarget INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-mandroid>")
+endif ()
 
 unset (intel_opts)
 
@@ -220,9 +220,10 @@ if (APPLE)
 
     set_property (GLOBAL PROPERTY ORANGES_MAC_NATIVE_ARCH "${osx_native_arch}")
 
-    include (OrangdsGeneratePlatformHeader)
+    include (OrangesGeneratePlatformHeader)
 
-    if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE AND ("${CMAKE_${PLAT_DEFAULT_TESTING_LANGUAGE}_COMPILER_ID}" MATCHES Clang))
+    if (("${osx_native_arch}" STREQUAL "arm64") AND ORANGES_MAC_UNIVERSAL_BINARY AND XCODE
+        AND ("${CMAKE_${PLAT_DEFAULT_TESTING_LANGUAGE}_COMPILER_ID}" MATCHES Clang))
 
         set_target_properties (
             OrangesDefaultTarget
@@ -265,7 +266,9 @@ endif ()
 
 include (OrangesDebugTarget)
 
-target_link_libraries(OrangesDefaultTarget INTERFACE $<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>)
+target_link_libraries (
+    OrangesDefaultTarget
+    INTERFACE $<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>)
 
 add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 

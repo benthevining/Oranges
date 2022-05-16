@@ -69,13 +69,11 @@ set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
 
 target_compile_options (
     OrangesOptimizationFlags
-    INTERFACE
-              "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
+    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_debug}>:-Og>"
               "$<$<AND:${compiler_gcclike},$<CONFIG:MINSIZEREL>>:-Os>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<CONFIG:MINSIZEREL>>:-Oz;-fconserve-stack>"
-              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3;-Ofast>"
-              )
+              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3;-Ofast>")
 
 set (
     gcclike_opts
@@ -93,8 +91,7 @@ set (
     -fgcse-sm
     -floop-interchange
     -fmodulo-sched
-    -fmodulo-sched-allow-regmoves
-    -minline-stringops-dynamically)
+    -fmodulo-sched-allow-regmoves)
 
 set (clang_optimization_flags # cmake-format: sortable
                               -fvectorize)
@@ -184,41 +181,13 @@ unset (cray_release_opts)
 
 include (OrangesGeneratePlatformHeader)
 
-if(PLAT_ARM)
+if (PLAT_SSE)
+    target_compile_options (OrangesOptimizationFlags INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-msse>")
+endif ()
 
-    set (arm_options
-        # cmake-format: sortable
-        -mfloat-abi=hard
-        -mprint-tune-info)
-
-    if(PLAT_BIG_ENDIAN_${PLAT_DEFAULT_TESTING_LANGUAGE})
-        list (APPEND arm_options -mbig-endian)
-    else()
-        list (APPEND arm_options -mlittle-endian)
-    endif()
-
-    if(PLAT_ARM_NEON)
-        list (APPEND arm_options -mfpu=neon)
-
-        target_compile_options(OrangesOptimizationFlags INTERFACE
-            "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_release}>:-funsafe-math-optimizations>")
-    endif()
-
-    target_compile_options (OrangesOptimizationFlags INTERFACE
-        "$<$<CXX_COMPILER_ID:GNU>:${arm_options}>")
-
-    unset (arm_options)
-endif()
-
-if(PLAT_SSE)
-    target_compile_options(OrangesOptimizationFlags INTERFACE
-        "$<$<CXX_COMPILER_ID:GNU>:-msse>")
-endif()
-
-if(PLAT_AVX)
-    target_compile_options(OrangesOptimizationFlags INTERFACE
-        "$<$<CXX_COMPILER_ID:GNU>:-mavx>")
-endif()
+if (PLAT_AVX)
+    target_compile_options (OrangesOptimizationFlags INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-mavx>")
+endif ()
 
 unset (config_is_debug)
 unset (config_is_release)

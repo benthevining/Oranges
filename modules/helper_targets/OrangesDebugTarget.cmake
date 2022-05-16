@@ -1,11 +1,23 @@
-include_guard(GLOBAL)
+# ======================================================================================
+#    ____  _____            _   _  _____ ______  _____
+#   / __ \|  __ \     /\   | \ | |/ ____|  ____|/ ____|
+#  | |  | | |__) |   /  \  |  \| | |  __| |__  | (___
+#  | |  | |  _  /   / /\ \ | . ` | | |_ |  __|  \___ \
+#  | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) |
+#   \____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
+#
+#  This file is part of the Oranges open source CMake library and is licensed under the terms of the GNU Public License.
+#
+# ======================================================================================
+
+include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if(TARGET Oranges::OrangesDebugTarget)
-    message(WARNING "Target Oranges::OrangesDebugTarget already exists!")
-    return()
-endif()
+if (TARGET Oranges::OrangesDebugTarget)
+    message (WARNING "Target Oranges::OrangesDebugTarget already exists!")
+    return ()
+endif ()
 
 #
 
@@ -23,7 +35,7 @@ unset (debug_configs)
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
-set (compiler_gcclike "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>>")
+set (compiler_gcclike "$<CXX_COMPILER_ID:GNU,Clang,AppleClang>")
 
 set (compiler_gcc "$<CXX_COMPILER_ID:GNU>")
 
@@ -49,20 +61,20 @@ set (gcc_flags # cmake-format: sortable
                -fno-merge-debug-strings -ftest-coverage -ggdb)
 
 set (clang_flags # cmake-format: sortable
-                 -fcoverage-mapping -fdebug-macro -g3)
+                 -fcoverage-mapping -fdebug-macro -fprofile-instr-generate -g3)
 
 set (msvc_flags # cmake-format: sortable
-    /Z7
-    /fsanitize-coverage=edge)
+                /fsanitize-coverage=edge /Z7)
 
-target_compile_options (OrangesDebugTarget INTERFACE
-    "$<$<AND:${config_is_debug},${compiler_msvc}>:${msvc_flags}>"
-    "$<$<AND:${config_is_debug},${compiler_intel}>:${intel_cov_flags}>"
-    "$<$<AND:${config_is_debug},${compiler_gcclike}>:${gcclike_flags}>"
-    "$<$<AND:${config_is_debug},${compiler_gcc}>:${gcc_flags}>"
-    "$<$<AND:${config_is_debug},${compiler_clang}>:${clang_flags}>"
-    "$<$<AND:${config_is_debug},${compiler_arm}>:-g>"
-    "$<$<AND:${config_is_debug},${compiler_cray}>:-G0>")
+target_compile_options (
+    OrangesDebugTarget
+    INTERFACE "$<$<AND:${config_is_debug},${compiler_msvc}>:${msvc_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_intel}>:${intel_cov_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_gcclike}>:${gcclike_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_gcc}>:${gcc_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_clang}>:${clang_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_arm}>:-g>"
+              "$<$<AND:${config_is_debug},${compiler_cray}>:-G0>")
 
 unset (intel_cov_flags)
 unset (gcclike_flags)
@@ -75,10 +87,10 @@ target_link_options (OrangesDebugTarget INTERFACE
 
 include (OrangesGeneratePlatformHeader)
 
-if(PLAT_APPLE)
-    target_compile_options (OrangesDebugTarget INTERFACE
-        "$<$<AND:${config_is_debug},${compiler_gcc}>:-gfull>")
-endif()
+if (PLAT_APPLE)
+    target_compile_options (OrangesDebugTarget
+                            INTERFACE "$<$<AND:${config_is_debug},${compiler_gcc}>:-gfull>")
+endif ()
 
 #
 
