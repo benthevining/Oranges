@@ -56,6 +56,7 @@ A library of CMake modules.
   * OrangesJuceUtilities
   * OrangesOptimizationFlags
   * OrangesPluginUtilities
+  * OrangesSWIG
   * OrangesSetDefaultCpackGenerator
   * OrangesSourceFileUtils
   * OrangesUninstallTarget
