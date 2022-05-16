@@ -15,7 +15,7 @@
 OrangesGenerateExportHeader
 ----------------------------
 
-This module is a thin wrapper around CMake's generate_export_header, and adds the :command:`oranges_generate_export_header()` command.
+This module is a thin wrapper around CMake's :command:`generate_export_header()`, and adds the :command:`oranges_generate_export_header()` command.
 
 .. command:: oranges_generate_export_header
 
@@ -26,11 +26,22 @@ This module is a thin wrapper around CMake's generate_export_header, and adds th
                                    [HEADER <exportHeaderName>]
                                    [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
+``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesABIControlledLibrary
 
-Note that OrangesABIControlledLibrary is a build-only target. If you link against it, you must do so using the ``$<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>`` syntax.
+``Oranges::OrangesABIControlledLibrary``
+
+Provides default symbol visibility control flags.
+
+.. seealso ::
+
+    Module :module:`GenerateExportHeader`
+        OrangesGenerateExportHeader is a thin wrapper around this module shipped by CMake
+
+    Module :module:`OrangesGenerateStandardHeaders`
+        An aggregate module that includes this one
 
 #]=======================================================================]
 
@@ -50,10 +61,6 @@ if (NOT TARGET Oranges::OrangesABIControlledLibrary)
 
     add_library (Oranges::OrangesABIControlledLibrary ALIAS OrangesABIControlledLibrary)
 endif ()
-
-option (ORANGES_REMOVE_DEPRECATED_CODE "Removes deprecated code from preprocessed output" OFF)
-
-mark_as_advanced (FORCE ORANGES_REMOVE_DEPRECATED_CODE)
 
 #
 
@@ -91,10 +98,6 @@ function (oranges_generate_export_header)
 
     target_link_libraries ("${ORANGES_ARG_TARGET}" "${private_vis}"
                            $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
-
-    if (ORANGES_REMOVE_DEPRECATED_CODE)
-        set (no_build_deprecated DEFINE_NO_DEPRECATED)
-    endif ()
 
     generate_export_header ("${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
                             EXPORT_FILE_NAME "${ORANGES_ARG_HEADER}" ${no_build_deprecated})

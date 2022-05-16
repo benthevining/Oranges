@@ -20,8 +20,6 @@ The Oranges CMake library.
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - ORANGES_BUILD_DOCS
-- ORANGES_INCLUDE_ALL : If on, all modules are included when the Oranges project is added (instead of allowing you to dynamically load only the ones you need)
-- ORANGES_NO_TARGETS : If on, does not bring the Oranges utility targets into the build tree. Use of this option is not recommended.
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,16 +44,6 @@ project (
     DESCRIPTION "CMake modules, scripts, and utilities"
     HOMEPAGE_URL "www.github.com/benthevining/Oranges"
     LANGUAGES NONE)
-
-option (
-    ORANGES_INCLUDE_ALL
-    "If on, all modules are included when the Oranges project is added (instead of allowing you to dynamically load only the ones you need)"
-    OFF)
-
-option (
-    ORANGES_NO_TARGETS
-    "If on, does not bring the Oranges utility targets into the build tree. Use of this option is not recommended."
-    OFF)
 
 option (CMAKE_FIND_PACKAGE_PREFER_CONFIG
         "Prefer config files to find modules in find_package search" ON)
@@ -109,16 +97,9 @@ mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
 #
 
-if (ORANGES_INCLUDE_ALL)
+include (OrangesGenerateExportHeader)
 
-    add_subdirectory (modules)
-
-elseif (NOT ORANGES_NO_TARGETS)
-
-    include (OrangesGenerateExportHeader)
-
-    add_subdirectory (modules/helper_targets)
-endif ()
+add_subdirectory (modules/helper_targets)
 
 #
 

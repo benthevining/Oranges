@@ -22,7 +22,10 @@ Inclusion style: Once globally, preferably from the top-level project
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- wipe_cache
+
+``wipe_cache``
+
+A utility target that when executed, deletes the directory where :command:`oranges_fetch_repository()` caches its downloads, as well as :variable:`FETCHCONTENT_BASE_DIR`.
 
 #]=======================================================================]
 

@@ -15,7 +15,7 @@
 OrangesFetchRepository
 -------------------------
 
-This module is a light wrapper around CMake's FetchContent, and provides the function :command:`oranges_fetch_repository()`.
+This module is a light wrapper around CMake's :module:`FetchContent` module, and provides the function :command:`oranges_fetch_repository()`.
 
 .. command:: oranges_fetch_repository
 
@@ -33,33 +33,33 @@ This module is a light wrapper around CMake's FetchContent, and provides the fun
                              [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
                              [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
 
-Fetches a git repository at configure time, with options for routing the call to ``find_package()`` or a local location.
+Fetches a git repository at configure time, with options for routing the call to :command:`find_package()` or a local location.
 
 Output variables (set in the scope of the caller):
 
 - ``<name>_SOURCE_DIR``
 - ``<name>_BINARY_DIR``
 
-If the variable ``FETCHCONTENT_SOURCE_DIR_<name>`` is set, this function will simply call ``add_subdirectory()`` on that directory.
+If the variable :variable:`FETCHCONTENT_SOURCE_DIR_<name>` is set, this function will simply call :command:`add_subdirectory()` on that directory.
 
-The variables ``GITHUB_USERNAME``, ``GITHUB_ACCESS_TOKEN``, ``BITBUCKET_USERNAME``, and ``BITBUCKET_PASSWORD`` can be set to enable fetching private/protected repositories.
+The environment variables :envvar:`GITHUB_USERNAME`, :envvar:`GITHUB_ACCESS_TOKEN`, :envvar:`BITBUCKET_USERNAME`, and :envvar:`BITBUCKET_PASSWORD` can be set to enable fetching private/protected repositories.
 
 ``GIT_TAG`` can be an exact commit ref, or the name of a branch.
 
-If ``DOWNLOAD_ONLY`` is present, ``add_subdirectory()`` will not be called on the fetched repository.
+If ``DOWNLOAD_ONLY`` is present, :command:`add_subdirectory()` will not be called on the fetched repository.
 
-If ``CMAKE_SUBDIR`` is set, ``add_subdirectory()`` will be called on ``<pkgName_SOURCE_DIR>/${CMAKE_SUBDIR}`` (if a CMakeLists.txt exists in that directory).
+If ``CMAKE_SUBDIR`` is set, :command:`add_subdirectory()` will be called on ``<pkgName_SOURCE_DIR>/${CMAKE_SUBDIR}`` (if a CMakeLists.txt exists in that directory).
 This is useful for projects which have their CMakeLists.txt in a subdirectory, instead of in the root of their source tree.
 
 If the ``FULL`` option is present, the full git history will be pulled (the default behavior is a shallow clone).
 
 If the ``QUIET`` option is present, this function will not output status updates.
 
-If the ``EXCLUDE_FROM_ALL`` option is present, it will be forwarded to the ``add_subdirectory()`` call for the fetched dependency (if ``add_subdirectory()`` is called).
+If the ``EXCLUDE_FROM_ALL`` option is present, it will be forwarded to the :command:`add_subdirectory()` call for the fetched dependency (if :command:`add_subdirectory()` is called).
 
-If the ``NEVER_LOCAL`` option is present, then this function will never be routed to a ``find_package()`` call.
+If the ``NEVER_LOCAL`` option is present, then this function will never be routed to a :command:`find_package()` call.
 
-``CMAKE_OPTIONS`` is an optional list of space-separated key-value pairs, which will be set as variables before calling ``add_subdirectory()`` on the fetched dependency (if ``add_subdirectory()`` is called).
+``CMAKE_OPTIONS`` is an optional list of space-separated key-value pairs, which will be set as variables before calling :command:`add_subdirectory()` on the fetched dependency.
 
 ``GIT_STRATEGY`` may be one of ``CHECKOUT``, ``REBASE``, or ``REBASE_CHECKOUT`` and defines how the git repository is checked out and pulled.
 
@@ -69,23 +69,36 @@ If the ``NO_SUBMODULES`` option is present, no git submodules will be pulled or 
 If the ``NO_RECURSE_SUBMODULES`` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
 If neither option is given, all submodules will be updated recursively.
 
-
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST - when ON, the function `oranges_fetch_repository()` will first try a normal `find_package()` call. Defaults to OFF.
 
-Cache variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FETCHCONTENT_BASE_DIR : defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+.. cmake:variable:: ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
+
+When ON, the function :command:`oranges_fetch_repository()` will first try a normal :commdn:`find_package()` call. Defaults to OFF.
+
+.. cmake:variable:: FETCHCONTENT_BASE_DIR
+
+Defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ${CMAKE_SOURCE_DIR}/Cache.
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- GITHUB_USERNAME
-- GITHUB_ACCESS_TOKEN
-- GITLAB_USERNAME
-- GITLAB_PASSWORD
-- BITBUCKET_USERNAME
-- BITBUCKET_PASSWORD
+
+.. cmake:envvar:: GITHUB_USERNAME
+
+.. cmake:envvar:: GITHUB_ACCESS_TOKEN
+
+.. cmake:envvar:: GITLAB_USERNAME
+
+.. cmake:envvar:: GITLAB_PASSWORD
+
+.. cmake:envvar:: BITBUCKET_USERNAME
+
+.. cmake:envvar:: BITBUCKET_PASSWORD
+
+.. seealso ::
+
+    Module :module:`FetchContent`
+        The native CMake module that does most of the heavy lifting here
 
 #]=======================================================================]
 

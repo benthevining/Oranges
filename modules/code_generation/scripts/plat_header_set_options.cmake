@@ -14,6 +14,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (CheckCXXSymbolExists)
+
 #
 
 set (doc_plat_os_type "String literal describing the target OS")
@@ -190,21 +192,20 @@ endif ()
 
 if (NOT ((DEFINED PLAT_ARM) OR (DEFINED CACHE{PLAT_ARM}) OR (DEFINED PLAT_INTEL)
          OR (DEFINED CACHE{PLAT_INTEL})))
-    try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                 "${CMAKE_CURRENT_LIST_DIR}/check_arm.cpp" OUTPUT_VARIABLE compile_output)
 
-    string (REGEX REPLACE ".*ORANGES_ARM ([a-zA-Z0-9_-]*).*" "\\1" is_arm "${compile_output}")
+    foreach (symbol IN ITEMS __arm__ __arm64__ _M_ARM)
+        check_cxx_symbol_exists ("${symbol}" cstdlib is_arm)
 
-    if (is_arm)
-        _oph_set_ifndef (PLAT_ARM 1 CACHE BOOL "${doc_plat_arm}")
-        _oph_set_ifndef (PLAT_INTEL 0 CACHE BOOL "${doc_plat_intel}")
-    else ()
-        _oph_set_ifndef (PLAT_ARM 0 CACHE BOOL "${doc_plat_arm}")
-        _oph_set_ifndef (PLAT_INTEL 1 CACHE BOOL "${doc_plat_intel}")
-    endif ()
+        if (is_arm)
+            _oph_set_ifndef (PLAT_ARM 1 CACHE BOOL "${doc_plat_arm}")
+            _oph_set_ifndef (PLAT_INTEL 0 CACHE BOOL "${doc_plat_intel}")
+            break ()
+        endif ()
+    endforeach ()
 
-    unset (compile_result)
-    unset (compile_output)
+    _oph_set_ifndef (PLAT_ARM 0 CACHE BOOL "${doc_plat_arm}")
+    _oph_set_ifndef (PLAT_INTEL 1 CACHE BOOL "${doc_plat_intel}")
+
     unset (is_arm)
 endif ()
 
@@ -237,21 +238,19 @@ endif ()
 
 if (NOT (DEFINED PLAT_ARM_NEON OR DEFINED CACHE{PLAT_ARM_NEON}))
     if (PLAT_ARM)
-        try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                     "${CMAKE_CURRENT_LIST_DIR}/check_arm_neon.cpp" OUTPUT_VARIABLE compile_output)
 
-        string (REGEX REPLACE ".*ORANGES_ARM_NEON ([a-zA-Z0-9_-]*).*" "\\1" has_arm_neon
-                              "${compile_output}")
+        foreach (symbol IN ITEMS __ARM_NEON__ __ARM_NEON __ARMEL__)
+            check_cxx_symbol_exists ("${symbol}" cstdlib has_neon)
 
-        if (has_arm_neon)
-            _oph_set_ifndef (PLAT_ARM_NEON 1 CACHE BOOL "${doc_plat_arm_neon}")
-        else ()
-            _oph_set_ifndef (PLAT_ARM_NEON 0 CACHE BOOL "${doc_plat_arm_neon}")
-        endif ()
+            if (has_neon)
+                _oph_set_ifndef (PLAT_ARM_NEON 1 CACHE BOOL "${doc_plat_arm_neon}")
+                break ()
+            endif ()
+        endforeach ()
 
-        unset (compile_result)
-        unset (compile_output)
-        unset (has_arm_neon)
+        _oph_set_ifndef (PLAT_ARM_NEON 0 CACHE BOOL "${doc_plat_arm_neon}")
+
+        unset (has_neon)
     else ()
         _oph_set_ifndef (PLAT_ARM_NEON 0 CACHE BOOL "${doc_plat_arm_neon}")
     endif ()
@@ -263,39 +262,42 @@ unset (doc_plat_arm_neon)
 
 if (PLAT_INTEL)
     if (NOT (DEFINED PLAT_SSE OR DEFINED CACHE{PLAT_SSE}))
-        try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                     "${CMAKE_CURRENT_LIST_DIR}/check_sse.cpp" OUTPUT_VARIABLE compile_output)
+        foreach (
+            symbol IN
+            ITEMS __SSE__
+                  __SSE2__
+                  __SSE3__
+                  __SSE4_1__
+                  _M_AMD64
+                  _M_X64
+                  _M_IX86_FP)
+            check_cxx_symbol_exists ("${symbol}" cstdlib has_sse)
 
-        string (REGEX REPLACE ".*ORANGES_SSE ([a-zA-Z0-9_-]*).*" "\\1" has_sse "${compile_output}")
+            if (has_sse)
+                _oph_set_ifndef (PLAT_SSE 1 CACHE BOOL "${doc_plat_sse}")
+                break ()
+            endif ()
+        endforeach ()
 
-        if (has_sse)
-            _oph_set_ifndef (PLAT_SSE 1 CACHE BOOL "${doc_plat_sse}")
-        else ()
-            _oph_set_ifndef (PLAT_SSE 0 CACHE BOOL "${doc_plat_sse}")
-        endif ()
+        _oph_set_ifndef (PLAT_SSE 0 CACHE BOOL "${doc_plat_sse}")
 
-        unset (compile_result)
-        unset (compile_output)
         unset (has_sse)
     endif ()
 
     #
 
     if (NOT (DEFINED PLAT_AVX512 OR DEFINED CACHE{PLAT_AVX512}))
-        try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                     "${CMAKE_CURRENT_LIST_DIR}/check_avx512.cpp" OUTPUT_VARIABLE compile_output)
+        foreach (symbol IN ITEMS __AVX512CD__ __AVX512DQ__ __AVX512F__ __AVX512VL__)
+            check_cxx_symbol_exists ("${symbol}" cstdlib has_avx512)
 
-        string (REGEX REPLACE ".*ORANGES_AVX512 ([a-zA-Z0-9_-]*).*" "\\1" has_avx512
-                              "${compile_output}")
+            if (has_avx512)
+                _oph_set_ifndef (PLAT_AVX512 1 CACHE BOOL "${doc_plat_avx512}")
+                break ()
+            endif ()
+        endforeach ()
 
-        if (has_avx512)
-            _oph_set_ifndef (PLAT_AVX512 1 CACHE BOOL "${doc_plat_avx512}")
-        else ()
-            _oph_set_ifndef (PLAT_AVX512 0 CACHE BOOL "${doc_plat_avx512}")
-        endif ()
+        _oph_set_ifndef (PLAT_AVX512 0 CACHE BOOL "${doc_plat_avx512}")
 
-        unset (compile_result)
-        unset (compile_output)
         unset (has_avx512)
     endif ()
 
@@ -305,22 +307,18 @@ if (PLAT_INTEL)
         if (PLAT_AVX512)
             _oph_set_ifndef (PLAT_AVX 0 CACHE BOOL "${doc_plat_avx}")
         else ()
-            try_compile (compile_result "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
-                         "${CMAKE_CURRENT_LIST_DIR}/check_avx.cpp" OUTPUT_VARIABLE compile_output)
+            foreach (symbol IN ITEMS __AVX__ __AVX2__)
+                check_cxx_symbol_exists ("${symbol}" cstdlib has_avx)
 
-            string (REGEX REPLACE ".*ORANGES_AVX ([a-zA-Z0-9_-]*).*" "\\1" has_avx
-                                  "${compile_output}")
+                if (has_avx)
+                    _oph_set_ifndef (PLAT_AVX 1 CACHE BOOL "${doc_plat_avx}")
+                    break ()
+                endif ()
+            endforeach ()
 
-            if (has_avx)
-                _oph_set_ifndef (PLAT_AVX 1 CACHE BOOL "${doc_plat_avx}")
-            else ()
-                _oph_set_ifndef (PLAT_AVX 0 CACHE BOOL "${doc_plat_avx}")
-            endif ()
+            _oph_set_ifndef (PLAT_AVX 0 CACHE BOOL "${doc_plat_avx}")
 
-            unset (compile_result)
-            unset (compile_output)
             unset (has_avx)
-
         endif ()
     endif ()
 else ()

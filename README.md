@@ -41,7 +41,6 @@ A library of CMake modules.
   * OrangesDefaultCPackSettings
   * OrangesDefaultTarget
   * OrangesDefaultWarnings
-  * OrangesDownloadFile
   * OrangesDoxygenConfig
   * OrangesFetchRepository
   * OrangesFindPackageHelpers

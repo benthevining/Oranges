@@ -32,7 +32,25 @@ This module provides the function :command:`oranges_generate_standard_headers()`
                                       [SOURCE_GROUP_NAME <groupName>])
 
 This calls :command:`oranges_generate_export_header()` and :command:`oranges_generate_platform_header()`,
-then generates another header named ``<mainHeaderName>`` that includes all the other generated headers.
+then generates another header named ``<mainHeaderName>`` that includes the other generated headers.
+
+``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
+
+If the ``NO_AGGREGATE_HEADER`` option is present, then one "central" header that includes the other generated headers will not be created.
+
+``FEATURE_TEST_LANGUAGE`` is the language passed to :command:`oranges_generate_platform_header()` to do any compiler-specific platform introspection; defaults to CXX.
+
+All headers will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
+
+If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :command:`source_group()` command. The group will be named ``<groupName>``.
+
+.. seealso ::
+
+    Module :module:`OrangesGeneratePlatformHeader`
+        This module provides platform- and compiler-specific macro definitions
+
+    Module :module:`OrangesGenerateExportHeader`
+        This module provides symbol visibility control utilities
 
 #]=======================================================================]
 

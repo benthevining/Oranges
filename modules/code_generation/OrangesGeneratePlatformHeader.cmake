@@ -15,7 +15,7 @@
 OrangesGeneratePlatformHeader
 ------------------------------
 
-This module provides the function :command:`oranges_generate_platform_header()`.
+This module provides the function :command:`oranges_generate_platform_header()` and an extensive set of cache variables describing the current target platform.
 
 .. command:: oranges_generate_platform_header
 
@@ -30,7 +30,15 @@ This module provides the function :command:`oranges_generate_platform_header()`.
 
 Generates a header file containing various platform identifying macros for the current target platform.
 
-A useful property of this module is that including it initializes all the `PLAT_` cache variables, so you can reference them.
+Each option is initialized by the value of a corresponding cache variable, and the entire set of cache variables is initialized when this module is first included.
+
+For some of the platform introspection, a language must be specified, because the information may be compiler-specific. For these options, the cache variables are suffixed with ``<lang>``, so that multiple settings can be saved (and overridden) for different platform testing languages.
+
+A useful property of this module is that including it initializes all the ``PLAT_`` cache variables, so you can reference them even without generating a header file.
+
+``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
+
+The header will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
 
 The generated file will contain the following macros, where ``<baseName>`` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
 
@@ -132,11 +140,25 @@ The generated file will contain the following macros, where ``<baseName>`` is al
     | <baseName>_SSE      | PLAT_SSE       | 0 or 1 |
     +---------------------+----------------+--------+
 
+.. note::
+
+    Each macro used by this header file will always be defined to a value, so you should use ``#if`` to check their values, and not ``#ifdef``.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- PLAT_DISABLE_SIMD - if on, initializes all SIMD capability macros to 0.
-- PLAT_DEFAULT_TESTING_LANGUAGE - specifies the language that will be used by default if none is specified when calling :command:`oranges_generate_platform_header()`. Additionally, the first time this file is included, all cache variables will be initialized using this language.
+
+.. cmake:variable:: PLAT_DISABLE_SIMD
+
+If on, all SIMD-related macros are initialized to 0, instead of attempting to detect features present with the current toolchain and target platform.
+
+.. cmake:variable:: PLAT_DEFAULT_TESTING_LANGUAGE
+
+The language that will be used to initialize the values of language- or compiler-specific variables the first time this module is included. Defaults to CXX.
+
+.. seealso ::
+
+    Module :module:`OrangesGenerateStandardHeaders`
+        An aggregate module that includes this one
 
 #]=======================================================================]
 
