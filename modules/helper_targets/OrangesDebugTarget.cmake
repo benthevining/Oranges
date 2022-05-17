@@ -10,6 +10,21 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesDebugTarget
+-------------------------
+
+Provides an interface target with debugging and code coverage flags enabled.
+
+This target's debugging flags are designed to be as verbose as possible.
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::OrangesDebugTarget
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

@@ -17,6 +17,13 @@ OrangesOptimizationFlags
 
 Provides an interface target with some configuration-aware compiler-specific optimization flags.
 
+If the configuration being built is in the :prop_gbl:`DEBUG_CONFIGURATIONS` property, then this target adds the equivalent of ``-O0``.
+
+Otherwise, this target adds optimization flags that are designed to be as performant as possible, even at the expense of accuracy.
+For example, in compilers that support various floating point modes or options, the fastest option available is chosen.
+
+If the configuration being built is ``MINSIZEREL``, then all optimization flags that don't affect binary size are still added, and any extra flags available to tell the compiler to optimize for size are also added.
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Oranges::OrangesOptimizationFlags
@@ -31,6 +38,8 @@ if (TARGET Oranges::OrangesOptimizationFlags)
     return ()
 endif ()
 
+include (OrangesGeneratePlatformHeader)
+
 add_library (OrangesOptimizationFlags INTERFACE)
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
@@ -44,16 +53,19 @@ set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
 unset (debug_configs)
 
 set (config_is_release "$<NOT:${config_is_debug}>")
+set (config_minsizerel "$<CONFIG:MINSIZEREL>")
+set (config_relwdeb "$<CONFIG:RELWITHDEBINFO>")
+
+#
+# MSVC
 
 set (compiler_msvc "$<CXX_COMPILER_ID:MSVC>")
 
 target_compile_options (
     OrangesOptimizationFlags
-    INTERFACE "$<${compiler_msvc}:/Oi>"
-              "$<$<AND:${compiler_msvc},${config_is_debug}>:/Od;/Zi>"
-              "$<$<AND:${compiler_msvc},${config_is_release}>:/fp:fast;/GL;/Gw;/Qpar>"
-              "$<$<AND:${compiler_msvc},${config_is_release}>:/Ox;/Ot>"
-              "$<$<AND:${compiler_msvc},$<CONFIG:MINSIZEREL>>:/O1;/Os>")
+    INTERFACE "$<${compiler_msvc}:/Oi>" "$<$<AND:${compiler_msvc},${config_is_debug}>:/Od;/Zi>"
+              "$<$<AND:${compiler_msvc},${config_is_release}>:/fp:fast;/GL;/Gw;/Qpar;/Ox;/Ot>"
+              "$<$<AND:${compiler_msvc},${config_minsizerel}>:/O1;/Os>")
 
 target_link_options (
     OrangesOptimizationFlags
@@ -61,19 +73,32 @@ target_link_options (
     "$<${compiler_msvc}:/OPT:REF>"
     "$<$<AND:${compiler_msvc},${config_is_debug}>:/OPT:NOICF>"
     "$<$<AND:${compiler_msvc},${config_is_release}>:/LTCG;/OPT:ICF>"
-    "$<$<AND:${compiler_msvc},$<CONFIG:RELWITHDEBINFO>>:/DEBUG>")
+    "$<$<AND:${compiler_msvc},${config_relwdeb}>:/DEBUG>")
 
 unset (compiler_msvc)
 
+#
+# GCC/Clang
+
 set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
+set (compiler_gcc "$<CXX_COMPILER_ID:GNU>")
+set (compiler_clang "$<CXX_COMPILER_ID:Clang,AppleClang>")
+
+if (PLAT_SSE)
+    target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-msse>")
+elseif (PLAT_AVX)
+    target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mavx>")
+elseif (PLAT_ARM_NEON)
+    target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mfpu=neon>")
+endif ()
 
 target_compile_options (
     OrangesOptimizationFlags
-    INTERFACE "$<$<AND:${compiler_gcclike},${config_is_debug}>:-O0>"
-              "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_debug}>:-Og>"
-              "$<$<AND:${compiler_gcclike},$<CONFIG:MINSIZEREL>>:-Os>"
-              "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<CONFIG:MINSIZEREL>>:-Oz;-fconserve-stack>"
-              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3;-Ofast>")
+    INTERFACE "$<$<AND:${config_is_debug},${compiler_clang}>:-O0>"
+              "$<$<AND:${config_is_debug},${compiler_gcc}>:-Og>"
+              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3;-Ofast>"
+              "$<$<AND:${config_minsizerel},${compiler_clang}>:-Os>"
+              "$<$<AND:${config_minsizerel},${compiler_gcc}>:-Oz;-fconserve-stack>")
 
 set (
     gcclike_opts
@@ -93,25 +118,25 @@ set (
     -fmodulo-sched
     -fmodulo-sched-allow-regmoves)
 
-set (clang_optimization_flags # cmake-format: sortable
-                              -fvectorize)
-
 target_compile_options (
     OrangesOptimizationFlags
-    INTERFACE
-        "$<$<AND:${compiler_gcclike},${config_is_release}>:${gcclike_opts}>"
-        "$<$<AND:$<CXX_COMPILER_ID:GNU>,${config_is_release}>:${gcc_optimization_flags}>"
-        "$<$<AND:$<CXX_COMPILER_ID:Clang,AppleClang>,${config_is_release}>:${clang_optimization_flags}>"
-        "$<$<CXX_COMPILER_ID:AppleClang,GNU>:-ffinite-loops>")
+    INTERFACE "$<$<AND:${config_is_release},${compiler_gcclike}>:${gcclike_opts}>"
+              "$<$<AND:${config_is_release},${compiler_gcc}>:${gcc_optimization_flags}>"
+              "$<$<AND:${config_is_release},${compiler_clang}>:-fvectorize>"
+              "$<$<CXX_COMPILER_ID:AppleClang,GNU>:-ffinite-loops>")
 
 unset (gcclike_opts)
-unset (compiler_gcclike)
 unset (gcc_optimization_flags)
-unset (clang_optimization_flags)
+unset (compiler_gcclike)
+unset (compiler_gcc)
+unset (compiler_clang)
+
+#
+# Intel
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
-if (WIN32)
+if (PLAT_WIN)
     set (intel_debug_flags /0d)
     set (intel_minsize_flags /Os)
     set (intel_reldeb_flags /debug:all)
@@ -144,13 +169,17 @@ target_compile_options (
     OrangesOptimizationFlags
     INTERFACE "$<$<AND:${compiler_intel},${config_is_debug}>:${intel_debug_flags}>"
               "$<$<AND:${compiler_intel},${config_is_release}>:${intel_release_flags}>"
-              "$<$<AND:${compiler_intel},$<CONFIG:MINSIZEREL>>:${intel_minsize_flags}>"
-              "$<$<AND:${compiler_intel},$<CONFIG:RELWITHDEBINFO>>:${intel_reldeb_flags}>")
+              "$<$<AND:${compiler_intel},${config_minsizerel}>:${intel_minsize_flags}>"
+              "$<$<AND:${compiler_intel},${config_relwdeb}>:${intel_reldeb_flags}>")
 
 unset (intel_reldeb_flags)
 unset (intel_debug_flags)
 unset (intel_release_flags)
 unset (intel_minsize_flags)
+unset (compiler_intel)
+
+#
+# ARM
 
 set (compiler_arm "$<CXX_COMPILER_ID:ARMCC,ARMClang>")
 
@@ -159,7 +188,12 @@ target_compile_options (
     INTERFACE "$<${compiler_arm}:-finline-functions>"
               "$<$<AND:${compiler_arm},${config_is_debug}>:-O0;-g>"
               "$<$<AND:${compiler_arm},${config_is_release}>:-O3;-fvectorize>"
-              "$<$<AND:${compiler_arm},$<CONFIG:MINSIZEREL>>:-0z>")
+              "$<$<AND:${compiler_arm},${config_minsizerel}>:-0z>")
+
+unset (compiler_arm)
+
+#
+# Cray
 
 set (compiler_cray "$<CXX_COMPILER_ID:Cray>")
 
@@ -177,20 +211,15 @@ target_compile_options (
 # cmake-format: on
 
 unset (compiler_cray)
+unset (cray_debug_opts)
 unset (cray_release_opts)
 
-include (OrangesGeneratePlatformHeader)
-
-if (PLAT_SSE)
-    target_compile_options (OrangesOptimizationFlags INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-msse>")
-endif ()
-
-if (PLAT_AVX)
-    target_compile_options (OrangesOptimizationFlags INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-mavx>")
-endif ()
+#
 
 unset (config_is_debug)
 unset (config_is_release)
+unset (config_minsizerel)
+unset (config_relwdeb)
 
 install (TARGETS OrangesOptimizationFlags EXPORT OrangesTargets)
 

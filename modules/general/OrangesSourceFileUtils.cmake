@@ -28,6 +28,9 @@ Utility function for adding source files to a target, and generating install rul
                              [INSTALL_COMPONENT <component>])
 
 This function adds the source files to the given target, and adds rules for any headers to be installed to ``<installBaseDir>/<directory>``.
+Headers are identified by file extensions ``.h``, ``.hpp``, or ``.hxx``.
+
+``INSTALL_DIR`` defaults to :variable:`CMAKE_INSTALL_INCLUDEDIR`.
 
 The variable ``<directory>_files`` will be set in the scope of the caller as a list of filenames, in the form ``<directory>/<filename>``.
 
@@ -58,7 +61,7 @@ function (oranges_add_source_files)
 
     set (headers ${ORANGES_ARG_FILES})
 
-    list (FILTER headers INCLUDE REGEX "\\.\\h")
+    list (FILTER headers INCLUDE REGEX "\\.\\h|\\.\\hpp|\\.\\hxx")
 
     if (NOT ORANGES_ARG_INSTALL_DIR)
         set (ORANGES_ARG_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")

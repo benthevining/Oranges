@@ -17,6 +17,8 @@ OrangesDefaultWarnings
 
 Provides a helper target for configuring some default compiler warnings.
 
+The warning flags are designed to be as strict, verbose, and complete as possible, but "warnings as errors" is *not* configured by this module.
+
 Note that this is a build-only target! You should always link to it using the following command:
 
 .. code-block:: cmake
@@ -119,6 +121,8 @@ set (clang_cxx_opts
      # cmake-format: sortable
      -Winconsistent-missing-destructor-override -Woverloaded-virtual -Wunused-private-field)
 
+set (arm_compiler_opts -g)
+
 if (WIN32)
     set (intel_flags /W5 /Wall)
 else ()
@@ -153,7 +157,7 @@ target_compile_options (
               "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
               "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>"
               "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${intel_flags}>"
-              "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:-g>")
+              "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:${arm_compiler_opts}>")
 
 unset (gcclike_comp_opts)
 unset (gcc_comp_opts)
@@ -162,6 +166,7 @@ unset (config_is_debug)
 unset (gcclike_cxx_opts)
 unset (gcc_cxx_opts)
 unset (clang_cxx_opts)
+unset (arm_compiler_opts)
 
 install (TARGETS OrangesDefaultWarnings EXPORT OrangesTargets)
 

@@ -10,6 +10,28 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesIPO
+-------------------------
+
+Provides an interface target with interprocedural optimization enabled.
+
+Targets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Oranges::OrangesIPO
+
+Variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION`
+
+.. seealso ::
+
+    Module :module:`CheckIPOSupported`
+        Built-in CMake module for checking if IPO is supported by the current toolchain
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

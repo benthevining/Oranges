@@ -45,25 +45,23 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-oranges_file_scoped_message_context ("OrangesDoxygenConfig")
-
 #
 
 find_package (Doxygen OPTIONAL_COMPONENTS dot)
 
-if (NOT TARGET Doxygen::doxygen)
-    message (WARNING "Doxygen dependencies missing!")
-
-    function (oranges_create_doxygen_target)
-
-    endfunction ()
-
-    return ()
-endif ()
-
 #
 
 function (oranges_create_doxygen_target)
+
+    if (ORANGES_IN_GRAPHVIZ_CONFIG)
+        return ()
+    endif ()
+
+    if (NOT TARGET Doxygen::doxygen)
+        message (WARNING "Doxygen dependencies missing!")
+
+        return ()
+    endif ()
 
     oranges_add_function_message_context ()
 

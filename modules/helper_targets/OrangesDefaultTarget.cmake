@@ -19,7 +19,10 @@ Provides a helper "default target" with some sensible defaults configured.
 
 The default target will have configuration postfixes and appropriate configuration-specific optimization flags configured.
 
+OrangesDefaultTarget will always link against :module:`OrangesOptimizationFlags`, and :module:`OrangesDebugTarget` for debug configurations.
+
 The default target will have the following compiler definitions added:
+
 - ORANGES_DEBUG : 1 if the configuration is a debug configuration, 0 otherwise
 - ORANGES_RELEASE: 1 if the configuration is a release configuration, 0 otherwise
 - ORANGES_BUILD_TYPE : A string literal with the exact name of the build configuration that was used.
@@ -32,12 +35,39 @@ Targets
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_MAINTAINER_BUILD
-- ORANGES_MAC_UNIVERSAL_BINARY
+
+.. cmake:variable:: ORANGES_MAINTAINER_BUILD
+
+When ``ON``, :module:`OrangesDefaultTarget` will link to :module:`OrangesDefaultWarnings` and :module:`OrangesAllIntegrations`. ``OFF`` by default.
+
+.. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
+
+10-character Apple developer ID used to set up code signing on iOS.
+
+.. cmake:variable:: ORANGES_MAC_UNIVERSAL_BINARY
+
+If true, and the Xcode generator is being used, and running on an M1 Mac, configures generation of universal binaries for both arm64 and x86_64 architectures.
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- APPLE_DEV_ID
+
+.. cmake:envvar:: APPLE_DEV_ID
+
+The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the :variable:`ORANGES_IOS_DEV_TEAM_ID`.
+
+.. seealso ::
+
+    Module :module:`OrangesDebugTarget`
+        A helper target that just enables debugging flags. OrangesDefaultTarget links to this by default in all debug configurations.
+
+    Module :module:`OrangesDefaultWarnings`
+        A helper target that enables default warning flags. OrangesDefaultTarget links to this if :variable:`ORANGES_MAINTAINER_BUILD` is ``ON``.
+
+    Module :module:`OrangesOptimizationFlags`
+        A helper target that enables various configuration-aware optimization flags.
+
+    Module :module:`OrangesAllIntegrations`
+        A helper module that configures static analysis integrations and ccache. OrangesDefaultTarget links to this if :variable:`ORANGES_MAINTAINER_BUILD` is ``ON``.
 
 #]=======================================================================]
 
@@ -52,6 +82,8 @@ endif ()
 include (OrangesCmakeDevTools)
 include (FeatureSummary)
 include (OrangesGeneratePlatformHeader)
+include (OrangesDebugTarget)
+include (OrangesOptimizationFlags)
 
 #
 
@@ -128,7 +160,7 @@ unset (windowsDefs)
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
-if (WIN32)
+if (PLAT_WIN)
     set (intel_opts /Gm)
 else ()
     set (intel_opts -multiple-processes=4 -static-intel)
@@ -212,7 +244,7 @@ endif ()
 
 unset (ios_like)
 
-if (APPLE)
+if (PLAT_APPLE)
     execute_process (COMMAND uname -m OUTPUT_VARIABLE osx_native_arch
                      OUTPUT_STRIP_TRAILING_WHITESPACE)
 
@@ -264,11 +296,10 @@ if (ORANGES_MAINTAINER_BUILD)
 
 endif ()
 
-include (OrangesDebugTarget)
-
 target_link_libraries (
     OrangesDefaultTarget
-    INTERFACE $<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>)
+    INTERFACE "$<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>"
+              Oranges::OrangesOptimizationFlags)
 
 add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 
@@ -325,7 +356,7 @@ target_compile_features (
               cxx_variable_templates
               cxx_variadic_templates)
 
-if (WIN32)
+if (PLAT_WIN)
     set (intel_opts /GR /EHsc)
 else ()
     set (intel_opts -fexceptions)

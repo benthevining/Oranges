@@ -60,7 +60,6 @@ help:  ## Print this message
 
 .PHONY: init
 init:  ## Initializes the workspace and installs all dependencies
-	@chmod +x $(ORANGES_ROOT)/scripts/alphabetize_codeowners.py
 	@cd $(ORANGES_ROOT) && \
 		$(PRECOMMIT) install --install-hooks --overwrite && \
 		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg && \

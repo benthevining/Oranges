@@ -89,15 +89,17 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFunctionArgumentHelpers)
 
+find_program (ORANGES_DOT dot DOC "graphviz dot tool, used to generate dependency graph images")
+
+mark_as_advanced (FORCE ORANGES_DOT)
+
+#
+
 function (oranges_add_graphviz_target)
 
     if (ORANGES_IN_GRAPHVIZ_CONFIG)
         return ()
     endif ()
-
-    find_program (ORANGES_DOT dot DOC "graphviz dot tool, used to generate dependency graph images")
-
-    mark_as_advanced (FORCE ORANGES_DOT)
 
     if (NOT ORANGES_DOT)
         message (AUTHOR_WARNING "dot cannot be found, dependency graph images cannot be generated")
