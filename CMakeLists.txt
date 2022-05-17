@@ -104,8 +104,8 @@ if (ORANGES_BUILD_DOCS)
     include (OrangesGraphViz)
 
     oranges_add_graphviz_target (
-        TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" COPY_GRAPH_TO
-        "${CMAKE_CURRENT_LIST_DIR}/util/deps_graph.png")
+        TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}"
+        COPY_GRAPH_TO "${CMAKE_CURRENT_LIST_DIR}/util/deps_graph.png")
 
     add_subdirectory (docs)
 

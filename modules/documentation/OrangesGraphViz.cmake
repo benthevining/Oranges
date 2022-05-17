@@ -217,6 +217,12 @@ function (oranges_add_graphviz_target)
         unset (all_flag)
     endif ()
 
+    if (ORANGES_ARG_EXTRA_CMAKE_OPTIONS)
+        list (JOIN ORANGES_ARG_EXTRA_CMAKE_OPTIONS " " extra_cmake_args)
+    else ()
+        unset (extra_cmake_args)
+    endif ()
+
     # cmake-format: off
     add_custom_target (
         "${ORANGES_ARG_TARGET}" ${all_flag}
@@ -225,7 +231,7 @@ function (oranges_add_graphviz_target)
                     -B "${ORANGES_ARG_BINARY_DIR}"
                     -D ORANGES_IN_GRAPHVIZ_CONFIG=ON
                     -D "FETCHCONTENT_BASE_DIR=${FETCHCONTENT_BASE_DIR}"
-                    ${ORANGES_ARG_EXTRA_CMAKE_OPTIONS}
+                    ${extra_cmake_args}
                     "--graphviz=${dot_file_output}"
                     --no-warn-unused-cli
         DEPENDS "${oranges_graphviz_config_file}"

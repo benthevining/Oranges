@@ -207,10 +207,6 @@ function (oranges_create_doxygen_target)
             COMMENT "Doxygen version:")
     endif ()
 
-    if (TARGET DependencyGraph)
-        add_dependencies ("${ORANGES_ARG_TARGET}" DependencyGraph)
-    endif ()
-
     set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
                                                                  "${ORANGES_DOC_OUTPUT_DIR}")
 
