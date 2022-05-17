@@ -24,10 +24,6 @@ define_property (
     GLOBAL PROPERTY CACHE_DISCONNECTED BRIEF_DOCS "All dependency fetching fully disconnected"
     FULL_DOCS "ON if all dependency fetching is fully disconnected")
 
-if (ORANGES_PROPERTIES_LIST_FILE)
-    file (APPEND "${ORANGES_PROPERTIES_LIST_FILE}" "CACHE_DIR GLOBAL\nCACHE_DISCONNECTED GLOBAL\n")
-endif ()
-
 oranges_file_scoped_message_context ("OrangesSetUpCache")
 
 if (DEFINED ENV{CMAKE_CACHE})
@@ -45,13 +41,10 @@ unset (default_cache)
 
 set_property (GLOBAL PROPERTY CACHE_DIR "${FETCHCONTENT_BASE_DIR}")
 
-set (ORANGES_FILE_DOWNLOAD_CACHE "${FETCHCONTENT_BASE_DIR}"
-     CACHE PATH "Directory in which to cache all downloaded files")
-
 set (ExternalData_BINARY_ROOT "${FETCHCONTENT_BASE_DIR}"
      CACHE PATH "Directory in which to cache all downloaded data files")
 
-mark_as_advanced (FORCE FETCHCONTENT_BASE_DIR ORANGES_FILE_DOWNLOAD_CACHE ExternalData_BINARY_ROOT)
+mark_as_advanced (FORCE FETCHCONTENT_BASE_DIR ExternalData_BINARY_ROOT)
 
 if (NOT DEFINED ENV{CPM_SOURCE_CACHE})
     set (ENV{CPM_SOURCE_CACHE} "${FETCHCONTENT_BASE_DIR}")
@@ -80,7 +73,4 @@ endif ()
 
 set_property (GLOBAL PROPERTY CACHE_DISCONNECTED "${FETCHCONTENT_FULLY_DISCONNECTED}")
 
-set (ORANGES_FILE_DOWNLOAD_DISCONNECTED "${FETCHCONTENT_FULLY_DISCONNECTED}"
-     CACHE BOOL "ON if all dependency fetching is fully disconnected")
-
-mark_as_advanced (FORCE FETCHCONTENT_FULLY_DISCONNECTED ORANGES_FILE_DOWNLOAD_DISCONNECTED)
+mark_as_advanced (FORCE FETCHCONTENT_FULLY_DISCONNECTED)

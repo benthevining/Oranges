@@ -69,16 +69,16 @@ If the ``NO_SUBMODULES`` option is present, no git submodules will be pulled or 
 If the ``NO_RECURSE_SUBMODULES`` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
 If neither option is given, all submodules will be updated recursively.
 
-Options
+Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:variable:: ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
 
-When ON, the function :command:`oranges_fetch_repository()` will first try a normal :commdn:`find_package()` call. Defaults to OFF.
+When ``ON``, the function :command:`oranges_fetch_repository()` will first try a normal :command:`find_package()` call. Defaults to ``OFF``.
 
 .. cmake:variable:: FETCHCONTENT_BASE_DIR
 
-Defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ${CMAKE_SOURCE_DIR}/Cache.
+Defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ``${CMAKE_SOURCE_DIR}/Cache``.
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

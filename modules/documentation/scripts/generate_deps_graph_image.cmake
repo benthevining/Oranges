@@ -12,11 +12,12 @@
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-file (MAKE_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@") # @ORANGES_DOC_OUTPUT_DIR@
+file (MAKE_DIRECTORY "@ORANGES_ARG_OUTPUT_DIR@") # ORANGES_ARG_OUTPUT_DIR
 
-# look in @PROJECT_SOURCE_DIR@ and @ORANGES_DOC_OUTPUT_DIR@
-find_file (original_dot_file deps_graph.dot PATHS "@PROJECT_SOURCE_DIR@" "@ORANGES_DOC_OUTPUT_DIR@"
-           NO_DEFAULT_PATH)
+# look in ORANGES_ARG_SOURCE_DIR, ORANGES_ARG_BINARY_DIR and ORANGES_ARG_OUTPUT_DIR
+find_file (
+    original_dot_file deps_graph.dot PATHS "@ORANGES_ARG_SOURCE_DIR@" "@ORANGES_ARG_BINARY_DIR@"
+                                           "@ORANGES_ARG_OUTPUT_DIR@" NO_DEFAULT_PATH)
 
 if (NOT original_dot_file OR NOT EXISTS "${original_dot_file}")
     message (
@@ -25,9 +26,8 @@ if (NOT original_dot_file OR NOT EXISTS "${original_dot_file}")
     return ()
 endif ()
 
-execute_process (
-    COMMAND "@ORANGES_DOT@" -Tpng -o "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.png"
-            "${original_dot_file}" WORKING_DIRECTORY "@ORANGES_DOC_OUTPUT_DIR@" COMMAND_ECHO STDOUT
-                                                     COMMAND_ERROR_IS_FATAL ANY)
+set (output_graph "@ORANGES_ARG_OUTPUT_DIR@/deps_graph.png")
 
-file (RENAME "${original_dot_file}" "@ORANGES_DOC_OUTPUT_DIR@/deps_graph.dot")
+execute_process (
+    COMMAND "@ORANGES_DOT@" -Tpng -o "${output_graph}" "${original_dot_file}"
+    WORKING_DIRECTORY "@ORANGES_ARG_OUTPUT_DIR@" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)

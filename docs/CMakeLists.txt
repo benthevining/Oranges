@@ -14,6 +14,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.13 FATAL_ERROR)
 
+if (ORANGES_IN_GRAPHVIZ_CONFIG)
+    return ()
+endif ()
+
 project (
     OrangesDocs
     VERSION "${Oranges_VERSION}"
@@ -124,8 +128,8 @@ if (TARGET OrangesReadme)
     add_dependencies (OrangesDocs OrangesReadme)
 endif ()
 
-if (TARGET DependencyGraph)
-    add_dependencies (OrangesDocs DependencyGraph)
+if (TARGET OrangesDependencyGraph)
+    add_dependencies (OrangesDocs OrangesDependencyGraph)
 endif ()
 
 unset (doc_format_outputs)

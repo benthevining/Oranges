@@ -78,12 +78,6 @@ if (PROJECT_IS_TOP_LEVEL)
     include (OrangesDeprecateDirectoryScopedCommands)
     include (OrangesWipeCacheTarget)
     include (OrangesDefaultCPackSettings)
-
-    set (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE util)
-
-    include (OrangesGraphVizConfig)
-
-    unset (Oranges_DEPS_GRAPH_OUTPUT_TO_SOURCE)
 endif ()
 
 #
@@ -107,6 +101,11 @@ include (CPackComponent)
 
 if (ORANGES_BUILD_DOCS)
     include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
+    include (OrangesGraphViz)
+
+    oranges_add_graphviz_target (
+        TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" COPY_GRAPH_TO
+        "${CMAKE_CURRENT_LIST_DIR}/util/deps_graph.png")
 
     add_subdirectory (docs)
 
