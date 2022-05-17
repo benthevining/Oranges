@@ -31,6 +31,24 @@ This module provides the function :command:`oranges_create_pkgconfig_file()`.
                                   [NO_INSTALL]|[INSTALL_DEST <installDestination>] [INSTALL_COMPONENT <componentName>]
                                   [REQUIRES <requiredPackages...>])
 
+Generates pkgconfig files for each build configuration of the specified target.
+For each configuration, a file named ``<packageName>-<config>.pc`` will be generated.
+
+The pkgconfig files are populated with flags automatically based on the ``<targetName>``'s flags.
+
+``OUTPUT_DIR`` specifies where the pkgconfig files will be written. If not specified, it defaults to ``${CMAKE_CURRENT_BINARY_DIR}/pkgconfig``.
+
+``NAME`` specifies the name of the package. If not specified, defaults to ``<targetName>``.
+
+``DESCRIPTION``, ``URL``, and ``VERSION`` will all default to the values of the relevant ``PROJECT_`` variables if not explicitly specified.
+
+If ``INSTALL_DEST`` is not specified, it defaults to ``${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig``.
+
+The pkgconfig file will be automatically populated with names/paths of libraries linked to by ``<targetName>``, but you can optionally manually specify names of required packages using ``REQUIRES``.
+
+``INCLUDE_REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` in which to look for includes.
+If it is empty or not specified, the pkgconfig file will specify ``CMAKE_INSTALL_INCLUDEDIR`` as the include directory.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
@@ -73,15 +91,17 @@ function (oranges_create_pkgconfig_file)
     endif ()
 
     if (NOT ORANGES_ARG_OUTPUT_DIR)
-        set (ORANGES_ARG_OUTPUT_DIR "${PROJECT_BINARY_DIR}/pkgconfig")
+        set (ORANGES_ARG_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/pkgconfig")
     endif ()
 
     if (NOT ORANGES_ARG_NAME)
         set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}")
     endif ()
 
-    if (NOT ORANGES_ARG_INCLUDE_REL_PATH)
-        set (ORANGES_ARG_INCLUDE_REL_PATH "${ORANGES_ARG_NAME}")
+    if (ORANGES_ARG_INCLUDE_REL_PATH)
+        set (ORANGES_PKG_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_INCLUDE_REL_PATH}")
+    else ()
+        set (ORANGES_PKG_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
     endif ()
 
     if (NOT ORANGES_ARG_DESCRIPTION)

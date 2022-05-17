@@ -38,12 +38,21 @@ Configures signing of an AAX plugin target. Does nothing on Linux.
 The ``ACCOUNT``, ``SIGNID``, ``KEYFILE``, and ``KEYPASSWORD`` options set the cache variables ``WRAPTOOL_ACCOUNT``, ``WRAPTOOL_SIGNID``, ``WRAPTOOL_KEYFILE``, and ``WRAPTOOL_KEYPASSWORD``, respectively.
 
 
-Cache variables
+Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- WRAPTOOL_ACCOUNT
-- WRAPTOOL_SIGNID
-- WRAPTOOL_KEYFILE
-- WRAPTOOL_KEYPASSWORD
+
+.. cmake:envvar:: WRAPTOOL_ACCOUNT
+
+.. cmake:envvar:: WRAPTOOL_SIGNID
+
+.. cmake:envvar:: WRAPTOOL_KEYFILE
+
+.. cmake:envvar:: WRAPTOOL_KEYPASSWORD
+
+.. seealso::
+
+    Module :module:`Findwraptool`
+        Find module for wraptool
 
 #]=======================================================================]
 

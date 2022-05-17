@@ -43,7 +43,6 @@ A library of CMake modules.
   * OrangesDefaultWarnings
   * OrangesDoxygenConfig
   * OrangesFetchRepository
-  * OrangesFindPackageHelpers
   * OrangesGenerateExportHeader
   * OrangesGeneratePkgConfig
   * OrangesGeneratePlatformHeader

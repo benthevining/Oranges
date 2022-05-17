@@ -26,7 +26,7 @@ If the configuration being built is ``MINSIZEREL``, then all optimization flags 
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesOptimizationFlags
+``Oranges::OrangesOptimizationFlags``
 
 #]=======================================================================]
 
@@ -84,6 +84,9 @@ set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
 set (compiler_gcc "$<CXX_COMPILER_ID:GNU>")
 set (compiler_clang "$<CXX_COMPILER_ID:Clang,AppleClang>")
 
+# TODO: the -mfpu=neon option works on GCC building for ARM, but not for x86_64. Only enable it if
+# not building a universal binary?
+#[[
 if (PLAT_SSE)
     target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-msse>")
 elseif (PLAT_AVX)
@@ -91,6 +94,7 @@ elseif (PLAT_AVX)
 elseif (PLAT_ARM_NEON)
     target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mfpu=neon>")
 endif ()
+]]
 
 target_compile_options (
     OrangesOptimizationFlags

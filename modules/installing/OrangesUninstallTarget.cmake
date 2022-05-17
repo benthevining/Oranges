@@ -17,20 +17,23 @@ OrangesUninstallTarget
 
 When this module is included, it creates a target that uninstalls all of the project's installed files.
 
-Inclusion style: Once globally, preferably from top-level project
+.. note::
 
-The variable ``ORANGES_ADDITIONAL_INSTALL_MANIFEST_FILES`` may be populated with a list of file paths of additional install manifest files, such as those produced by Python, etc.
-An install manifest file must be a simple list of absolute paths of installed files, one per line.
-Relative paths in ``ORANGES_ADDITIONAL_INSTALL_MANIFEST_FILES`` will be interpreted relative to CMAKE_BINARY_DIR. (All paths *within* install manifest files must be absolute.)
-
+    Inclusion style: Once globally, preferably from top-level project
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- uninstall
+``uninstall``
 
 Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_ADDITIONAL_INSTALL_MANIFEST_FILES
+
+.. cmake:variable:: ORANGES_ADDITIONAL_INSTALL_MANIFEST_FILES
+
+This variable may be populated with a list of file paths of additional install manifest files, such as those produced by Python or other tools.
+An install manifest file must be a simple list of absolute paths of installed files, one per line.
+Relative paths in ``ORANGES_ADDITIONAL_INSTALL_MANIFEST_FILES`` will be interpreted relative to ``CMAKE_BINARY_DIR``. (All paths *within* install manifest files must be absolute.)
+
 
 #]=======================================================================]
 

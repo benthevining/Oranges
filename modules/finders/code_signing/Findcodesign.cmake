@@ -17,13 +17,16 @@ Findcodesign
 
 Find Apple's codesign program.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- codesign_FOUND
+
+.. cmake:variable:: PROGRAM_CODESIGN
+
+Path to the codesign executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Apple::codesign : the codesign executable.
+``Apple::codesign``: the codesign executable.
 
 #]=======================================================================]
 
@@ -48,14 +51,14 @@ endif ()
 
 set (codesign_FOUND FALSE)
 
-find_program (CODESIGN_PROGRAM codesign DOC "Apple's codesign program")
+find_program (PROGRAM_CODESIGN codesign DOC "Apple's codesign program")
 
-mark_as_advanced (FORCE CODESIGN_PROGRAM)
+mark_as_advanced (FORCE PROGRAM_CODESIGN)
 
-if (CODESIGN_PROGRAM)
+if (PROGRAM_CODESIGN)
     add_executable (codesign IMPORTED GLOBAL)
 
-    set_target_properties (codesign PROPERTIES IMPORTED_LOCATION "${CODESIGN_PROGRAM}")
+    set_target_properties (codesign PROPERTIES IMPORTED_LOCATION "${PROGRAM_CODESIGN}")
 
     add_executable (Apple::codesign ALIAS codesign)
 

@@ -17,6 +17,19 @@ OrangesSetDefaultCpackGenerator
 
 When this modules is included, if CPACK_GENERATOR is not set, it will be set to a default value sensible for the current platform.
 
+.. cmake:variable:: ORANGES_DEB_EXE
+
+Path to the ``debuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is Debian.
+
+.. cmake:variable:: ORANGES_RPM_EXE
+
+Path to the ``rpmbuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is RPM.
+
+.. seealso::
+
+    Module :module:`LinuxLSBInfo`
+        This module is used to determine properties of the current Linux distribution.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

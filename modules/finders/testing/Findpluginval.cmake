@@ -17,17 +17,21 @@ Findpluginval
 
 Find the pluginval plugin testing tool.
 
-Options
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- PLUGINVAL_BUILD_AT_CONFIGURE_TIME : If this is ON and pluginval cannot be found on the system, then it will be built from source at configure time. Defaults to ON.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- pluginval_FOUND
+.. cmake:variable:: PROGRAM_PLUGINVAL
+
+Path to the pluginval executable
+
+.. cmake:variable:: PLUGINVAL_BUILD_AT_CONFIGURE_TIME
+
+If this is ``ON`` and pluginval cannot be found on the system, then it will be built from source at configure time. Defaults to ``ON``.
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Tracktion::pluginval : The pluginval executable
+``Tracktion::pluginval``: The pluginval executable
 
 #]=======================================================================]
 
@@ -54,14 +58,14 @@ endif ()
 set (pluginval_FOUND FALSE)
 
 # TO DO: search the cache location where it would've been built...
-find_program (PLUGINVAL_PROGRAM pluginval DOC "pluginval executable")
+find_program (PROGRAM_PLUGINVAL pluginval DOC "pluginval executable")
 
-mark_as_advanced (FORCE PLUGINVAL_PROGRAM)
+mark_as_advanced (FORCE PROGRAM_PLUGINVAL)
 
-if (PLUGINVAL_PROGRAM)
+if (PROGRAM_PLUGINVAL)
     add_executable (pluginval IMPORTED GLOBAL)
 
-    set_target_properties (pluginval PROPERTIES IMPORTED_LOCATION "${PLUGINVAL_PROGRAM}")
+    set_target_properties (pluginval PROPERTIES IMPORTED_LOCATION "${PROGRAM_PLUGINVAL}")
 
     add_executable (Tracktion::pluginval ALIAS pluginval)
 

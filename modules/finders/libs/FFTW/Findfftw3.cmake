@@ -17,13 +17,12 @@ Findfftw3
 
 A find module for the FFTW double-precision FFT library.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- fftw3_FOUND
-
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FFTW3::fftw3 : FFTW double precision library
+
+``FFTW3::fftw3``
+
+FFTW double precision library
 
 #]=======================================================================]
 

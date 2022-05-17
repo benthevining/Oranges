@@ -35,6 +35,11 @@ Adds a post-build command to the specified target to run codesign on the target'
 
 Configures code signing for every individual format target of a plugin.
 
+.. seealso::
+
+    Module :module:`Findcodesign`
+        Find module for codesign
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

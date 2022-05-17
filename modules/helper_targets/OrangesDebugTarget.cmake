@@ -21,7 +21,7 @@ This target's debugging flags are designed to be as verbose as possible.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesDebugTarget
+``Oranges::OrangesDebugTarget``
 
 #]=======================================================================]
 

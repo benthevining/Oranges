@@ -40,7 +40,14 @@ Adds a command to call the Faust compiler to generate the ``<generatedClassName>
                       [INSTALL_REL_PATH <relPath>]
                       [INSTALL_COMPONENT <compName>])
 
-Calls :command:`faust_add_generation_command` for each pair of passed ``fileNames`` and ``classNames``, and creates an interface library target that contains all the generated sources.
+Calls :command:`faust_add_generation_command()` for each pair of passed ``fileNames`` and ``classNames``, and creates an interface library target that contains all the generated sources.
+
+``<fileNames>`` and ``<classNames>`` must be lists of the same length, with each element in the ``<fileNames>`` list corresponding to the element in the ``<classNames>`` list at the same index.
+
+.. seealso::
+
+    Module :module:`Findfaust`
+        Find module for Faust.
 
 #]=======================================================================]
 
@@ -50,9 +57,7 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-if (NOT TARGET faust::faust)
-    find_package (faust REQUIRED)
-endif ()
+find_package (faust REQUIRED)
 
 #
 

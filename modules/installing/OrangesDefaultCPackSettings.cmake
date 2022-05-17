@@ -17,7 +17,21 @@ OrangesDefaultCPackSettings
 
 Sets up some default configuration settings for CPack.
 
-Inclusion style: once globally, ideally from the top-level project.
+Most of the configuration settings are read from the relevant ``PROJECT_`` variables, meaning that the top-level project in a CMake build tree will control their values.
+
+.. note::
+
+    Inclusion style: once globally, ideally from the top-level project.
+
+.. cmake:variable:: CPACK_LICENSE_FILE
+
+The path to the license file for this project. This module searches under ``${PROJECT_SOURCE_DIR}`` for files with the following names: LICENSE.txt, LICENSE.md, LICENSE, COPYRIGHT.txt, COPYRIGHT.md, or COPYRIGHT.
+If none is found, a warning will be issued.
+
+.. cmake:variable:: CPACK_README_FILE
+
+The path to the readme file for this project. This module searches under ``${PROJECT_SOURCE_DIR}`` for files with the following names: README, README.txt, README.md, readme, readme.txt, or readme.md.
+If none is found, a warning will be issued.
 
 #]=======================================================================]
 
@@ -69,8 +83,8 @@ set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}"
 # set (CPACK_PACKAGE_CONTACT "${${UPPER_PROJECT_NAME}_MAINTAINER}" CACHE STRING "CPack package
 # maintainer contact")
 
-set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "${${PROJECT_NAME}_DESCRIPTION}"
-     CACHE STRING "CPack package description")
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}" CACHE STRING
+                                                                      "CPack package description")
 
 #
 
@@ -137,14 +151,14 @@ set (CPACK_NSIS_MODIFY_PATH ON)
 # set (CPACK_NSIS_INSTALLED_ICON_NAME "${CPACK_PACKAGE_ICON}" CACHE PATH "Icon for the Windows 'Add
 # or Remove Programs' tool")
 
-set (CPACK_NSIS_HELP_LINK "${${PROJECT_NAME}_HOMEPAGE_URL}"
-     CACHE STRING "Adds project help link to registry")
+set (CPACK_NSIS_HELP_LINK "${PROJECT_HOMEPAGE_URL}" CACHE STRING
+                                                          "Adds project help link to registry")
 
 # set (CPACK_NSIS_CONTACT "${CPACK_PACKAGE_CONTACT}" CACHE STRING "Package contact email")
 
 #
 
-set (CPACK_OSX_PACKAGE_VERSION "${${PROJECT_NAME}_VERSION}")
+set (CPACK_OSX_PACKAGE_VERSION "${PROJECT_VERSION}")
 
 set (CPACK_BUNDLE_NAME "${PROJECT_NAME}" CACHE STRING "Bundle name on MacOS")
 
@@ -172,8 +186,8 @@ set (CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_LIST_DIR}/scripts/posti
 # set (CPACK_DEBIAN_PACKAGE_DEPENDS "${${UPPER_PROJECT_NAME}_PACKAGE_DEB_DEPENDS}" CACHE STRING "Deb
 # package dependencies")
 
-set (CPACK_DEBIAN_PACKAGE_HOMEPAGE "${${PROJECT_NAME}_HOMEPAGE_URL}"
-     CACHE STRING "Deb package homepage URL")
+set (CPACK_DEBIAN_PACKAGE_HOMEPAGE "${PROJECT_HOMEPAGE_URL}" CACHE STRING
+                                                                   "Deb package homepage URL")
 set (CPACK_DEBIAN_PACKAGE_SECTION devel CACHE STRING "Debian package category")
 
 set (CPACK_DEBIAN_PACKAGE_PRIORITY optional CACHE STRING "Deb package priority")
@@ -188,10 +202,9 @@ if (COMMON_PACKAGE_RELEASE)
     set (CPACK_RPM_PACKAGE_RELEASE "${COMMON_PACKAGE_RELEASE}" CACHE STRING "")
 endif ()
 
-set (CPACK_RPM_PACKAGE_URL "${${PROJECT_NAME}_HOMEPAGE_URL}" CACHE STRING
-                                                                   "RPM package homepage URL")
+set (CPACK_RPM_PACKAGE_URL "${PROJECT_HOMEPAGE_URL}" CACHE STRING "RPM package homepage URL")
 
-set (CPACK_RPM_PACKAGE_VERSION "${${PROJECT_NAME}_VERSION}" CACHE STRING "RPM package version")
+set (CPACK_RPM_PACKAGE_VERSION "${PROJECT_VERSION}" CACHE STRING "RPM package version")
 
 # set (CPACK_RPM_PACKAGE_REQUIRES "${${UPPER_PROJECT_NAME}_PACKAGE_RPM_DEPENDS}" CACHE STRING "RPM
 # package dependencies")

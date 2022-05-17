@@ -23,15 +23,37 @@ OrangesDefaultTarget will always link against :module:`OrangesOptimizationFlags`
 
 The default target will have the following compiler definitions added:
 
-- ORANGES_DEBUG : 1 if the configuration is a debug configuration, 0 otherwise
-- ORANGES_RELEASE: 1 if the configuration is a release configuration, 0 otherwise
-- ORANGES_BUILD_TYPE : A string literal with the exact name of the build configuration that was used.
+- ``ORANGES_DEBUG`` : 1 if the configuration is a debug configuration, 0 otherwise
+- ``ORANGES_RELEASE``: 1 if the configuration is a release configuration, 0 otherwise
+- ``ORANGES_BUILD_TYPE`` : A string literal with the exact name of the build configuration that was used.
 
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesDefaultTarget
-- Oranges::OrangesDefaultCXXTarget : links to OrangesDefaultTarget, but also has some default C++ compile features added. The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
+
+``Oranges::OrangesDefaultTarget``
+
+``Oranges::OrangesDefaultCXXTarget``
+
+Links to OrangesDefaultTarget, but also has some default C++ compile features added. The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
+
+Target properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``ORANGES_USING_INSTALLED_PACKAGE``
+
+or any target that links against OrangesDefaultTarget, this property will be defined to ``TRUE`` if it was linked to from an installed package, and ``FALSE`` if it is being built from source.
+
+``ORANGES_MAC_UNIVERSAL_BINARY``
+
+If true, this target is being built as a MacOSX universal binary.
+
+Global properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``ORANGES_MAC_NATIVE_ARCH``
+
+On Mac systems, this is a string describing the host's native architecture (typically arm64 or x86_64). Undefined on non-Apple systems.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -193,11 +215,15 @@ unset (debug_configs)
 
 set (config_is_release "$<NOT:${config_is_debug}>")
 
+# cmake-format: off
 target_compile_definitions (
     OrangesDefaultTarget
-    INTERFACE "$<${config_is_debug}:ORANGES_DEBUG=1>" "$<${config_is_debug}:ORANGES_RELEASE=0>"
-              "$<${config_is_release}:ORANGES_DEBUG=0>" "$<${config_is_release}:ORANGES_RELEASE=1>"
+    INTERFACE "$<${config_is_debug}:ORANGES_DEBUG=1>"
+              "$<${config_is_debug}:ORANGES_RELEASE=0>"
+              "$<${config_is_release}:ORANGES_DEBUG=0>"
+              "$<${config_is_release}:ORANGES_RELEASE=1>"
               "ORANGES_BUILD_TYPE=\"$<CONFIG>\"")
+# cmake-format: on
 
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")

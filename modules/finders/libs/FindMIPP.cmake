@@ -15,15 +15,14 @@
 FindMipp
 -------------------------
 
-A find module for the MIPP library. This module fetches the JUCE sources from GitHub using oranges_fetch_repository().
-
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- MIPP_FOUND
+A find module for the MIPP library. This module fetches the sources from GitHub using :module:`OrangesFetchRepository`.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- aff3ct::MIPP : MIPP library (INTERFACE)
+
+``aff3ct::MIPP``
+
+Interface library with MIPP's include directories and sources.
 
 #]=======================================================================]
 

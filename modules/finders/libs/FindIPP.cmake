@@ -15,20 +15,22 @@
 FindIPP
 -------------------------
 
-A find module for the Intel IPP signal processing libraries.
-
-Options
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- IPP_STATIC - defaults to on
-- IPP_MULTI_THREADED - defaults to off
+A find module for the Intel IPP libraries.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- IPP_ROOT : this can be manually overridden to provide the path to the root of the IPP installation.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- IPP_FOUND
+.. cmake:variable:: IPP_STATIC
+
+True if static libraries should be found; if false, finds shared libraries. Defaults to ``ON``.
+
+.. cmake:variable:: IPP_MULTI_THREADED
+
+True if multithreaded versions of the libraries should be found. Defaults to ``OFF``.
+
+.. cmake:variable:: IPP_ROOT
+
+This can be manually overridden to provide the path to the root of the IPP installation.
 
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -52,7 +54,7 @@ Components
 - VC : video coding
 - VM : vector math
 
-Each one produces an imported target named Intel::ipp_lib_<Component>.
+Each one produces an imported target named ``Intel::ipp_lib_<Component>``.
 
 Each component imports its dependencies as well:
 
@@ -78,7 +80,10 @@ Each component imports its dependencies as well:
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Intel::IntelIPP : interface library that links to all found component libraries
+
+``Intel::IntelIPP``
+
+Interface library that links to all found component libraries
 
 #]=======================================================================]
 

@@ -17,7 +17,9 @@ OrangesWipeCacheTarget
 
 When this module is included, it creates a target that wipes all persistent caches of downloaded dependencies.
 
-Inclusion style: Once globally, preferably from the top-level project
+.. note::
+
+    Inclusion style: Once globally, preferably from the top-level project
 
 
 Targets

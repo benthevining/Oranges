@@ -176,6 +176,21 @@
           "TARGET": 1
         }
       },
+      "oranges_add_swig_targets": {
+        "kwargs": {
+          "AGGREGATE_TARGET": 1,
+          "BINARY_DIR": 1,
+          "INPUT_LANGUAGE": 1,
+          "LANGUAGES": "+",
+          "MODULE_NAME": 1,
+          "OUTPUT_VAR": 1,
+          "SOURCES": "+",
+          "TYPE": 1
+        },
+        "pargs": {
+          "flags": "NO_AGGREGATE_TARGET"
+        }
+      },
       "oranges_create_doxygen_target": {
         "kwargs": {
           "FILE_PATTERNS": "+",

@@ -17,10 +17,6 @@ FindMTS-ESP
 
 A find module for the MTS-ESP MIDI tuning library.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- MTS-ESP_FOUND
-
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Client
@@ -29,9 +25,18 @@ Components
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ODDSound::MTSClient : static library build of the MTS-ESP client library
-- ODDSound::MTSMaster : static library build of the MTS-ESP master library
-- ODDSound::MTS-ESP   : interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
+
+``ODDSound::MTSClient``
+
+Static library build of the MTS-ESP client library
+
+``ODDSound::MTSMaster``
+
+Static library build of the MTS-ESP master library
+
+``ODDSound::MTS-ESP``
+
+Interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
 
 #]=======================================================================]
 

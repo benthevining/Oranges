@@ -17,13 +17,17 @@ Findwraptool
 
 Find PACE's wraptool code signing program.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- wraptool_FOUND
+
+.. cmake:variable:: PROGRAM_WRAPTOOL
+
+Path to the wraptool executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- PACE::wraptool : the wraptool executable.
+
+``PACE::wraptool``: the wraptool executable.
 
 #]=======================================================================]
 
@@ -45,14 +49,14 @@ if (TARGET PACE::wraptool)
 else ()
     set (wraptool_FOUND FALSE)
 
-    find_program (WRAPTOOL_PROGRAM wraptool DOC "PACE wraptool program")
+    find_program (PROGRAM_WRAPTOOL wraptool DOC "PACE wraptool program")
 
-    mark_as_advanced (FORCE WRAPTOOL_PROGRAM)
+    mark_as_advanced (FORCE PROGRAM_WRAPTOOL)
 
-    if (WRAPTOOL_PROGRAM)
+    if (PROGRAM_WRAPTOOL)
         add_executable (wraptool IMPORTED GLOBAL)
 
-        set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${WRAPTOOL_PROGRAM}")
+        set_target_properties (wraptool PROPERTIES IMPORTED_LOCATION "${PROGRAM_WRAPTOOL}")
 
         add_executable (PACE::wraptool ALIAS wraptool)
 

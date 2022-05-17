@@ -34,6 +34,11 @@ Include an external XCode project
 
 Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
 
+.. seealso::
+
+    Module :module:`Findxcodebuild`
+        Find module for xcodebuild
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

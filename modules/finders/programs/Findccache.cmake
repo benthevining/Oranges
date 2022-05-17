@@ -17,22 +17,40 @@ Findccache
 
 Find the ccache compiler cache.
 
-Options
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- CCACHE_DISABLE - when on, disables ccache for the entire build
-
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- CCACHE_OPTIONS - space-separated command line flags to pass to ccache
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ccache_FOUND
+.. cmake:variable:: CCACHE_PROGRAM
+
+Path to the ccache executable
+
+.. cmake:variable:: CCACHE_DISABLE
+
+When ``ON``, ccache is disabled for the entire build and linking against ``ccache::ccache-interface`` does nothing. Defaults to ``OFF``.
+
+.. cmake:variable:: CCACHE_OPTIONS
+
+A space-separated list of command line flags to pass to ccache.
+
+Defaults to ``CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M``.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ccache::ccache : The ccache executable.
-- ccache::ccache-interface : Interface library that can be linked against to enable ccache for a target
+
+``ccache::ccache``
+
+The ccache executable.
+
+``ccache::ccache-interface``
+
+Interface library that can be linked against to enable ccache for a target
+
+Target properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``ORANGES_USING_CCACHE``
+
+True if the target is using ccache; otherwise, false or undefined.
 
 #]=======================================================================]
 
@@ -50,10 +68,6 @@ set_package_properties (
     PURPOSE "Speed up compilation with caching")
 
 option (CCACHE_DISABLE "Disable ccache for this build" OFF)
-
-if (CCACHE_DISABLE)
-    return ()
-endif ()
 
 #
 
@@ -143,24 +157,20 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 add_library (ccache-interface INTERFACE)
 
-set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
-
-if (XCODE)
-    set (CMAKE_XCODE_ATTRIBUTE_CC "${c_script}")
-    set (CMAKE_XCODE_ATTRIBUTE_CXX "${cxx_script}")
-    set (CMAKE_XCODE_ATTRIBUTE_LD "${c_script}")
-    set (CMAKE_XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
-
-    set_target_properties (
-        ccache-interface
-        PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
-                   XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+if (CCACHE_DISABLE)
+    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE FALSE)
 else ()
-    set (CMAKE_C_COMPILER_LAUNCHER "${c_script}")
-    set (CMAKE_CXX_COMPILER_LAUNCHER "${cxx_script}")
+    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
 
-    set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-                                                       CXX_COMPILER_LAUNCHER "${cxx_script}")
+    if (XCODE)
+        set_target_properties (
+            ccache-interface
+            PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
+                       XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+    else ()
+        set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+                                                           CXX_COMPILER_LAUNCHER "${cxx_script}")
+    endif ()
 endif ()
 
 if (NOT TARGET ccache::ccache-interface)

@@ -19,7 +19,10 @@ When this modules is included, it configures installation of system libraries, u
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_IGNORE_SYSTEM_LIBS : if set to ON, including this module will do nothing. Defaults to OFF.
+
+.. cmake:variable::ORANGES_IGNORE_SYSTEM_LIBS
+
+If set to ``ON``, including this module will do nothing. Defaults to ``OFF``.
 
 #]=======================================================================]
 

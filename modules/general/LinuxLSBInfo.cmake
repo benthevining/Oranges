@@ -15,11 +15,17 @@
 LinuxLSBInfo
 -------------------------
 
+This module sets some cache variables identifying the Linux distribution of the host computer.
+
+.. cmake:variable:: LSB_RELEASE_EXECUTABLE
+
+The path to the ``lsb_release`` program
+
 Output variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- LSB_DISTRIBUTOR_ID
-- LSB_RELEASE
-- LSB_CODENAME
+- ``LSB_DISTRIBUTOR_ID``
+- ``LSB_RELEASE``
+- ``LSB_CODENAME``
 
 #]=======================================================================]
 

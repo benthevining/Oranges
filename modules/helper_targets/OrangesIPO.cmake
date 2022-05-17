@@ -19,11 +19,14 @@ Provides an interface target with interprocedural optimization enabled.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesIPO
+``Oranges::OrangesIPO``
 
 Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION`
+
+:variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION`
+
+If this variable is set to true, then IPO will be enabled; you can set this variable to false to disable IPO even when linking to this target.
 
 .. seealso ::
 

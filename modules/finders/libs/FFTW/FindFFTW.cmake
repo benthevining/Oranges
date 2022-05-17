@@ -18,10 +18,6 @@ FindFFTW
 A find module for the FFTW FFT library.
 FFTW produces two separate CMake packages, fftw3 (double precision) and fftw3f (float precision); this find module searches for both and creates an interface target that links to whichever is found (or both).
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FFTW_FOUND
-
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - fftw3 - double precision FFTW library
@@ -29,7 +25,15 @@ Components
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FFTW::FFTW : interface library that links to both the single and/or double precision libraries, and has the macros FFTW_SINGLE_ONLY or FFTW_DOUBLE_ONLY defined, if applicable.
+
+``FFTW::FFTW``
+
+Interface library that links to both the single and/or double precision libraries, and has the following macros defined:
+
+- ``FFTW_SINGLE_AVAILABLE`` - 1 if the single-precision library was found, 0 otherwise
+- ``FFTW_DOUBLE_AVAILABLE`` - 1 if the double-precision library was found, 0 otherwise
+- ``FFTW_SINGLE_ONLY`` - 1 if float precision is available, but not double precision. 0 if both precisions are available.
+- ``FFTW_DOUBLE_ONLY`` - 1 if double precision is available, but not single precision. 0 if both precisions are available.
 
 #]=======================================================================]
 
@@ -83,26 +87,20 @@ endif ()
 target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
                                       $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
 
-# define FFTW_DOUBLE_ONLY to 1 if the double target exists and the float one doesn't
-target_compile_definitions (
-    FFTW
-    INTERFACE
-        $<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3f>>>:FFTW_DOUBLE_ONLY=1>
-    )
+set (float_lib_exists "$<TARGET_EXISTS:FFTW::fftw3f>")
+set (double_lib_exists "$<TARGET_EXISTS:FFTW::fftw3>")
 
-# define FFTW_SINGLE_ONLY to 1 if the float target exists and the double one doesn't
 target_compile_definitions (
     FFTW
     INTERFACE
-        $<$<AND:$<TARGET_EXISTS:FFTW::fftw3f>,$<NOT:$<TARGET_EXISTS:FFTW::fftw3>>>:FFTW_SINGLE_ONLY=1>
-    )
+        "FFTW_SINGLE_AVAILABLE=${float_lib_exists}"
+        "FFTW_DOUBLE_AVAILABLE=${double_lib_exists}"
+        "$<$<AND:${double_lib_exists},$<NOT:${float_lib_exists}>>:FFTW_DOUBLE_ONLY=1>"
+        "$<$<AND:${float_lib_exists},$<NOT:${double_lib_exists}>>:FFTW_SINGLE_ONLY=1>"
+        "$<$<AND:${float_lib_exists},${double_lib_exists}>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>")
 
-# define both FFTW_DOUBLE_ONLY and FFTW_SINGLE_ONLY to 0 if both targets exist
-target_compile_definitions (
-    FFTW
-    INTERFACE
-        "$<$<AND:$<TARGET_EXISTS:FFTW::fftw3>,$<TARGET_EXISTS:FFTW::fftw3f>>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>"
-    )
+unset (float_lib_exists)
+unset (double_lib_exists)
 
 install (TARGETS FFTW EXPORT FFTWTargets)
 

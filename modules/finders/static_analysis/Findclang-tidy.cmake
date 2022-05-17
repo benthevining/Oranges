@@ -17,15 +17,23 @@ Findclang-tidy
 
 Find the clang-tidy static analysis tool.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- clang-tidy_FOUND
+
+.. cmake:variable:: PROGRAM_CLANG_TIDY
+
+Path to the clang-tidy executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Clang::clang-tidy : The clang-tidy executable.
-- Clang::clang-tidy-interface : Interface library that can be linked against to enable clang-tidy integrations for a target.
 
+``Clang::clang-tidy``
+
+The clang-tidy executable.
+
+``Clang::clang-tidy-interface``
+
+Interface library that can be linked against to enable clang-tidy integrations for a target.
 
 #]=======================================================================]
 

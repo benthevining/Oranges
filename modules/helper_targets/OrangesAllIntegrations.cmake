@@ -15,7 +15,7 @@
 OrangesAllIntegrations
 -------------------------
 
-Searches for all static analysis integration programs and enables the ones that are available.
+Searches for ccache and all static analysis integration programs and enables the ones that are available.
 
 This module searches for the following packages:
 
@@ -27,23 +27,26 @@ This module searches for the following packages:
 
 and enables build-time integrations for any of the tools that are found. No errors are emitted for unfound integration tools.
 
-Note that this is a build-only target! You should always link to it using the following command:
-
-.. code-block:: cmake
-
-    target_link_libraries (YourTarget YOUR_SCOPE
-        $<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
-
-If you get an error similar to: ::
-
-    CMake Error: install(EXPORT "someExport" ...) includes target "yourTarget" which requires target "OrangesAllIntegrations" that is not in any export set.
-
-then this is why. You're linking to OrangesAllIntegrations unconditionally (or with incorrect generator expressions).
-
-
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges::OrangesAllIntegrations
+``Oranges::OrangesAllIntegrations``
+
+.. seealso ::
+
+    Module :module:`Findccache`
+        Find module for ccache
+
+    Module :module:`Findclang-tidy`
+        Find module for clang-tidy
+
+    Module :module:`Findcppcheck`
+        Find module for cppcheck
+
+    Module :module:`Findcpplint`
+        Find module for cpplint
+
+    Module :module:`Findinclude-what-you-use`
+        Find module for include-what-you-use
 
 #]=======================================================================]
 

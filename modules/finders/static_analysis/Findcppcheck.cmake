@@ -19,18 +19,29 @@ Find the cppcheck static analysis tool.
 
 Cache variables:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- CPPCHECK_ENABLE - list of checks to enable
-- CPPCHECK_DISABLE - list of checks to disable
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- cppcheck_FOUND
+.. cmake:variable:: CPPCHECK_PROGRAM
+
+Path to the cppcheck executable.
+
+.. cmake:variable:: CPPCHECK_ENABLE
+
+List of cppcheck checks to enable. Defaults to ``warning;style;performance;portability``.
+
+.. cmake:variable:: CPPCHECK_DISABLE
+
+List of cppcheck checks to disable. Defaults to ``unmatchedSuppression;missingIncludeSystem;unusedStructMember;unreadVariable;preprocessorErrorDirective;unknownMacro``.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- cppcheck::cppcheck : The cppcheck executable.
-- cppcheck::cppcheck-interface : Interface library that can be linked against to enable cppcheck integrations for a target
 
+``cppcheck::cppcheck``
+
+The cppcheck executable
+
+``cppcheck::cppcheck-interface``
+
+Interface library that can be linked against to enable cppcheck integrations for a target
 
 #]=======================================================================]
 
@@ -57,13 +68,13 @@ set (
     "unmatchedSuppression;missingIncludeSystem;unusedStructMember;unreadVariable;preprocessorErrorDirective;unknownMacro"
     CACHE STRING "List of cppcheck checks to disable")
 
-find_program (PROGRAM_CPPCHECK NAMES cppcheck DOC "cppcheck executable")
+find_program (CPPCHECK_PROGRAM NAMES cppcheck DOC "cppcheck executable")
 
-mark_as_advanced (FORCE PROGRAM_CPPCHECK CPPCHECK_ENABLE CPPCHECK_DISABLE)
+mark_as_advanced (FORCE CPPCHECK_PROGRAM CPPCHECK_ENABLE CPPCHECK_DISABLE)
 
 set (cppcheck_FOUND FALSE)
 
-if (NOT PROGRAM_CPPCHECK)
+if (NOT CPPCHECK_PROGRAM)
     find_package_warning_or_error ("cppcheck program cannot be found!")
     return ()
 endif ()
@@ -74,7 +85,7 @@ endif ()
 
 add_executable (cppcheck IMPORTED GLOBAL)
 
-set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPCHECK}")
+set_target_properties (cppcheck PROPERTIES IMPORTED_LOCATION "${CPPCHECK_PROGRAM}")
 
 add_executable (cppcheck::cppcheck ALIAS cppcheck)
 
@@ -82,7 +93,7 @@ set (cppcheck_FOUND TRUE)
 
 if (NOT TARGET cppcheck::cppcheck-interface)
 
-    set (cppcheck_cmd "${PROGRAM_CPPCHECK};--inline-suppr")
+    set (cppcheck_cmd "${CPPCHECK_PROGRAM};--inline-suppr")
 
     foreach (enable_check IN LISTS CPPCHECK_ENABLE)
         list (APPEND cppcheck_cmd "--enable=${enable_check}")

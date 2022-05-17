@@ -15,15 +15,14 @@
 FindJUCE
 -------------------------
 
-A find module for the JUCE library. This module fetches the JUCE sources from GitHub using oranges_fetch_repository().
+A find module for the JUCE library. This module fetches the JUCE sources from GitHub using :module:`OrangesFetchRepository`.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- LEMONS_JUCE_BRANCH: the branch of the GitHub repository to use; develop or master. Defaults to develop.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- JUCE_FOUND
+.. cmake:variable:: ORANGES_JUCE_BRANCH
+
+The branch of JUCE's GitHub repository to use either ``develop`` or ``master``. Defaults to ``master``.
 
 #]=======================================================================]
 
@@ -43,9 +42,9 @@ oranges_file_scoped_message_context ("FindJUCE")
 
 #
 
-set (LEMONS_JUCE_BRANCH "develop" CACHE STRING "The branch of the JUCE GitHub repository to use")
-set_property (CACHE LEMONS_JUCE_BRANCH PROPERTY STRINGS "develop;master")
-mark_as_advanced (FORCE LEMONS_JUCE_BRANCH)
+set (ORANGES_JUCE_BRANCH "master" CACHE STRING "The branch of the JUCE GitHub repository to use")
+set_property (CACHE ORANGES_JUCE_BRANCH PROPERTY STRINGS "develop;master")
+mark_as_advanced (FORCE ORANGES_JUCE_BRANCH)
 
 if (JUCE_FIND_QUIETLY)
     set (quiet_flag QUIET)
@@ -54,7 +53,7 @@ endif ()
 oranges_fetch_repository (
     NAME JUCE
     GITHUB_REPOSITORY juce-framework/JUCE
-    GIT_TAG "origin/${LEMONS_JUCE_BRANCH}"
+    GIT_TAG "origin/${ORANGES_JUCE_BRANCH}"
     CMAKE_OPTIONS "JUCE_ENABLE_MODULE_SOURCE_GROUPS ON" "JUCE_BUILD_EXAMPLES OFF"
                   "JUCE_BUILD_EXTRAS OFF"
     NEVER_LOCAL ${quiet_flag})

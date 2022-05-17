@@ -17,13 +17,18 @@ Findfaust
 
 Find the Faust compiler.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- faust_FOUND
+
+.. cmake:variable:: PROGRAM_FAUST
+
+Path to the Faust compiler executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- faust::faust : The Faust compiler executable
+``faust::faust``
+
+The Faust compiler executable
 
 #]=======================================================================]
 

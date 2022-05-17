@@ -17,13 +17,16 @@ Findxcodebuild
 
 Find Apple's xcodebuild program.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- xcodebuild_FOUND
+
+.. cmake:variable:: PROGRAM_XCODEBUILD
+
+Path to the xcodebuild executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Apple::xcodebuild : xcodebuild executable
+``Apple::xcodebuild``: xcodebuild executable
 
 #]=======================================================================]
 
@@ -42,14 +45,14 @@ oranges_file_scoped_message_context ("Findxcodebuild")
 
 set (xcodebuild_FOUND FALSE) # cmake-lint: disable=W0105
 
-find_program (XCODE_BUILD xcodebuild DOC "xcodebuild executable")
+find_program (PROGRAM_XCODEBUILD xcodebuild DOC "xcodebuild executable")
 
-mark_as_advanced (FORCE XCODE_BUILD)
+mark_as_advanced (FORCE PROGRAM_XCODEBUILD)
 
-if (XCODE_BUILD)
+if (PROGRAM_XCODEBUILD)
     add_executable (xcodebuild IMPORTED GLOBAL)
 
-    set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION "${XCODE_BUILD}")
+    set_target_properties (xcodebuild PROPERTIES IMPORTED_LOCATION "${PROGRAM_XCODEBUILD}")
 
     add_executable (Apple::xcodebuild ALIAS xcodebuild)
 

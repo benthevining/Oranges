@@ -19,18 +19,38 @@ Find the cpplint static analysis tool.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- CPPLINT_IGNORE - list of checks to ignore (accepts regex).
-- CPPLINT_VERBOSITY - verbosity level. Defaults to 0.
 
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- cpplint_FOUND
+.. cmake:variable:: CPPLINT_PROGRAM
+
+Path to the cpplint executable
+
+.. cmake:variable:: CPPLINT_IGNORE
+
+A list of cpplint checks to ignore; accepts regex. Defaults to ``-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo``.
+
+.. cmake:variable:: CPPLINT_VERBOSITY
+
+cpplint verbosity level. Defaults to 0.
+
+From the cpplint docs:
+
+::
+
+    Specify a number 0-5 to restrict errors to certain verbosity levels.
+    Errors with lower verbosity levels have lower confidence and are more
+    likely to be false positives.
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Google::cpplint : the cpplint executable
-- Google::cpplint-interface : interface library that can be linked against to enable cpplint integrations for a target
 
+``Google::cpplint``
+
+The cpplint executable
+
+``Google::cpplint-interface``
+
+Interface library that can be linked against to enable cpplint integrations for a target
 
 #]=======================================================================]
 
@@ -55,13 +75,13 @@ set (CPPLINT_IGNORE
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
-find_program (PROGRAM_CPPLINT NAMES cpplint DOC "cpplint executable")
+find_program (CPPLINT_PROGRAM NAMES cpplint DOC "cpplint executable")
 
-mark_as_advanced (FORCE PROGRAM_CPPLINT CPPLINT_IGNORE CPPLINT_VERBOSITY)
+mark_as_advanced (FORCE CPPLINT_PROGRAM CPPLINT_IGNORE CPPLINT_VERBOSITY)
 
 set (cpplint_FOUND FALSE)
 
-if (NOT PROGRAM_CPPLINT)
+if (NOT CPPLINT_PROGRAM)
     find_package_warning_or_error ("cpplint program cannot be found!")
     return ()
 endif ()
@@ -72,7 +92,7 @@ endif ()
 
 add_executable (cpplint IMPORTED GLOBAL)
 
-set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${PROGRAM_CPPLINT}")
+set_target_properties (cpplint PROPERTIES IMPORTED_LOCATION "${CPPLINT_PROGRAM}")
 
 add_executable (Google::cpplint ALIAS cpplint)
 
@@ -87,9 +107,9 @@ if (NOT TARGET Google::cpplint-interface)
     set_target_properties (
         cpplint-interface
         PROPERTIES CXX_CPPLINT
-                   "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
+                   "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
                    C_CPPLINT
-                   "${PROGRAM_CPPLINT};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}")
+                   "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}")
 
     add_library (Google::cpplint-interface ALIAS cpplint-interface)
 endif ()

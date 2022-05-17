@@ -17,14 +17,22 @@ Findinclude-what-you-use
 
 Find the include-what-you-use static analysis tool.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- include-what-you-use_FOUND
+
+.. cmake:variable:: PROGRAM_INCLUDE_WHAT_YOU_USE
+
+Path to the include-what-you-use executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Google::include-what-you-use : include-what-you-use executable
-- Google::include-what-you-use-interface : interface library that can be linked against to enable include-what-you-use integrations for a target
+``Google::include-what-you-use``
+
+include-what-you-use executable
+
+``Google::include-what-you-use-interface``
+
+Interface library that can be linked against to enable include-what-you-use integrations for a target
 
 
 #]=======================================================================]

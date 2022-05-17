@@ -17,13 +17,17 @@ Findauval
 
 Find the auval AudioUnit plugin testing tool.
 
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- auval_FOUND
+
+.. cmake:variable:: PROGRAM_AUVAL
+
+Path to the auval executable
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Apple::auval : the auval executable.
+
+``Apple::auval``: the auval executable.
 
 #]=======================================================================]
 
@@ -51,12 +55,12 @@ endif ()
 
 set (auval_FOUND FALSE)
 
-find_program (AUVAL_PROGRAM auval DOC "auval executable")
+find_program (PROGRAM_AUVAL auval DOC "auval executable")
 
-if (AUVAL_PROGRAM)
+if (PROGRAM_AUVAL)
     add_executable (auval IMPORTED GLOBAL)
 
-    set_target_properties (auval PROPERTIES IMPORTED_LOCATION "${AUVAL_PROGRAM}")
+    set_target_properties (auval PROPERTIES IMPORTED_LOCATION "${PROGRAM_AUVAL}")
 
     add_executable (Apple::auval ALIAS auval)
 
