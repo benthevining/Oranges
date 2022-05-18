@@ -16,8 +16,6 @@ Usewraptool
 -------------------------
 
 Configure AAX plugin signing using PACE's wraptool program.
-If wraptool hasn't already been found, including this module will call ``find_package(wraptool)``.
-
 
 Configure AAX signing with wraptool
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -36,23 +34,41 @@ Configure AAX signing with wraptool
 Configures signing of an AAX plugin target. Does nothing on Linux.
 
 The ``ACCOUNT``, ``SIGNID``, ``KEYFILE``, and ``KEYPASSWORD`` options set the cache variables ``WRAPTOOL_ACCOUNT``, ``WRAPTOOL_SIGNID``, ``WRAPTOOL_KEYFILE``, and ``WRAPTOOL_KEYPASSWORD``, respectively.
+When this module is included, each of these cache variables is also initialized with the value of the corresponding environment variable with the same name, if it is defined.
 
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:variable:: PROGRAM_WRAPTOOL
+
+Path to the wraptool executable
+
+.. cmake:variable:: WRAPTOOL_ACCOUNT
+
+.. cmake:variable:: WRAPTOOL_SIGNID
+
+.. cmake:variable:: WRAPTOOL_KEYFILE
+
+.. cmake:variable:: WRAPTOOL_KEYPASSWORD
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:envvar:: WRAPTOOL_ACCOUNT
 
+Initializes the :variable:`WRAPTOOL_ACCOUNT` variable when this module is included.
+
 .. cmake:envvar:: WRAPTOOL_SIGNID
+
+Initializes the :variable:`WRAPTOOL_SIGNID` variable when this module is included.
 
 .. cmake:envvar:: WRAPTOOL_KEYFILE
 
+Initializes the :variable:`WRAPTOOL_KEYFILE` variable when this module is included.
+
 .. cmake:envvar:: WRAPTOOL_KEYPASSWORD
 
-.. seealso::
-
-    Module :module:`Findwraptool`
-        Find module for wraptool
+Initializes the :variable:`WRAPTOOL_KEYPASSWORD` variable when this module is included.
 
 #]=======================================================================]
 
@@ -64,45 +80,39 @@ include (LemonsCmakeDevTools)
 
 #
 
-define_property (GLOBAL PROPERTY WRAPTOOL_ACCOUNT BRIEF_DOCS "wraptool account ID"
-                 FULL_DOCS "wraptool account ID")
+find_program (PROGRAM_WRAPTOOL wraptool DOC "PACE wraptool program")
 
-define_property (GLOBAL PROPERTY WRAPTOOL_SIGNID BRIEF_DOCS "wraptool sign ID"
-                 FULL_DOCS "wraptool sign ID")
-
-define_property (GLOBAL PROPERTY WRAPTOOL_KEYFILE BRIEF_DOCS "wraptool keyfile"
-                 FULL_DOCS "wraptool keyfile")
-
-define_property (GLOBAL PROPERTY WRAPTOOL_KEYPASSWORD BRIEF_DOCS "wraptool key password"
-                 FULL_DOCS "wraptool key password")
+mark_as_advanced (FORCE PROGRAM_WRAPTOOL)
 
 #
 
 if (DEFINED ENV{WRAPTOOL_ACCOUNT})
-    set (WRAPTOOL_ACCOUNT "$ENV{WRAPTOOL_ACCOUNT}" CACHE STRING "Account ID")
+    set (WRAPTOOL_ACCOUNT "$ENV{WRAPTOOL_ACCOUNT}" CACHE STRING "wraptool account ID")
 endif ()
 
 if (DEFINED ENV{WRAPTOOL_SIGNID})
-    set (WRAPTOOL_SIGNID "$ENV{WRAPTOOL_SIGNID}" CACHE STRING "Sign ID")
+    set (WRAPTOOL_SIGNID "$ENV{WRAPTOOL_SIGNID}" CACHE STRING "wraptool sign ID")
 endif ()
 
 if (DEFINED ENV{WRAPTOOL_KEYFILE})
-    set (WRAPTOOL_KEYFILE "$ENV{WRAPTOOL_SIGNID}" CACHE STRING "Keyfile path")
+    set (WRAPTOOL_KEYFILE "$ENV{WRAPTOOL_SIGNID}" CACHE FILEPATH "wraptool keyfile path")
 endif ()
 
 if (DEFINED ENV{WRAPTOOL_KEYPASSWORD})
-    set (WRAPTOOL_KEYPASSWORD "$ENV{WRAPTOOL_KEYPASSWORD}" CACHE STRING "Key password")
-endif ()
-
-#
-
-if (NOT TARGET PACE::wraptool)
-    find_package (wraptool REQUIRED)
+    set (WRAPTOOL_KEYPASSWORD "$ENV{WRAPTOOL_KEYPASSWORD}" CACHE STRING "wraptool key password")
 endif ()
 
 #
 
 function (wraptool_configure_aax_plugin_signing)
+
+    if (NOT PROGRAM_WRAPTOOL)
+        message (
+            WARNING
+                "wraptool not found, codesigning cannot be configured. Set PROGRAM_WRAPTOOL to its location."
+            )
+        return ()
+    endif ()
 
     oranges_add_function_message_context ()
 
@@ -124,22 +134,17 @@ function (wraptool_configure_aax_plugin_signing)
                 "${CMAKE_CURRENT_FUNCTION} called with non-existent target ${LEMONS_AAX_TARGET}!")
     endif ()
 
-    set (WRAPTOOL_ACCOUNT "${LEMONS_AAX_ACCOUNT}" CACHE STRING "Account ID")
-    set (WRAPTOOL_SIGNID "${LEMONS_AAX_SIGNID}" CACHE STRING "Sign ID")
-    set (WRAPTOOL_KEYFILE "${LEMONS_AAX_KEYFILE}" CACHE FILEPATH "Keyfile path")
-    set (WRAPTOOL_KEYPASSWORD "${LEMONS_AAX_KEYPASSWORD}" CACHE STRING "Key password")
-
-    set_property (GLOBAL PROPERTY WRAPTOOL_ACCOUNT "${WRAPTOOL_ACCOUNT}")
-    set_property (GLOBAL PROPERTY WRAPTOOL_SIGNID "${WRAPTOOL_SIGNID}")
-    set_property (GLOBAL PROPERTY WRAPTOOL_KEYFILE "${WRAPTOOL_KEYFILE}")
-    set_property (GLOBAL PROPERTY WRAPTOOL_KEYPASSWORD "${WRAPTOOL_KEYPASSWORD}")
+    set (WRAPTOOL_ACCOUNT "${LEMONS_AAX_ACCOUNT}" CACHE STRING "wraptool account ID")
+    set (WRAPTOOL_SIGNID "${LEMONS_AAX_SIGNID}" CACHE STRING "wraptool sign ID")
+    set (WRAPTOOL_KEYFILE "${LEMONS_AAX_KEYFILE}" CACHE FILEPATH "wraptool keyfile path")
+    set (WRAPTOOL_KEYPASSWORD "${LEMONS_AAX_KEYPASSWORD}" CACHE STRING "wraptool key password")
 
     if (APPLE)
         add_custom_command (
             TARGET "${LEMONS_AAX_TARGET}"
             POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
             COMMAND
-                PACE::wraptool ARGS sign --verbose --dsig1-compat off --account
+                "${PROGRAM_WRAPTOOL}" ARGS sign --verbose --dsig1-compat off --account
                 "${WRAPTOOL_ACCOUNT}" --wcguid "${LEMONS_AAX_GUID}" --signid "${WRAPTOOL_SIGNID}"
                 --in "$<TARGET_PROPERTY:${aaxTarget},JUCE_PLUGIN_ARTEFACT_FILE>" --out
                 "$<TARGET_PROPERTY:${aaxTarget},JUCE_PLUGIN_ARTEFACT_FILE>"
@@ -150,7 +155,7 @@ function (wraptool_configure_aax_plugin_signing)
             TARGET "${LEMONS_AAX_TARGET}"
             POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
             COMMAND
-                PACE::wraptool ARGS sign --verbose --dsig1-compat off --account
+                "${PROGRAM_WRAPTOOL}" ARGS sign --verbose --dsig1-compat off --account
                 "${WRAPTOOL_ACCOUNT}" --keyfile "${WRAPTOOL_KEYFILE}" --keypassword
                 "${WRAPTOOL_KEYPASSWORD}" --wcguid "${LEMONS_AAX_GUID}" --in
                 "$<TARGET_PROPERTY:${aaxTarget},JUCE_PLUGIN_ARTEFACT_FILE>" --out

@@ -118,9 +118,11 @@ endif ()
 set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
                                                                                             "")
 
-mark_as_advanced (FORCE CCACHE_OPTIONS)
-
-separate_arguments (ccache_options UNIX_COMMAND "${CCACHE_OPTIONS}")
+if (CCACHE_OPTIONS)
+    separate_arguments (ccache_options UNIX_COMMAND "${CCACHE_OPTIONS}")
+else ()
+    set (ccache_options "")
+endif ()
 
 list (APPEND ccache_options "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
 list (APPEND ccache_options "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")

@@ -100,8 +100,8 @@ add_subdirectory (modules/helper_targets)
 include (CPackComponent)
 
 if (ORANGES_BUILD_DOCS)
-    include ("${CMAKE_CURRENT_LIST_DIR}/scripts/update_readme.cmake")
-    include (OrangesGraphViz)
+    include (scripts/update_readme.cmake)
+    include (OrangesGraphviz)
 
     oranges_add_graphviz_target (
         TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}"
@@ -124,16 +124,16 @@ install (
 
 include (CMakePackageConfigHelpers)
 
-write_basic_package_version_file ("OrangesConfigVersion.cmake" VERSION "${PROJECT_VERSION}"
+write_basic_package_version_file (Oranges-config-version.cmake VERSION "${PROJECT_VERSION}"
                                   COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 configure_package_config_file (
-    "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesConfig.cmake" OrangesConfig.cmake
-    INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}" PATH_VARS ORANGES_ROOT_DIR)
+    scripts/Oranges-config.cmake Oranges-config.cmake INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}"
+    PATH_VARS ORANGES_ROOT_DIR)
 
 install (
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfigVersion.cmake"
-          "${CMAKE_CURRENT_BINARY_DIR}/OrangesConfig.cmake"
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/Oranges-config-version.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/Oranges-config.cmake"
           "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
     DESTINATION "${ORANGES_INSTALL_DEST}"
     COMPONENT oranges_base)

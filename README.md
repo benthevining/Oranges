@@ -47,7 +47,7 @@ A library of CMake modules.
   * OrangesGeneratePkgConfig
   * OrangesGeneratePlatformHeader
   * OrangesGenerateStandardHeaders
-  * OrangesGraphViz
+  * OrangesGraphviz
   * OrangesIPO
   * OrangesInstallSystemLibs
   * OrangesJuceModuleUtilities
@@ -78,16 +78,12 @@ A library of CMake modules.
   * Findauval
   * Findccache
   * Findclang-tidy
-  * Findcodesign
   * Findcppcheck
   * Findcpplint
-  * Findfaust
   * Findfftw3
   * Findfftw3f
   * Findinclude-what-you-use
   * Findpluginval
-  * Findwraptool
-  * Findxcodebuild
 
 ## Using Oranges
 

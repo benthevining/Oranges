@@ -31,6 +31,8 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``Oranges::OrangesAllIntegrations``
 
+Interface target that links to ccache and all the static analysis tools' interface targets.
+
 .. seealso ::
 
     Module :module:`Findccache`

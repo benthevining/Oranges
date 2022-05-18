@@ -17,6 +17,14 @@ OrangesFetchRepository
 
 This module is a light wrapper around CMake's :module:`FetchContent` module, and provides the function :command:`oranges_fetch_repository()`.
 
+.. contents:: Contents
+    :depth: 1
+    :local:
+    :backlinks: top
+
+The oranges_fetch_repository command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. command:: oranges_fetch_repository
 
   ::
@@ -69,7 +77,7 @@ If the ``NO_SUBMODULES`` option is present, no git submodules will be pulled or 
 If the ``NO_RECURSE_SUBMODULES`` option is present, top-level git submodules will be cloned/updated, but submodules will not be updated recursively.
 If neither option is given, all submodules will be updated recursively.
 
-Variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:variable:: ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
@@ -106,8 +114,10 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-option (ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
-        "Try local find_package before fetching dependencies from git" OFF)
+option (
+    ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST
+    "In the oranges_fetch_repository function, try local find_package before fetching dependencies from git"
+    OFF)
 
 include (OrangesCmakeDevTools)
 include (OrangesSetUpCache)

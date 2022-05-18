@@ -16,8 +16,6 @@ Usexcodebuild
 -------------------------
 
 Include external Xcode projects in your build.
-If xcodebuild hasn't already been found, including this module will call ``find_package(xcodebuild)``.
-
 
 Include an external XCode project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -32,12 +30,14 @@ Include an external XCode project
                                    [EXTRA_ARGS <extraXcodebuildArgs>]
                                    [COMMENT <buildComment>])
 
-Adds an external Xcode project to the build, similar to the CMake-native include_external_msproject command.
+Adds an external Xcode project to the build, similar to the CMake-native :command:`include_external_msproject() <include_external_msproject>` command.
 
-.. seealso::
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Module :module:`Findxcodebuild`
-        Find module for xcodebuild
+.. cmake:variable:: PROGRAM_XCODEBUILD
+
+Path to the xcodebuild executable
 
 #]=======================================================================]
 
@@ -45,15 +45,25 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+find_program (
+    PROGRAM_XCODEBUILD xcodebuild
+    DOC "xcodebuild executable (used by the Oranges include_external_xcode_project function)")
 
-if (NOT TARGET Apple::xcodebuild)
-    find_package (xcodebuild REQUIRED)
-endif ()
+mark_as_advanced (FORCE PROGRAM_XCODEBUILD)
+
+include (OrangesCmakeDevTools)
 
 #
 
 function (include_external_xcode_project)
+
+    if (NOT PROGRAM_XCODEBUILD)
+        message (
+            WARNING
+                "${CMAKE_CURRENT_FUNCTION} - xcodebuild not found, cannot add external Xcode project target"
+            )
+        return ()
+    endif ()
 
     oranges_add_function_message_context ()
 
@@ -75,7 +85,7 @@ function (include_external_xcode_project)
 
     add_custom_target (
         "${ORANGES_ARG_TARGET}"
-        COMMAND Apple::xcodebuild -scheme "${ORANGES_ARG_SCHEME}" -configuration
+        COMMAND "${PROGRAM_XCODEBUILD}" -scheme "${ORANGES_ARG_SCHEME}" -configuration
                 $<COMMAND_CONFIG:$<CONFIG>> ${ORANGES_ARG_EXTRA_ARGS} build
         COMMAND_EXPAND_LISTS VERBATIM USES_TERMINAL
         WORKING_DIRECTORY "${ORANGES_ARG_DIRECTORY}"

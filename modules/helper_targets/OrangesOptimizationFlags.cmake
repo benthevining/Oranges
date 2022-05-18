@@ -28,6 +28,8 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``Oranges::OrangesOptimizationFlags``
 
+Interface target with configuration-specific optimization flags configured.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

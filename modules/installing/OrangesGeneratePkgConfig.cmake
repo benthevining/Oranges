@@ -15,7 +15,7 @@
 OrangesGeneratePkgConfig
 -------------------------
 
-This module provides the function :command:`oranges_create_pkgconfig_file()`.
+This module provides the function :command:`oranges_create_pkgconfig_file() <oranges_create_pkgconfig_file>`.
 
 .. command:: oranges_create_pkgconfig_file
 
@@ -34,7 +34,7 @@ This module provides the function :command:`oranges_create_pkgconfig_file()`.
 Generates pkgconfig files for each build configuration of the specified target.
 For each configuration, a file named ``<packageName>-<config>.pc`` will be generated.
 
-The pkgconfig files are populated with flags automatically based on the ``<targetName>``'s flags.
+The pkgconfig files are populated with flags automatically based on the target ``<targetName>``'s flags.
 
 ``OUTPUT_DIR`` specifies where the pkgconfig files will be written. If not specified, it defaults to ``${CMAKE_CURRENT_BINARY_DIR}/pkgconfig``.
 

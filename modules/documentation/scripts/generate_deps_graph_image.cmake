@@ -29,5 +29,5 @@ endif ()
 set (output_graph "@ORANGES_ARG_OUTPUT_DIR@/deps_graph.png")
 
 execute_process (
-    COMMAND "@ORANGES_DOT@" -Tpng -o "${output_graph}" "${original_dot_file}"
+    COMMAND "@PROGRAM_DOT@" -Tpng -o "${output_graph}" "${original_dot_file}"
     WORKING_DIRECTORY "@ORANGES_ARG_OUTPUT_DIR@" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)

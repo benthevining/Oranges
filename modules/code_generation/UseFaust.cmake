@@ -16,8 +16,6 @@ UseFaust
 -------------------------
 
 Integrate Faust DSP code into your project.
-If the Faust compiler hasn't already been found, including this module will call ``find_package(faust)``.
-
 
 .. command:: faust_add_generation_command
 
@@ -29,7 +27,6 @@ If the Faust compiler hasn't already been found, including this module will call
 
 Adds a command to call the Faust compiler to generate the ``<generatedClassName>`` C++ class in the file ``<outputFile>`` from the ``<inputFile>`` Faust .dsp file.
 
-
 .. command:: faust_add_library
 
   ::
@@ -40,14 +37,16 @@ Adds a command to call the Faust compiler to generate the ``<generatedClassName>
                       [INSTALL_REL_PATH <relPath>]
                       [INSTALL_COMPONENT <compName>])
 
-Calls :command:`faust_add_generation_command()` for each pair of passed ``fileNames`` and ``classNames``, and creates an interface library target that contains all the generated sources.
+Calls :command:`faust_add_generation_command() <faust_add_generation_command>` for each pair of passed ``fileNames`` and ``classNames``, and creates an interface library target that contains all the generated sources.
 
 ``<fileNames>`` and ``<classNames>`` must be lists of the same length, with each element in the ``<fileNames>`` list corresponding to the element in the ``<classNames>`` list at the same index.
 
-.. seealso::
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Module :module:`Findfaust`
-        Find module for Faust.
+.. cmake:variable:: PROGRAM_FAUST
+
+Path to the Faust compiler executable
 
 #]=======================================================================]
 
@@ -57,11 +56,20 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesCmakeDevTools)
 
-find_package (faust REQUIRED)
+find_program (PROGRAM_FAUST faust DOC "Faust compiler (used by the Oranges UseFaust module)")
+
+mark_as_advanced (FORCE PROGRAM_FAUST)
 
 #
 
 function (faust_add_generation_command)
+
+    if (NOT PROGRAM_FAUST)
+        message (
+            WARNING
+                "${CMAKE_CURRENT_FUNCTION} - Faust not found, Faust targets cannot be configured")
+        return ()
+    endif ()
 
     set (oneValueArgs INPUT_FILE OUTPUT_FILE CLASS_NAME)
 
@@ -77,7 +85,7 @@ function (faust_add_generation_command)
     add_custom_command (
         OUTPUT "${ORANGES_ARG_OUTPUT_FILE}"
         COMMAND
-            faust::faust "${ORANGES_ARG_INPUT_FILE}"
+            "${PROGRAM_FAUST}" "${ORANGES_ARG_INPUT_FILE}"
             # -I ${Faust_SOURCE_DIR}/libraries
             -o "${ORANGES_ARG_OUTPUT_FILE}" -cn "${ORANGES_ARG_CLASS_NAME}"
         DEPENDS "${ORANGES_ARG_INPUT_FILE}"
@@ -88,6 +96,13 @@ endfunction ()
 #
 
 function (faust_add_library)
+
+    if (NOT PROGRAM_FAUST)
+        message (
+            WARNING
+                "${CMAKE_CURRENT_FUNCTION} - Faust not found, Faust targets cannot be configured")
+        return ()
+    endif ()
 
     set (oneValueArgs TARGET_NAME INSTALL_REL_PATH INSTALL_COMPONENT)
     set (multiValueArgs INPUT_FILES CLASS_NAMES)

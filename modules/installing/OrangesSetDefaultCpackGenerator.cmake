@@ -15,7 +15,9 @@
 OrangesSetDefaultCpackGenerator
 --------------------------------
 
-When this modules is included, if CPACK_GENERATOR is not set, it will be set to a default value sensible for the current platform.
+When this modules is included, if :variable:`CPACK_GENERATOR` is not set, it will be set to a default value sensible for the current platform.
+
+On Windows, the default generator is NSIS. On Mac, it's PackageMaker. On Ubuntu, the DEB generator is used. On RPM, the RPM generator is used. On any other system, TGZ will be used.
 
 .. cmake:variable:: ORANGES_DEB_EXE
 
@@ -38,21 +40,23 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 cmake_language (DEFER CALL message VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")
 
-if (CPACK_GENERATOR)
+if (DEFINED CPACK_GENERATOR OR DEFINED CACHE{CPACK_GENERATOR})
     return ()
 endif ()
 
-if (MSVC OR WIN32)
+include (OrangesGeneratePlatformHeader)
+
+if (PLAT_WIN)
     set (CPACK_GENERATOR "NSIS" CACHE STRING "CPack generator")
     return ()
 endif ()
 
-if (APPLE)
+if (PLAT_APPLE)
     set (CPACK_GENERATOR "PackageMaker" CACHE STRING "CPack generator")
     return ()
 endif ()
 
-if (NOT UNIX)
+if (NOT PLAT_UNIX)
     set (CPACK_GENERATOR "TGZ" CACHE STRING "CPack generator")
     return ()
 endif ()
@@ -71,7 +75,9 @@ if (LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
     return ()
 endif ()
 
-find_program (ORANGES_DEB_EXE debuild)
+find_program (
+    ORANGES_DEB_EXE debuild
+    DOC "Not actually used, just checked for existence to determine if platform is Debian")
 
 mark_as_advanced (FORCE ORANGES_DEB_EXE)
 
@@ -80,7 +86,8 @@ if (ORANGES_DEB_EXE)
     return ()
 endif ()
 
-find_program (ORANGES_RPM_EXE rpmbuild)
+find_program (ORANGES_RPM_EXE rpmbuild
+              DOC "Not actually used, just checked for existence to determine if platform is RPM.")
 
 mark_as_advanced (FORCE ORANGES_RPM_EXE)
 

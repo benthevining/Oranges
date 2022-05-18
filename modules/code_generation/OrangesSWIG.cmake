@@ -15,7 +15,7 @@
 OrangesSWIG
 -------------------------
 
-This module provides the command :command:`oranges_add_swig_targets()`.
+This module provides the command :command:`oranges_add_swig_targets() <oranges_add_swig_targets>`.
 
 If the SWIG package hasn't already been found, including this module will call ``find_package (SWIG)``.
 
@@ -34,7 +34,7 @@ If the SWIG package hasn't already been found, including this module will call `
 
 Creates SWIG libraries in each of the output languages listed in ``LANGUAGES``. The target for each output language will be named ``<moduleName>_<lang>``.
 
-This is basically a wrapper around CMake's :command:`swig_add_library`, with the convenience of being able to create targets for multiple target languages in one function call.
+This is basically a wrapper around CMake's :command:`swig_add_library() <swig_add_library>`, with the convenience of being able to create targets for multiple target languages in one function call.
 
 ``AGGREGATE_TARGET`` is the name of an interface target that links to all the generated SWIG targets. It defaults to ``<moduleName>_SWIG``.
 If the ``NO_AGGREGATE_TARGET`` option is given, then no aggregate target will be created.
@@ -59,7 +59,9 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-find_package (SWIG COMPONENTS python)
+if (NOT SWIG_FOUND)
+    find_package (SWIG COMPONENTS python)
+endif ()
 
 include (UseSWIG)
 include (OrangesFunctionArgumentHelpers)
@@ -67,6 +69,14 @@ include (OrangesFunctionArgumentHelpers)
 #
 
 function (oranges_add_swig_targets)
+
+    if (NOT SWIG_FOUND)
+        message (
+            WARNING
+                "${CMAKE_CURRENT_FUNCTION} - SWIG could not be found, SWIG targets cannot be added."
+            )
+        return ()
+    endif ()
 
     set (options NO_AGGREGATE_TARGET)
     set (oneValueArgs MODULE_NAME BINARY_DIR TYPE INPUT_LANGUAGE OUTPUT_VAR AGGREGATE_TARGET)

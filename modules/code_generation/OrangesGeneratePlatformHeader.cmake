@@ -15,7 +15,15 @@
 OrangesGeneratePlatformHeader
 ------------------------------
 
-This module provides the function :command:`oranges_generate_platform_header()` and an extensive set of cache variables describing the current target platform.
+This module provides the function :command:`oranges_generate_platform_header() <oranges_generate_platform_header>` and an extensive set of cache variables describing the current target platform.
+
+.. contents:: Contents
+    :depth: 1
+    :local:
+    :backlinks: top
+
+The header generation command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. command:: oranges_generate_platform_header
 
@@ -32,13 +40,17 @@ Generates a header file containing various platform identifying macros for the c
 
 Each option is initialized by the value of a corresponding cache variable, and the entire set of cache variables is initialized when this module is first included.
 
-For some of the platform introspection, a language must be specified, because the information may be compiler-specific. For these options, the cache variables are suffixed with ``<lang>``, so that multiple settings can be saved (and overridden) for different platform testing languages.
+For some of the platform introspection, a language must be specified, because the information may be compiler-specific.
+For these options, the cache variables are suffixed with ``<lang>`` (where ``lang`` is the language in all-uppercase), so that multiple settings can be saved (and overridden) for different platform testing languages.
 
 A useful property of this module is that including it initializes all the ``PLAT_`` cache variables, so you can reference them even without generating a header file.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
 
 The header will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
+
+Macros
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The generated file will contain the following macros, where ``<baseName>`` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
 
@@ -176,7 +188,7 @@ set (
     CXX
     CACHE
         STRING
-        "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration"
+        "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration, when another language isn't explicitly specified"
     )
 
 set_property (CACHE PLAT_DEFAULT_TESTING_LANGUAGE PROPERTY STRINGS "CXX;C;OBJCXX;OBJC;Fortran;ASM")

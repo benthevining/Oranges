@@ -20,9 +20,17 @@ Find the include-what-you-use static analysis tool.
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cmake:variable:: PROGRAM_INCLUDE_WHAT_YOU_USE
+.. cmake:variable:: IWYU_PROGRAM
 
 Path to the include-what-you-use executable
+
+.. cmake:variable:: IWYU_EXTRA_ARGS
+
+A semicolon-separated list of command line arguments that will be passed to the include-what-you-use executable.
+For each argument in this list, the IWYU command line is actually appended with ``-Xiwyu <arg>``.
+Defaults to ``--update_comments;--cxx17ns``.
+
+Changes to the value of this variable after this module is included have no effect.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -54,12 +62,19 @@ oranges_file_scoped_message_context ("Findinclude-what-you-use")
 
 set (include-what-you-use_FOUND FALSE)
 
-find_program (PROGRAM_INCLUDE_WHAT_YOU_USE NAMES include-what-you-use iwyu
-              DOC "include-what-you-use executable")
+find_program (IWYU_PROGRAM NAMES include-what-you-use iwyu DOC "include-what-you-use executable")
 
-mark_as_advanced (FORCE PROGRAM_INCLUDE_WHAT_YOU_USE)
+mark_as_advanced (FORCE IWYU_PROGRAM)
 
-if (NOT PROGRAM_INCLUDE_WHAT_YOU_USE)
+set (
+    IWYU_EXTRA_ARGS
+    "--update_comments;--cxx17ns"
+    CACHE
+        STRING
+        "A space-separated list of command line arguments that will be passed to the include-what-you-use executable."
+    )
+
+if (NOT IWYU_PROGRAM)
     find_package_warning_or_error ("include-what-you-use program cannot be found!")
     return ()
 endif ()
@@ -70,8 +85,7 @@ endif ()
 
 add_executable (include-what-you-use IMPORTED GLOBAL)
 
-set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION
-                                                       "${PROGRAM_INCLUDE_WHAT_YOU_USE}")
+set_target_properties (include-what-you-use PROPERTIES IMPORTED_LOCATION "${IWYU_PROGRAM}")
 
 add_executable (Google::include-what-you-use ALIAS include-what-you-use)
 
@@ -80,10 +94,17 @@ set (include-what-you-use_FOUND TRUE)
 if (NOT TARGET Google::include-what-you-use-interface)
     add_library (include-what-you-use-interface INTERFACE)
 
-    set_target_properties (
-        include-what-you-use-interface
-        PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-                   "${PROGRAM_INCLUDE_WHAT_YOU_USE};-Xiwyu;--update_comments;-Xiwyu;--cxx17ns")
+    set (iwyu_cmd "${IWYU_PROGRAM}")
+
+    foreach (xtra_arg IN LISTS IWYU_EXTRA_ARGS)
+        set (iwyu_cmd "${iwyu_cmd};-Xiwyu;${xtra_arg}")
+        unset (xtra_arg)
+    endforeach ()
+
+    set_target_properties (include-what-you-use-interface PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+                                                                     "${iwyu_cmd}")
+
+    unset (iwyu_cmd)
 
     add_library (Google::include-what-you-use-interface ALIAS include-what-you-use-interface)
 endif ()

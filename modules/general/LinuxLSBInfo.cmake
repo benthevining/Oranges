@@ -17,29 +17,44 @@ LinuxLSBInfo
 
 This module sets some cache variables identifying the Linux distribution of the host computer.
 
-.. cmake:variable:: LSB_RELEASE_EXECUTABLE
-
-The path to the ``lsb_release`` program
-
-Output variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ``LSB_DISTRIBUTOR_ID``
-- ``LSB_RELEASE``
-- ``LSB_CODENAME``
+
+.. cmake:variable:: PROGRAM_LSB_RELEASE
+
+The path to the ``lsb_release`` program.
+
+.. cmake:variable:: LSB_DISTRIBUTOR_ID
+
+LSB distributor ID for your Linux distribution. Initialized with the output of executing ``<PROGRAM_LSB_RELEASE> -si``.
+
+.. cmake:variable:: LSB_RELEASE
+
+LSB release for your Linux distribution. Initialized with the output of executing ``<PROGRAM_LSB_RELEASE> -sr``.
+
+.. cmake:variable:: LSB_CODENAME
+
+LSB codename for your Linux distribution. Initialized with the output of running ``<PROGRAM_LSB_RELEASE> -sc``.
 
 #]=======================================================================]
 
 include_guard (GLOBAL)
 
+if ((DEFINED LSB_DISTRIBUTOR_ID OR DEFINED CACHE{LSB_DISTRIBUTOR_ID})
+    AND (DEFINED LSB_RELEASE OR DEFINED CACHE{LSB_RELEASE}) AND (DEFINED LSB_CODENAME
+                                                                 OR DEFINED CACHE{LSB_CODENAME}))
+    return ()
+endif ()
+
 include (OrangesCmakeDevTools)
 
 oranges_file_scoped_message_context ("LinuxLSBInfo")
 
-find_program (LSB_RELEASE_EXECUTABLE lsb_release)
+find_program (PROGRAM_LSB_RELEASE lsb_release DOC "LSB release executable for your Linux distro")
 
-mark_as_advanced (FORCE LSB_RELEASE_EXECUTABLE)
+mark_as_advanced (FORCE PROGRAM_LSB_RELEASE)
 
-if (NOT LSB_RELEASE_EXECUTABLE)
+if (NOT PROGRAM_LSB_RELEASE)
 
     message (AUTHOR_WARNING "Unable to detect LSB info for your Linux distro")
 
@@ -50,19 +65,24 @@ if (NOT LSB_RELEASE_EXECUTABLE)
     return ()
 endif ()
 
-execute_process (COMMAND "${LSB_RELEASE_EXECUTABLE}" -sc OUTPUT_VARIABLE LSB_CODENAME
+execute_process (COMMAND "${PROGRAM_LSB_RELEASE}" -sc OUTPUT_VARIABLE LSB_CODENAME
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process (COMMAND "${LSB_RELEASE_EXECUTABLE}" -sr OUTPUT_VARIABLE LSB_RELEASE
+execute_process (COMMAND "${PROGRAM_LSB_RELEASE}" -sr OUTPUT_VARIABLE lsb_rel
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-execute_process (COMMAND "${LSB_RELEASE_EXECUTABLE}" -si OUTPUT_VARIABLE LSB_DISTRIBUTOR_ID
+execute_process (COMMAND "${PROGRAM_LSB_RELEASE}" -si OUTPUT_VARIABLE lsb_distrib_id
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-set (LSB_DISTRIBUTOR_ID "${LSB_DISTRIBUTOR_ID}"
-     CACHE STRING "LSB distributor ID for your Linux distribution")
-set (LSB_RELEASE "${LSB_RELEASE}" CACHE STRING "LSB executable for your Linux distribution")
+set (LSB_DISTRIBUTOR_ID "${lsb_distrib_id}" CACHE STRING
+                                                  "LSB distributor ID for your Linux distribution")
+
+set (LSB_RELEASE "${lsb_rel}" CACHE STRING "LSB release for your Linux distribution")
+
 set (LSB_CODENAME "${LSB_CODENAME}" CACHE STRING "LSB codename for your Linux distribution")
+
+unset (lsb_distrib_id)
+unset (lsb_rel)
 
 message (DEBUG "Linux ditributor ID: ${LSB_DISTRIBUTOR_ID}")
 message (DEBUG "Linux release ID: ${LSB_RELEASE}")

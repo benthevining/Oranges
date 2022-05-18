@@ -28,6 +28,8 @@ Path to the cpplint executable
 
 A list of cpplint checks to ignore; accepts regex. Defaults to ``-whitespace;-legal;-build;-runtime/references;-readability/braces;-readability/todo``.
 
+Changes to the value of this variable after this module is included have no effect.
+
 .. cmake:variable:: CPPLINT_VERBOSITY
 
 cpplint verbosity level. Defaults to 0.
@@ -40,6 +42,13 @@ From the cpplint docs:
     Errors with lower verbosity levels have lower confidence and are more
     likely to be false positives.
 
+Changes to the value of this variable after this module is included have no effect.
+
+.. cmake:variable:: CPPLINT_EXTRA_ARGS
+
+A space-separated list of command line arguments that will be passed to the cpplint executable verbatim. Empty by default.
+
+Changes to the value of this variable after this module is included have no effect.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -75,9 +84,19 @@ set (CPPLINT_IGNORE
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "cpplint verbosity level")
 
+set_property (CACHE CPPLINT_VERBOSITY PROPERTY STRINGS "0;1;2;3;4;5")
+
+set (
+    CPPLINT_EXTRA_ARGS
+    ""
+    CACHE
+        STRING
+        "A space-separated list of command line arguments that will be passed to the cpplint executable verbatim."
+    )
+
 find_program (CPPLINT_PROGRAM NAMES cpplint DOC "cpplint executable")
 
-mark_as_advanced (FORCE CPPLINT_PROGRAM CPPLINT_IGNORE CPPLINT_VERBOSITY)
+mark_as_advanced (FORCE CPPLINT_PROGRAM)
 
 set (cpplint_FOUND FALSE)
 
@@ -102,14 +121,28 @@ if (NOT TARGET Google::cpplint-interface)
 
     add_library (cpplint-interface INTERFACE)
 
-    list (JOIN CPPLINT_IGNORE "," CPPLINT_IGNORE)
+    set (cpplint_cmd "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY}")
 
-    set_target_properties (
-        cpplint-interface
-        PROPERTIES CXX_CPPLINT
-                   "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}"
-                   C_CPPLINT
-                   "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY};--filter=${CPPLINT_IGNORE}")
+    if (CPPLINT_IGNORE)
+        list (JOIN CPPLINT_IGNORE "," cpplint_ignr)
+
+        set (cpplint_cmd "${cpplint_cmd};--filter=${cpplint_ignr}")
+
+        unset (cpplint_ignr)
+    endif ()
+
+    if (CPPLINT_EXTRA_ARGS)
+        separate_arguments (cpplint_xtra_args UNIX_COMMAND "${CPPLINT_EXTRA_ARGS}")
+
+        set (cpplint_cmd "${cpplint_cmd};${cpplint_xtra_args}")
+
+        unset (cpplint_xtra_args)
+    endif ()
+
+    set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${cpplint_cmd}"
+                                                        C_CPPLINT "${cpplint_cmd}")
+
+    unset (cpplint_cmd)
 
     add_library (Google::cpplint-interface ALIAS cpplint-interface)
 endif ()

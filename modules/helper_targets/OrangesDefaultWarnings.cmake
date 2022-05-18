@@ -23,6 +23,8 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``Oranges::OrangesDefaultWarnings``
 
+Interface target with default warning flags configured.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

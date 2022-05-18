@@ -19,13 +19,12 @@ include (CheckCXXSymbolExists)
 #
 
 set (doc_plat_os_type "String literal describing the target OS")
-
-#
-
 set (doc_plat_arm_neon "True if the target CPU supports ARM NEON instructions")
 set (doc_plat_avx "True if the target CPU supports AVX instructions")
 set (doc_plat_avx512 "True if the target CPU supports AVX-512 instructions")
 set (doc_plat_sse "True if the target CPU supports SSE instructions")
+
+#
 
 if (PLAT_DISABLE_SIMD)
     set (PLAT_ARM_NEON 0 CACHE BOOL "${doc_plat_arm_neon}")

@@ -27,7 +27,7 @@ Targets
 
 ``wipe_cache``
 
-A utility target that when executed, deletes the directory where :command:`oranges_fetch_repository()` caches its downloads, as well as :variable:`FETCHCONTENT_BASE_DIR`.
+A utility target that when executed, deletes the directory where :command:`oranges_fetch_repository() <oranges_fetch_repository>` caches its downloads, as well as :variable:`FETCHCONTENT_BASE_DIR`.
 
 #]=======================================================================]
 
@@ -56,13 +56,9 @@ set (configured_script "${CMAKE_BINARY_DIR}/wipe_cache.cmake")
 
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/scripts/wipe_cache.cmake" "${configured_script}" @ONLY)
 
-find_program (PROGRAM_SUDO sudo)
-
-mark_as_advanced (FORCE PROGRAM_SUDO)
-
 add_custom_target (
     wipe_cache
-    COMMAND "${PROGRAM_SUDO}" "${CMAKE_COMMAND} -P ${configured_script}"
+    COMMAND "${CMAKE_COMMAND} -P ${configured_script}"
     COMMENT "Wiping cache..."
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     VERBATIM USES_TERMINAL)

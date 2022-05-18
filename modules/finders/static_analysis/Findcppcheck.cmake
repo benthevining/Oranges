@@ -28,9 +28,19 @@ Path to the cppcheck executable.
 
 List of cppcheck checks to enable. Defaults to ``warning;style;performance;portability``.
 
+Changes to the value of this variable after this module is included have no effect.
+
 .. cmake:variable:: CPPCHECK_DISABLE
 
 List of cppcheck checks to disable. Defaults to ``unmatchedSuppression;missingIncludeSystem;unusedStructMember;unreadVariable;preprocessorErrorDirective;unknownMacro``.
+
+Changes to the value of this variable after this module is included have no effect.
+
+.. cmake:variable:: CPPCHECK_EXTRA_ARGS
+
+A space-separated list of command line arguments that will be passed to the cppcheck executable verbatim. Empty by default.
+
+Changes to the value of this variable after this module is included have no effect.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -68,9 +78,17 @@ set (
     "unmatchedSuppression;missingIncludeSystem;unusedStructMember;unreadVariable;preprocessorErrorDirective;unknownMacro"
     CACHE STRING "List of cppcheck checks to disable")
 
+set (
+    CPPCHECK_EXTRA_ARGS
+    ""
+    CACHE
+        STRING
+        "A space-separated list of command line arguments that will be passed to the cppcheck executable verbatim."
+    )
+
 find_program (CPPCHECK_PROGRAM NAMES cppcheck DOC "cppcheck executable")
 
-mark_as_advanced (FORCE CPPCHECK_PROGRAM CPPCHECK_ENABLE CPPCHECK_DISABLE)
+mark_as_advanced (FORCE CPPCHECK_PROGRAM)
 
 set (cppcheck_FOUND FALSE)
 
@@ -102,6 +120,14 @@ if (NOT TARGET cppcheck::cppcheck-interface)
     foreach (disable_check IN LISTS CPPCHECK_DISABLE)
         list (APPEND cppcheck_cmd "--suppress=${disable_check}")
     endforeach ()
+
+    if (CPPCHECK_EXTRA_ARGS)
+        separate_arguments (cppcheck_xtra_args UNIX_COMMAND "${CPPCHECK_EXTRA_ARGS}")
+
+        set (cppcheck_cmd "${cppcheck_cmd};${cppcheck_xtra_args}")
+
+        unset (cppcheck_xtra_args)
+    endif ()
 
     add_library (cppcheck-interface INTERFACE)
 

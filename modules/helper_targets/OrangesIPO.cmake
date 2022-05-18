@@ -17,9 +17,14 @@ OrangesIPO
 
 Provides an interface target with interprocedural optimization enabled.
 
+If the variable :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION` is defined, it will control this module's behavior - if set to a false value, linking to the ``OrangesIPO`` target does nothing.
+If :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION` is not defined, CMake's :module:`CheckIPOSupported` module will be used to detect if IPO is supported with the current toolchain, and if not, linking to the ``OrangesIPO`` target does nothing.
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``Oranges::OrangesIPO``
+
+Sets up interprocedural optimization flags.
 
 Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -47,7 +52,8 @@ include (FeatureSummary)
 
 add_library (OrangesIPO INTERFACE)
 
-if (NOT DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+if (NOT (DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION OR DEFINED
+                                                       CACHE{CMAKE_INTERPROCEDURAL_OPTIMIZATION}))
     include (CheckIPOSupported)
     check_ipo_supported (RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 endif ()

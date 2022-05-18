@@ -15,7 +15,7 @@
 OrangesGenerateExportHeader
 ----------------------------
 
-This module is a thin wrapper around CMake's :command:`generate_export_header()`, and adds the :command:`oranges_generate_export_header()` command.
+This module is a thin wrapper around CMake's :command:`generate_export_header() <generate_export_header>`, and adds the :command:`oranges_generate_export_header() <generate_export_header>` command.
 
 .. command:: oranges_generate_export_header
 
@@ -25,6 +25,8 @@ This module is a thin wrapper around CMake's :command:`generate_export_header()`
                                    [BASE_NAME <baseName>]
                                    [HEADER <exportHeaderName>]
                                    [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
+
+Generates a header file containing symbol export macros, and adds it to the specified target.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 

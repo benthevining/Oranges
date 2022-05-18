@@ -113,6 +113,7 @@ repos:
       rev: v1.26.3
       hooks:
           - id: yamllint
+            #exclude: .clang-tidy
     - repo: https://github.com/sirosen/check-jsonschema
       rev: 0.14.3 # last known stable version is 0.14.3
       hooks:

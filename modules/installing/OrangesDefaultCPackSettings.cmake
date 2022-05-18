@@ -19,6 +19,8 @@ Sets up some default configuration settings for CPack.
 
 Most of the configuration settings are read from the relevant ``PROJECT_`` variables, meaning that the top-level project in a CMake build tree will control their values.
 
+This module includes :module:`OrangesSetDefaultCpackGenerator`.
+
 .. note::
 
     Inclusion style: once globally, ideally from the top-level project.

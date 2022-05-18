@@ -21,6 +21,8 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``Oranges::OrangesUnityBuild``
 
+Provides flags for building a target as a unity build.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

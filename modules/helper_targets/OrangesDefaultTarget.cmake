@@ -17,45 +17,49 @@ OrangesDefaultTarget
 
 Provides a helper "default target" with some sensible defaults configured.
 
-The default target will have configuration postfixes and appropriate configuration-specific optimization flags configured.
-
-OrangesDefaultTarget will always link against :module:`OrangesOptimizationFlags`, and :module:`OrangesDebugTarget` for debug configurations.
-
-The default target will have the following compiler definitions added:
-
-- ``ORANGES_DEBUG`` : 1 if the configuration is a debug configuration, 0 otherwise
-- ``ORANGES_RELEASE``: 1 if the configuration is a release configuration, 0 otherwise
-- ``ORANGES_BUILD_TYPE`` : A string literal with the exact name of the build configuration that was used.
-
+.. contents:: Contents
+    :depth: 1
+    :local:
+    :backlinks: top
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``Oranges::OrangesDefaultTarget``
 
+A default target with some basic boilerplate settings configured, that links against :module:`OrangesOptimizationFlags` and :module:`OrangesDebugTarget`.
+
+This target will have the following compiler definitions added:
+
+- ``ORANGES_DEBUG`` : 1 if the configuration is a debug configuration, 0 otherwise
+- ``ORANGES_RELEASE``: 1 if the configuration is a release configuration, 0 otherwise
+- ``ORANGES_BUILD_TYPE`` : A string literal with the exact name of the build configuration that was used.
+
 ``Oranges::OrangesDefaultCXXTarget``
 
-Links to OrangesDefaultTarget, but also has some default C++ compile features added. The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
+Links to ``OrangesDefaultTarget``, but also has some default C++ compile features added.
+The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
 
 Target properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``ORANGES_USING_INSTALLED_PACKAGE``
 
-or any target that links against OrangesDefaultTarget, this property will be defined to ``TRUE`` if it was linked to from an installed package, and ``FALSE`` if it is being built from source.
+For any target that links against ``OrangesDefaultTarget``, this property will be defined to ``TRUE`` if it was linked to from an installed package, and ``FALSE`` if it is being built from source.
+This property will (probably) be undefined for any target that to not link against ``OrangesDefaultTarget``.
 
 ``ORANGES_MAC_UNIVERSAL_BINARY``
 
-If true, this target is being built as a MacOSX universal binary.
+If true, this target is being built as a MacOSX universal binary. This property will (probably) be undefined for any target that to not link against ``OrangesDefaultTarget``.
 
 Global properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``ORANGES_MAC_NATIVE_ARCH``
 
-On Mac systems, this is a string describing the host's native architecture (typically arm64 or x86_64). Undefined on non-Apple systems.
+On Mac systems, this is a string describing the host's native architecture (typically arm64 or x86_64). Undefined on non-Apple systems, or when crosscompiling for iOS.
 
-Options
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:variable:: ORANGES_MAINTAINER_BUILD
@@ -64,7 +68,7 @@ When ``ON``, :module:`OrangesDefaultTarget` will link to :module:`OrangesDefault
 
 .. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
 
-10-character Apple developer ID used to set up code signing on iOS.
+10-character Apple developer ID used to set up code signing on iOS. Initialized by the value of :envvar:`APPLE_DEV_ID`, if set.
 
 .. cmake:variable:: ORANGES_MAC_UNIVERSAL_BINARY
 
@@ -109,9 +113,11 @@ include (OrangesOptimizationFlags)
 
 #
 
-option (ORANGES_MAINTAINER_BUILD "Enables integrations and warnings in OrangesDefaultTarget" OFF)
+option (ORANGES_MAINTAINER_BUILD
+        "Enables static analysis and default warnings in OrangesDefaultTarget" OFF)
 
-option (ORANGES_MAC_UNIVERSAL_BINARY "Builds for x86_64 and arm64" ON)
+option (ORANGES_MAC_UNIVERSAL_BINARY
+        "Builds everything linking against OrangesDefaultTarget for x86_64 and arm64" ON)
 
 if (PLAT_LINUX)
     set (CMAKE_AR "${CMAKE_CXX_COMPILER_AR}")
@@ -270,7 +276,7 @@ endif ()
 
 unset (ios_like)
 
-if (PLAT_APPLE)
+if (PLAT_MACOSX)
     execute_process (COMMAND uname -m OUTPUT_VARIABLE osx_native_arch
                      OUTPUT_STRIP_TRAILING_WHITESPACE)
 
@@ -295,10 +301,8 @@ if (PLAT_APPLE)
                  "  -- ENABLING universal binary in OrangesDefaultTarget in OrangesDefaultTarget")
     else ()
         set_target_properties (
-            OrangesDefaultTarget
-            PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES ${osx_native_arch}>
-                       $<$<PLATFORM_ID:Darwin>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>
-                       $<<NOT:$<PLATFORM_ID:Darwin>>:ORANGES_MAC_UNIVERSAL_BINARY FALSE>)
+            OrangesDefaultTarget PROPERTIES $<$<PLATFORM_ID:Darwin>:OSX_ARCHITECTURES
+                                            ${osx_native_arch}> ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 
         add_feature_info (ORANGES_MAC_UNIVERSAL_BINARY OFF
                           "Not building universal binaries for MacOSX in OrangesDefaultTarget")
@@ -307,6 +311,8 @@ if (PLAT_APPLE)
     endif ()
 
     unset (osx_native_arch)
+else ()
+    set_target_properties (OrangesDefaultTarget PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY FALSE)
 endif ()
 
 #

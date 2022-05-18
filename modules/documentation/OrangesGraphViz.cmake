@@ -15,7 +15,7 @@
 OrangesGraphViz
 -------------------------
 
-This module provides the function :command:`oranges_add_graphviz_target()`, which adds a custom target to generate Graphviz graphs depicting CMake's build graph.
+This module provides the function :command:`oranges_add_graphviz_target() <oranges_add_graphviz_target>`, which adds a custom target to generate Graphviz graphs depicting CMake's build graph.
 
 .. note::
 
@@ -63,10 +63,10 @@ If your custom config file is not already in ``srcDir`` or ``binDir``, it will b
 
 ``COPY_GRAPH_TO`` specifies an absolute filepath where the generated image will be copied to. The use case for this is to add the generated graph to your source tree, or to documentation, etc.
 
-Variables
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cmake:variable:: ORANGES_DOT
+.. cmake:variable:: PROGRAM_DOT
 
 Set to the absolute path of the ``dot`` executable that will be used to generate the graph images for :command:`oranges_add_graphviz_target()`.
 
@@ -89,9 +89,11 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
 include (OrangesFunctionArgumentHelpers)
 
-find_program (ORANGES_DOT dot DOC "graphviz dot tool, used to generate dependency graph images")
+find_program (
+    PROGRAM_DOT dot
+    DOC "graphviz dot tool, used to generate dependency graph images by the OrangesGraphviz module")
 
-mark_as_advanced (FORCE ORANGES_DOT)
+mark_as_advanced (FORCE PROGRAM_DOT)
 
 #
 
@@ -101,7 +103,7 @@ function (oranges_add_graphviz_target)
         return ()
     endif ()
 
-    if (NOT ORANGES_DOT)
+    if (NOT PROGRAM_DOT)
         message (AUTHOR_WARNING "dot cannot be found, dependency graph images cannot be generated")
         return ()
     endif ()

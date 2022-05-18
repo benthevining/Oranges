@@ -17,10 +17,12 @@ OrangesInstallSystemLibs
 
 When this modules is included, it configures installation of system libraries, unless the ``ORANGES_IGNORE_SYSTEM_LIBS`` option is set to ON.
 
+The system libraries will be added to an install component named ``SystemLibraries``, which is added to an install type named ``Developer``.
+
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. cmake:variable::ORANGES_IGNORE_SYSTEM_LIBS
+.. cmake:variable:: ORANGES_IGNORE_SYSTEM_LIBS
 
 If set to ``ON``, including this module will do nothing. Defaults to ``OFF``.
 
@@ -35,7 +37,7 @@ include (CPackComponent)
 #
 
 option (ORANGES_IGNORE_SYSTEM_LIBS
-        "Don't create install rules for compiler-provided system libraries" OFF)
+        "If true, don't create install rules for compiler-provided system libraries" OFF)
 
 mark_as_advanced (FORCE ORANGES_IGNORE_SYSTEM_LIBS)
 

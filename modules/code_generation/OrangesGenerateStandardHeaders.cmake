@@ -15,7 +15,7 @@
 OrangesGenerateStandardHeaders
 -------------------------------
 
-This module provides the function :command:`oranges_generate_standard_headers()`.
+This module provides the function :command:`oranges_generate_standard_headers() <oranges_generate_standard_headers>`.
 
 .. command:: oranges_generate_standard_headers
 
@@ -31,18 +31,18 @@ This module provides the function :command:`oranges_generate_standard_headers()`
                                       [INTERFACE]
                                       [SOURCE_GROUP_NAME <groupName>])
 
-This calls :command:`oranges_generate_export_header()` and :command:`oranges_generate_platform_header()`,
+This calls :command:`oranges_generate_export_header() <oranges_generate_export_header>` and :command:`oranges_generate_platform_header() <oranges_generate_platform_header>`,
 then generates another header named ``<mainHeaderName>`` that includes the other generated headers.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
 If the ``NO_AGGREGATE_HEADER`` option is present, then one "central" header that includes the other generated headers will not be created.
 
-``FEATURE_TEST_LANGUAGE`` is the language passed to :command:`oranges_generate_platform_header()` to do any compiler-specific platform introspection; defaults to CXX.
+``FEATURE_TEST_LANGUAGE`` is the language passed to :command:`oranges_generate_platform_header() <oranges_generate_platform_header>` to do any compiler-specific platform introspection; defaults to the value of :variable:`PLAT_DEFAULT_TESTING_LANGUAGE`.
 
 All headers will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
 
-If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :command:`source_group()` command. The group will be named ``<groupName>``.
+If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :command:`source_group() <source_group>` command. The group will be named ``<groupName>``.
 
 .. seealso ::
 
@@ -88,7 +88,7 @@ function (oranges_generate_standard_headers)
     lemons_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT ORANGES_ARG_FEATURE_TEST_LANGUAGE)
-        set (ORANGES_ARG_FEATURE_TEST_LANGUAGE CXX)
+        set (ORANGES_ARG_FEATURE_TEST_LANGUAGE "${PLAT_DEFAULT_TESTING_LANGUAGE}")
     endif ()
 
     if (NOT ORANGES_ARG_BASE_NAME)

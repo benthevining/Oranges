@@ -16,14 +16,12 @@ Usecodesign
 -------------------------
 
 Configure code signing of targets using Apple's codesign tool.
-If codesign hasn't already been found, including this module will call ``find_package(codesign)``.
 
 .. command:: codesign_sign_target
 
   ::
 
     codesign_sign_target (TARGET <targetName>)
-
 
 Adds a post-build command to the specified target to run codesign on the target's bundle.
 
@@ -35,10 +33,12 @@ Adds a post-build command to the specified target to run codesign on the target'
 
 Configures code signing for every individual format target of a plugin.
 
-.. seealso::
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Module :module:`Findcodesign`
-        Find module for codesign
+.. cmake:variable:: PROGRAM_CODESIGN
+
+Path to the codesign executable
 
 #]=======================================================================]
 
@@ -49,13 +49,22 @@ cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 include (CallForEachPluginFormat)
 include (LemonsCmakeDevTools)
 
-if (NOT TARGET Apple::codesign)
-    find_package (codesign REQUIRED)
-endif ()
+find_program (PROGRAM_CODESIGN codesign
+              DOC "Apple's codesign program (used by the Oranges Usecodesign module)")
+
+mark_as_advanced (FORCE PROGRAM_CODESIGN)
 
 #
 
 function (codesign_sign_target)
+
+    if (NOT PROGRAM_CODESIGN)
+        message (
+            WARNING
+                "codesign not found, codesigning cannot be configured. Set PROGRAM_CODESIGN to its location."
+            )
+        return ()
+    endif ()
 
     oranges_add_function_message_context ()
 
@@ -79,11 +88,12 @@ function (codesign_sign_target)
 
     add_custom_command (
         TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-        COMMAND Apple::codesign -s - --force "${dest}" COMMENT "Signing ${ORANGES_ARG_TARGET}...")
+        COMMAND "${PROGRAM_CODESIGN}" -s - --force "${dest}"
+        COMMENT "Signing ${ORANGES_ARG_TARGET}...")
 
     add_custom_command (
         TARGET "${ORANGES_ARG_TARGET}" POST_BUILD VERBATIM COMMAND_EXPAND_LISTS
-        COMMAND Apple::codesign -verify "${dest}"
+        COMMAND "${PROGRAM_CODESIGN}" -verify "${dest}"
         COMMENT "Verifying signing of ${ORANGES_ARG_TARGET}...")
 
 endfunction ()
@@ -91,6 +101,14 @@ endfunction ()
 #
 
 function (codesign_sign_plugin_targets)
+
+    if (NOT PROGRAM_CODESIGN)
+        message (
+            WARNING
+                "codesign not found, codesigning cannot be configured. Set PROGRAM_CODESIGN to its location."
+            )
+        return ()
+    endif ()
 
     oranges_add_function_message_context ()
 
