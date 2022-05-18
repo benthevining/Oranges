@@ -19,7 +19,7 @@ This module provides the function :command:`oranges_add_graphviz_target() <orang
 
 .. note::
 
-    Graphviz's ``dot`` tool is required to generate the output images. A path to its executable can manually be set using the :variable:`ORANGES_DOT` cache variable.
+    Graphviz's ``dot`` tool is required to generate the output images. A path to its executable can manually be set using the :variable:`PROGRAM_DOT` cache variable.
 
 .. command:: oranges_add_graphviz_target
 
@@ -76,7 +76,7 @@ Set to ``ON`` in the child invocations of CMake launched by :command:`oranges_ad
 
 .. seealso ::
 
-    Module :module:`CMakeGraphVizOptions`
+    Module :external:module:`CMakeGraphVizOptions`
         CMake's built in support for GraphViz graph creation.
 
 #]=======================================================================]

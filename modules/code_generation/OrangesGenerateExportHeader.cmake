@@ -15,7 +15,7 @@
 OrangesGenerateExportHeader
 ----------------------------
 
-This module is a thin wrapper around CMake's :command:`generate_export_header() <generate_export_header>`, and adds the :command:`oranges_generate_export_header() <generate_export_header>` command.
+This module is a thin wrapper around CMake's :external:command:`generate_export_header() <generate_export_header>`, and adds the :command:`oranges_generate_export_header() <generate_export_header>` command.
 
 .. command:: oranges_generate_export_header
 
@@ -39,7 +39,7 @@ Provides default symbol visibility control flags.
 
 .. seealso ::
 
-    Module :module:`GenerateExportHeader`
+    Module :external:module:`GenerateExportHeader`
         OrangesGenerateExportHeader is a thin wrapper around this module shipped by CMake
 
     Module :module:`OrangesGenerateStandardHeaders`

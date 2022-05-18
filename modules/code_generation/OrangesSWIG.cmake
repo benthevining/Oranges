@@ -34,7 +34,7 @@ If the SWIG package hasn't already been found, including this module will call `
 
 Creates SWIG libraries in each of the output languages listed in ``LANGUAGES``. The target for each output language will be named ``<moduleName>_<lang>``.
 
-This is basically a wrapper around CMake's :command:`swig_add_library() <swig_add_library>`, with the convenience of being able to create targets for multiple target languages in one function call.
+This is basically a wrapper around CMake's :external:command:`swig_add_library() <swig_add_library>`, with the convenience of being able to create targets for multiple target languages in one function call.
 
 ``AGGREGATE_TARGET`` is the name of an interface target that links to all the generated SWIG targets. It defaults to ``<moduleName>_SWIG``.
 If the ``NO_AGGREGATE_TARGET`` option is given, then no aggregate target will be created.
@@ -47,10 +47,10 @@ If ``OUTPUT_VAR`` is specified, a variable with that name will be set in the cal
 
 .. seealso::
 
-    Module :module:`UseSWIG`
+    Module :external:module:`UseSWIG`
         CMake's built-in SWIG support.
 
-    Module :module:`FindSWIG`
+    Module :external:module:`FindSWIG`
         CMake's built-in find module for SWIG.
 
 #]=======================================================================]

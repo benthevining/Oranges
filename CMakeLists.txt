@@ -19,7 +19,10 @@ The Oranges CMake library.
 
 Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_BUILD_DOCS
+
+.. cmake:variable:: ORANGES_BUILD_DOCS
+
+When on, builds the HTML and man page documentation. Defaults to on if Oranges is the top-level project.
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

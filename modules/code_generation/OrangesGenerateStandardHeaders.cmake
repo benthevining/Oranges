@@ -42,7 +42,7 @@ If the ``NO_AGGREGATE_HEADER`` option is present, then one "central" header that
 
 All headers will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
 
-If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :command:`source_group() <source_group>` command. The group will be named ``<groupName>``.
+If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :external:command:`source_group() <source_group>` command. The group will be named ``<groupName>``.
 
 .. seealso ::
 

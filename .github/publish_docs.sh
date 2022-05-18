@@ -47,9 +47,6 @@ cmake --preset default
 
 cmake --build --preset docs
 
-# need to create an empty .nojekyll file
-touch .nojekyll
-
 cd "$docs_git_tree"
 
 # remove everything currently in the docs branch

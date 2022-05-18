@@ -26,6 +26,11 @@ Options
 
 If set to ``ON``, including this module will do nothing. Defaults to ``OFF``.
 
+.. seealso::
+
+    Module :external:module:`InstallRequiredSystemLibraries`
+        Built-in CMake module that does the actual population of install rules with compiler libraries
+
 #]=======================================================================]
 
 include_guard (GLOBAL)

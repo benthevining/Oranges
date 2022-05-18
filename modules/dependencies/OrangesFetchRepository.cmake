@@ -15,7 +15,7 @@
 OrangesFetchRepository
 -------------------------
 
-This module is a light wrapper around CMake's :module:`FetchContent` module, and provides the function :command:`oranges_fetch_repository()`.
+This module is a light wrapper around CMake's :external:module:`FetchContent` module, and provides the function :command:`oranges_fetch_repository()`.
 
 .. contents:: Contents
     :depth: 1
@@ -41,14 +41,14 @@ The oranges_fetch_repository command
                              [GIT_STRATEGY CHECKOUT|REBASE|REBASE_CHECKOUT]
                              [GIT_OPTIONS "Option1=Value" "Option2=Value" ...])
 
-Fetches a git repository at configure time, with options for routing the call to :command:`find_package()` or a local location.
+Fetches a git repository at configure time, with options for routing the call to :external:command:`find_package()` or a local location.
 
 Output variables (set in the scope of the caller):
 
 - ``<name>_SOURCE_DIR``
 - ``<name>_BINARY_DIR``
 
-If the variable :variable:`FETCHCONTENT_SOURCE_DIR_<name>` is set, this function will simply call :command:`add_subdirectory()` on that directory.
+If the variable :variable:`FETCHCONTENT_SOURCE_DIR_<name>` is set, this function will simply call :external:command:`add_subdirectory()` on that directory.
 
 The environment variables :envvar:`GITHUB_USERNAME`, :envvar:`GITHUB_ACCESS_TOKEN`, :envvar:`BITBUCKET_USERNAME`, and :envvar:`BITBUCKET_PASSWORD` can be set to enable fetching private/protected repositories.
 
@@ -105,7 +105,7 @@ Environment variables
 
 .. seealso ::
 
-    Module :module:`FetchContent`
+    Module :external:module:`FetchContent`
         The native CMake module that does most of the heavy lifting here
 
 #]=======================================================================]

@@ -33,11 +33,21 @@ highlight_language = 'cmake'
 
 needs_sphinx = '1.1'
 
-extensions = ['sphinxcontrib.moderncmakedomain']
+autosectionlabel_prefix_document = True
+
+intersphinx_mapping = {'cmake': ('https://cmake.org/cmake/help/latest', None)}
+
+# editorconfig-checker-disable
+extensions = [
+    'sphinx.ext.autosectionlabel', 'sphinx.ext.githubpages',
+    'sphinx.ext.intersphinx', 'sphinx.ext.graphviz',
+    'sphinxcontrib.moderncmakedomain'
+]
+# editorconfig-checker-enable
 
 nitpicky = True
 smartquotes = False
-numfig = True
+numfig = False
 
 man_show_urls = False
 man_make_section_directory = False
