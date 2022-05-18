@@ -12,7 +12,7 @@
 
 #[=======================================================================[.rst:
 
-OrangesGraphViz
+OrangesGraphviz
 -------------------------
 
 This module provides the function :command:`oranges_add_graphviz_target() <oranges_add_graphviz_target>`, which adds a custom target to generate Graphviz graphs depicting CMake's build graph.
