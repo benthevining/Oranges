@@ -53,10 +53,11 @@ man_show_urls = False
 man_make_section_directory = False
 
 # html_baseurl
-html_show_sourcelink = True
+html_show_sourcelink = False
 html_static_path = ['@conf_path@']
 html_style = 'oranges.css'
 html_theme = 'default'
+html_split_index = True
 
 # editorconfig-checker-disable
 html_theme_options = {

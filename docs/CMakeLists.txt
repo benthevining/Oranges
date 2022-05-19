@@ -60,7 +60,6 @@ file (MAKE_DIRECTORY "${ORANGES_DOCS_BUILD_TREE}")
 
 # Generate .rst files for each module, and an index.rst
 
-set (ORANGES_MODULES_ROOT "${Oranges_SOURCE_DIR}/modules")
 set (RST_OUTPUT_DIR "${ORANGES_DOCS_BUILD_TREE}/modules")
 set (INPUT_INDEX_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst")
 
@@ -70,7 +69,6 @@ configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX
 
 execute_process (COMMAND python3 "${configured_script}")
 
-unset (ORANGES_MODULES_ROOT)
 unset (RST_OUTPUT_DIR)
 unset (INPUT_INDEX_FILE)
 

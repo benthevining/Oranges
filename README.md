@@ -28,84 +28,87 @@ A library of CMake modules.
 
 ### Oranges provides the following CMake modules:
 
-  * CallForEachPluginFormat
-  * LinuxLSBInfo
-  * OrangesAAXUtils
-  * OrangesAddPrivateSDKs
-  * OrangesAppUtilities
-  * OrangesAssetsHelpers
-  * OrangesBuildTypeMacros
-  * OrangesCcache
-  * OrangesClangTidy
-  * OrangesClapFormat
-  * OrangesCppcheck
-  * OrangesCpplint
-  * OrangesCreateAAXSDKTarget
-  * OrangesDebugTarget
-  * OrangesDefaultCPackSettings
-  * OrangesDefaultTarget
-  * OrangesDefaultWarnings
-  * OrangesDoxygenConfig
-  * OrangesFetchRepository
-  * OrangesGenerateExportHeader
-  * OrangesGeneratePkgConfig
-  * OrangesGeneratePlatformHeader
-  * OrangesGenerateStandardHeaders
-  * OrangesGraphviz
-  * OrangesIPO
-  * OrangesIWYU
-  * OrangesInstallSystemLibs
-  * OrangesJuceModuleUtilities
-  * OrangesJuceUtilities
-  * OrangesOptimizationFlags
-  * OrangesPluginUtilities
-  * OrangesSWIG
-  * OrangesSetDefaultCpackGenerator
-  * OrangesSourceFileUtils
-  * OrangesStaticAnalysis
-  * OrangesUninstallTarget
-  * OrangesUnityBuild
-  * OrangesWipeCacheTarget
-  * OrangesWrapAutotoolsProject
-  * UseFaust
-  * Usecodesign
-  * Usewraptool
-  * Usexcodebuild
+  * [CallForEachPluginFormat](modules/juce/plugins/CallForEachPluginFormat.cmake)
+  * [LinuxLSBInfo](modules/general/LinuxLSBInfo.cmake)
+  * [OrangesAAXUtils](modules/juce/plugins/OrangesAAXUtils.cmake)
+  * [OrangesAddPrivateSDKs](modules/juce/plugins/OrangesAddPrivateSDKs.cmake)
+  * [OrangesAppUtilities](modules/juce/OrangesAppUtilities.cmake)
+  * [OrangesAssetsHelpers](modules/juce/OrangesAssetsHelpers.cmake)
+  * [OrangesBuildTypeMacros](modules/general/OrangesBuildTypeMacros.cmake)
+  * [OrangesCcache](modules/helper_targets/OrangesCcache.cmake)
+  * [OrangesClangTidy](modules/helper_targets/static_analysis/OrangesClangTidy.cmake)
+  * [OrangesClapFormat](modules/juce/plugins/OrangesClapFormat.cmake)
+  * [OrangesCppcheck](modules/helper_targets/static_analysis/OrangesCppcheck.cmake)
+  * [OrangesCpplint](modules/helper_targets/static_analysis/OrangesCpplint.cmake)
+  * [OrangesCreateAAXSDKTarget](modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake)
+  * [OrangesDebugTarget](modules/helper_targets/OrangesDebugTarget.cmake)
+  * [OrangesDefaultCPackSettings](modules/installing/OrangesDefaultCPackSettings.cmake)
+  * [OrangesDefaultTarget](modules/helper_targets/OrangesDefaultTarget.cmake)
+  * [OrangesDefaultWarnings](modules/helper_targets/OrangesDefaultWarnings.cmake)
+  * [OrangesDoxygenConfig](modules/documentation/OrangesDoxygenConfig.cmake)
+  * [OrangesFetchRepository](modules/dependencies/OrangesFetchRepository.cmake)
+  * [OrangesGenerateExportHeader](modules/code_generation/OrangesGenerateExportHeader.cmake)
+  * [OrangesGeneratePkgConfig](modules/installing/OrangesGeneratePkgConfig.cmake)
+  * [OrangesGeneratePlatformHeader](modules/code_generation/OrangesGeneratePlatformHeader.cmake)
+  * [OrangesGenerateStandardHeaders](modules/code_generation/OrangesGenerateStandardHeaders.cmake)
+  * [OrangesGraphviz](modules/documentation/OrangesGraphviz.cmake)
+  * [OrangesIPO](modules/helper_targets/OrangesIPO.cmake)
+  * [OrangesIWYU](modules/helper_targets/static_analysis/OrangesIWYU.cmake)
+  * [OrangesInstallSystemLibs](modules/installing/OrangesInstallSystemLibs.cmake)
+  * [OrangesJuceModuleUtilities](modules/juce/OrangesJuceModuleUtilities.cmake)
+  * [OrangesJuceUtilities](modules/juce/OrangesJuceUtilities.cmake)
+  * [OrangesOptimizationFlags](modules/helper_targets/OrangesOptimizationFlags.cmake)
+  * [OrangesPluginUtilities](modules/juce/plugins/OrangesPluginUtilities.cmake)
+  * [OrangesSWIG](modules/code_generation/OrangesSWIG.cmake)
+  * [OrangesSetDefaultCpackGenerator](modules/installing/OrangesSetDefaultCpackGenerator.cmake)
+  * [OrangesSourceFileUtils](modules/general/OrangesSourceFileUtils.cmake)
+  * [OrangesStaticAnalysis](modules/helper_targets/static_analysis/OrangesStaticAnalysis.cmake)
+  * [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
+  * [OrangesUnityBuild](modules/helper_targets/OrangesUnityBuild.cmake)
+  * [OrangesWipeCacheTarget](modules/dependencies/OrangesWipeCacheTarget.cmake)
+  * [OrangesWrapAutotoolsProject](modules/dependencies/OrangesWrapAutotoolsProject.cmake)
+  * [UseFaust](modules/code_generation/UseFaust.cmake)
+  * [Usecodesign](modules/code_signing/Usecodesign.cmake)
+  * [Usewraptool](modules/code_signing/Usewraptool.cmake)
+  * [Usexcodebuild](modules/general/Usexcodebuild.cmake)
 
 ### Oranges provides the following find modules:
 
-  * FindAbletonLink
-  * FindAccelerate
-  * FindFFTW
-  * FindIPP
-  * FindJUCE
-  * FindMIPP
-  * FindMTS-ESP
-  * Findauval
-  * Findfftw3
-  * Findfftw3f
-  * Findpluginval
+  * [FindAbletonLink](modules/finders/libs/FindAbletonLink.cmake)
+  * [FindAccelerate](modules/finders/libs/FindAccelerate.cmake)
+  * [FindFFTW](modules/finders/libs/FFTW/FindFFTW.cmake)
+  * [FindIPP](modules/finders/libs/FindIPP.cmake)
+  * [FindJUCE](modules/finders/libs/FindJUCE.cmake)
+  * [FindMIPP](modules/finders/libs/FindMIPP.cmake)
+  * [FindMTS-ESP](modules/finders/libs/FindMTS-ESP.cmake)
+  * [Findfftw3](modules/finders/libs/FFTW/Findfftw3.cmake)
+  * [Findfftw3f](modules/finders/libs/FFTW/Findfftw3f.cmake)
+  * [Findpluginval](modules/finders/testing/Findpluginval.cmake)
 
 ## Using Oranges
 
-Even though Oranges is a library of CMake modules, it is fully usable as an installable package.
-You can run `cmake --install`, and then call `find_package (Oranges)` from any consuming CMake project.
+When you bring Oranges into your build (either through ``add_subdirectory()`` or ``find_package()``), it does not include every module Oranges ships. You should manually ``include()`` each module you want to use.
 
-If your project depends on Oranges, I recommend copying the `FindOranges` script from the `scripts/` directory into your project's source tree (and adding its location to the `CMAKE_MODULE_PATH` before calling `find_package (Oranges)`), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
-See the `FindOranges` file for more documentation on what it does.
+Even though Oranges is a library of CMake modules, it is fully usable as an installable package.
+You can run ``cmake --install``, and then call ``find_package (Oranges)`` from any consuming CMake project.
+
+If your project depends on Oranges, I recommend copying the ``FindOranges`` script from the ``scripts/`` directory into your project's source tree (and adding its location to the ``CMAKE_MODULE_PATH`` before calling ``find_package (Oranges)``), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
+See the ``FindOranges`` file for more documentation on what it does.
 
 ### CMake options
 
-* ORANGES_BUILD_DOCS
+* ``ORANGES_BUILD_DOCS``
 
 Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in.
 
+Oranges modules define options of their own, which are only relevant if you include those modules. See each module for details on its options and cache variables.
+
 ## CMake install components
-  * oranges_modules
-  * oranges_doc_html
-  * oranges_doc_singlehtml
-  * oranges_docs - installs all Oranges documentation
-  * oranges - installs all Oranges components
+* oranges_modules
+* oranges_doc_html
+* oranges_doc_singlehtml
+* oranges_docs - installs all Oranges documentation
+* oranges - installs all Oranges components
 
 ## Dependency graph
 

@@ -12,6 +12,8 @@
 
 #[=======================================================================[.rst:
 
+.. _find_oranges:
+
 FindOranges
 -------------------------
 
@@ -19,10 +21,6 @@ A find module for Oranges itself.
 This file can be copied verbatim into any projects that depend on Oranges, and committed to their source control -- this is what I do for my projects.
 You can then use the environment or command line variable ORANGES_PATH to turn this find module into an add_subdirectory of a local copy of Oranges;
 if neither variable is set, this module will use FetchContent to download the Oranges sources from GitHub.
-
-Output variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Oranges_FOUND
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -51,9 +49,9 @@ set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
 #
 
-if (NOT ORANGES_PATH)
+if (NOT (DEFINED ORANGES_PATH OR DEFINED CACHE{ORANGES_PATH}))
     if (DEFINED ENV{ORANGES_PATH})
-        set (ORANGES_PATH "$ENV{ORANGES_PATH}")
+        set (ORANGES_PATH "$ENV{ORANGES_PATH}" CACHE PATH "Path to the Oranges repository")
     endif ()
 endif ()
 

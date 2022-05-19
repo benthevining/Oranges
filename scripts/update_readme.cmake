@@ -16,19 +16,13 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 find_package (Python3 COMPONENTS Interpreter)
 
-if (NOT TARGET Python3::Interpreter)
+if (NOT TARGET Python3::Interpreter OR NOT Python3_FOUND)
     message (WARNING "Python3 interpreter not found!")
     return ()
 endif ()
 
-set (ORANGES_MODULES_ROOT "${CMAKE_CURRENT_BINARY_DIR}/../modules")
-set (ORANGES_README "${CMAKE_CURRENT_LIST_DIR}/../README.md")
-
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
                 "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
-
-unset (ORANGES_README)
-unset (ORANGES_MODULES_ROOT)
 
 if (Oranges_IS_TOP_LEVEL)
     set (all_flag ALL)

@@ -22,14 +22,18 @@ from typing import Final
 import os
 
 
-MODULES_ROOT: Final[str] = "@ORANGES_MODULES_ROOT@"
+ORANGES_ROOT: Final[str] = "@Oranges_SOURCE_DIR@"
 
-README: Final[str] = "@ORANGES_README@"
+MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
+
+README: Final[str] = os.path.join(ORANGES_ROOT, "README.md")
 
 #
 
-module_names: list[str] = []
-find_modules: list[str] = []
+module_lines: list[str] = []
+find_module_lines: list[str] = []
+
+#
 
 
 def process_directory(dir_path: str) -> None:
@@ -54,12 +58,15 @@ def process_directory(dir_path: str) -> None:
 		if not entry.endswith(".cmake"):
 			continue
 
-		entry = entry.removesuffix(".cmake")
+		filename: Final[str] = entry.removesuffix(".cmake")
 
-		if entry.startswith("Find"):
-			find_modules.append(entry)
+		out_line: Final[
+		    str] = f"  * [{filename}]({os.path.relpath(entry_path, start=ORANGES_ROOT)})\n"
+
+		if filename.startswith("Find"):
+			find_module_lines.append(out_line)
 		else:
-			module_names.append(entry)
+			module_lines.append(out_line)
 
 
 #
@@ -75,8 +82,8 @@ for dirname in os.listdir(MODULES_ROOT):
 
 	process_directory(DIRPATH)
 
-find_modules.sort()
-module_names.sort()
+find_module_lines.sort()
+module_lines.sort()
 
 #
 
@@ -93,19 +100,19 @@ output_lines.append("\n")
 output_lines.append("### Oranges provides the following CMake modules:\n")
 output_lines.append("\n")
 
-for module in module_names:
-	output_lines.append(f"  * {module}\n")
+for module_line in module_lines:
+	output_lines.append(module_line)
 
-del module_names
+del module_lines
 
 output_lines.append("\n")
 output_lines.append("### Oranges provides the following find modules:\n")
 output_lines.append("\n")
 
-for module in find_modules:
-	output_lines.append(f"  * {module}\n")
+for find_mod_line in find_module_lines:
+	output_lines.append(find_mod_line)
 
-del find_modules
+del find_module_lines
 
 output_lines.append("\n")
 output_lines.extend(AFTER_LINES)

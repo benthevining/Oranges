@@ -23,7 +23,11 @@ import os
 
 #
 
-MODULES_ROOT: Final[str] = "@ORANGES_MODULES_ROOT@"
+ORANGES_ROOT: Final[str] = "@Oranges_SOURCE_DIR@"
+
+MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
+
+ORANGES_README: Final[str] = os.path.join(ORANGES_ROOT, "README.md")
 
 RST_OUTPUT_DIR: Final[str] = "@RST_OUTPUT_DIR@"
 
@@ -86,10 +90,25 @@ for dirname in os.listdir(MODULES_ROOT):
 
 #
 
+OUTPUT_TREE_ROOT: Final[str] = os.path.abspath(os.path.dirname(RST_OUTPUT_DIR))
+
+# generate a documentation page for the FindOranges script
+
+# editorconfig-checker-disable
+FIND_ORANGES_PATH: Final[str] = os.path.relpath(os.path.join(
+    ORANGES_ROOT, "scripts/FindOranges.cmake"),
+                                                start=OUTPUT_TREE_ROOT)
+# editorconfig-checker-enable
+
+FINDER_DOC_FILE: Final[str] = os.path.join(RST_OUTPUT_DIR, "FindOranges.rst")
+
+with open(FINDER_DOC_FILE, "w", encoding="utf-8") as find_out:
+	find_out.write(f".. cmake-module:: {FIND_ORANGES_PATH}")
+
+#
+
 with open(INPUT_INDEX_FILE, "r", encoding="utf-8") as index_in:
 	index_lines = index_in.readlines()
-
-OUTPUT_TREE_ROOT: Final[str] = os.path.abspath(os.path.dirname(RST_OUTPUT_DIR))
 
 module_files: list[str] = []
 find_modules: list[str] = []
@@ -103,6 +122,34 @@ for filepath in generated_files:
 		module_files.append(REL_PATH)
 
 del generated_files
+
+#
+
+with open(ORANGES_README, "r", encoding="utf-8") as readme_in:
+	readme_lines = readme_in.readlines()
+
+README_START_LINE: Final[str] = "## Using Oranges\n"
+README_END_LINE: Final[str] = "## Dependency graph\n"
+
+# editorconfig-checker-disable
+readme_lines = readme_lines[readme_lines.index(README_START_LINE):readme_lines
+                            .index(README_END_LINE) - 1]
+# editorconfig-checker-enable
+
+for line in readme_lines:
+	# if line.startswith("See the ``FindOranges`` file for more documentation on what it does."):
+	# 	index_lines.append(f"\nView the documentation for the :ref:`FindOranges script <find_oranges>`.\n")
+	# 	continue
+
+	if line.startswith("#"):
+		index_lines.append(f"\n{line.replace('#', '').strip()}\n")
+		index_lines.append("##################\n")
+	else:
+		index_lines.append(f"{line}")
+
+del readme_lines
+
+#
 
 module_files.sort()
 find_modules.sort()
