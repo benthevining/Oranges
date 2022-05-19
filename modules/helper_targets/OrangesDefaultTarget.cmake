@@ -27,13 +27,7 @@ Targets
 
 ``Oranges::OrangesDefaultTarget``
 
-A default target with some basic boilerplate settings configured, that links against :module:`OrangesOptimizationFlags` and :module:`OrangesDebugTarget`.
-
-This target will have the following compiler definitions added:
-
-- ``ORANGES_DEBUG`` : 1 if the configuration is a debug configuration, 0 otherwise
-- ``ORANGES_RELEASE``: 1 if the configuration is a release configuration, 0 otherwise
-- ``ORANGES_BUILD_TYPE`` : A string literal with the exact name of the build configuration that was used.
+A default target with some basic boilerplate settings configured, that links against :module:`OrangesOptimizationFlags`, :module:`OrangesCcache`, and :module:`OrangesDebugTarget`.
 
 ``Oranges::OrangesDefaultCXXTarget``
 
@@ -64,7 +58,7 @@ Cache variables
 
 .. cmake:variable:: ORANGES_MAINTAINER_BUILD
 
-When ``ON``, :module:`OrangesDefaultTarget` will link to :module:`OrangesDefaultWarnings` and :module:`OrangesAllIntegrations`. ``OFF`` by default.
+When ``ON``, :module:`OrangesDefaultTarget` will link to :module:`OrangesDefaultWarnings` and :module:`OrangesStaticAnalysis`. ``OFF`` by default.
 
 .. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
 
@@ -110,6 +104,7 @@ include (FeatureSummary)
 include (OrangesGeneratePlatformHeader)
 include (OrangesDebugTarget)
 include (OrangesOptimizationFlags)
+include (OrangesCcache)
 
 #
 
@@ -178,6 +173,34 @@ set_property (
     TARGET OrangesDefaultTarget APPEND PROPERTY EXPORT_PROPERTIES ORANGES_MAC_UNIVERSAL_BINARY
                                                 ORANGES_USING_INSTALLED_PACKAGE)
 
+get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
+
+if (NOT debug_configs)
+    set (debug_configs Debug)
+endif ()
+
+set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
+
+unset (debug_configs)
+
+set (config_is_release "$<NOT:${config_is_debug}>")
+
+target_link_libraries (
+    OrangesDefaultTarget
+    INTERFACE "$<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>"
+              "$<BUILD_INTERFACE:ccache::interface>" Oranges::OrangesOptimizationFlags)
+
+if (ORANGES_MAINTAINER_BUILD)
+    include (OrangesDefaultWarnings)
+    include (OrangesStaticAnalysis)
+
+    target_link_libraries (
+        OrangesDefaultTarget INTERFACE "$<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>"
+                                       "$<BUILD_INTERFACE:Oranges::OrangesStaticAnalysis>")
+endif ()
+
+#
+
 set (windowsDefs # cmake-format: sortable
                  _CRT_SECURE_NO_WARNINGS NOMINMAX STRICT UNICODE)
 
@@ -208,28 +231,6 @@ if (PLAT_ANDROID)
 endif ()
 
 unset (intel_opts)
-
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
-
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
-
-set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
-
-unset (debug_configs)
-
-set (config_is_release "$<NOT:${config_is_debug}>")
-
-# cmake-format: off
-target_compile_definitions (
-    OrangesDefaultTarget
-    INTERFACE "$<${config_is_debug}:ORANGES_DEBUG=1>"
-              "$<${config_is_debug}:ORANGES_RELEASE=0>"
-              "$<${config_is_release}:ORANGES_DEBUG=0>"
-              "$<${config_is_release}:ORANGES_RELEASE=1>"
-              "ORANGES_BUILD_TYPE=\"$<CONFIG>\"")
-# cmake-format: on
 
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")
@@ -316,22 +317,6 @@ else ()
 endif ()
 
 #
-
-if (ORANGES_MAINTAINER_BUILD)
-
-    include (OrangesDefaultWarnings)
-    include (OrangesAllIntegrations)
-
-    target_link_libraries (
-        OrangesDefaultTarget INTERFACE $<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>
-                                       $<BUILD_INTERFACE:Oranges::OrangesAllIntegrations>)
-
-endif ()
-
-target_link_libraries (
-    OrangesDefaultTarget
-    INTERFACE "$<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>"
-              Oranges::OrangesOptimizationFlags)
 
 add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 

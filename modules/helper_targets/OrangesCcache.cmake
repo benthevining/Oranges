@@ -12,10 +12,10 @@
 
 #[=======================================================================[.rst:
 
-Findccache
+OrangesCcache
 -------------------------
 
-Find the ccache compiler cache.
+Find the ccache compiler cache, and set up a target that uses it as its compiler launcher.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -26,22 +26,18 @@ Path to the ccache executable
 
 .. cmake:variable:: CCACHE_DISABLE
 
-When ``ON``, ccache is disabled for the entire build and linking against ``ccache::ccache-interface`` does nothing. Defaults to ``OFF``.
+When ``ON``, ccache is disabled for the entire build and linking against ``ccache::interface`` does nothing. Defaults to ``OFF``.
 
 .. cmake:variable:: CCACHE_OPTIONS
 
 A space-separated list of command line flags to pass to ccache.
 
-Defaults to ``CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M``.
+Defaults to ``CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M CCACHE_BASEDIR=${CMAKE_SOURCE_DIR} CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache``.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``ccache::ccache``
-
-The ccache executable.
-
-``ccache::ccache-interface``
+``ccache::interface``
 
 Interface library that can be linked against to enable ccache for a target
 
@@ -58,14 +54,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
 
-include (OrangesFindPackageHelpers)
-
-set_package_properties (
-    ccache PROPERTIES
-    URL "https://ccache.dev/"
-    DESCRIPTION "C/C++ compiler cache"
-    TYPE RECOMMENDED
-    PURPOSE "Speed up compilation with caching")
+include (FeatureSummary)
 
 option (CCACHE_DISABLE "Disable ccache for this build" OFF)
 
@@ -80,54 +69,31 @@ define_property (
     BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
     FULL_DOCS "Boolean that indicates whether this target is using the ccache compiler cache")
 
-set (ccache_FOUND FALSE)
-
 find_program (CCACHE_PROGRAM ccache DOC "ccache executable")
 
 mark_as_advanced (FORCE CCACHE_PROGRAM)
 
-if (NOT CCACHE_PROGRAM)
-    find_package_warning_or_error ("ccache program cannot be found!")
-    return ()
-endif ()
+#
 
-if (NOT ccache_FIND_QUIETLY)
-    message (VERBOSE "Using ccache!")
-endif ()
-
-add_executable (ccache IMPORTED GLOBAL)
-
-set_target_properties (ccache PROPERTIES IMPORTED_LOCATION "${CCACHE_PROGRAM}")
-
-add_executable (ccache::ccache ALIAS ccache)
-
-set (ccache_FOUND TRUE)
+enable_language (CXX)
+enable_language (C)
 
 #
 
-if (NOT CMAKE_CXX_COMPILER)
-    enable_language (CXX)
-endif ()
-
-if (NOT CMAKE_C_COMPILER)
-    enable_language (C)
-endif ()
-
-#
-
-set (CCACHE_OPTIONS "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M" CACHE STRING
-                                                                                            "")
+set (
+    CCACHE_OPTIONS
+    "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M CCACHE_BASEDIR=${CMAKE_SOURCE_DIR} CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache"
+    CACHE
+        STRING
+        "Space-separated command line options that will be passed to ccache (as the compiler launcher)"
+    )
 
 if (CCACHE_OPTIONS)
     separate_arguments (ccache_options UNIX_COMMAND "${CCACHE_OPTIONS}")
+    list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 else ()
-    set (ccache_options "")
+    set (CCACHE_EXPORTS "")
 endif ()
-
-list (APPEND ccache_options "CCACHE_BASEDIR=${CMAKE_SOURCE_DIR}")
-list (APPEND ccache_options "CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache")
-
-list (JOIN ccache_options "\n export " CCACHE_EXPORTS)
 
 #
 
@@ -157,24 +123,32 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 #
 
-add_library (ccache-interface INTERFACE)
+if (NOT TARGET ccache::interface)
+    add_library (ccache-interface INTERFACE)
 
-if (CCACHE_DISABLE)
-    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE FALSE)
-else ()
-    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
+    if (CCACHE_DISABLE)
+        set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE FALSE)
+        message (VERBOSE "Disabling ccache")
 
-    if (XCODE)
-        set_target_properties (
-            ccache-interface
-            PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
-                       XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
+        add_feature_info (ccache OFF "Not using the ccache compiler cache")
     else ()
-        set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-                                                           CXX_COMPILER_LAUNCHER "${cxx_script}")
-    endif ()
-endif ()
+        set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
+        message (VERBOSE "Using ccache")
 
-if (NOT TARGET ccache::ccache-interface)
-    add_library (ccache::ccache-interface ALIAS ccache-interface)
+        add_feature_info (ccache ON "Using the ccache compiler cache")
+
+        if (XCODE)
+            set_target_properties (
+                ccache-interface
+                PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
+                           XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS
+                                                            "${cxx_script}")
+        else ()
+            set_target_properties (
+                ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}" CXX_COMPILER_LAUNCHER
+                                                                              "${cxx_script}")
+        endif ()
+    endif ()
+
+    add_library (ccache::interface ALIAS ccache-interface)
 endif ()

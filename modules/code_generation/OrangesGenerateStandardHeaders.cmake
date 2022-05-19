@@ -27,6 +27,7 @@ This module provides the function :command:`oranges_generate_standard_headers() 
                                       [FEATURE_TEST_LANGUAGE <lang>]
                                       [EXPORT_HEADER <exportHeaderName>]
                                       [PLATFORM_HEADER <platformHeaderName>]
+                                      [NO_BUILD_TYPE_MACROS]
                                       [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
                                       [INTERFACE]
                                       [SOURCE_GROUP_NAME <groupName>])
@@ -34,13 +35,15 @@ This module provides the function :command:`oranges_generate_standard_headers() 
 This calls :command:`oranges_generate_export_header() <oranges_generate_export_header>` and :command:`oranges_generate_platform_header() <oranges_generate_platform_header>`,
 then generates another header named ``<mainHeaderName>`` that includes the other generated headers.
 
+This function will also call :command:`oranges_add_build_type_macros() <oranges_add_build_type_macros>`, unless the ``NO_BUILD_TYPE_MACROS`` option is given.
+
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
 If the ``NO_AGGREGATE_HEADER`` option is present, then one "central" header that includes the other generated headers will not be created.
 
 ``FEATURE_TEST_LANGUAGE`` is the language passed to :command:`oranges_generate_platform_header() <oranges_generate_platform_header>` to do any compiler-specific platform introspection; defaults to the value of :variable:`PLAT_DEFAULT_TESTING_LANGUAGE`.
 
-All headers will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
+All headers and compile definitions will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
 
 If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into a source folder using the :external:command:`source_group() <source_group>` command. The group will be named ``<groupName>``.
 
@@ -52,6 +55,9 @@ If ``SOURCE_GROUP_NAME`` is given, then the generated files will be grouped into
     Module :module:`OrangesGenerateExportHeader`
         This module provides symbol visibility control utilities
 
+    Module :module:`OrangesBuildTypeMacros`
+        This module provides a function to add preprocessor definitions describing the current build type
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
@@ -61,6 +67,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 include (OrangesCmakeDevTools)
 include (OrangesGenerateExportHeader)
 include (OrangesGeneratePlatformHeader)
+include (OrangesBuildTypeMacros)
 
 #
 
@@ -115,6 +122,17 @@ function (oranges_generate_standard_headers)
         set (relative_path REL_PATH "${ORANGES_ARG_REL_PATH}")
     endif ()
 
+    if (ORANGES_ARG_INTERFACE)
+        set (public_vis INTERFACE)
+    else ()
+        set (public_vis PUBLIC)
+    endif ()
+
+    if (NOT ORANGES_ARG_NO_BUILD_TYPE_MACROS)
+        oranges_add_build_type_macros (TARGET "${ORANGES_ARG_TARGET}"
+                                       BASE_NAME "${ORANGES_ARG_BASE_NAME}" SCOPE "${public_vis}")
+    endif ()
+
     oranges_generate_export_header (
         TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
         HEADER "${ORANGES_ARG_EXPORT_HEADER}" ${install_component} ${relative_path})
@@ -142,12 +160,6 @@ function (oranges_generate_standard_headers)
 
         set_source_files_properties ("${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
                                      PROPERTIES GENERATED ON)
-
-        if (ORANGES_ARG_INTERFACE)
-            set (public_vis INTERFACE)
-        else ()
-            set (public_vis PUBLIC)
-        endif ()
 
         target_sources (
             "${ORANGES_ARG_TARGET}"

@@ -151,6 +151,13 @@
           ]
         }
       },
+      "oranges_add_build_type_macros": {
+        "kwargs": {
+          "BASE_NAME": 1,
+          "SCOPE": 1,
+          "TARGET": 1
+        }
+      },
       "oranges_add_graphviz_target": {
         "kwargs": {
           "BINARY_DIR": 1,
@@ -333,7 +340,8 @@
         "pargs": {
           "flags": [
             "INTERFACE",
-            "NO_AGGREGATE_HEADER"
+            "NO_AGGREGATE_HEADER",
+            "NO_BUILD_TYPE_MACROS"
           ]
         }
       },

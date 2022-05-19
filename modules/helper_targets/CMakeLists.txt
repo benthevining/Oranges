@@ -10,7 +10,8 @@
 #
 # ======================================================================================
 
-include (OrangesAllIntegrations)
+include (OrangesStaticAnalysis)
+include (OrangesCcache)
 include (OrangesDebugTarget)
 include (OrangesDefaultTarget)
 include (OrangesDefaultWarnings)

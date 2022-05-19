@@ -32,10 +32,14 @@ A library of CMake modules.
   * LinuxLSBInfo
   * OrangesAAXUtils
   * OrangesAddPrivateSDKs
-  * OrangesAllIntegrations
   * OrangesAppUtilities
   * OrangesAssetsHelpers
+  * OrangesBuildTypeMacros
+  * OrangesCcache
+  * OrangesClangTidy
   * OrangesClapFormat
+  * OrangesCppcheck
+  * OrangesCpplint
   * OrangesCreateAAXSDKTarget
   * OrangesDebugTarget
   * OrangesDefaultCPackSettings
@@ -49,6 +53,7 @@ A library of CMake modules.
   * OrangesGenerateStandardHeaders
   * OrangesGraphviz
   * OrangesIPO
+  * OrangesIWYU
   * OrangesInstallSystemLibs
   * OrangesJuceModuleUtilities
   * OrangesJuceUtilities
@@ -57,6 +62,7 @@ A library of CMake modules.
   * OrangesSWIG
   * OrangesSetDefaultCpackGenerator
   * OrangesSourceFileUtils
+  * OrangesStaticAnalysis
   * OrangesUninstallTarget
   * OrangesUnityBuild
   * OrangesWipeCacheTarget
@@ -76,13 +82,8 @@ A library of CMake modules.
   * FindMIPP
   * FindMTS-ESP
   * Findauval
-  * Findccache
-  * Findclang-tidy
-  * Findcppcheck
-  * Findcpplint
   * Findfftw3
   * Findfftw3f
-  * Findinclude-what-you-use
   * Findpluginval
 
 ## Using Oranges
