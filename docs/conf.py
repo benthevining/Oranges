@@ -32,7 +32,7 @@ language = 'en'
 primary_domain = 'cmake'
 highlight_language = 'cmake'
 
-needs_sphinx = '1.1'
+needs_sphinx = '4.1'
 
 autosectionlabel_prefix_document = True
 
@@ -49,7 +49,7 @@ extensions = [
 # editorconfig-checker-enable
 
 nitpicky = True
-smartquotes = False
+smartquotes = True
 numfig = False
 
 man_show_urls = False

@@ -27,6 +27,14 @@ repos:
 
     - repo: local
       hooks:
+          # update cmake-format config
+          - id: update-cmakeformat-config
+            name: Update CMakeFormat config
+            entry: python3 scripts/update_cmakeformat_config.py --input=util/OrangesCMakeCommands.json
+            language: system
+            always_run: true
+            pass_filenames: false
+
           # run cmake & update dependency graph & readme
           - id: run-cmake
             name: Run CMake

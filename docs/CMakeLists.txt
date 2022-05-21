@@ -151,8 +151,6 @@ unset (doc_format_outputs)
 
 #
 
-# TODO: install man pages
-
 install (DIRECTORY "${docs_output}/html" COMPONENT oranges_doc_html
          DESTINATION "${CMAKE_INSTALL_DOCDIR}" PATTERN .buildinfo EXCLUDE)
 
@@ -165,6 +163,12 @@ install (DIRECTORY "${docs_output}/singlehtml" COMPONENT oranges_doc_singlehtml
 cpack_add_component (
     oranges_doc_singlehtml DISPLAY_NAME "Oranges single-page HTML docs"
     DESCRIPTION "Install the Oranges single-page HTML documentation" GROUP oranges_docs)
+
+install (FILES "${docs_output}/man/oranges.1" COMPONENT oranges_doc_man
+         DESTINATION "${CMAKE_INSTALL_MANDIR}")
+
+cpack_add_component (oranges_doc_man DISPLAY_NAME "Oranges man pages"
+                     DESCRIPTION "Install the Oranges man pages" GROUP oranges_docs)
 
 cpack_add_component_group (
     oranges_docs DISPLAY_NAME "Oranges documentation"

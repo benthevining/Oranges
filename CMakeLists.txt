@@ -36,6 +36,7 @@ Install components
 - oranges_modules
 - oranges_doc_html
 - oranges_doc_singlehtml
+- oranges_doc_man
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

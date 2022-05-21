@@ -113,6 +113,7 @@ Empty by default.
 * oranges_modules
 * oranges_doc_html
 * oranges_doc_singlehtml
+* oranges_doc_man
 * oranges_docs - installs all Oranges documentation
 * oranges - installs all Oranges components
 
