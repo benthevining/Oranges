@@ -15,6 +15,7 @@
 from sys import path as sys_path
 
 
+sys_path.insert(0, r'@scripts_path@')
 sys_path.insert(0, r'@conf_path@')
 
 source_suffix = '.rst'
@@ -37,11 +38,13 @@ autosectionlabel_prefix_document = True
 
 intersphinx_mapping = {'cmake': ('https://cmake.org/cmake/help/latest', None)}
 
+autodoc_typehints = 'both'
+
 # editorconfig-checker-disable
 extensions = [
     'sphinx.ext.autosectionlabel', 'sphinx.ext.githubpages',
-    'sphinx.ext.intersphinx', 'sphinx.ext.graphviz',
-    'sphinxcontrib.moderncmakedomain'
+    'sphinx.ext.intersphinx', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc',
+    'sphinxarg.ext', 'sphinxcontrib.moderncmakedomain'
 ]
 # editorconfig-checker-enable
 

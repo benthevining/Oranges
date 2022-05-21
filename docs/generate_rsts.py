@@ -33,6 +33,8 @@ RST_OUTPUT_DIR: Final[str] = "@RST_OUTPUT_DIR@"
 
 INPUT_INDEX_FILE: Final[str] = "@INPUT_INDEX_FILE@"
 
+SCRIPTS_RST_INPUT_DIR: Final[str] = "@SCRIPTS_RST_INPUT_DIR@"
+
 if not os.path.isdir(RST_OUTPUT_DIR):
 	os.makedirs(RST_OUTPUT_DIR)
 
@@ -182,6 +184,15 @@ for module in find_modules:
 	index_lines.append(f"\n   {module}")
 
 del find_modules
+
+index_lines.append("\n")
+index_lines.append("\nStandalone scripts\n")
+index_lines.append("##################\n")
+index_lines.append("\n")
+index_lines.append(".. toctree::\n")
+index_lines.append("   :maxdepth: 1\n")
+index_lines.append("   :caption: Standalone scripts provided by Oranges:\n")
+index_lines.append("\n   scripts/update_find_package_version.rst")
 
 OUTPUT_INDEX: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "index.rst")
 

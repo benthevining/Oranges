@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script searches a project source tree recursively for any occurrences of a CMake find_package() or find_dependency() command for a specified
-package, and updates the version used in the find_package() command to a new one specified.
+This script searches a project source tree recursively for any occurrences of a CMake :external:command:`find_package()` or
+:external:command:`find_dependency()` command for a specified package, and updates the version used in the :external:command:`find_package()` command
+to a new one specified.
 """
 
 # ======================================================================================
@@ -18,6 +19,7 @@ package, and updates the version used in the find_package() command to a new one
 # ======================================================================================
 
 from typing import Final
+from argparse import ArgumentParser
 import os
 
 #
@@ -25,7 +27,13 @@ import os
 
 def process_file(package_name: str, new_version: str, file_path: str) -> bool:
 	"""
-	Processes a single CMake file.
+	Processes a single file. Does nothing if the filename is not CMakelists.txt or the file extension is not .cmake.
+
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
+	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param file_path: The absolute path to the file to process.
+
+	:returns: true if this file was changed.
 	"""
 
 	# pylint: disable=too-many-locals
@@ -111,6 +119,12 @@ def process_directory(package_name: str, new_version: str,
                       dir_path: str) -> bool:
 	"""
 	Processes all CMake files in this directory recursively.
+
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
+	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param dir_path: The absolute path to the directory to process.
+
+	:returns: true if any files in this directory were changed.
 	"""
 
 	# editorconfig-checker-enable
@@ -145,7 +159,14 @@ def process_directory(package_name: str, new_version: str,
 def update_find_package_version(package_name: str, new_version: str,
                                 root_dir: str) -> bool:
 	"""
-	Scans all CMake files found in <root_dir> for occurrences of find_package(<package_name>), and updates them to use the <new_version> specified.
+	Scans all CMake files found in ``<root_dir>`` for occurrences of ``find_package(<package_name>)``, and updates them to use the ``<new_version>``
+	specified.
+
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
+	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param root_dir: Path to the root directory to search. If this is not an absolute path, then the directory searched will be ``$(pwd)/<root_dir>``.
+
+	:returns: true if any files were changed by this operation.
 	"""
 
 	if not os.path.isabs(root_dir):
@@ -164,10 +185,13 @@ def update_find_package_version(package_name: str, new_version: str,
 
 #
 
-if __name__ == "__main__":
-	from argparse import ArgumentParser
-	from sys import argv
 
+def _create_parser() -> ArgumentParser:
+	"""
+	Creates the argument parser for this script.
+
+	:meta private:
+	"""
 	parser = ArgumentParser()
 
 	parser.add_argument(
@@ -187,7 +211,7 @@ if __name__ == "__main__":
 	    dest="new_version",
 	    required=True,
 	    help=
-	    "The new version of the package to be used with all find_package commands."
+	    "The new version of the package to be used with all find_package commands. This can contain integers and '.' characters."
 	)
 
 	parser.add_argument(
@@ -196,12 +220,24 @@ if __name__ == "__main__":
 	    action="store",
 	    dest="root_dir",
 	    required=True,
-	    help="Root directory to scan for CMake files to change")
+	    help=
+	    "Root directory to scan for CMake files to change. If this is not an absolute path, then the directory searched will be ``$(pwd)/<root_dir>``."
+	)
+
+	return parser
+
+
+#
+
+if __name__ == "__main__":
+	from sys import argv
+
+	my_parser = _create_parser()
 
 	if len(argv) < 2:
-		parser.print_help()
+		my_parser.print_help()
 	else:
-		args = parser.parse_args()
+		args = my_parser.parse_args()
 
 		update_find_package_version(package_name=args.package_name,
 		                            new_version=args.new_version,

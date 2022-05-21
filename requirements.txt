@@ -6,3 +6,4 @@ pre-commit
 sphinx
 sphinxcontrib.domaintools
 sphinxcontrib-moderncmakedomain
+sphinx-argparse

@@ -57,10 +57,14 @@ set (ORANGES_DOCS_BUILD_TREE "${Oranges_BINARY_DIR}/OrangesDocs")
 
 file (MAKE_DIRECTORY "${ORANGES_DOCS_BUILD_TREE}")
 
+# copy static rst pages to docs build tree
+file (COPY "${CMAKE_CURRENT_LIST_DIR}/scripts" DESTINATION "${ORANGES_DOCS_BUILD_TREE}")
+
 # Generate .rst files for each module, and an index.rst
 
 set (RST_OUTPUT_DIR "${ORANGES_DOCS_BUILD_TREE}/modules")
 set (INPUT_INDEX_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst")
+set (SCRIPTS_RST_INPUT_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
 
 set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
@@ -71,10 +75,12 @@ execute_process (COMMAND python3 "${configured_script}")
 
 unset (RST_OUTPUT_DIR)
 unset (INPUT_INDEX_FILE)
+unset (SCRIPTS_RST_INPUT_DIR)
 
 #
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")
+set (scripts_path "${Oranges_SOURCE_DIR}/scripts")
 set (conf_version "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}")
 # conf_copyright
 
@@ -82,6 +88,7 @@ configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
 
 unset (conf_path)
 unset (conf_version)
+unset (scripts_path)
 
 set (docs_output "${Oranges_SOURCE_DIR}/doc")
 

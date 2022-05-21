@@ -15,12 +15,13 @@
 install_fftw.cmake
 -------------------------
 
-This script is intended to be invoked with cmake -P. It builds and installs FFTW to your system.
+This script is intended to be invoked with cmake -P. It builds and installs both the float and double versions of FFTW to your system.
 
 Input variables (define with -D)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - SOURCE_DIR - path to the root of the FFTW source tree. If not defined, FFTW sources will be downloaded.
-- CACHE_DIR - directory to use to cache downloaded sources. If not specified, defaults to <scriptDir>/temp
+- CACHE_DIR - directory to use to cache downloaded sources. If not defined, defaults to ``<scriptDir>/temp``.
+- QUIET - set to ON to suppress status messages. Defaults to ``OFF``.
 
 #]=======================================================================]
 
@@ -28,19 +29,27 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (NOT SOURCE_DIR)
 
-    message (STATUS "Downloading FFTW sources...")
+    if (NOT QUIET)
+        message (STATUS "Downloading FFTW sources...")
+    endif ()
 
     if (NOT CACHE_DIR)
         set (CACHE_DIR "${CMAKE_CURRENT_LIST_DIR}/temp")
     endif ()
 
-    message (STATUS "Cache dir: ${CACHE_DIR}")
+    if (NOT QUIET)
+        message (STATUS "Cache dir: ${CACHE_DIR}")
+    endif ()
 
     set (tarball "${CACHE_DIR}/fftw-3.3.10.tar.gz")
 
-    file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}" SHOW_PROGRESS)
+    if (NOT QUIET)
+        set (progress_flag SHOW_PROGRESS)
+    endif ()
 
-    set (SOURCE_DIR "${CACHE_DIR}/FFTW")
+    file (DOWNLOAD "https://www.fftw.org/fftw-3.3.10.tar.gz" "${tarball}" ${progress_flag})
+
+    unset (progress_flag)
 
     file (ARCHIVE_EXTRACT INPUT "${tarball}" DESTINATION "${CACHE_DIR}")
 
@@ -88,26 +97,39 @@ function (install_fftw_library buildDir isFloat)
         set (float_flag -D ENABLE_FLOAT=ON)
     endif ()
 
+    if (NOT QUIET)
+        set (echo_flag COMMAND_ECHO STDOUT)
+        set (log_flag --log-level=VERBOSE)
+    endif ()
+
     execute_process (
         COMMAND "${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D BUILD_TESTS=OFF
-                --log-level=VERBOSE ${float_flag} ${sse_flag} ${sse2_flag}
-        WORKING_DIRECTORY "${SOURCE_DIR}" COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+                ${float_flag} ${sse_flag} ${sse2_flag} ${log_flag}
+        WORKING_DIRECTORY "${SOURCE_DIR}" ${echo_flag} COMMAND_ERROR_IS_FATAL ANY)
 
     execute_process (COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel "${numCores}"
-                             COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+                             ${echo_flag} COMMAND_ERROR_IS_FATAL ANY)
 
-    execute_process (COMMAND ${SUDO_PROGRAM} "${CMAKE_COMMAND}" --install "${buildDir}"
-                             COMMAND_ECHO STDOUT COMMAND_ERROR_IS_FATAL ANY)
+    if (SUDO_PROGRAM)
+        set (sudo_prgm "${SUDO_PROGRAM}")
+    endif ()
+
+    execute_process (COMMAND ${sudo_prgm} "${CMAKE_COMMAND}" --install "${buildDir}" ${echo_flag}
+                             COMMAND_ERROR_IS_FATAL ANY)
 
 endfunction ()
 
 #
 
-message (STATUS "Installing double precision library...")
+if (NOT QUIET)
+    message (STATUS "Installing double precision library...")
+endif ()
 
 install_fftw_library ("${SOURCE_DIR}/Builds/double" FALSE)
 
-message (STATUS "Installing float precision library...")
+if (NOT QUIET)
+    message (STATUS "Installing float precision library...")
+endif ()
 
 install_fftw_library ("${SOURCE_DIR}/Builds/float" TRUE)
 
