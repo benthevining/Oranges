@@ -19,7 +19,7 @@ Provides an interface target with debugging and code coverage flags enabled.
 
 This target's debugging flags are designed to be as verbose as possible.
 
-Note that Oranges' default warning flags are provided in a separate target in the :module:OrangesDefaultWarnings` module.
+Note that Oranges' default warning flags are provided in a separate target in the :module:`OrangesDefaultWarnings` module.
 You can link to only this target to configure debugging and coverage flags while providing your own warnings.
 
 Targets

@@ -64,14 +64,18 @@ configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX
 file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
       CONFIGURE_DEPENDS scripts/*.rst)
 
+file (GLOB rst_files LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}" CONFIGURE_DEPENDS
+                                                                                 *.rst)
+
 add_custom_command (
     OUTPUT "${ORANGES_DOCS_BUILD_TREE}/index.rst"
     COMMAND Python3::Interpreter "${configured_script}"
-    DEPENDS generate_rsts.py index.rst ${scripts_rsts}
+    DEPENDS generate_rsts.py process_source_tree.py ${scripts_rsts} ${rst_files}
     COMMENT "Oranges docs: preparing docs build tree..."
     VERBATIM USES_TERMINAL)
 
 unset (scripts_rsts)
+unset (rst_files)
 
 set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
                                                                     "${ORANGES_DOCS_BUILD_TREE}")

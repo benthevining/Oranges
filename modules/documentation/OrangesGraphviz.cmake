@@ -17,10 +17,6 @@ OrangesGraphviz
 
 This module provides the function :command:`oranges_add_graphviz_target() <oranges_add_graphviz_target>`, which adds a custom target to generate Graphviz graphs depicting CMake's build graph.
 
-.. note::
-
-    Graphviz's ``dot`` tool is required to generate the output images. A path to its executable can manually be set using the :variable:`PROGRAM_DOT` cache variable.
-
 .. command:: oranges_add_graphviz_target
 
     ::
@@ -32,6 +28,10 @@ This module provides the function :command:`oranges_add_graphviz_target() <orang
                                      [EXTRA_CMAKE_OPTIONS <options...>]
                                      [GRAPHVIZ_CONFIG_FILE <configFile>]
                                      [COPY_GRAPH_TO <filename>])
+
+.. note::
+
+    Graphviz's ``dot`` tool is required to generate the output images. A path to its executable can manually be set using the :variable:`PROGRAM_DOT` cache variable.
 
 All arguments are optional.
 

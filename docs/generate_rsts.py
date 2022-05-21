@@ -3,7 +3,7 @@
 """
 This script prepares a build tree for Sphinx by performing the following tasks:
 
-* generating a set of .rst files, one for each module, that simply references the actual .cmake file in the source tree
+* generating a .rst file for each module, command, and variable
 * generating a UsingOranges.rst file populated with text from the Readme
 * copying the .rst files in this directory (/docs) into the docs build tree
 """
@@ -23,6 +23,13 @@ This script prepares a build tree for Sphinx by performing the following tasks:
 from typing import Final
 from shutil import copytree, copy2
 import os
+import sys
+
+
+sys.path.insert(0, "@CMAKE_CURRENT_LIST_DIR@")
+
+# pylint: disable=wrong-import-position
+from process_source_tree import process_directory
 
 #
 
@@ -32,22 +39,14 @@ MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
 
 OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
 
-MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "modules")
-
-# editorconfig-checker-disable
-FIND_MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT,
-                                                       "find_modules")
-# editorconfig-checker-enable
-
 DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 #
 
-if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
-	os.makedirs(MODULES_RST_OUTPUT_DIR)
-
-if not os.path.isdir(FIND_MODULES_RST_OUTPUT_DIR):
-	os.makedirs(FIND_MODULES_RST_OUTPUT_DIR)
+for subdir_name in "modules", "find_modules", "commands", "variables", "env_variables":
+	subdir_path = os.path.join(OUTPUT_TREE_ROOT, subdir_name)
+	if not os.path.isdir(subdir_path):
+		os.makedirs(subdir_path)
 
 # the .rst files in this directory are static, so just copy them into the output tree
 
@@ -57,7 +56,7 @@ copytree(src=os.path.join(DOCS_DIR, "scripts"),
          dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
          dirs_exist_ok=True)
 
-for filename in "modules", "finders", "scripts", "index":
+for filename in "modules", "scripts", "commands", "variables", "env_variables", "index":
 	copy2(os.path.join(DOCS_DIR, f"{filename}.rst"),
 	      os.path.join(OUTPUT_TREE_ROOT, f"{filename}.rst"))
 
@@ -65,46 +64,7 @@ for filename in "modules", "finders", "scripts", "index":
 
 #
 
-# generate .rst files for each module
-
-
-def process_directory(dir_path: str) -> None:
-	"""
-	Processes all CMake modules in a directory, recursively.
-	"""
-
-	for entry in os.listdir(dir_path):
-
-		if entry == "scripts":
-			continue
-
-		entry_path: Final[str] = os.path.join(dir_path, entry)
-
-		if os.path.isdir(entry_path):
-			process_directory(entry_path)
-			continue
-
-		if not os.path.isfile(entry_path):
-			continue
-
-		if not entry.endswith(".cmake"):
-			continue
-
-		if os.path.basename(entry_path).startswith("Find"):
-			base_dir: Final[str] = FIND_MODULES_RST_OUTPUT_DIR
-		else:
-			base_dir: Final[str] = MODULES_RST_OUTPUT_DIR
-
-		output_file: Final[str] = os.path.join(
-		    base_dir, f"{entry.removesuffix('.cmake')}.rst")
-
-		output_path: Final[str] = os.path.relpath(entry_path, start=base_dir)
-
-		with open(output_file, "w", encoding="utf-8") as rst_out:
-			rst_out.write(f".. cmake-module:: {output_path}")
-
-
-#
+# generate .rst files for each module & command
 
 for dirname in os.listdir(MODULES_ROOT):
 	if dirname == "internal":
@@ -115,7 +75,7 @@ for dirname in os.listdir(MODULES_ROOT):
 	if not os.path.isdir(DIRPATH):
 		continue
 
-	process_directory(DIRPATH)
+	process_directory(dir_path=DIRPATH, output_base_dir=OUTPUT_TREE_ROOT)
 
 #
 

@@ -22,7 +22,9 @@ Manuals
 	:maxdepth: 1
 	:caption: Oranges reference manuals:
 
-	CMake modules <modules>
-	Find modules <finders>
-	Standalone scripts <scripts>
 	Using Oranges <UsingOranges>
+	CMake modules <modules>
+	CMake commands <commands>
+	CMake variables <variables>
+	Environment variables <env_variables>
+	Standalone scripts <scripts>

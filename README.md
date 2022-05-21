@@ -55,7 +55,6 @@ A library of CMake modules.
   * [OrangesIPO](modules/helper_targets/OrangesIPO.cmake)
   * [OrangesIWYU](modules/helper_targets/static_analysis/OrangesIWYU.cmake)
   * [OrangesInstallSystemLibs](modules/installing/OrangesInstallSystemLibs.cmake)
-  * [OrangesJuceModuleUtilities](modules/juce/OrangesJuceModuleUtilities.cmake)
   * [OrangesJuceUtilities](modules/juce/OrangesJuceUtilities.cmake)
   * [OrangesOptimizationFlags](modules/helper_targets/OrangesOptimizationFlags.cmake)
   * [OrangesPluginUtilities](modules/juce/plugins/OrangesPluginUtilities.cmake)

@@ -43,8 +43,8 @@ autodoc_typehints = 'both'
 # editorconfig-checker-disable
 extensions = [
     'sphinx.ext.autosectionlabel', 'sphinx.ext.githubpages',
-    'sphinx.ext.intersphinx', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc',
-    'sphinxarg.ext', 'sphinxcontrib.moderncmakedomain'
+    'sphinx.ext.intersphinx', 'sphinx.ext.autodoc', 'sphinxarg.ext',
+    'sphinxcontrib.moderncmakedomain'
 ]
 # editorconfig-checker-enable
 
