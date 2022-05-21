@@ -46,6 +46,10 @@ def process_file(package_name: str, new_version: str, file_path: str):
 		        or stripped_line.startswith("FIND_PACKAGE")):
 			continue
 
+		# this is another command that starts with find_package_
+		if stripped_line[len("find_package"):].startswith("_"):
+			continue
+
 		find_pkg_args_string: Final[str] = stripped_line.split("(",
 		                                                       1)[1].split(
 		                                                           ")", 1)[0]
@@ -59,12 +63,12 @@ def process_file(package_name: str, new_version: str, file_path: str):
 
 		del find_pkg_args_string
 
-		if not find_pkg_args[0].trim() == package_name:
+		if not find_pkg_args[0].strip() == package_name:
 			continue
 
 		# check if a version was given, and if it matches the new version already
 
-		find_pkg_version: Final[str] = find_pkg_args[1].trim()
+		find_pkg_version: Final[str] = find_pkg_args[1].strip()
 
 		version_was_given: Final[bool] = find_pkg_version.replace(
 		    ".", "").isdigit()
@@ -141,6 +145,7 @@ def update_find_package_version(package_name: str, new_version: str,
 
 if __name__ == "__main__":
 	from argparse import ArgumentParser
+	from sys import argv
 
 	parser = ArgumentParser()
 
@@ -149,6 +154,7 @@ if __name__ == "__main__":
 	    "-p",
 	    action="store",
 	    dest="package_name",
+	    required=True,
 	    help=
 	    "Name of the package to update the version of. This must be the exact string passed as the first argument to find_package()."
 	)
@@ -158,6 +164,7 @@ if __name__ == "__main__":
 	    "-v",
 	    action="store",
 	    dest="new_version",
+	    required=True,
 	    help=
 	    "The new version of the package to be used with all find_package commands."
 	)
@@ -167,10 +174,14 @@ if __name__ == "__main__":
 	    "-r",
 	    action="store",
 	    dest="root_dir",
+	    required=True,
 	    help="Root directory to scan for CMake files to change")
 
-	args = parser.parse_args()
+	if len(argv) < 2:
+		parser.print_help()
+	else:
+		args = parser.parse_args()
 
-	update_find_package_version(package_name=args.package_name,
-	                            new_version=args.new_version,
-	                            root_dir=args.root_dir)
+		update_find_package_version(package_name=args.package_name,
+		                            new_version=args.new_version,
+		                            root_dir=args.root_dir)
