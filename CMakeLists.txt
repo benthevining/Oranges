@@ -24,6 +24,8 @@ Options
 
 When on, builds the HTML and man page documentation. Defaults to on if Oranges is the top-level project.
 
+Building the docs requires Python 3.9 and Sphinx.
+
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
@@ -103,6 +105,8 @@ add_subdirectory (modules/helper_targets)
 include (CPackComponent)
 
 if (ORANGES_BUILD_DOCS)
+    find_package (Python3 3.9 COMPONENTS Interpreter)
+
     include (scripts/update_readme.cmake)
     include (OrangesGraphviz)
 

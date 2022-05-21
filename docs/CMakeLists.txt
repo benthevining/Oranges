@@ -36,17 +36,16 @@ separate_arguments (sphinx_flags UNIX_COMMAND "${SPHINX_FLAGS}")
 
 if (NOT SPHINX_EXECUTABLE)
     if (Oranges_IS_TOP_LEVEL)
-        message (WARNING "SPHINX_EXECUTABLE (sphinx-build) is not found!")
+        message (
+            WARNING "SPHINX_EXECUTABLE (sphinx-build) not found, Oranges docs cannot be built.")
     endif ()
 
     return ()
 endif ()
 
-find_package (Python3 3.9 COMPONENTS Interpreter)
-
-if (NOT TARGET Python3::Interpreter OR NOT Python3_FOUND)
+if (NOT TARGET Python3::Interpreter)
     if (Oranges_IS_TOP_LEVEL)
-        message (WARNING "Python cannot be found, docs cannot be built!")
+        message (WARNING "Python interpreter cannot be found, Oranges docs cannot be built!")
     endif ()
 
     return ()
@@ -67,6 +66,7 @@ set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
 
+# for some reason, just this command is finicky about using the Python3::Interpreter target...
 execute_process (COMMAND python3 "${configured_script}")
 
 unset (RST_OUTPUT_DIR)
@@ -91,15 +91,20 @@ set (doc_format_last "")
 foreach (format IN ITEMS html singlehtml man)
     set (doc_format_output "doc_format_${format}")
 
+    # cmake-format: off
     add_custom_command (
         OUTPUT "${doc_format_output}"
         COMMAND
-            "${SPHINX_EXECUTABLE}" -c "${CMAKE_CURRENT_BINARY_DIR}" -d
-            "${CMAKE_CURRENT_BINARY_DIR}/doctrees" -b "${format}" ${sphinx_flags}
-            "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}/${format}" ${${format}_extra_commands}
-        DEPENDS ${doc_format_last}
-        COMMENT "sphinx-build ${format}..."
+            "${SPHINX_EXECUTABLE}"
+                -c "${CMAKE_CURRENT_BINARY_DIR}"
+                -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
+                -b "${format}"
+                ${sphinx_flags}
+                "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}/${format}"
+        DEPENDS "${doc_format_last}"
+        COMMENT "Oranges docs - building format ${format}..."
         VERBATIM USES_TERMINAL)
+    # cmake-format: on
 
     set_property (SOURCE "${doc_format_output}" PROPERTY SYMBOLIC 1)
     list (APPEND doc_format_outputs "${doc_format_output}")

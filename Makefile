@@ -20,6 +20,7 @@ RM = $(CMAKE) -E rm -rf  # force this one to use CMake
 PRECOMMIT ?= pre-commit
 GIT ?= git
 ASDF ?= asdf
+PYTHON ?= python3
 
 # directory aliases
 BUILDS ?= Builds
@@ -63,7 +64,8 @@ init:  ## Initializes the workspace and installs all dependencies
 	@cd $(ORANGES_ROOT) && \
 		$(PRECOMMIT) install --install-hooks --overwrite && \
 		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg && \
-		$(ASDF) install
+		$(ASDF) install && \
+		$(PYTHON) -m pip install -r $(ORANGES_ROOT)/requirements.txt
 
 #
 

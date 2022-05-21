@@ -95,9 +95,9 @@ OUTPUT_TREE_ROOT: Final[str] = os.path.abspath(os.path.dirname(RST_OUTPUT_DIR))
 # generate a documentation page for the FindOranges script
 
 # editorconfig-checker-disable
-FIND_ORANGES_PATH: Final[str] = os.path.relpath(os.path.join(
-    ORANGES_ROOT, "scripts/FindOranges.cmake"),
-                                                start=OUTPUT_TREE_ROOT)
+FIND_ORANGES_PATH: Final[str] = os.path.relpath(
+    os.path.join(ORANGES_ROOT, "scripts/FindOranges.cmake"),
+    start=os.path.join(OUTPUT_TREE_ROOT, "modules"))
 # editorconfig-checker-enable
 
 FINDER_DOC_FILE: Final[str] = os.path.join(RST_OUTPUT_DIR, "FindOranges.rst")
@@ -137,9 +137,13 @@ readme_lines = readme_lines[readme_lines.index(README_START_LINE):readme_lines
 # editorconfig-checker-enable
 
 for line in readme_lines:
-	# if line.startswith("See the ``FindOranges`` file for more documentation on what it does."):
-	# 	index_lines.append(f"\nView the documentation for the :ref:`FindOranges script <find_oranges>`.\n")
-	# 	continue
+	if line.startswith(
+	    "See the [``FindOranges``](scripts/FindOranges.cmake) file for more documentation on what it does."
+	):
+		index_lines.append(
+		    "\n:doc:`View the documentation for the FindOranges script. <modules/FindOranges>`\n"
+		)
+		continue
 
 	if line.startswith("#"):
 		index_lines.append(f"\n{line.replace('#', '').strip()}\n")

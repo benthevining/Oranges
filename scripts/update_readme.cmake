@@ -14,10 +14,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-find_package (Python3 COMPONENTS Interpreter)
-
-if (NOT TARGET Python3::Interpreter OR NOT Python3_FOUND)
-    message (WARNING "Python3 interpreter not found!")
+if (NOT TARGET Python3::Interpreter)
+    message (WARNING "Python3 interpreter not found, Oranges ReadMe target cannot be added")
     return ()
 endif ()
 
@@ -42,6 +40,6 @@ set_property (TARGET OrangesReadme APPEND PROPERTY ADDITIONAL_CLEAN_FILES
 set_target_properties (OrangesReadme PROPERTIES FOLDER Utility LABELS "Oranges;Utility"
                                                 XCODE_GENERATE_SCHEME OFF)
 
-if (TARGET DependencyGraph)
-    add_dependencies (OrangesReadme DependencyGraph)
+if (TARGET OrangesDependencyGraph)
+    add_dependencies (OrangesReadme OrangesDependencyGraph)
 endif ()

@@ -12,23 +12,33 @@
 
 #[=======================================================================[.rst:
 
-.. _find_oranges:
-
 FindOranges
 -------------------------
 
 A find module for Oranges itself.
-This file can be copied verbatim into any projects that depend on Oranges, and committed to their source control -- this is what I do for my projects.
-You can then use the environment or command line variable ORANGES_PATH to turn this find module into an add_subdirectory of a local copy of Oranges;
-if neither variable is set, this module will use FetchContent to download the Oranges sources from GitHub.
 
-Environment variables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- ORANGES_PATH
+This file can be copied verbatim into any projects that depend on Oranges, and committed to their source control -- this is what I do for my projects.
+
+You can then use the environment or command line variable :variable:`ORANGES_PATH` to turn this find module into an :external:command:`add_subdirectory() <add_subdirectory>` of a local copy of Oranges;
+if neither variable is set, this module will use :external:module:`FetchContent` to download the Oranges sources from GitHub.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- FETCHCONTENT_BASE_DIR
+
+.. cmake:variable:: ORANGES_PATH
+
+This variable may be set to a local copy of the Oranges repository, in which case calling ``find_package (Oranges)`` will result in this script executing ``add_subdirectory (${ORANGES_PATH})``.
+
+If this variable is not set, this script will use CMake's :external:module:`FetchContent` module to fetch the Oranges sources from GitHub.
+
+This variable is initialized by the value of the :envvar:`ORANGES_PATH` environment variable.
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: ORANGES_PATH
+
+Initializes the :variable:`ORANGES_PATH` variable.
 
 #]=======================================================================]
 

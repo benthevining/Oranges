@@ -93,15 +93,17 @@ Even though Oranges is a library of CMake modules, it is fully usable as an inst
 You can run ``cmake --install``, and then call ``find_package (Oranges)`` from any consuming CMake project.
 
 If your project depends on Oranges, I recommend copying the ``FindOranges`` script from the ``scripts/`` directory into your project's source tree (and adding its location to the ``CMAKE_MODULE_PATH`` before calling ``find_package (Oranges)``), so that if your project is built on a system where Oranges hasn't been installed, it can still be fetched at configure-time.
-See the ``FindOranges`` file for more documentation on what it does.
+See the [``FindOranges``](scripts/FindOranges.cmake) file for more documentation on what it does.
 
 ### CMake options
 
+Oranges modules define options of their own, which are only relevant if you include those modules. See each module for details on its options and cache variables.
+
+These options are defined by the top-level Oranges project itself:
+
 * ``ORANGES_BUILD_DOCS``
 
-Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in.
-
-Oranges modules define options of their own, which are only relevant if you include those modules. See each module for details on its options and cache variables.
+Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in. Building the docs requires Python 3.9 and Sphinx.
 
 ## CMake install components
 * oranges_modules

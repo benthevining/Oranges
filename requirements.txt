@@ -1,5 +1,5 @@
 # For development
-bumpversion
+bump2version
 pre-commit
 
 # For docs
