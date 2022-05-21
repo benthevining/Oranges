@@ -112,12 +112,13 @@ include (CPackComponent)
 if (ORANGES_BUILD_DOCS)
     find_package (Python3 3.9 COMPONENTS Interpreter)
 
-    include (scripts/update_readme.cmake)
     include (OrangesGraphviz)
 
     oranges_add_graphviz_target (
         TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}"
         COPY_GRAPH_TO "${CMAKE_CURRENT_LIST_DIR}/util/deps_graph.png")
+
+    include (scripts/update_readme.cmake)
 
     add_subdirectory (docs)
 

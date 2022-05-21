@@ -70,11 +70,13 @@ file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DI
       CONFIGURE_DEPENDS scripts/*.rst)
 
 add_custom_command (
-    OUTPUT "${ORANGES_DOCS_BUILD_TREE}"
+    OUTPUT "${ORANGES_DOCS_BUILD_TREE}/index.rst"
     COMMAND Python3::Interpreter "${configured_script}"
     DEPENDS generate_rsts.py index.rst ${scripts_rsts}
     COMMENT "Oranges docs: preparing docs build tree..."
     VERBATIM USES_TERMINAL)
+
+unset (scripts_rsts)
 
 #
 
@@ -106,8 +108,11 @@ foreach (format IN ITEMS html singlehtml man)
                 -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
                 -b "${format}"
                 ${sphinx_flags}
-                "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}/${format}"
-        DEPENDS "${doc_format_last}" "${ORANGES_DOCS_BUILD_TREE}" colors.py conf.py oranges.css
+                "${ORANGES_DOCS_BUILD_TREE}"
+                "${docs_output}/${format}"
+        DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+                ${doc_format_last}
+                colors.py conf.py oranges.css
         COMMENT "Oranges docs - building format ${format}..."
         VERBATIM USES_TERMINAL)
     # cmake-format: on
