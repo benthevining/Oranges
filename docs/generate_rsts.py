@@ -32,9 +32,7 @@ OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
 
 MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "modules")
 
-INPUT_INDEX_FILE: Final[str] = "@INPUT_INDEX_FILE@"
-
-SCRIPTS_RST_INPUT_DIR: Final[str] = "@SCRIPTS_RST_INPUT_DIR@"
+DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
 	os.makedirs(MODULES_RST_OUTPUT_DIR)
@@ -44,7 +42,7 @@ if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
 # the .rst files for the scripts are static, so just copy them into the output tree
 
 # editorconfig-checker-disable
-copytree(src=SCRIPTS_RST_INPUT_DIR,
+copytree(src=os.path.join(DOCS_DIR, "scripts"),
          dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
          dirs_exist_ok=True)
 # editorconfig-checker-enable
@@ -122,9 +120,11 @@ with open(FINDER_DOC_FILE, "w", encoding="utf-8") as find_out:
 #
 
 # Read content from the index.rst file in the /docs dir
-
-with open(INPUT_INDEX_FILE, "r", encoding="utf-8") as index_in:
+# editorconfig-checker-disable
+with open(os.path.join(DOCS_DIR, "index.rst"), "r",
+          encoding="utf-8") as index_in:
 	index_lines = index_in.readlines()
+# editorconfig-checker-enable
 
 module_files: list[str] = []
 find_modules: list[str] = []
@@ -207,13 +207,13 @@ for module in find_modules:
 del find_modules
 
 index_lines.append("\n")
-index_lines.append("\nStandalone scripts\n")
-index_lines.append("##################\n")
-index_lines.append("\n")
-index_lines.append(".. toctree::\n")
-index_lines.append("   :maxdepth: 1\n")
-index_lines.append("   :caption: Standalone scripts provided by Oranges:\n")
-index_lines.append("\n   scripts/update_find_package_version.rst")
+
+# append content from scripts.rst file in this directory
+# editorconfig-checker-disable
+with open(os.path.join(DOCS_DIR, "scripts.rst"), "r",
+          encoding="utf-8") as scripts_in:
+	index_lines.extend(scripts_in.readlines())
+# editorconfig-checker-enable
 
 OUTPUT_INDEX: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "index.rst")
 

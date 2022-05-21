@@ -56,15 +56,10 @@ endif ()
 #
 
 set (ORANGES_DOCS_BUILD_TREE "${Oranges_BINARY_DIR}/OrangesDocs")
-set (INPUT_INDEX_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst")
-set (SCRIPTS_RST_INPUT_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
 
 set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
-
-unset (INPUT_INDEX_FILE)
-unset (SCRIPTS_RST_INPUT_DIR)
 
 file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
       CONFIGURE_DEPENDS scripts/*.rst)

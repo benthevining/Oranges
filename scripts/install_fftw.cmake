@@ -102,10 +102,15 @@ function (install_fftw_library buildDir isFloat)
         set (log_flag --log-level=VERBOSE)
     endif ()
 
+    # cmake-format: off
     execute_process (
-        COMMAND "${CMAKE_COMMAND}" -B "${buildDir}" -D BUILD_SHARED_LIBS=OFF -D BUILD_TESTS=OFF
-                ${float_flag} ${sse_flag} ${sse2_flag} ${log_flag}
+        COMMAND "${CMAKE_COMMAND}"
+                    -B "${buildDir}"
+                    -D BUILD_SHARED_LIBS=OFF
+                    -D BUILD_TESTS=OFF
+                    ${float_flag} ${sse_flag} ${sse2_flag} ${log_flag}
         WORKING_DIRECTORY "${SOURCE_DIR}" ${echo_flag} COMMAND_ERROR_IS_FATAL ANY)
+    # cmake-format: on
 
     execute_process (COMMAND "${CMAKE_COMMAND}" --build "${buildDir}" --parallel "${numCores}"
                              ${echo_flag} COMMAND_ERROR_IS_FATAL ANY)
