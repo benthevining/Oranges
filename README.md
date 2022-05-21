@@ -105,6 +105,11 @@ These options are defined by the top-level Oranges project itself:
 
 Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in. Building the docs requires Python 3.9 and Sphinx.
 
+* ``ORANGES_SPHINX_FLAGS``
+
+When building the documentation, this can contain a space-separated list of flags that will be passed to the Sphinx executable while building each documentation format.
+Empty by default.
+
 ## CMake install components
 * oranges_modules
 * oranges_doc_html

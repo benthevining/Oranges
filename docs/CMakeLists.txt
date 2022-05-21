@@ -30,9 +30,11 @@ project (
 find_program (SPHINX_EXECUTABLE NAMES sphinx-build
               DOC "Sphinx Documentation Builder (sphinx-doc.org)")
 
-set (SPHINX_FLAGS "" CACHE STRING "Flags to pass to sphinx-build")
+set (ORANGES_SPHINX_FLAGS "" CACHE STRING "Flags to pass to sphinx-build")
 
-separate_arguments (sphinx_flags UNIX_COMMAND "${SPHINX_FLAGS}")
+mark_as_advanced (ORANGES_SPHINX_FLAGS)
+
+separate_arguments (sphinx_flags UNIX_COMMAND "${ORANGES_SPHINX_FLAGS}")
 
 if (NOT SPHINX_EXECUTABLE)
     if (Oranges_IS_TOP_LEVEL)
@@ -54,15 +56,6 @@ endif ()
 #
 
 set (ORANGES_DOCS_BUILD_TREE "${Oranges_BINARY_DIR}/OrangesDocs")
-
-file (MAKE_DIRECTORY "${ORANGES_DOCS_BUILD_TREE}")
-
-# copy static rst pages to docs build tree
-file (COPY "${CMAKE_CURRENT_LIST_DIR}/scripts" DESTINATION "${ORANGES_DOCS_BUILD_TREE}")
-
-# Generate .rst files for each module, and an index.rst
-
-set (RST_OUTPUT_DIR "${ORANGES_DOCS_BUILD_TREE}/modules")
 set (INPUT_INDEX_FILE "${CMAKE_CURRENT_LIST_DIR}/index.rst")
 set (SCRIPTS_RST_INPUT_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
 
@@ -70,12 +63,18 @@ set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
 
-# for some reason, just this command is finicky about using the Python3::Interpreter target...
-execute_process (COMMAND python3 "${configured_script}")
-
-unset (RST_OUTPUT_DIR)
 unset (INPUT_INDEX_FILE)
 unset (SCRIPTS_RST_INPUT_DIR)
+
+file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
+      CONFIGURE_DEPENDS scripts/*.rst)
+
+add_custom_command (
+    OUTPUT "${ORANGES_DOCS_BUILD_TREE}"
+    COMMAND Python3::Interpreter "${configured_script}"
+    DEPENDS generate_rsts.py index.rst ${scripts_rsts}
+    COMMENT "Oranges docs: preparing docs build tree..."
+    VERBATIM USES_TERMINAL)
 
 #
 
@@ -108,7 +107,7 @@ foreach (format IN ITEMS html singlehtml man)
                 -b "${format}"
                 ${sphinx_flags}
                 "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}/${format}"
-        DEPENDS "${doc_format_last}"
+        DEPENDS "${doc_format_last}" "${ORANGES_DOCS_BUILD_TREE}" colors.py conf.py oranges.css
         COMMENT "Oranges docs - building format ${format}..."
         VERBATIM USES_TERMINAL)
     # cmake-format: on

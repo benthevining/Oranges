@@ -19,6 +19,7 @@ This script also generates an index.rst file, with a toc-tree linking to each mo
 # ======================================================================================
 
 from typing import Final
+from shutil import copytree
 import os
 
 #
@@ -27,20 +28,32 @@ ORANGES_ROOT: Final[str] = "@Oranges_SOURCE_DIR@"
 
 MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
 
-ORANGES_README: Final[str] = os.path.join(ORANGES_ROOT, "README.md")
+OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
 
-RST_OUTPUT_DIR: Final[str] = "@RST_OUTPUT_DIR@"
+MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "modules")
 
 INPUT_INDEX_FILE: Final[str] = "@INPUT_INDEX_FILE@"
 
 SCRIPTS_RST_INPUT_DIR: Final[str] = "@SCRIPTS_RST_INPUT_DIR@"
 
-if not os.path.isdir(RST_OUTPUT_DIR):
-	os.makedirs(RST_OUTPUT_DIR)
-
-generated_files: list[str] = []
+if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
+	os.makedirs(MODULES_RST_OUTPUT_DIR)
 
 #
+
+# the .rst files for the scripts are static, so just copy them into the output tree
+
+# editorconfig-checker-disable
+copytree(src=SCRIPTS_RST_INPUT_DIR,
+         dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
+         dirs_exist_ok=True)
+# editorconfig-checker-enable
+
+#
+
+# generate .rst files for each module
+
+generated_files: list[str] = []
 
 
 def process_directory(dir_path: str) -> None:
@@ -66,10 +79,10 @@ def process_directory(dir_path: str) -> None:
 			continue
 
 		output_file: Final[str] = os.path.join(
-		    RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
+		    MODULES_RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
 
 		output_path: Final[str] = os.path.relpath(entry_path,
-		                                          start=RST_OUTPUT_DIR)
+		                                          start=MODULES_RST_OUTPUT_DIR)
 
 		with open(output_file, "w", encoding="utf-8") as rst_out:
 			rst_out.write(f".. cmake-module:: {output_path}")
@@ -92,22 +105,23 @@ for dirname in os.listdir(MODULES_ROOT):
 
 #
 
-OUTPUT_TREE_ROOT: Final[str] = os.path.abspath(os.path.dirname(RST_OUTPUT_DIR))
-
 # generate a documentation page for the FindOranges script
 
 # editorconfig-checker-disable
 FIND_ORANGES_PATH: Final[str] = os.path.relpath(
     os.path.join(ORANGES_ROOT, "scripts/FindOranges.cmake"),
     start=os.path.join(OUTPUT_TREE_ROOT, "modules"))
-# editorconfig-checker-enable
 
-FINDER_DOC_FILE: Final[str] = os.path.join(RST_OUTPUT_DIR, "FindOranges.rst")
+FINDER_DOC_FILE: Final[str] = os.path.join(MODULES_RST_OUTPUT_DIR,
+                                           "FindOranges.rst")
+# editorconfig-checker-enable
 
 with open(FINDER_DOC_FILE, "w", encoding="utf-8") as find_out:
 	find_out.write(f".. cmake-module:: {FIND_ORANGES_PATH}")
 
 #
+
+# Read content from the index.rst file in the /docs dir
 
 with open(INPUT_INDEX_FILE, "r", encoding="utf-8") as index_in:
 	index_lines = index_in.readlines()
@@ -127,8 +141,13 @@ del generated_files
 
 #
 
-with open(ORANGES_README, "r", encoding="utf-8") as readme_in:
+# Read content from the readme
+
+# editorconfig-checker-disable
+with open(os.path.join(ORANGES_ROOT, "README.md"), "r",
+          encoding="utf-8") as readme_in:
 	readme_lines = readme_in.readlines()
+# editorconfig-checker-enable
 
 README_START_LINE: Final[str] = "## Using Oranges\n"
 README_END_LINE: Final[str] = "## Dependency graph\n"
@@ -156,6 +175,8 @@ for line in readme_lines:
 del readme_lines
 
 #
+
+# Build the actual index.rst for the docs build tree
 
 module_files.sort()
 find_modules.sort()

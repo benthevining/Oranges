@@ -26,6 +26,11 @@ When on, builds the HTML and man page documentation. Defaults to on if Oranges i
 
 Building the docs requires Python 3.9 and Sphinx.
 
+.. cmake:variable:: ORANGES_SPHINX_FLAGS
+
+When building the documentation, this can contain a space-separated list of flags that will be passed to the Sphinx executable while building each documentation format.
+Empty by default.
+
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - oranges_modules
