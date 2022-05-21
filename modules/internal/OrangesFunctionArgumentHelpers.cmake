@@ -12,7 +12,7 @@
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 macro (lemons_require_function_arguments prefix)
     foreach (requiredArgument ${ARGN})

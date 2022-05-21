@@ -36,7 +36,7 @@ Path to the ``rpmbuild`` executable. This program is not actually used by this m
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 cmake_language (DEFER CALL message VERBOSE "Using CPack generator(s): ${CPACK_GENERATOR}")
 

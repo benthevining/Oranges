@@ -23,7 +23,7 @@ root_doc = 'index'
 
 project = 'Oranges'
 author = 'Ben Vining'
-copyright = '@conf_copyright@'
+copyright = '2022 Ben Vining; released to public ownership under the terms of the GNU Public License'
 version = '@conf_version@'  # feature version
 release = '@conf_version@'  # full version string
 pygments_style = 'colors.OrangesTemplateStyle'

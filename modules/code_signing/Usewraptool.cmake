@@ -74,7 +74,7 @@ Initializes the :variable:`WRAPTOOL_KEYPASSWORD` variable when this module is in
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (LemonsCmakeDevTools)
 

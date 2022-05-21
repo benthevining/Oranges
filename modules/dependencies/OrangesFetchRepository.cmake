@@ -116,7 +116,7 @@ Initializes the value of the :external:variable:`FETCHCONTENT_FULLY_DISCONNECTED
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 option (
     ORANGES_FETCH_TRY_LOCAL_PACKAGES_FIRST

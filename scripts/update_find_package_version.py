@@ -29,8 +29,8 @@ def process_file(package_name: str, new_version: str, file_path: str) -> bool:
 	"""
 	Processes a single file. Does nothing if the filename is not CMakelists.txt or the file extension is not .cmake.
 
-	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
-	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to ``find_package()`` in CMake.
+	:param new_version: The new version of the package. This can contain integers and ``.`` characters.
 	:param file_path: The absolute path to the file to process.
 
 	:returns: true if this file was changed.
@@ -120,8 +120,8 @@ def process_directory(package_name: str, new_version: str,
 	"""
 	Processes all CMake files in this directory recursively.
 
-	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
-	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to ``find_package()`` in CMake.
+	:param new_version: The new version of the package. This can contain integers and ``.`` characters.
 	:param dir_path: The absolute path to the directory to process.
 
 	:returns: true if any files in this directory were changed.
@@ -162,8 +162,8 @@ def update_find_package_version(package_name: str, new_version: str,
 	Scans all CMake files found in ``<root_dir>`` for occurrences of ``find_package(<package_name>)``, and updates them to use the ``<new_version>``
 	specified.
 
-	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to find_package in CMake.
-	:param new_version: The new version of the package. This can contain integers and '.' characters.
+	:param package_name: The package name whose version is being updated. This must be the exact name passed as the first argument to ``find_package()`` in CMake.
+	:param new_version: The new version of the package. This can contain integers and ``.`` characters.
 	:param root_dir: Path to the root directory to search. If this is not an absolute path, then the directory searched will be ``$(pwd)/<root_dir>``.
 
 	:returns: true if any files were changed by this operation.

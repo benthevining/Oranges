@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script generates a set of .rst files, one for each CMake module, that simply references the actual .cmake file in the source tree.
+This script prepares a build tree for Sphinx by performing the following tasks:
 
-This script also generates an index.rst file, with a toc-tree linking to each module.
+* generating a set of .rst files, one for each module, that simply references the actual .cmake file in the source tree
+* generating a UsingOranges.rst file populated with text from the Readme
+* copying the .rst files in this directory (/docs) into the docs build tree
 """
 
 # ======================================================================================
@@ -19,7 +21,7 @@ This script also generates an index.rst file, with a toc-tree linking to each mo
 # ======================================================================================
 
 from typing import Final
-from shutil import copytree
+from shutil import copytree, copy2
 import os
 
 #
@@ -39,20 +41,26 @@ FIND_MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT,
 
 DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
+#
+
 if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
 	os.makedirs(MODULES_RST_OUTPUT_DIR)
 
 if not os.path.isdir(FIND_MODULES_RST_OUTPUT_DIR):
 	os.makedirs(FIND_MODULES_RST_OUTPUT_DIR)
 
-#
-
-# the .rst files for the scripts are static, so just copy them into the output tree
+# the .rst files in this directory are static, so just copy them into the output tree
 
 # editorconfig-checker-disable
+
 copytree(src=os.path.join(DOCS_DIR, "scripts"),
          dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
          dirs_exist_ok=True)
+
+for filename in "modules", "finders", "scripts", "index":
+	copy2(os.path.join(DOCS_DIR, f"{filename}.rst"),
+	      os.path.join(OUTPUT_TREE_ROOT, f"{filename}.rst"))
+
 # editorconfig-checker-enable
 
 #
@@ -114,29 +122,21 @@ for dirname in os.listdir(MODULES_ROOT):
 # generate a documentation page for the FindOranges script
 
 # editorconfig-checker-disable
-FIND_ORANGES_PATH: Final[str] = os.path.relpath(
-    os.path.join(ORANGES_ROOT, "scripts/FindOranges.cmake"),
-    start=os.path.join(OUTPUT_TREE_ROOT, "modules"))
+FIND_ORANGES_PATH: Final[str] = os.path.relpath(os.path.join(
+    ORANGES_ROOT, "scripts", "FindOranges.cmake"),
+                                                start=OUTPUT_TREE_ROOT)
 
-FINDER_DOC_FILE: Final[str] = os.path.join(MODULES_RST_OUTPUT_DIR,
-                                           "FindOranges.rst")
+FINDER_DOC_FILE: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "FindOranges.rst")
 # editorconfig-checker-enable
 
 with open(FINDER_DOC_FILE, "w", encoding="utf-8") as find_out:
 	find_out.write(f".. cmake-module:: {FIND_ORANGES_PATH}")
 
-#
-
-# Read content from the index.rst file in the /docs dir
-# editorconfig-checker-disable
-with open(os.path.join(DOCS_DIR, "index.rst"), "r",
-          encoding="utf-8") as index_in:
-	index_lines = index_in.readlines()
-# editorconfig-checker-enable
+del FIND_ORANGES_PATH
 
 #
 
-# Read content from the readme
+# Read content from the readme and write a UsingOranges.rst file
 
 # editorconfig-checker-disable
 with open(os.path.join(ORANGES_ROOT, "README.md"), "r",
@@ -152,57 +152,37 @@ readme_lines = readme_lines[readme_lines.index(README_START_LINE):readme_lines
                             .index(README_END_LINE) - 1]
 # editorconfig-checker-enable
 
+using_oranges_lines: list[str] = []
+
 for line in readme_lines:
 	if line.startswith(
 	    "See the [``FindOranges``](scripts/FindOranges.cmake) file for more documentation on what it does."
 	):
-		index_lines.append(
-		    f"\n:doc:`View the documentation for the FindOranges script. <{os.path.splitext(os.path.relpath(FINDER_DOC_FILE, start=OUTPUT_TREE_ROOT))[0]}>`\n"
+		using_oranges_lines.append(
+		    f"\n:doc:`View the documentation for the FindOranges script <{os.path.splitext(os.path.relpath(FINDER_DOC_FILE, start=OUTPUT_TREE_ROOT))[0]}>`.\n"
 		)
 		continue
 
 	if line.startswith("#"):
-		index_lines.append(f"\n{line.replace('#', '').strip()}\n")
-		index_lines.append("##################\n")
+		STRIPPED_LINE: Final[str] = line.replace("#", "").strip()
+
+		using_oranges_lines.append(f"\n{STRIPPED_LINE}\n")
+
+		if STRIPPED_LINE == "Using Oranges":
+			using_oranges_lines.append("-------------------------------\n")
+		else:
+			using_oranges_lines.append("##################\n")
 	else:
-		index_lines.append(f"{line}")
+		using_oranges_lines.append(f"{line}")
 
 del readme_lines
 del FINDER_DOC_FILE
 
-#
-
-# Build the actual index.rst for the docs build tree
-
-index_lines.append("\nModules\n")
-index_lines.append("##################\n")
-index_lines.append("\n")
-index_lines.append(".. toctree::\n")
-index_lines.append("   :maxdepth: 1\n")
-index_lines.append("   :caption: CMake modules provided by Oranges:\n")
-index_lines.append("   :glob:\n\n")
-index_lines.append("   modules/*")
-
-index_lines.append("\n")
-index_lines.append("\nFind Modules\n")
-index_lines.append("##################\n")
-index_lines.append("\n")
-index_lines.append(".. toctree::\n")
-index_lines.append("   :maxdepth: 1\n")
-index_lines.append("   :caption: Find modules provided by Oranges:\n")
-index_lines.append("   :glob:\n\n")
-index_lines.append("   find_modules/*")
-
-index_lines.append("\n\n")
-
-# append content from scripts.rst file in this directory
 # editorconfig-checker-disable
-with open(os.path.join(DOCS_DIR, "scripts.rst"), "r",
-          encoding="utf-8") as scripts_in:
-	index_lines.extend(scripts_in.readlines())
+with open(os.path.join(OUTPUT_TREE_ROOT, "UsingOranges.rst"),
+          "w",
+          encoding="utf-8") as using_oranges:
+	using_oranges.write("".join(using_oranges_lines))
 # editorconfig-checker-enable
 
-OUTPUT_INDEX: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "index.rst")
-
-with open(OUTPUT_INDEX, "w", encoding="utf-8") as index_out:
-	index_out.write("".join(index_lines))
+del using_oranges_lines

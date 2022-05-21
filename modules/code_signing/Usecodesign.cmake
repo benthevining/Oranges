@@ -44,7 +44,7 @@ Path to the codesign executable
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.21 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (CallForEachPluginFormat)
 include (LemonsCmakeDevTools)

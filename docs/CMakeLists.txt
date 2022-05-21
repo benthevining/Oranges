@@ -12,7 +12,7 @@
 
 include_guard (GLOBAL)
 
-cmake_minimum_required (VERSION 3.13 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 if (ORANGES_IN_GRAPHVIZ_CONFIG)
     return ()
@@ -81,7 +81,6 @@ set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_C
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")
 set (scripts_path "${Oranges_SOURCE_DIR}/scripts")
 set (conf_version "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}")
-# conf_copyright
 
 configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
 

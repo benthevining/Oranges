@@ -11,6 +11,18 @@
 
 Oranges is a library of CMake modules.
 
-Oranges provides some helper targets, some wrapper functions around native CMake modules to provide higher-level and more convenient APIs, and some additional functionality that is not present in the modules CMake ships. Oranges also provides a few standalone Python scripts to perform tasks related to management of CMake files.
+Oranges provides some helper targets, some wrapper functions around native CMake modules to provide higher-level and more convenient APIs, and some additional functionality that is not present in the modules CMake ships. Oranges also provides a few standalone scripts to perform tasks related to management of CMake files.
 
-`View the source code on GitHub <https://github.com/benthevining/Oranges>`_
+`View the source code on GitHub <https://github.com/benthevining/Oranges>`_.
+
+Manuals
+-------------------------------
+
+.. toctree::
+	:maxdepth: 1
+	:caption: Oranges reference manuals:
+
+	CMake modules <modules>
+	Find modules <finders>
+	Standalone scripts <scripts>
+	Using Oranges <UsingOranges>
