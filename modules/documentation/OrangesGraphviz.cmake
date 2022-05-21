@@ -25,8 +25,8 @@ This module provides the function :command:`oranges_add_graphviz_target() <orang
 
     ::
 
-        oranges_add_graphviz_target ([OUTPUT_DIR <outputDirectory>]
-                                     [TARGET <targetName>] [ALL]
+        oranges_add_graphviz_target ([TARGET <targetName>] [ALL]
+                                     [OUTPUT_DIR <outputDirectory>]
                                      [SOURCE_DIR <srcDir>]
                                      [BINARY_DIR <binDir>]
                                      [EXTRA_CMAKE_OPTIONS <options...>]

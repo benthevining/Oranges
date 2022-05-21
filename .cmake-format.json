@@ -131,26 +131,6 @@
           "TARGET": 1
         }
       },
-      "lemons_make_path_absolute": {
-        "kwargs": {
-          "BASE_DIR": 1,
-          "VAR": 1
-        }
-      },
-      "lemons_subdir_list": {
-        "kwargs": {
-          "BASE_DIR": 1,
-          "DIR": 1,
-          "RESULT": 1
-        },
-        "pargs": {
-          "flags": [
-            "RECURSE",
-            "FILES",
-            "FULL_PATHS"
-          ]
-        }
-      },
       "oranges_add_build_type_macros": {
         "kwargs": {
           "BASE_NAME": 1,
@@ -233,29 +213,6 @@
           "flags": "NO_INSTALL"
         }
       },
-      "oranges_download_file": {
-        "kwargs": {
-          "COPY_TO": 1,
-          "EXPECTED_HASH": 1,
-          "FILENAME": 1,
-          "GITHUB_REPOSITORY": 1,
-          "GIT_BRANCH": 1,
-          "PACKAGE_NAME": 1,
-          "PASSWORD": 1,
-          "PATH_OUTPUT": 1,
-          "REPO_REL_PATH": 1,
-          "TIMEOUT": 1,
-          "URL": 1,
-          "USERNAME": 1
-        },
-        "pargs": {
-          "flags": [
-            "NO_CACHE",
-            "QUIET",
-            "NEVER_LOCAL"
-          ]
-        }
-      },
       "oranges_fetch_repository": {
         "kwargs": {
           "BITBUCKET_REPOSITORY": 1,
@@ -281,24 +238,13 @@
           ]
         }
       },
-      "oranges_generate_build_type_header": {
-        "kwargs": {
-          "BASE_NAME": 1,
-          "HEADER": 1,
-          "INSTALL_COMPONENT": 1,
-          "REL_PATH": 1,
-          "TARGET": 1
-        },
-        "pargs": {
-          "flags": "INTERFACE"
-        }
-      },
       "oranges_generate_export_header": {
         "kwargs": {
           "BASE_NAME": 1,
           "HEADER": 1,
           "INSTALL_COMPONENT": 1,
           "REL_PATH": 1,
+          "SCOPE": 1,
           "TARGET": 1
         }
       },
@@ -309,20 +255,8 @@
           "INSTALL_COMPONENT": 1,
           "LANGUAGE": 1,
           "REL_PATH": 1,
+          "SCOPE": 1,
           "TARGET": 1
-        },
-        "pargs": {
-          "flags": "INTERFACE"
-        }
-      },
-      "oranges_generate_properties_json": {
-        "kwargs": {
-          "INPUT_FILE": 1,
-          "OUTPUT_FILE": 1,
-          "USE_TARGET": 1
-        },
-        "pargs": {
-          "flags": "KEEP_INPUT_FILE"
         }
       },
       "oranges_generate_standard_headers": {
@@ -335,21 +269,14 @@
           "INSTALL_COMPONENT": 1,
           "PLATFORM_HEADER": 1,
           "REL_PATH": 1,
+          "SCOPE": 1,
           "TARGET": 1
         },
         "pargs": {
           "flags": [
-            "INTERFACE",
             "NO_AGGREGATE_HEADER",
             "NO_BUILD_TYPE_MACROS"
           ]
-        }
-      },
-      "oranges_list_transform": {
-        "kwargs": {
-          "CALLBACK": 1,
-          "LIST": 1,
-          "OUTPUT": 1
         }
       },
       "pluginval_add_all_plugin_tests": {

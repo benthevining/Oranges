@@ -23,9 +23,11 @@ This module provides the function :command:`oranges_add_build_type_macros() <ora
 
     oranges_add_build_type_macros (TARGET <targetName>
                                    BASE_NAME <baseName>
-                                   SCOPE <PUBLIC|PRIVATE|INTERFACE>)
+                                  [SCOPE <PUBLIC|PRIVATE|INTERFACE>])
 
 Adds some preprocessor definitions to the specified target which describe the current build type being built.
+
+``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
 
 This function adds the following preprocessor definitions, where ``<baseName>`` is all uppercase:
 
@@ -78,6 +80,20 @@ function (oranges_add_build_type_macros)
     unset (debug_configs)
 
     set (config_is_release "$<NOT:${config_is_debug}>")
+
+    if (NOT ORANGES_ARG_SCOPE)
+        get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+
+        if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
+            set (ORANGES_ARG_SCOPE INTERFACE)
+        elseif ("${target_type}" STREQUAL EXECUTABLE)
+            set (ORANGES_ARG_SCOPE PUBLIC)
+        else ()
+            set (ORANGES_ARG_SCOPE PRIVATE)
+        endif ()
+
+        unset (target_type)
+    endif ()
 
     # cmake-format: off
     target_compile_definitions (

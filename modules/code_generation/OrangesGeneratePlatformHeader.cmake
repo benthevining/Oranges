@@ -33,7 +33,7 @@ The header generation command
                                      [BASE_NAME <baseName>]
                                      [HEADER <headerName>]
                                      [LANGUAGE <languageToUseForFeatureTests>]
-                                     [INTERFACE]
+                                     [SCOPE <PUBLIC|PRIVATE|INTERFACE>]
                                      [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 Generates a header file containing various platform identifying macros for the current target platform.
@@ -44,6 +44,8 @@ For some of the platform introspection, a language must be specified, because th
 For these options, the cache variables are suffixed with ``<lang>`` (where ``lang`` is the language in all-uppercase), so that multiple settings can be saved (and overridden) for different platform testing languages.
 
 A useful property of this module is that including it initializes all the ``PLAT_`` cache variables, so you can reference them even without generating a header file.
+
+``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
 
@@ -203,9 +205,17 @@ function (oranges_generate_platform_header)
 
     oranges_add_function_message_context ()
 
-    set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH LANGUAGE INSTALL_COMPONENT)
+    set (
+        oneValueArgs
+        TARGET
+        BASE_NAME
+        HEADER
+        REL_PATH
+        LANGUAGE
+        INSTALL_COMPONENT
+        SCOPE)
 
-    cmake_parse_arguments (ORANGES_ARG "INTERFACE" "${oneValueArgs}" "" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
     oranges_assert_target_argument_is_target (ORANGES_ARG)
     lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -220,18 +230,26 @@ function (oranges_generate_platform_header)
         set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_platform.h")
     endif ()
 
-    if (ORANGES_ARG_INTERFACE)
-        set (public_vis INTERFACE)
-    else ()
-        set (public_vis PUBLIC)
-    endif ()
-
     if (NOT ORANGES_ARG_REL_PATH)
         set (ORANGES_ARG_REL_PATH "${ORANGES_ARG_TARGET}")
     endif ()
 
     if (NOT ORANGES_ARG_LANGUAGE)
         set (ORANGES_ARG_LANGUAGE "${PLAT_DEFAULT_TESTING_LANGUAGE}")
+    endif ()
+
+    if (NOT ORANGES_ARG_SCOPE)
+        get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+
+        if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
+            set (ORANGES_ARG_SCOPE INTERFACE)
+        elseif ("${target_type}" STREQUAL EXECUTABLE)
+            set (ORANGES_ARG_SCOPE PUBLIC)
+        else ()
+            set (ORANGES_ARG_SCOPE PRIVATE)
+        endif ()
+
+        unset (target_type)
     endif ()
 
     string (TOUPPER "${ORANGES_ARG_LANGUAGE}" ORANGES_ARG_LANGUAGE)
@@ -302,7 +320,7 @@ function (oranges_generate_platform_header)
 
     target_sources (
         "${ORANGES_ARG_TARGET}"
-        "${public_vis}"
+        "${ORANGES_ARG_SCOPE}"
         $<BUILD_INTERFACE:${generated_file}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
         )
@@ -315,7 +333,8 @@ function (oranges_generate_platform_header)
              DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        "${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction ()

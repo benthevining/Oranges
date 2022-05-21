@@ -24,9 +24,12 @@ This module is a thin wrapper around CMake's :external:command:`generate_export_
     oranges_generate_export_header (TARGET <targetName>
                                    [BASE_NAME <baseName>]
                                    [HEADER <exportHeaderName>]
+                                   [SCOPE <PUBLIC|PRIVATE|INTERFACE>]
                                    [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 
 Generates a header file containing symbol export macros, and adds it to the specified target.
+
+``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
@@ -74,10 +77,9 @@ function (oranges_generate_export_header)
 
     oranges_add_function_message_context ()
 
-    set (options INTERFACE)
-    set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH INSTALL_COMPONENT)
+    set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH INSTALL_COMPONENT SCOPE)
 
-    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
     oranges_assert_target_argument_is_target (ORANGES_ARG)
     lemons_check_for_unparsed_args (ORANGES_ARG)
@@ -90,16 +92,27 @@ function (oranges_generate_export_header)
         set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_export.h")
     endif ()
 
-    if (ORANGES_ARG_INTERFACE)
-        set (public_vis INTERFACE)
-        set (private_vis INTERFACE)
+    get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+
+    if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
+        target_link_libraries ("${ORANGES_ARG_TARGET}"
+                               INTERFACE $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
     else ()
-        set (public_vis PUBLIC)
-        set (private_vis PRIVATE)
+        target_link_libraries ("${ORANGES_ARG_TARGET}"
+                               PRIVATE $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
     endif ()
 
-    target_link_libraries ("${ORANGES_ARG_TARGET}" "${private_vis}"
-                           $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
+    if (NOT ORANGES_ARG_SCOPE)
+        if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
+            set (ORANGES_ARG_SCOPE INTERFACE)
+        elseif ("${target_type}" STREQUAL EXECUTABLE)
+            set (ORANGES_ARG_SCOPE PUBLIC)
+        else ()
+            set (ORANGES_ARG_SCOPE PRIVATE)
+        endif ()
+    endif ()
+
+    unset (target_type)
 
     generate_export_header ("${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
                             EXPORT_FILE_NAME "${ORANGES_ARG_HEADER}" ${no_build_deprecated})
@@ -115,7 +128,7 @@ function (oranges_generate_export_header)
 
     target_sources (
         "${ORANGES_ARG_TARGET}"
-        "${public_vis}"
+        "${ORANGES_ARG_SCOPE}"
         "$<BUILD_INTERFACE:${generated_file}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>"
         )
@@ -128,14 +141,15 @@ function (oranges_generate_export_header)
              DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${ORANGES_ARG_TARGET}" "${public_vis}" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+        "${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>")
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" upperBaseName)
 
     target_compile_definitions (
         "${ORANGES_ARG_TARGET}"
-        "${public_vis}"
+        "${ORANGES_ARG_SCOPE}"
         "$<$<STREQUAL:$<TARGET_PROPERTY:${ORANGES_ARG_TARGET},TYPE>,STATIC_LIBRARY>:${upperBaseName}_STATIC_DEFINE=1>"
         )
 

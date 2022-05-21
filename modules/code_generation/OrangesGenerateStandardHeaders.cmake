@@ -29,13 +29,15 @@ This module provides the function :command:`oranges_generate_standard_headers() 
                                       [PLATFORM_HEADER <platformHeaderName>]
                                       [NO_BUILD_TYPE_MACROS]
                                       [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>]
-                                      [INTERFACE]
+                                      [SCOPE <PUBLIC|PRIVATE|INTERFACE>]
                                       [SOURCE_GROUP_NAME <groupName>])
 
 This calls :command:`oranges_generate_export_header() <oranges_generate_export_header>` and :command:`oranges_generate_platform_header() <oranges_generate_platform_header>`,
 then generates another header named ``<mainHeaderName>`` that includes the other generated headers.
 
 This function will also call :command:`oranges_add_build_type_macros() <oranges_add_build_type_macros>`, unless the ``NO_BUILD_TYPE_MACROS`` option is given.
+
+``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
 
 ``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
@@ -75,7 +77,7 @@ function (oranges_generate_standard_headers)
 
     oranges_add_function_message_context ()
 
-    set (options INTERFACE NO_AGGREGATE_HEADER)
+    set (options NO_AGGREGATE_HEADER)
 
     set (
         oneValueArgs
@@ -87,7 +89,8 @@ function (oranges_generate_standard_headers)
         INSTALL_COMPONENT
         REL_PATH
         FEATURE_TEST_LANGUAGE
-        SOURCE_GROUP_NAME)
+        SOURCE_GROUP_NAME
+        SCOPE)
 
     cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
 
@@ -114,6 +117,20 @@ function (oranges_generate_standard_headers)
         set (ORANGES_ARG_PLATFORM_HEADER "${ORANGES_ARG_TARGET}_platform.h")
     endif ()
 
+    if (NOT ORANGES_ARG_SCOPE)
+        get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+
+        if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
+            set (ORANGES_ARG_SCOPE INTERFACE)
+        elseif ("${target_type}" STREQUAL EXECUTABLE)
+            set (ORANGES_ARG_SCOPE PUBLIC)
+        else ()
+            set (ORANGES_ARG_SCOPE PRIVATE)
+        endif ()
+
+        unset (target_type)
+    endif ()
+
     if (ORANGES_ARG_INSTALL_COMPONENT)
         set (install_component INSTALL_COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
     endif ()
@@ -122,31 +139,23 @@ function (oranges_generate_standard_headers)
         set (relative_path REL_PATH "${ORANGES_ARG_REL_PATH}")
     endif ()
 
-    if (ORANGES_ARG_INTERFACE)
-        set (public_vis INTERFACE)
-    else ()
-        set (public_vis PUBLIC)
-    endif ()
-
     if (NOT ORANGES_ARG_NO_BUILD_TYPE_MACROS)
-        oranges_add_build_type_macros (TARGET "${ORANGES_ARG_TARGET}"
-                                       BASE_NAME "${ORANGES_ARG_BASE_NAME}" SCOPE "${public_vis}")
+        oranges_add_build_type_macros (
+            TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
+            SCOPE "${ORANGES_ARG_SCOPE}")
     endif ()
 
     oranges_generate_export_header (
         TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-        HEADER "${ORANGES_ARG_EXPORT_HEADER}" ${install_component} ${relative_path})
-
-    if (ORANGES_ARG_INTERFACE)
-        set (interface_flag INTERFACE)
-    endif ()
+        HEADER "${ORANGES_ARG_EXPORT_HEADER}" SCOPE "${ORANGES_ARG_SCOPE}" ${install_component}
+                                                                           ${relative_path})
 
     oranges_generate_platform_header (
         TARGET "${ORANGES_ARG_TARGET}"
         BASE_NAME "${ORANGES_ARG_BASE_NAME}"
         HEADER "${ORANGES_ARG_PLATFORM_HEADER}"
-        LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}" ${install_component} ${relative_path}
-                                                        ${interface_flag})
+        LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}"
+        SCOPE "${ORANGES_ARG_SCOPE}" ${install_component} ${relative_path})
 
     if (NOT ORANGES_ARG_NO_AGGREGATE_HEADER)
         set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
@@ -163,7 +172,7 @@ function (oranges_generate_standard_headers)
 
         target_sources (
             "${ORANGES_ARG_TARGET}"
-            "${public_vis}"
+            "${ORANGES_ARG_SCOPE}"
             $<BUILD_INTERFACE:${configured_file}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
             )
@@ -177,7 +186,8 @@ function (oranges_generate_standard_headers)
                  ${install_component})
 
         target_include_directories (
-            "${ORANGES_ARG_TARGET}" "${public_vis}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            "${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
     endif ()
 
