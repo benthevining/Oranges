@@ -66,7 +66,7 @@ enable_testing ()
 
 set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
-include ("${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake")
+include (cmake/OrangesMacros.cmake)
 
 #
 
@@ -118,7 +118,7 @@ if (ORANGES_BUILD_DOCS)
         TARGET OrangesDependencyGraph SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}"
         COPY_GRAPH_TO "${CMAKE_CURRENT_LIST_DIR}/util/deps_graph.png")
 
-    include (scripts/update_readme.cmake)
+    include (cmake/update_readme.cmake)
 
     add_subdirectory (docs)
 
@@ -141,13 +141,13 @@ write_basic_package_version_file (Oranges-config-version.cmake VERSION "${PROJEC
                                   COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 configure_package_config_file (
-    scripts/Oranges-config.cmake Oranges-config.cmake INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}"
+    cmake/Oranges-config.cmake Oranges-config.cmake INSTALL_DESTINATION "${ORANGES_INSTALL_DEST}"
     PATH_VARS ORANGES_ROOT_DIR)
 
 install (
     FILES "${CMAKE_CURRENT_BINARY_DIR}/Oranges-config-version.cmake"
           "${CMAKE_CURRENT_BINARY_DIR}/Oranges-config.cmake"
-          "${CMAKE_CURRENT_LIST_DIR}/scripts/OrangesMacros.cmake"
+          "${CMAKE_CURRENT_LIST_DIR}/cmake/OrangesMacros.cmake"
     DESTINATION "${ORANGES_INSTALL_DEST}"
     COMPONENT oranges_base)
 

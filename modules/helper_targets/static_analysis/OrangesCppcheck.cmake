@@ -77,42 +77,45 @@ find_program (CPPCHECK_PROGRAM NAMES cppcheck DOC "cppcheck executable")
 
 mark_as_advanced (FORCE CPPCHECK_PROGRAM)
 
-if (NOT TARGET cppcheck::cppcheck-interface)
-
+if (NOT TARGET cppcheck-interface)
     add_library (cppcheck-interface INTERFACE)
+endif ()
 
-    if (CPPCHECK_PROGRAM)
-        set (cppcheck_cmd "${CPPCHECK_PROGRAM};--inline-suppr")
+if (CPPCHECK_PROGRAM)
+    set (cppcheck_cmd "${CPPCHECK_PROGRAM};--inline-suppr")
 
-        foreach (enable_check IN LISTS CPPCHECK_ENABLE)
-            list (APPEND cppcheck_cmd "--enable=${enable_check}")
-        endforeach ()
+    foreach (enable_check IN LISTS CPPCHECK_ENABLE)
+        list (APPEND cppcheck_cmd "--enable=${enable_check}")
+    endforeach ()
 
-        foreach (disable_check IN LISTS CPPCHECK_DISABLE)
-            list (APPEND cppcheck_cmd "--suppress=${disable_check}")
-        endforeach ()
+    foreach (disable_check IN LISTS CPPCHECK_DISABLE)
+        list (APPEND cppcheck_cmd "--suppress=${disable_check}")
+    endforeach ()
 
-        if (CPPCHECK_EXTRA_ARGS)
-            separate_arguments (cppcheck_xtra_args UNIX_COMMAND "${CPPCHECK_EXTRA_ARGS}")
+    if (CPPCHECK_EXTRA_ARGS)
+        separate_arguments (cppcheck_xtra_args UNIX_COMMAND "${CPPCHECK_EXTRA_ARGS}")
 
-            set (cppcheck_cmd "${cppcheck_cmd};${cppcheck_xtra_args}")
+        set (cppcheck_cmd "${cppcheck_cmd};${cppcheck_xtra_args}")
 
-            unset (cppcheck_xtra_args)
-        endif ()
-
-        set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-                                                             CXX_CPPCHECK "${cppcheck_cmd}")
-
-        unset (cppcheck_cmd)
-
-        message (VERBOSE "cppcheck enabled!")
-
-        add_feature_info (cppcheck ON "cppcheck static analysis tool")
-    else ()
-        message (VERBOSE "cppcheck could not be found")
-
-        add_feature_info (cppcheck OFF "cppcheck static analysis tool")
+        unset (cppcheck_xtra_args)
     endif ()
 
+    set_target_properties (cppcheck-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+                                                         CXX_CPPCHECK "${cppcheck_cmd}")
+
+    unset (cppcheck_cmd)
+
+    message (VERBOSE "cppcheck enabled!")
+
+    add_feature_info (cppcheck ON "cppcheck static analysis tool")
+else ()
+    message (VERBOSE "cppcheck could not be found")
+
+    add_feature_info (cppcheck OFF "cppcheck static analysis tool")
+endif ()
+
+if (NOT TARGET cppcheck::interface)
     add_library (cppcheck::interface ALIAS cppcheck-interface)
 endif ()
+
+install (TARGETS cppcheck-interface EXPORT OrangesTargets)

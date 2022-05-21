@@ -12,5 +12,5 @@ Command-line usage
 Input variables:
 
 * ``SOURCE_DIR``: Can be set to the path of a copy of the FFTW source tree. If not defined, FFTW sources will be downloaded.
-* ``CACHE_DIR``: Directory to use to cache downloaded sources. If not defined, defaults to ``<scriptDir>/temp``.
+* ``CACHE_DIR``: Directory to use to cache downloaded sources. If not defined, then if the environment variable :envvar:`CMAKE_CACHE` is defined, this variable is initialized to its value. Otherwise, defaults to ``<scriptDir>/temp``.
 * ``QUIET``: If set to ``ON``, suppresses most progress messages. Defaults to ``OFF``.

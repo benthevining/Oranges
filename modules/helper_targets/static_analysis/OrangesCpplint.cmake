@@ -85,42 +85,45 @@ find_program (CPPLINT_PROGRAM NAMES cpplint DOC "cpplint executable")
 
 mark_as_advanced (FORCE CPPLINT_PROGRAM)
 
-if (NOT TARGET cpplint::interface)
-
+if (NOT TARGET cpplint-interface)
     add_library (cpplint-interface INTERFACE)
+endif ()
 
-    if (CPPLINT_PROGRAM)
-        set (cpplint_cmd "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY}")
+if (CPPLINT_PROGRAM)
+    set (cpplint_cmd "${CPPLINT_PROGRAM};--verbose=${CPPLINT_VERBOSITY}")
 
-        if (CPPLINT_IGNORE)
-            list (JOIN CPPLINT_IGNORE "," cpplint_ignr)
+    if (CPPLINT_IGNORE)
+        list (JOIN CPPLINT_IGNORE "," cpplint_ignr)
 
-            set (cpplint_cmd "${cpplint_cmd};--filter=${cpplint_ignr}")
+        set (cpplint_cmd "${cpplint_cmd};--filter=${cpplint_ignr}")
 
-            unset (cpplint_ignr)
-        endif ()
-
-        if (CPPLINT_EXTRA_ARGS)
-            separate_arguments (cpplint_xtra_args UNIX_COMMAND "${CPPLINT_EXTRA_ARGS}")
-
-            set (cpplint_cmd "${cpplint_cmd};${cpplint_xtra_args}")
-
-            unset (cpplint_xtra_args)
-        endif ()
-
-        set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${cpplint_cmd}"
-                                                            C_CPPLINT "${cpplint_cmd}")
-
-        unset (cpplint_cmd)
-
-        message (VERBOSE "cpplint found")
-
-        add_feature_info (cpplint ON "cpplint static analysis tool")
-    else ()
-        message (VERBOSE "cpplint could not be found")
-
-        add_feature_info (cpplint OFF "cpplint static analysis tool")
+        unset (cpplint_ignr)
     endif ()
 
+    if (CPPLINT_EXTRA_ARGS)
+        separate_arguments (cpplint_xtra_args UNIX_COMMAND "${CPPLINT_EXTRA_ARGS}")
+
+        set (cpplint_cmd "${cpplint_cmd};${cpplint_xtra_args}")
+
+        unset (cpplint_xtra_args)
+    endif ()
+
+    set_target_properties (cpplint-interface PROPERTIES CXX_CPPLINT "${cpplint_cmd}"
+                                                        C_CPPLINT "${cpplint_cmd}")
+
+    unset (cpplint_cmd)
+
+    message (VERBOSE "cpplint found")
+
+    add_feature_info (cpplint ON "cpplint static analysis tool")
+else ()
+    message (VERBOSE "cpplint could not be found")
+
+    add_feature_info (cpplint OFF "cpplint static analysis tool")
+endif ()
+
+if (NOT TARGET cpplint::interface)
     add_library (cpplint::interface ALIAS cpplint-interface)
 endif ()
+
+install (TARGETS cpplint-interface EXPORT OrangesTargets)

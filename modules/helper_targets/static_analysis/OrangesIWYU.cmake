@@ -57,33 +57,37 @@ set (
     "--update_comments;--cxx17ns"
     CACHE
         STRING
-        "A space-separated list of command line arguments that will be passed to the include-what-you-use executable."
+        "A semicolon-separated list of command line arguments that will be passed to the include-what-you-use executable."
     )
 
-if (NOT TARGET IWYU::interface)
+if (NOT TARGET include-what-you-use-interface)
     add_library (include-what-you-use-interface INTERFACE)
+endif ()
 
-    if (IWYU_PROGRAM)
-        set (iwyu_cmd "${IWYU_PROGRAM}")
+if (IWYU_PROGRAM)
+    set (iwyu_cmd "${IWYU_PROGRAM}")
 
-        foreach (xtra_arg IN LISTS IWYU_EXTRA_ARGS)
-            set (iwyu_cmd "${iwyu_cmd};-Xiwyu;${xtra_arg}")
-            unset (xtra_arg)
-        endforeach ()
+    foreach (xtra_arg IN LISTS IWYU_EXTRA_ARGS)
+        set (iwyu_cmd "${iwyu_cmd};-Xiwyu;${xtra_arg}")
+        unset (xtra_arg)
+    endforeach ()
 
-        set_target_properties (include-what-you-use-interface PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-                                                                         "${iwyu_cmd}")
+    set_target_properties (include-what-you-use-interface PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+                                                                     "${iwyu_cmd}")
 
-        unset (iwyu_cmd)
+    unset (iwyu_cmd)
 
-        message (VERBOSE "include-what-you-use enabled")
+    message (VERBOSE "include-what-you-use enabled")
 
-        add_feature_info (include-what-you-use ON "include-what-you-use static analysis tool")
-    else ()
-        message (VERBOSE "include-what-you-use could not be found")
+    add_feature_info (include-what-you-use ON "include-what-you-use static analysis tool")
+else ()
+    message (VERBOSE "include-what-you-use could not be found")
 
-        add_feature_info (include-what-you-use OFF "include-what-you-use static analysis tool")
-    endif ()
+    add_feature_info (include-what-you-use OFF "include-what-you-use static analysis tool")
+endif ()
 
+if (NOT TARGET IWYU::interface)
     add_library (IWYU::interface ALIAS include-what-you-use-interface)
 endif ()
+
+install (TARGETS include-what-you-use-interface EXPORT OrangesTargets)

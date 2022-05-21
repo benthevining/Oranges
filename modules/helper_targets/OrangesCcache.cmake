@@ -123,32 +123,34 @@ execute_process (COMMAND chmod a+rx "${c_script}" "${cxx_script}")
 
 #
 
-if (NOT TARGET ccache::interface)
+if (NOT TARGET ccache-interface)
     add_library (ccache-interface INTERFACE)
+endif ()
 
-    if (CCACHE_DISABLE)
-        set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE FALSE)
-        message (VERBOSE "Disabling ccache")
+if (CCACHE_DISABLE)
+    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE FALSE)
+    message (VERBOSE "Disabling ccache")
 
-        add_feature_info (ccache OFF "Not using the ccache compiler cache")
+    add_feature_info (ccache OFF "Not using the ccache compiler cache")
+else ()
+    set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
+    message (VERBOSE "Using ccache")
+
+    add_feature_info (ccache ON "Using the ccache compiler cache")
+
+    if (XCODE)
+        set_target_properties (
+            ccache-interface
+            PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
+                       XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
     else ()
-        set_target_properties (ccache-interface PROPERTIES ORANGES_USING_CCACHE TRUE)
-        message (VERBOSE "Using ccache")
-
-        add_feature_info (ccache ON "Using the ccache compiler cache")
-
-        if (XCODE)
-            set_target_properties (
-                ccache-interface
-                PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
-                           XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS
-                                                            "${cxx_script}")
-        else ()
-            set_target_properties (
-                ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}" CXX_COMPILER_LAUNCHER
-                                                                              "${cxx_script}")
-        endif ()
+        set_target_properties (ccache-interface PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+                                                           CXX_COMPILER_LAUNCHER "${cxx_script}")
     endif ()
+endif ()
 
+if (NOT TARGET ccache::interface)
     add_library (ccache::interface ALIAS ccache-interface)
 endif ()
+
+install (TARGETS ccache-interface EXPORT OrangesTargets)

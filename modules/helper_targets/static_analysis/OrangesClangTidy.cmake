@@ -73,40 +73,44 @@ set (
         "A space-separated list of command line arguments that will be passed to the clang-tidy executable verbatim."
     )
 
-if (NOT TARGET ClangTidy::interface)
+if (NOT TARGET clang-tidy-interface)
     add_library (clang-tidy-interface INTERFACE)
+endif ()
 
-    if (CLANG_TIDY_PROGRAM)
-        set (clangtidy_cmd "${CLANG_TIDY_PROGRAM}")
+if (CLANG_TIDY_PROGRAM)
+    set (clangtidy_cmd "${CLANG_TIDY_PROGRAM}")
 
-        if (CLANGTIDY_CONFIG_FILE)
-            if ("${CLANGTIDY_CONFIG_FILE}" MATCHES DEFAULT)
-                set (clangtidy_cmd
-                     "${clangtidy_cmd};--config-file=${CMAKE_CURRENT_LIST_DIR}/scripts/.clang-tidy")
-            else ()
-                set (clangtidy_cmd "${clangtidy_cmd};--config-file=${CLANGTIDY_CONFIG_FILE}")
-            endif ()
+    if (CLANGTIDY_CONFIG_FILE)
+        if ("${CLANGTIDY_CONFIG_FILE}" MATCHES DEFAULT)
+            set (clangtidy_cmd
+                 "${clangtidy_cmd};--config-file=${CMAKE_CURRENT_LIST_DIR}/scripts/.clang-tidy")
+        else ()
+            set (clangtidy_cmd "${clangtidy_cmd};--config-file=${CLANGTIDY_CONFIG_FILE}")
         endif ()
-
-        if (CLANGTIDY_EXTRA_ARGS)
-            separate_arguments (clangtidy_xtra_args UNIX_COMMAND "${CLANGTIDY_EXTRA_ARGS}")
-
-            set (clangtidy_cmd "${clangtidy_cmd};${clangtidy_xtra_args}")
-
-            unset (clangtidy_xtra_args)
-        endif ()
-
-        set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
-                                                               CXX_CLANG_TIDY "${clangtidy_cmd}")
-
-        unset (clangtidy_cmd)
-
-        message (VERBOSE "Using clang-tidy!")
-        add_feature_info (clang-tidy ON "Clang's static analysis tool")
-    else ()
-        message (VERBOSE "clang-tidy could not be found")
-        add_feature_info (clang-tidy OFF "Clang's static analysis tool")
     endif ()
 
+    if (CLANGTIDY_EXTRA_ARGS)
+        separate_arguments (clangtidy_xtra_args UNIX_COMMAND "${CLANGTIDY_EXTRA_ARGS}")
+
+        set (clangtidy_cmd "${clangtidy_cmd};${clangtidy_xtra_args}")
+
+        unset (clangtidy_xtra_args)
+    endif ()
+
+    set_target_properties (clang-tidy-interface PROPERTIES EXPORT_COMPILE_COMMANDS ON
+                                                           CXX_CLANG_TIDY "${clangtidy_cmd}")
+
+    unset (clangtidy_cmd)
+
+    message (VERBOSE "Using clang-tidy!")
+    add_feature_info (clang-tidy ON "Clang's static analysis tool")
+else ()
+    message (VERBOSE "clang-tidy could not be found")
+    add_feature_info (clang-tidy OFF "Clang's static analysis tool")
+endif ()
+
+if (NOT TARGET ClangTidy::interface)
     add_library (ClangTidy::interface ALIAS clang-tidy-interface)
 endif ()
+
+install (TARGETS clang-tidy-interface EXPORT OrangesTargets)

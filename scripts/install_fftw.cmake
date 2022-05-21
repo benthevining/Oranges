@@ -27,6 +27,12 @@ Input variables (define with -D)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+if (NOT CACHE_DIR)
+    if (DEFINED ENV{CMAKE_CACHE})
+        set (CACHE_DIR $ENV{CMAKE_CACHE})
+    endif ()
+endif ()
+
 if (NOT SOURCE_DIR)
 
     if (NOT QUIET)

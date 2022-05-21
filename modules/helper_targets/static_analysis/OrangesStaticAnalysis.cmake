@@ -56,11 +56,7 @@ if (TARGET Oranges::OrangesStaticAnalysis)
     return ()
 endif ()
 
-include (OrangesCmakeDevTools)
 include (FeatureSummary)
-
-oranges_file_scoped_message_context ("OrangesStaticAnalysis")
-
 include (OrangesClangTidy)
 include (OrangesCppcheck)
 include (OrangesCpplint)

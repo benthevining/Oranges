@@ -84,12 +84,16 @@ Cache variables
 
 When ``ON``, the function :command:`oranges_fetch_repository()` will first try a normal :command:`find_package()` call. Defaults to ``OFF``.
 
-.. cmake:variable:: FETCHCONTENT_BASE_DIR
-
-Defines the directory where downloaded repositories will be stored. I recommend setting this outside of the binary tree, so that the binary tree can be removed, and dependencies won't have to be redownloaded during the next cmake configure. Defaults to ``${CMAKE_SOURCE_DIR}/Cache``.
-
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: CMAKE_CACHE
+
+Initializes the value of the :external:variable:`FETCHCONTENT_BASE_DIR` variable, if defined.
+
+.. cmake:envvar:: CMAKE_CACHE_DISCONNECTED
+
+Initializes the value of the :external:variable:`FETCHCONTENT_FULLY_DISCONNECTED` variable, if defined.
 
 .. cmake:envvar:: GITHUB_USERNAME
 
