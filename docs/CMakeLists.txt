@@ -73,6 +73,9 @@ add_custom_command (
 
 unset (scripts_rsts)
 
+set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                                    "${ORANGES_DOCS_BUILD_TREE}")
+
 #
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")

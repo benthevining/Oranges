@@ -32,10 +32,18 @@ OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
 
 MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "modules")
 
+# editorconfig-checker-disable
+FIND_MODULES_RST_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT,
+                                                       "find_modules")
+# editorconfig-checker-enable
+
 DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 if not os.path.isdir(MODULES_RST_OUTPUT_DIR):
 	os.makedirs(MODULES_RST_OUTPUT_DIR)
+
+if not os.path.isdir(FIND_MODULES_RST_OUTPUT_DIR):
+	os.makedirs(FIND_MODULES_RST_OUTPUT_DIR)
 
 #
 
@@ -50,8 +58,6 @@ copytree(src=os.path.join(DOCS_DIR, "scripts"),
 #
 
 # generate .rst files for each module
-
-generated_files: list[str] = []
 
 
 def process_directory(dir_path: str) -> None:
@@ -76,16 +82,18 @@ def process_directory(dir_path: str) -> None:
 		if not entry.endswith(".cmake"):
 			continue
 
-		output_file: Final[str] = os.path.join(
-		    MODULES_RST_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
+		if os.path.basename(entry_path).startswith("Find"):
+			base_dir: Final[str] = FIND_MODULES_RST_OUTPUT_DIR
+		else:
+			base_dir: Final[str] = MODULES_RST_OUTPUT_DIR
 
-		output_path: Final[str] = os.path.relpath(entry_path,
-		                                          start=MODULES_RST_OUTPUT_DIR)
+		output_file: Final[str] = os.path.join(
+		    base_dir, f"{entry.removesuffix('.cmake')}.rst")
+
+		output_path: Final[str] = os.path.relpath(entry_path, start=base_dir)
 
 		with open(output_file, "w", encoding="utf-8") as rst_out:
 			rst_out.write(f".. cmake-module:: {output_path}")
-
-		generated_files.append(output_file)
 
 
 #
@@ -126,19 +134,6 @@ with open(os.path.join(DOCS_DIR, "index.rst"), "r",
 	index_lines = index_in.readlines()
 # editorconfig-checker-enable
 
-module_files: list[str] = []
-find_modules: list[str] = []
-
-for filepath in generated_files:
-	REL_PATH: Final[str] = os.path.relpath(filepath, start=OUTPUT_TREE_ROOT)
-
-	if os.path.basename(filepath).startswith("Find"):
-		find_modules.append(REL_PATH)
-	else:
-		module_files.append(REL_PATH)
-
-del generated_files
-
 #
 
 # Read content from the readme
@@ -162,7 +157,7 @@ for line in readme_lines:
 	    "See the [``FindOranges``](scripts/FindOranges.cmake) file for more documentation on what it does."
 	):
 		index_lines.append(
-		    "\n:doc:`View the documentation for the FindOranges script. <modules/FindOranges>`\n"
+		    f"\n:doc:`View the documentation for the FindOranges script. <{os.path.splitext(os.path.relpath(FINDER_DOC_FILE, start=OUTPUT_TREE_ROOT))[0]}>`\n"
 		)
 		continue
 
@@ -173,13 +168,11 @@ for line in readme_lines:
 		index_lines.append(f"{line}")
 
 del readme_lines
+del FINDER_DOC_FILE
 
 #
 
 # Build the actual index.rst for the docs build tree
-
-module_files.sort()
-find_modules.sort()
 
 index_lines.append("\nModules\n")
 index_lines.append("##################\n")
@@ -187,11 +180,8 @@ index_lines.append("\n")
 index_lines.append(".. toctree::\n")
 index_lines.append("   :maxdepth: 1\n")
 index_lines.append("   :caption: CMake modules provided by Oranges:\n")
-
-for module in module_files:
-	index_lines.append(f"\n   {module}")
-
-del module_files
+index_lines.append("   :glob:\n\n")
+index_lines.append("   modules/*")
 
 index_lines.append("\n")
 index_lines.append("\nFind Modules\n")
@@ -200,13 +190,10 @@ index_lines.append("\n")
 index_lines.append(".. toctree::\n")
 index_lines.append("   :maxdepth: 1\n")
 index_lines.append("   :caption: Find modules provided by Oranges:\n")
+index_lines.append("   :glob:\n\n")
+index_lines.append("   find_modules/*")
 
-for module in find_modules:
-	index_lines.append(f"\n   {module}")
-
-del find_modules
-
-index_lines.append("\n")
+index_lines.append("\n\n")
 
 # append content from scripts.rst file in this directory
 # editorconfig-checker-disable
