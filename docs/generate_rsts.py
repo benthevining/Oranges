@@ -43,7 +43,7 @@ DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 #
 
-for subdir_name in "modules", "find_modules", "commands", "variables", "env_variables":
+for subdir_name in "module", "find_modules", "command", "variable", "envvar":
 	subdir_path = os.path.join(OUTPUT_TREE_ROOT, subdir_name)
 	if not os.path.isdir(subdir_path):
 		os.makedirs(subdir_path)

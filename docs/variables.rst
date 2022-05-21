@@ -6,4 +6,4 @@ Variables
 	:caption: CMake variables defined or used by Oranges modules:
 	:glob:
 
-	variables/*
+	variable/*

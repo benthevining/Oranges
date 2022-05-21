@@ -93,7 +93,7 @@ def process_commands(orig_filepath: str, output_dir: str) -> None:
 		cmd_lines.append(f"    include ({module_name})\n")
 		cmd_lines.append("\n")
 		cmd_lines.append(
-		    f":command:`View the full docs for this module <{command}>`.\n")
+		    f"View the full docs for :module:`this module <{module_name}>`.\n")
 		cmd_lines.append("\n")
 		cmd_lines.extend(doc_lines)
 
@@ -126,9 +126,7 @@ def process_variables(orig_filepath: str, output_dir: str) -> None:
 		var_lines.append(f"{variable}\n")
 		var_lines.append("-------------------------------\n")
 		var_lines.append("\n")
-		var_lines.append(
-		    f"Defined in module ``{module_name}``. :variable:`View the full docs for this module <{variable}>`.\n"
-		)
+		var_lines.append(f"Defined in module :module:`{module_name}`.\n")
 		var_lines.append("\n")
 		var_lines.extend(doc_lines)
 
@@ -161,9 +159,7 @@ def process_env_variables(orig_filepath: str, output_dir: str) -> None:
 		var_lines.append(f"{variable}\n")
 		var_lines.append("-------------------------------\n")
 		var_lines.append("\n")
-		var_lines.append(
-		    f"Defined in module ``{module_name}``. :envvar:`View the full docs for this module <{variable}>`.\n"
-		)
+		var_lines.append(f"Defined in module :module:`{module_name}`.\n")
 		var_lines.append("\n")
 		var_lines.extend(doc_lines)
 
@@ -198,17 +194,17 @@ def process_directory(dir_path: str, output_base_dir: str) -> None:
 		if not entry.endswith(".cmake"):
 			continue
 
-		process_commands(entry_path, os.path.join(output_base_dir, "commands"))
+		process_commands(entry_path, os.path.join(output_base_dir, "command"))
 		process_variables(entry_path, os.path.join(output_base_dir,
-		                                           "variables"))
+		                                           "variable"))
 		process_env_variables(entry_path,
-		                      os.path.join(output_base_dir, "env_variables"))
+		                      os.path.join(output_base_dir, "envvar"))
 
 		if os.path.basename(entry_path).startswith("Find"):
 			base_dir: Final[str] = os.path.join(output_base_dir,
 			                                    "find_modules")
 		else:
-			base_dir: Final[str] = os.path.join(output_base_dir, "modules")
+			base_dir: Final[str] = os.path.join(output_base_dir, "module")
 
 		output_file: Final[str] = os.path.join(
 		    base_dir, f"{entry.removesuffix('.cmake')}.rst")

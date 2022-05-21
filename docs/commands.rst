@@ -6,4 +6,4 @@ Commands
 	:caption: CMake commands provided by Oranges modules:
 	:glob:
 
-	commands/*
+	command/*

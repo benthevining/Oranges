@@ -6,7 +6,7 @@ Modules
 	:caption: CMake modules provided by Oranges:
 	:glob:
 
-	modules/*
+	module/*
 
 Find Modules
 ^^^^^^^^^^^^^^^^^

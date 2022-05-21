@@ -6,4 +6,4 @@ Environment Variables
 	:caption: Environment variables used by Oranges modules:
 	:glob:
 
-	env_variables/*
+	envvar/*
