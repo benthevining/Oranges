@@ -114,6 +114,8 @@ Empty by default.
 * oranges_doc_html
 * oranges_doc_singlehtml
 * oranges_doc_man
+* oranges_doc_info
+* oranges_doc_pdf
 * oranges_docs - installs all Oranges documentation
 * oranges - installs all Oranges components
 

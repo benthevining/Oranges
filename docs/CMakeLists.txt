@@ -30,6 +30,19 @@ project (
 find_program (SPHINX_EXECUTABLE NAMES sphinx-build
               DOC "Sphinx Documentation Builder (sphinx-doc.org)")
 
+find_program (MAKEINFO_EXECUTABLE NAMES makeinfo DOC "makeinfo tool")
+
+#[[
+Note: on my Mac, the following commands were needed to get the Latex build working:
+
+brew install basictex
+sudo tlmgr install latexmk tex-gyre fncychap wrapfig capt-of framed needspace varwidth titlesec
+]]
+
+find_program (LATEX_EXECUTABLE NAMES pdflatex DOC "pdflatex tool")
+
+find_program (LATEXMK_EXECUTABLE NAMES latexmk DOC "latexmk tool")
+
 set (ORANGES_SPHINX_FLAGS "" CACHE STRING "Flags to pass to sphinx-build")
 
 mark_as_advanced (ORANGES_SPHINX_FLAGS)
@@ -77,9 +90,6 @@ add_custom_command (
 unset (scripts_rsts)
 unset (rst_files)
 
-set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                    "${ORANGES_DOCS_BUILD_TREE}")
-
 #
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")
@@ -93,30 +103,61 @@ unset (conf_version)
 unset (scripts_path)
 
 set (docs_output "${Oranges_SOURCE_DIR}/doc")
+set (logfiles_dir "${CMAKE_CURRENT_BINARY_DIR}/logs")
 
-set (doc_format_outputs "")
-set (doc_format_last "")
+if (MAKEINFO_EXECUTABLE)
+    set (info_flag info)
+endif ()
 
-foreach (format IN ITEMS html singlehtml man)
+if (LATEX_EXECUTABLE AND LATEXMK_EXECUTABLE)
+    set (latex_flag latexpdf)
+endif ()
+
+# cmake-format: off
+foreach (format IN ITEMS html singlehtml man text linkcheck ${info_flag} ${latex_flag})
+# cmake-format: on
     set (doc_format_output "doc_format_${format}")
+    set (format_warnings_file "${logfiles_dir}/${format}")
 
-    # cmake-format: off
-    add_custom_command (
-        OUTPUT "${doc_format_output}"
-        COMMAND
-            "${SPHINX_EXECUTABLE}"
-                -c "${CMAKE_CURRENT_BINARY_DIR}"
-                -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
-                -b "${format}"
-                ${sphinx_flags}
-                "${ORANGES_DOCS_BUILD_TREE}"
-                "${docs_output}/${format}"
-        DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
-                ${doc_format_last}
-                colors.py conf.py oranges.css
-        COMMENT "Oranges docs - building format ${format}..."
-        VERBATIM USES_TERMINAL)
-    # cmake-format: on
+    if ("${format}" STREQUAL info OR "${format}" STREQUAL latexpdf)
+        # cmake-format: off
+        add_custom_command (
+            OUTPUT "${doc_format_output}"
+            COMMAND
+                "${SPHINX_EXECUTABLE}"
+                    -M "${format}"
+                    "${ORANGES_DOCS_BUILD_TREE}"
+                    "${docs_output}/${format}"
+                    -c "${CMAKE_CURRENT_BINARY_DIR}"
+                    -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
+                    -w "${format_warnings_file}"
+                    ${sphinx_flags}
+            DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+                    ${doc_format_last}
+                    colors.py conf.py oranges.css
+            COMMENT "Oranges docs - building format ${format}..."
+            VERBATIM USES_TERMINAL)
+        # cmake-format: on
+    else ()
+        # cmake-format: off
+        add_custom_command (
+            OUTPUT "${doc_format_output}"
+            COMMAND
+                "${SPHINX_EXECUTABLE}"
+                    -c "${CMAKE_CURRENT_BINARY_DIR}"
+                    -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
+                    -b "${format}"
+                    -w "${format_warnings_file}"
+                    ${sphinx_flags}
+                    "${ORANGES_DOCS_BUILD_TREE}"
+                    "${docs_output}/${format}"
+            DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+                    ${doc_format_last}
+                    colors.py conf.py oranges.css
+            COMMENT "Oranges docs - building format ${format}..."
+            VERBATIM USES_TERMINAL)
+        # cmake-format: on
+    endif ()
 
     set_property (SOURCE "${doc_format_output}" PROPERTY SYMBOLIC 1)
     list (APPEND doc_format_outputs "${doc_format_output}")
@@ -124,6 +165,8 @@ foreach (format IN ITEMS html singlehtml man)
 endforeach ()
 
 unset (doc_format_last)
+unset (info_flag)
+unset (latex_flag)
 
 #
 
@@ -133,6 +176,9 @@ endif ()
 
 add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
                    COMMENT "Building Oranges documentation...")
+
+set_property (TARGET OrangesDocs APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${logfiles_dir}"
+                                                 "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}")
 
 unset (all_flag)
 
@@ -169,6 +215,22 @@ install (FILES "${docs_output}/man/oranges.1" COMPONENT oranges_doc_man
 
 cpack_add_component (oranges_doc_man DISPLAY_NAME "Oranges man pages"
                      DESCRIPTION "Install the Oranges man pages" GROUP oranges_docs)
+
+if (MAKEINFO_EXECUTABLE)
+    install (FILES "${docs_output}/info/texinfo/oranges.info" COMPONENT oranges_doc_info
+             DESTINATION "${CMAKE_INSTALL_INFODIR}")
+
+    cpack_add_component (oranges_doc_info DISPLAY_NAME "Oranges info pages"
+                         DESCRIPTION "Install the Oranges info pages" GROUP oranges_docs)
+endif ()
+
+if (LATEX_EXECUTABLE AND LATEXMK_EXECUTABLE)
+    install (FILES "${docs_output}/latexpdf/latex/oranges.pdf" COMPONENT oranges_doc_pdf
+             DESTINATION "${CMAKE_INSTALL_DOCDIR}")
+
+    cpack_add_component (oranges_doc_pdf DISPLAY_NAME "Oranges PDF documentation"
+                         DESCRIPTION "Install the Oranges PDF documentation" GROUP oranges_docs)
+endif ()
 
 cpack_add_component_group (
     oranges_docs DISPLAY_NAME "Oranges documentation"
