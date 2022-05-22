@@ -19,6 +19,10 @@ if (NOT TARGET Python3::Interpreter)
     return ()
 endif ()
 
+if (ORANGES_IN_GRAPHVIZ_CONFIG)
+    return ()
+endif ()
+
 configure_file ("${CMAKE_CURRENT_LIST_DIR}/update_readme.py"
                 "${CMAKE_CURRENT_BINARY_DIR}/update_readme.py" @ONLY NEWLINE_STYLE UNIX)
 

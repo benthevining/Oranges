@@ -138,11 +138,18 @@ for line in readme_lines:
 del readme_lines
 del FINDER_DOC_FILE
 
+using_oranges_lines.append("\n")
+using_oranges_lines.append("Oranges dependency graph:\n")
+using_oranges_lines.append("##################\n")
+using_oranges_lines.append("\n")
+using_oranges_lines.append(".. image:: deps_graph.png\n")
+
 # editorconfig-checker-disable
 with open(os.path.join(OUTPUT_TREE_ROOT, "UsingOranges.rst"),
           "w",
           encoding="utf-8") as using_oranges:
 	using_oranges.write("".join(using_oranges_lines))
-# editorconfig-checker-enable
 
-del using_oranges_lines
+copy2(os.path.join(ORANGES_ROOT, "util", "deps_graph.png"),
+      os.path.join(OUTPUT_TREE_ROOT, "deps_graph.png"))
+# editorconfig-checker-enable

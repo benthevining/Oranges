@@ -71,6 +71,7 @@ html_style = 'oranges.css'
 html_theme = 'default'
 html_split_index = True
 html_copy_source = False
+html_scaled_image_link = True
 
 # editorconfig-checker-disable
 html_theme_options = {
