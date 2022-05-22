@@ -61,6 +61,7 @@ A library of CMake modules.
   * [OrangesSWIG](modules/code_generation/OrangesSWIG.cmake)
   * [OrangesSetDefaultCpackGenerator](modules/installing/OrangesSetDefaultCpackGenerator.cmake)
   * [OrangesSourceFileUtils](modules/general/OrangesSourceFileUtils.cmake)
+  * [OrangesSphinx](modules/documentation/OrangesSphinx.cmake)
   * [OrangesStaticAnalysis](modules/helper_targets/static_analysis/OrangesStaticAnalysis.cmake)
   * [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
   * [OrangesUnityBuild](modules/helper_targets/OrangesUnityBuild.cmake)

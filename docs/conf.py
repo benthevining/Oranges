@@ -34,9 +34,16 @@ highlight_language = 'cmake'
 
 needs_sphinx = '4.1'
 
-autosectionlabel_prefix_document = True
-
 intersphinx_mapping = {'cmake': ('https://cmake.org/cmake/help/latest', None)}
+
+nitpicky = True
+smartquotes = True
+numfig = False
+
+#
+# extensions
+
+autosectionlabel_prefix_document = True
 
 autodoc_typehints = 'both'
 
@@ -48,12 +55,14 @@ extensions = [
 ]
 # editorconfig-checker-enable
 
-nitpicky = True
-smartquotes = True
-numfig = False
+#
+# man pages
 
 man_show_urls = False
 man_make_section_directory = False
+
+#
+# HTML
 
 # html_baseurl
 html_show_sourcelink = False
@@ -61,6 +70,7 @@ html_static_path = ['@conf_path@']
 html_style = 'oranges.css'
 html_theme = 'default'
 html_split_index = True
+html_copy_source = False
 
 # editorconfig-checker-disable
 html_theme_options = {
@@ -83,8 +93,33 @@ html_theme_options = {
     'codebgcolor': '#eeeeee',
     'codetextcolor': '#333333',
 }
+
+html_sidebars = {
+    '**':
+    ['localtoc.html', 'relations.html', 'globaltoc.html', 'searchbox.html']
+}
 # editorconfig-checker-enable
+
+html_last_updated_fmt = '%b %d, %Y'
+
+html_permalinks = True
 
 html_title = f'Oranges {release} Documentation'
 html_short_title = f'Oranges {release} Documentation'
 # html_favicon
+
+#
+# Latex
+
+latex_show_pagerefs = True
+latex_show_urls = 'footnote'
+
+#
+# Texinfo
+
+texinfo_show_urls = 'footnote'
+
+#
+# Linkcheck
+
+linkcheck_retries = 4

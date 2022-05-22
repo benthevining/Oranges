@@ -58,6 +58,10 @@ mark_as_advanced (FORCE PROGRAM_CODESIGN)
 
 function (codesign_sign_target)
 
+    if (ORANGES_IN_GRAPHVIZ_CONFIG)
+        return ()
+    endif ()
+
     if (NOT PROGRAM_CODESIGN)
         message (
             WARNING

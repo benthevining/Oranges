@@ -106,6 +106,10 @@ endif ()
 
 function (wraptool_configure_aax_plugin_signing)
 
+    if (ORANGES_IN_GRAPHVIZ_CONFIG)
+        return ()
+    endif ()
+
     if (NOT PROGRAM_WRAPTOOL)
         message (
             WARNING

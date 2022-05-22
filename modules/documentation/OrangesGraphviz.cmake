@@ -33,35 +33,48 @@ This module provides the function :command:`oranges_add_graphviz_target() <orang
 
     Graphviz's ``dot`` tool is required to generate the output images. A path to its executable can manually be set using the :variable:`PROGRAM_DOT` cache variable.
 
-All arguments are optional.
+Creates a target that, when built, generates an image representing CMake's build graph.
 
-``OUTPUT_DIR`` is the directory in which the generated .dot file and image will be placed. The image itself will be at ``<outputDirectory>/deps_graph.png``. If not defined, defaults to ``${CMAKE_CURRENT_BINARY_DIR}``.
-
-``TARGET`` is the name of the custom target that, when built, will invoke dot and generate the actual image. If not defined, defaults to ``${PROJECT_NAME}DependencyGraph``.
-
-If the ``ALL`` flag is given, the custom target created will be built with CMake's ``All`` target.
-
-Because CMake only generates one dependency graph for its whole build graph, the way this function works is that its ``TARGET`` invokes another configuration of CMake in a child process, just to generate the build graph for this function's output graph image.
-Therefore, you can specify a custom ``SOURCE_DIR`` and ``BINARY_DIR`` for this child invocation of CMake. If not specified, they default to ``${CMAKE_SOURCE_DIR}`` and ``${CMAKE_CURRENT_BINARY_DIR}/Graphviz``, respectively.
-I recommend that you set ``SOURCE_DIR`` to ``${PROJECT_SOURCE_DIR}``, and ``BINARY_DIR`` to something specific for Graphviz generation and not used by the rest of your parent build.
-
+Because CMake only outputs one dependency graph for its whole build graph, the way this function works is that its ``TARGET`` invokes another configuration of CMake in a child process, just to generate the build graph for this function's output graph image.
 In the child CMake invocation, the variable :variable:`ORANGES_IN_GRAPHVIZ_CONFIG` will be defined to ``ON``.
 
-``EXTRA_CMAKE_OPTIONS`` is a list of extra command line arguments that will be forwarded verbatim to the child invocation of CMake.
+All arguments are optional.
 
-The ``GRAPHVIZ_CONFIG_FILE`` argument allows you to specify your own `CMakeGraphVizOptions.cmake <https://cmake.org/cmake/help/latest/module/CMakeGraphVizOptions.html>`_ file.
-CMake searches for this file in both the source and binary directories (which will be ``SOURCE_DIR`` and ``BINARY_DIR`` in the child invocation of CMake), and it simply sets some variables that CMake uses to configure Graphviz's output.
+Options:
 
-If you don't provide your own ``GRAPHVIZ_CONFIG_FILE``, this function will check if one exists already in ``srcDir`` or ``binDir``, and if not, will generate a default one for you and copy it to ``<binDir>`` so that the child CMake finds it.
-In the default generated config file, the graph is named ``${PROJECT_NAME}``, custom targets are shown, and the per-target and dependers information is not generated.
-The generated file will be placed at ``<binDir>/CMakeGraphVizOptions.cmake``.
+``TARGET``
+ Name of the custom target to create that, when built, will generate the dependency graph image. Defaults to ``${PROJECT_NAME}DependencyGraph``.
 
-If you do specify a ``GRAPHVIZ_CONFIG_FILE``, if you don't provide an absolute path, it will be interpreted relative to the current directory (``${CMAKE_CURRENT_LIST_DIR}``).
-If your custom config file is not already in ``srcDir`` or ``binDir``, it will be copied to ``<binDir>/CMakeGraphVizOptions.cmake``.
+``ALL``
+ If specified, the custom target created will be built with CMake's ``All`` target.
 
-``GRAPHVIZ_CONFIG_FILE`` must be specified if a CMakeGraphVizOptions.cmake file does not exist in ``srcDir`` or ``binDir``.
+``OUTPUT_DIR``
+ The directory in which the generated .dot file and image will be placed. The image itself will be at ``<outputDirectory>/deps_graph.png``. Defaults to ``${CMAKE_CURRENT_BINARY_DIR}``.
 
-``COPY_GRAPH_TO`` specifies an absolute filepath where the generated image will be copied to. The use case for this is to add the generated graph to your source tree, or to documentation, etc.
+``SOURCE_DIR``
+ The top-level source directory used for the child invocation of CMake executed when the custom target is built.
+ If you wish to only generate a graph of a subproject that may be contained within a superproject, then you should pass the subproject's ``${PROJECT_SOURCE_DIR}`` as this parameter.
+ Defaults to ``${CMAKE_SOURCE_DIR}``.
+
+``BINARY_DIR``
+ The top-level build directory used for the child invocation of CMake executed when the custom target is built.
+ Defaults to ``${CMAKE_CURRENT_BINARY_DIR}/Graphviz``.
+
+``EXTRA_CMAKE_OPTIONS``
+ Extra command-line options that will be passed to the child invocation of CMake verbatim. This should rarely need to be used.
+ If there is any custom logic you need to do when preparing the build tree for the dependency graph image generation, your scripts can check the value of the variable :variable:`ORANGES_IN_GRAPHVIZ_CONFIG` to see if you are in a child CMake invoked by a custom target created by this function.
+
+``GRAPHVIZ_CONFIG_FILE``
+ You can use this parameter to specify your own :module:`CMakeGraphVizOptions` file.
+ CMake searches for this file in both the source and binary directories (which will be ``SOURCE_DIR`` and ``BINARY_DIR`` in the child invocation of CMake), and it simply sets some variables that CMake uses to configure Graphviz's output.
+ If this parameter is not given, this function will check if a ``CMakeGraphVizOptions.cmake`` file already exists in ``SOURCE_DIR`` or ``BINARY_DIR``, and if not, will generate a default one for you and copy it to ``BINARY_DIR`` so that the child CMake finds it.
+ In the default generated config file, the graph is named ``${PROJECT_NAME}``, custom targets are shown, and the per-target and dependers information is not generated.
+ The generated file will be placed at ``<binDir>/CMakeGraphVizOptions.cmake``.
+ If you do specify a ``GRAPHVIZ_CONFIG_FILE``, if you don't provide an absolute path, it will be interpreted relative to the current directory (``${CMAKE_CURRENT_LIST_DIR}``).
+ If your custom config file is not already in ``SOURCE_DIR`` or ``BINARY_DIR``, it will be copied to ``<binDir>/CMakeGraphVizOptions.cmake``.
+
+``COPY_GRAPH_TO``
+ An absolute filepath where the generated image will be copied to once built. The use case for this is to add the generated graph to your source tree, or to documentation, etc.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -221,11 +234,12 @@ function (oranges_add_graphviz_target)
         unset (all_flag)
     endif ()
 
-    if (ORANGES_ARG_EXTRA_CMAKE_OPTIONS)
-        list (JOIN ORANGES_ARG_EXTRA_CMAKE_OPTIONS " " extra_cmake_args)
-    else ()
-        unset (extra_cmake_args)
-    endif ()
+    separate_arguments (extra_cmake_args UNIX_COMMAND "${ORANGES_ARG_EXTRA_CMAKE_OPTIONS}")
+
+    set (configured_file "${CMAKE_CURRENT_BINARY_DIR}/graphviz_child_config.cmake")
+
+    configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/graphviz_child_config.cmake"
+                    "${configured_file}" @ONLY NEWLINE_STYLE UNIX)
 
     # cmake-format: off
     add_custom_target (
@@ -234,7 +248,9 @@ function (oranges_add_graphviz_target)
                     -S "${ORANGES_ARG_SOURCE_DIR}"
                     -B "${ORANGES_ARG_BINARY_DIR}"
                     -D ORANGES_IN_GRAPHVIZ_CONFIG=ON
-                    -D "FETCHCONTENT_BASE_DIR=${FETCHCONTENT_BASE_DIR}"
+                    -D "CMAKE_PROJECT_INCLUDE_BEFORE=${configured_file}"
+                    -Wno-dev -Wno-deprecated
+                    --log-level=ERROR
                     ${extra_cmake_args}
                     "--graphviz=${dot_file_output}"
                     --no-warn-unused-cli

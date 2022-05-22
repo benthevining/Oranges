@@ -52,6 +52,10 @@ if (TARGET uninstall)
     return ()
 endif ()
 
+if (ORANGES_IN_GRAPHVIZ_CONFIG)
+    return ()
+endif ()
+
 if (PROJECT_IS_TOP_LEVEL)
     message (DEBUG "Oranges - adding uninstall target in project ${PROJECT_NAME}")
 else ()

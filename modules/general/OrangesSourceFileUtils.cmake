@@ -32,7 +32,7 @@ Headers are identified by file extensions ``.h``, ``.hpp``, or ``.hxx``.
 
 ``INSTALL_DIR`` defaults to :variable:`CMAKE_INSTALL_INCLUDEDIR`.
 
-The variable ``<directory>_files`` will be set in the scope of the caller as a list of filenames, in the form ``<directory>/<filename>``.
+The variable ``<directory>_files`` will be set in the scope of the caller as a list of filenames, each in the form ``<directory>/<filename>``.
 
 #]=======================================================================]
 

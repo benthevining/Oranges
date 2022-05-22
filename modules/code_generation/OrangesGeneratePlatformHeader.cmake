@@ -38,23 +38,41 @@ The header generation command
 
 Generates a header file containing various platform identifying macros for the current target platform.
 
-Each option is initialized by the value of a corresponding cache variable, and the entire set of cache variables is initialized when this module is first included.
+The value of each macro in the generated header file will be set from a corresponding cache variable, which allows the user a high level of configurability, and the ability to override specific details about the current platform as needed.
+The entire set of cache variables used to store platform attributes is initialized when this module is first included.
+Thus, you can use this module's cache variables in your CMake scripts without actually generating a header file.
 
-For some of the platform introspection, a language must be specified, because the information may be compiler-specific.
-For these options, the cache variables are suffixed with ``<lang>`` (where ``lang`` is the language in all-uppercase), so that multiple settings can be saved (and overridden) for different platform testing languages.
+Options:
 
-A useful property of this module is that including it initializes all the ``PLAT_`` cache variables, so you can reference them even without generating a header file.
+``TARGET``
+ *Required*
 
-``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+ The name of the target to add the generated header to. A target with this name must already exist prior to calling this function.
 
-``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
+``BASE_NAME``
+ Prefix to use for all macros in the generated header file. Defaults to ``<targetName>``.
 
-The header will be added to the target with ``PUBLIC`` visibility by default, unless the ``INTERFACE`` keyword is given.
+``HEADER``
+ Name of the header file to be generated. Defaults to ``<baseName>_platform.h``.
+
+``LANGUAGE``
+ Some of the platform introspection requires specifying a language, because some features may be compiler-specific.
+ For these options, the cache variables are suffixed with ``<lang>`` (where ``lang`` is the language in all-uppercase), so that multiple settings can be saved (and overridden) for different languages.
+ Defaults to the value of the :variable:`PLAT_DEFAULT_TESTING_LANGUAGE` variable.
+
+``SCOPE``
+ Scope with which the generated header will be added to the target. Defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+
+``INSTALL_COMPONENT``
+ An install component the generated header will be added to. This command will not create the install component.
+
+``REL_PATH``
+ Path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
 
 Macros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The generated file will contain the following macros, where ``<baseName>`` is all uppercase and every macro is defined to either 0 or 1 unless otherwise noted:
+The generated file will contain the following macros, where ``<baseName>`` and ``<lang>`` are all uppercase:
 
 .. table:: OS type macros
 
@@ -158,16 +176,16 @@ The generated file will contain the following macros, where ``<baseName>`` is al
 
     Each macro used by this header file will always be defined to a value, so you should use ``#if`` to check their values, and not ``#ifdef``.
 
-Options
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:variable:: PLAT_DISABLE_SIMD
 
-If on, all SIMD-related macros are initialized to 0, instead of attempting to detect features present with the current toolchain and target platform.
+If on, all SIMD-related macros are initialized to 0, instead of attempting to detect features present with the current toolchain and target platform. Defaults to ``OFF``.
 
 .. cmake:variable:: PLAT_DEFAULT_TESTING_LANGUAGE
 
-The language that will be used to initialize the values of language- or compiler-specific variables the first time this module is included. Defaults to CXX.
+The language that will be used to initialize the values of language- or compiler-specific variables the first time this module is included. Defaults to ``CXX``.
 
 .. seealso ::
 

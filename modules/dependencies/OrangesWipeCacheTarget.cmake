@@ -44,6 +44,10 @@ if (TARGET wipe_cache)
     return ()
 endif ()
 
+if (ORANGES_IN_GRAPHVIZ_CONFIG)
+    return ()
+endif ()
+
 include (OrangesSetUpCache)
 
 if (PROJECT_IS_TOP_LEVEL)

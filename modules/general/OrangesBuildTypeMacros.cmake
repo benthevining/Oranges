@@ -22,12 +22,24 @@ This module provides the function :command:`oranges_add_build_type_macros() <ora
   ::
 
     oranges_add_build_type_macros (TARGET <targetName>
-                                   BASE_NAME <baseName>
+                                  [BASE_NAME <baseName>]
                                   [SCOPE <PUBLIC|PRIVATE|INTERFACE>])
 
 Adds some preprocessor definitions to the specified target which describe the current build type being built.
 
-``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+Options:
+
+``TARGET``
+ *Required*
+
+ The name of the target to add the compile definitions to. A target with this name must already exist prior to calling this function.
+
+``BASE_NAME``
+ Prefix used for each macro added to the target. Defaults to ``<targetName>``.
+
+``SCOPE``
+ Scope with which the compile definitions will be added to the target. Defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+
 
 This function adds the following preprocessor definitions, where ``<baseName>`` is all uppercase:
 
@@ -65,7 +77,11 @@ function (oranges_add_build_type_macros)
     cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
     oranges_assert_target_argument_is_target (ORANGES_ARG)
-    lemons_require_function_arguments (ORANGES_ARG BASE_NAME SCOPE)
+    lemons_require_function_arguments (ORANGES_ARG SCOPE)
+
+    if (NOT ORANGES_ARG_BASE_NAME)
+        set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
+    endif ()
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" base_name)
 

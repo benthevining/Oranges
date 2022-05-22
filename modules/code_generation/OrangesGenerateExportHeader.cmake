@@ -29,9 +29,24 @@ This module is a thin wrapper around CMake's :external:command:`generate_export_
 
 Generates a header file containing symbol export macros, and adds it to the specified target.
 
-``SCOPE`` defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+Options:
 
-``REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
+``TARGET``
+ *Required*
+
+ The name of the target to add the export header to. A target with this name must exist prior to calling this function.
+
+``BASE_NAME``
+ Prefix to use for all macros in the generated header file. Defaults to ``<targetName>``.
+
+``SCOPE``
+ The visibility with which the generated header will be added to the target. Defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+
+``INSTALL_COMPONENT``
+ Name of an install component to add the generated header to. The install component will not be created by this command.
+
+``REL_PATH``
+ A path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
