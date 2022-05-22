@@ -3,7 +3,7 @@
 """
 This script prepares a build tree for Sphinx by performing the following tasks:
 
-* generating a .rst file for each module, command, and variable
+* generating a .rst file for each module, command, variable, and property
 * generating a UsingOranges.rst file populated with text from the Readme
 * copying the .rst files in this directory (/docs) into the docs build tree
 """
@@ -43,7 +43,7 @@ DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 #
 
-for subdir_name in "module", "find_modules", "command", "variable", "envvar":
+for subdir_name in "module", "find_modules", "command", "variable", "envvar", "prop_tgt", "prop_gbl":
 	subdir_path = os.path.join(OUTPUT_TREE_ROOT, subdir_name)
 	if not os.path.isdir(subdir_path):
 		os.makedirs(subdir_path)
@@ -56,7 +56,7 @@ copytree(src=os.path.join(DOCS_DIR, "scripts"),
          dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
          dirs_exist_ok=True)
 
-for filename in "modules", "scripts", "commands", "variables", "env_variables", "index":
+for filename in "modules", "scripts", "commands", "variables", "env_variables", "properties", "index":
 	copy2(os.path.join(DOCS_DIR, f"{filename}.rst"),
 	      os.path.join(OUTPUT_TREE_ROOT, f"{filename}.rst"))
 

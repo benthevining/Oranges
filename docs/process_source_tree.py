@@ -22,6 +22,27 @@ import os
 #
 
 
+def extract_docblock(filepath: str) -> list[str]:
+	"""
+	Parses an RST documentation block from the given file.
+	"""
+
+	with open(filepath, "r", encoding="utf-8") as orig_module:
+		module_lines: list[str] = orig_module.readlines()
+
+	try:
+		return module_lines[module_lines.index(
+		    "#[=======================================================================[.rst:\n"
+		):module_lines.index(
+		    "#]=======================================================================]\n"
+		)]
+	except ValueError:
+		return []
+
+
+#
+
+
 # editorconfig-checker-disable
 def parse_doc_block_for_entities(
         filepath: str, entity_delimiter: str) -> dict[str, list[str]]:
@@ -31,16 +52,9 @@ def parse_doc_block_for_entities(
 
 	# editorconfig-checker-enable
 
-	with open(filepath, "r", encoding="utf-8") as orig_module:
-		module_lines: list[str] = orig_module.readlines()
+	module_lines: Final[list[str]] = extract_docblock(filepath)
 
-	try:
-		module_lines = module_lines[module_lines.index(
-		    "#[=======================================================================[.rst:\n"
-		):module_lines.index(
-		    "#]=======================================================================]\n"
-		)]
-	except ValueError:
+	if not module_lines:
 		return {}
 
 	current_name: str = None
@@ -106,13 +120,16 @@ def process_commands(orig_filepath: str, output_dir: str) -> None:
 #
 
 
-def process_variables(orig_filepath: str, output_dir: str) -> None:
+# editorconfig-checker-disable
+def process_variables(orig_filepath: str, output_dir: str,
+                      delimiter: str) -> None:
 	"""
-	Parses the given file for variable documentation, and generates a .rst file for each documented variable.
+	Parses the given file for environment variable documentation, and generates a .rst file for each documented environment variable.
 	"""
+	# editorconfig-checker-enable
 
 	var_docs: Final[dict[str, list[str]]] = parse_doc_block_for_entities(
-	    orig_filepath, ".. cmake:variable::")
+	    orig_filepath, delimiter)
 
 	if not var_docs:
 		return
@@ -139,34 +156,62 @@ def process_variables(orig_filepath: str, output_dir: str) -> None:
 #
 
 
-def process_env_variables(orig_filepath: str, output_dir: str) -> None:
+# editorconfig-checker-disable
+def process_properties(orig_filepath: str, output_dir: str,
+                       section_delimiter: str) -> None:
 	"""
-	Parses the given file for environment variable documentation, and generates a .rst file for each documented environment variable.
+	Parses the given file for properties, and generates a .rst file for each documented property.
 	"""
+	# editorconfig-checker-enable
 
-	var_docs: Final[dict[str, list[str]]] = parse_doc_block_for_entities(
-	    orig_filepath, ".. cmake:envvar::")
+	doc_lines: list[str] = extract_docblock(orig_filepath)
 
-	if not var_docs:
+	if not doc_lines:
 		return
+
+	try:
+		doc_lines = doc_lines[doc_lines.index(f"{section_delimiter}\n") + 1:]
+	except ValueError:
+		return
+
+	current_prop: str = None
+	doc_sections: dict[str, list[str]] = {}
+
+	for idx, line in enumerate(doc_lines):
+		if line.startswith("``"):
+			current_prop = line.removeprefix("``").removesuffix("``\n").strip()
+			continue
+
+		if idx + 1 < len(doc_lines) and doc_lines[idx + 1].startswith(
+		    "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"):
+			current_prop = None
+			continue
+
+		if current_prop:
+			if current_prop in doc_sections:
+				doc_sections[current_prop].append(line)
+			else:
+				doc_sections[current_prop] = [line]
+
+	del doc_lines
 
 	module_name: Final[str] = os.path.splitext(
 	    os.path.basename(orig_filepath))[0]
 
-	for variable, doc_lines in var_docs.items():
-		var_lines: list[str] = []
+	for prop, prop_doc in doc_sections.items():
+		out_lines: list[str] = []
 
-		var_lines.append(f"{variable}\n")
-		var_lines.append("-------------------------------\n")
-		var_lines.append("\n")
-		var_lines.append(f"Defined in module :module:`{module_name}`.\n")
-		var_lines.append("\n")
-		var_lines.extend(doc_lines)
+		out_lines.append(f"{prop}\n")
+		out_lines.append("-------------------------\n")
+		out_lines.append("\n")
+		out_lines.append(f"Defined in module :module:`{module_name}`.\n")
+		out_lines.append("\n")
+		out_lines.extend(prop_doc)
 
-		with open(os.path.join(output_dir, f"{variable}.rst"),
+		with open(os.path.join(output_dir, f"{prop}.rst"),
 		          "w",
 		          encoding="utf-8") as var_out:
-			var_out.write("".join(var_lines))
+			var_out.write("".join(out_lines))
 
 
 #
@@ -196,9 +241,16 @@ def process_directory(dir_path: str, output_base_dir: str) -> None:
 
 		process_commands(entry_path, os.path.join(output_base_dir, "command"))
 		process_variables(entry_path, os.path.join(output_base_dir,
-		                                           "variable"))
-		process_env_variables(entry_path,
-		                      os.path.join(output_base_dir, "envvar"))
+		                                           "variable"),
+		                  ".. cmake:variable::")
+		process_variables(entry_path, os.path.join(output_base_dir, "envvar"),
+		                  ".. cmake:envvar::")
+		process_properties(entry_path, os.path.join(output_base_dir,
+		                                            "prop_tgt"),
+		                   "Target properties")
+		process_properties(entry_path, os.path.join(output_base_dir,
+		                                            "prop_gbl"),
+		                   "Global properties")
 
 		if os.path.basename(entry_path).startswith("Find"):
 			base_dir: Final[str] = os.path.join(output_base_dir,
