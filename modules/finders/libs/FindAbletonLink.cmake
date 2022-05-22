@@ -37,8 +37,6 @@ set_package_properties (
 
 #
 
-oranges_file_scoped_message_context ("FindAbletonLink")
-
 if (TARGET Ableton::Link)
     set (AbletonLink_FOUND TRUE)
     return ()

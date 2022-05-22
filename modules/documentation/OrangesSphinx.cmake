@@ -39,7 +39,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 include (GNUInstallDirs)
 include (CPackComponent)
 
@@ -82,6 +82,8 @@ function (oranges_add_sphinx_docs)
     set (multiValueArgs FORMATS EXTRA_FLAGS)
 
     cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    lemons_require_function_arguments (ORANGES_ARG DOC_TREE)
 
     if (NOT ORANGES_ARG_PROJECT_NAME)
         set (ORANGES_ARG_PROJECT_NAME "${PROJECT_NAME}")

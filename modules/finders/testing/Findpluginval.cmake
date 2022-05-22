@@ -41,14 +41,11 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 include (OrangesFetchRepository)
-include (LemonsCmakeDevTools)
 
 set_package_properties (pluginval PROPERTIES URL "https://github.com/Tracktion/pluginval"
                         DESCRIPTION "Audio plugin testing and validation tool")
 
 #
-
-oranges_file_scoped_message_context ("Findpluginval")
 
 if (TARGET Tracktion::pluginval)
     set (pluginval_FOUND TRUE)

@@ -51,7 +51,7 @@ find_program (
 
 mark_as_advanced (FORCE PROGRAM_XCODEBUILD)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 #
 
@@ -64,8 +64,6 @@ function (include_external_xcode_project)
             )
         return ()
     endif ()
-
-    oranges_add_function_message_context ()
 
     set (oneValueArgs TARGET DIRECTORY SCHEME EXTRA_ARGS COMMENT)
 

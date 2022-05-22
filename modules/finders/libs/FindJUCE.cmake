@@ -38,10 +38,6 @@ set_package_properties (JUCE PROPERTIES URL "https://juce.com/"
 
 #
 
-oranges_file_scoped_message_context ("FindJUCE")
-
-#
-
 set (ORANGES_JUCE_BRANCH "master" CACHE STRING "The branch of the JUCE GitHub repository to use")
 set_property (CACHE ORANGES_JUCE_BRANCH PROPERTY STRINGS "develop;master")
 mark_as_advanced (FORCE ORANGES_JUCE_BRANCH)

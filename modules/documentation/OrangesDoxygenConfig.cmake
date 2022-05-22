@@ -43,7 +43,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 #
 
@@ -62,8 +62,6 @@ function (oranges_create_doxygen_target)
 
         return ()
     endif ()
-
-    oranges_add_function_message_context ()
 
     set (options NO_VERSION_DISPLAY NO_INSTALL)
     set (oneValueArgs TARGET MAIN_PAGE_MD_FILE LOGO OUTPUT_DIR INSTALL_COMPONENT)

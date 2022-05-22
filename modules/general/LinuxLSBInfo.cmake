@@ -40,15 +40,13 @@ LSB codename for your Linux distribution. Initialized with the output of running
 
 include_guard (GLOBAL)
 
+# cmake-format: off
 if ((DEFINED LSB_DISTRIBUTOR_ID OR DEFINED CACHE{LSB_DISTRIBUTOR_ID})
-    AND (DEFINED LSB_RELEASE OR DEFINED CACHE{LSB_RELEASE}) AND (DEFINED LSB_CODENAME
-                                                                 OR DEFINED CACHE{LSB_CODENAME}))
+    AND (DEFINED LSB_RELEASE OR DEFINED CACHE{LSB_RELEASE})
+    AND (DEFINED LSB_CODENAME OR DEFINED CACHE{LSB_CODENAME}))
     return ()
 endif ()
-
-include (OrangesCmakeDevTools)
-
-oranges_file_scoped_message_context ("LinuxLSBInfo")
+# cmake-format: on
 
 find_program (PROGRAM_LSB_RELEASE lsb_release DOC "LSB release executable for your Linux distro")
 

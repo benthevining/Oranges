@@ -198,7 +198,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 option (PLAT_DISABLE_SIMD
         "Disable all SIMD macros in generated platform headers (ie, set them all to 0)" OFF)
@@ -220,8 +220,6 @@ _oranges_plat_header_set_opts_for_language ("${PLAT_DEFAULT_TESTING_LANGUAGE}")
 #
 
 function (oranges_generate_platform_header)
-
-    oranges_add_function_message_context ()
 
     set (
         oneValueArgs

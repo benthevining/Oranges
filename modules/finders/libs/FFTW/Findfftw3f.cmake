@@ -35,8 +35,6 @@ include (OrangesFindPackageHelpers)
 set_package_properties (fftw3f PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "float precision FFT library")
 
-oranges_file_scoped_message_context ("Findfftw3f")
-
 if (TARGET FFTW3::fftw3f)
     set (fftw3f_FOUND TRUE)
     return ()

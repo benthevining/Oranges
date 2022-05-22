@@ -96,11 +96,10 @@ Set to ``ON`` in the child invocations of CMake launched by :command:`oranges_ad
 
 include_guard (GLOBAL)
 
-include (OrangesSetUpCache)
-
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesFunctionArgumentHelpers)
+include (OrangesSetUpCache)
 
 find_program (
     PROGRAM_DOT dot

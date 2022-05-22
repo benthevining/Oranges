@@ -69,7 +69,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 if (NOT TARGET Oranges::OrangesABIControlledLibrary)
     add_library (OrangesABIControlledLibrary INTERFACE)
@@ -86,11 +86,9 @@ endif ()
 
 function (oranges_generate_export_header)
 
-    # NB this include must be in this function's scope, to prevent bugs with this module's
+    # NB. this include must be in this function's scope, to prevent bugs with this module's
     # variables!
     include (GenerateExportHeader)
-
-    oranges_add_function_message_context ()
 
     set (oneValueArgs TARGET BASE_NAME HEADER REL_PATH INSTALL_COMPONENT SCOPE)
 

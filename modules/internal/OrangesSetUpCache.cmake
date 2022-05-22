@@ -14,8 +14,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
-
 define_property (
     GLOBAL PROPERTY CACHE_DIR BRIEF_DOCS "Cache directory for downloaded dependencies"
     FULL_DOCS "Full path to the directory where downloaded dependencies will be stored")
@@ -23,8 +21,6 @@ define_property (
 define_property (
     GLOBAL PROPERTY CACHE_DISCONNECTED BRIEF_DOCS "All dependency fetching fully disconnected"
     FULL_DOCS "ON if all dependency fetching is fully disconnected")
-
-oranges_file_scoped_message_context ("OrangesSetUpCache")
 
 if (DEFINED ENV{CMAKE_CACHE})
     set (default_cache "$ENV{CMAKE_CACHE}")

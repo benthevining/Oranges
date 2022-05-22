@@ -123,7 +123,7 @@ option (
     "In the oranges_fetch_repository function, try local find_package before fetching dependencies from git"
     OFF)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 include (OrangesSetUpCache)
 include (FetchContent)
 

@@ -110,8 +110,6 @@ cmake_language (DEFER CALL _ipp_unset_vars)
 
 #
 
-oranges_file_scoped_message_context ("FindIPP")
-
 set (IPP_FOUND FALSE)
 
 #

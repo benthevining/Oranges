@@ -99,7 +99,6 @@ if (TARGET Oranges::OrangesDefaultTarget)
     return ()
 endif ()
 
-include (OrangesCmakeDevTools)
 include (FeatureSummary)
 include (OrangesGeneratePlatformHeader)
 include (OrangesDebugTarget)

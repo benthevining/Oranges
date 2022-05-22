@@ -55,14 +55,12 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 include (GNUInstallDirs)
 
 #
 
 function (oranges_create_pkgconfig_file)
-
-    oranges_add_function_message_context ()
 
     set (options NO_INSTALL)
     set (

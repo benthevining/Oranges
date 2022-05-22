@@ -50,8 +50,6 @@ set_package_properties (MTS-ESP PROPERTIES URL "https://oddsound.com/index.php"
 
 #
 
-oranges_file_scoped_message_context ("FindMTS-ESP")
-
 set (MTS-ESP_FOUND FALSE)
 
 #

@@ -43,10 +43,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
-
-oranges_file_scoped_message_context ("OrangesUninstallTarget")
-
 if (TARGET uninstall)
     message (AUTHOR_WARNING "uninstall target already exists!")
     return ()

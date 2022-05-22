@@ -76,7 +76,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (LemonsCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 #
 
@@ -117,8 +117,6 @@ function (wraptool_configure_aax_plugin_signing)
             )
         return ()
     endif ()
-
-    oranges_add_function_message_context ()
 
     set (oneValueArgs TARGET GUID ACCOUNT SIGNID KEYFILE KEYPASSWORD)
 

@@ -43,8 +43,6 @@ if (TARGET aff3ct::MIPP)
     return ()
 endif ()
 
-oranges_file_scoped_message_context ("FindMIPP")
-
 set (MIPP_FOUND FALSE)
 
 #

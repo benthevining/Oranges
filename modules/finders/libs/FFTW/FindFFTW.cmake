@@ -43,8 +43,6 @@ include (OrangesFindPackageHelpers)
 
 set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org" DESCRIPTION "FFT library")
 
-oranges_file_scoped_message_context ("FindFFTW")
-
 set (FFTW_FOUND FALSE)
 
 find_package_default_component_list (fftw3 fftw3f)

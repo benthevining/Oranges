@@ -35,10 +35,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
-
-oranges_file_scoped_message_context ("OrangesWipeCacheTarget")
-
 if (TARGET wipe_cache)
     message (AUTHOR_WARNING "wipe_cache target already exists!")
     return ()

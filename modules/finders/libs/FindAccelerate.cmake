@@ -46,9 +46,7 @@ set_package_properties (
 
 #
 
-oranges_file_scoped_message_context ("FindMTS-ESP")
-
-set (MTS-ESP_FOUND FALSE)
+set (Accelerate_FOUND FALSE)
 
 #
 
@@ -101,7 +99,7 @@ if (NOT TARGET Apple::Accelerate)
     add_library (Apple::Accelerate ALIAS Apple_Accelerate)
 endif ()
 
-set (MTS-ESP_FOUND TRUE)
+set (Accelerate_FOUND TRUE)
 
 install (TARGETS Apple_Accelerate EXPORT AccelerateTargets)
 

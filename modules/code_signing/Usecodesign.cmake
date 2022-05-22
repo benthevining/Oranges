@@ -47,7 +47,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (CallForEachPluginFormat)
-include (LemonsCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 
 find_program (PROGRAM_CODESIGN codesign
               DOC "Apple's codesign program (used by the Oranges Usecodesign module)")
@@ -69,8 +69,6 @@ function (codesign_sign_target)
             )
         return ()
     endif ()
-
-    oranges_add_function_message_context ()
 
     cmake_parse_arguments (ORANGES_ARG "" "TARGET" "" ${ARGN})
 
@@ -113,8 +111,6 @@ function (codesign_sign_plugin_targets)
             )
         return ()
     endif ()
-
-    oranges_add_function_message_context ()
 
     cmake_parse_arguments (ORANGES_ARG "" "TARGET" "" ${ARGN})
 

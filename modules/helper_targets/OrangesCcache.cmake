@@ -60,10 +60,6 @@ option (CCACHE_DISABLE "Disable ccache for this build" OFF)
 
 #
 
-oranges_file_scoped_message_context ("Findccache")
-
-#
-
 define_property (
     TARGET INHERITED PROPERTY ORANGES_USING_CCACHE
     BRIEF_DOCS "Boolean that indicates whether this target is using the ccache compiler cache"
@@ -98,8 +94,6 @@ endif ()
 #
 
 function (_lemons_configure_compiler_launcher language)
-
-    oranges_add_function_message_context ()
 
     string (TOUPPER "${language}" lang_upper)
 

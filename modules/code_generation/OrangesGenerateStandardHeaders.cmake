@@ -98,7 +98,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesCmakeDevTools)
+include (OrangesFunctionArgumentHelpers)
 include (OrangesGenerateExportHeader)
 include (OrangesGeneratePlatformHeader)
 include (OrangesBuildTypeMacros)
@@ -106,8 +106,6 @@ include (OrangesBuildTypeMacros)
 #
 
 function (oranges_generate_standard_headers)
-
-    oranges_add_function_message_context ()
 
     set (options NO_AGGREGATE_HEADER)
 
