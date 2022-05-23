@@ -10,5 +10,13 @@
 #
 # ======================================================================================
 
-include (OrangesStaticAnalysis)
-include (OrangesCcache)
+list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+
+include (OrangesIPO)
+include (OrangesUnityBuild)
+include (OrangesDebugTarget)
+include (OrangesDefaultTarget)
+include (OrangesDefaultWarnings)
+include (OrangesOptimizationFlags)
+
+list (POP_BACK CMAKE_MODULE_PATH)

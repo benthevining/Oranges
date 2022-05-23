@@ -33,6 +33,7 @@ A default target with some basic boilerplate settings configured, that links aga
 
 Links to ``OrangesDefaultTarget``, but also has some default C++ compile features added.
 The C++ standard used by this target is C++20, and it has exceptions and RTTI enabled by default.
+This target also has default symbol visibility control settings enabled; for building libraries, I recommend you link against this target and then create an export header with :command:`oranges_generate_export_header`.
 
 Target properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -95,14 +96,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if (TARGET Oranges::OrangesDefaultTarget)
-    return ()
-endif ()
-
 include (FeatureSummary)
 include (OrangesGeneratePlatformHeader)
-include (OrangesDebugTarget)
-include (OrangesOptimizationFlags)
 include (OrangesCcache)
 
 #
@@ -196,6 +191,14 @@ if (ORANGES_MAINTAINER_BUILD)
     target_link_libraries (
         OrangesDefaultTarget INTERFACE "$<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>"
                                        "$<BUILD_INTERFACE:Oranges::OrangesStaticAnalysis>")
+
+    add_feature_info (
+        "Oranges maintainer build" ON
+        "OrangesDefaultTarget is linked to OrangesDefaultWarnings and OrangesStaticAnalysis")
+else ()
+    add_feature_info (
+        "Oranges maintainer build" OFF
+        "OrangesDefaultTarget is not linked to OrangesDefaultWarnings or OrangesStaticAnalysis")
 endif ()
 
 #
@@ -323,8 +326,13 @@ add_library (Oranges::OrangesDefaultTarget ALIAS OrangesDefaultTarget)
 
 add_library (OrangesDefaultCXXTarget INTERFACE)
 
-set_target_properties (OrangesDefaultCXXTarget PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON
-                                                          CXX_EXTENSIONS OFF)
+set_target_properties (
+    OrangesDefaultCXXTarget
+    PROPERTIES CXX_STANDARD 20
+               CXX_STANDARD_REQUIRED ON
+               CXX_EXTENSIONS OFF
+               CXX_VISIBILITY_PRESET hidden
+               VISIBILITY_INLINES_HIDDEN TRUE)
 
 target_link_libraries (OrangesDefaultCXXTarget INTERFACE Oranges::OrangesDefaultTarget)
 

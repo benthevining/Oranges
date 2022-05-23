@@ -34,13 +34,6 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if (TARGET Oranges::OrangesDebugTarget)
-    message (WARNING "Target Oranges::OrangesDebugTarget already exists!")
-    return ()
-endif ()
-
-#
-
 add_library (OrangesDebugTarget INTERFACE)
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)

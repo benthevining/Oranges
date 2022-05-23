@@ -103,7 +103,7 @@ mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 
 #
 
-include (OrangesGenerateExportHeader)
+add_subdirectory (targets)
 
 add_subdirectory (modules/helper_targets)
 

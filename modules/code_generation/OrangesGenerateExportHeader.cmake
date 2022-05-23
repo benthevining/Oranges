@@ -48,13 +48,6 @@ Options:
 ``REL_PATH``
  A path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
-Targets
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``Oranges::OrangesABIControlledLibrary``
-
-Provides default symbol visibility control flags.
-
 .. seealso ::
 
     Module :external:module:`GenerateExportHeader`
@@ -71,17 +64,6 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesFunctionArgumentHelpers)
 
-if (NOT TARGET Oranges::OrangesABIControlledLibrary)
-    add_library (OrangesABIControlledLibrary INTERFACE)
-
-    set_target_properties (OrangesABIControlledLibrary PROPERTIES CXX_VISIBILITY_PRESET hidden
-                                                                  VISIBILITY_INLINES_HIDDEN TRUE)
-
-    install (TARGETS OrangesABIControlledLibrary EXPORT OrangesTargets)
-
-    add_library (Oranges::OrangesABIControlledLibrary ALIAS OrangesABIControlledLibrary)
-endif ()
-
 #
 
 function (oranges_generate_export_header)
@@ -97,6 +79,9 @@ function (oranges_generate_export_header)
     oranges_assert_target_argument_is_target (ORANGES_ARG)
     lemons_check_for_unparsed_args (ORANGES_ARG)
 
+    set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                                              VISIBILITY_INLINES_HIDDEN TRUE)
+
     if (NOT ORANGES_ARG_BASE_NAME)
         set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
     endif ()
@@ -106,14 +91,6 @@ function (oranges_generate_export_header)
     endif ()
 
     get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
-
-    if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
-        target_link_libraries ("${ORANGES_ARG_TARGET}"
-                               INTERFACE $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
-    else ()
-        target_link_libraries ("${ORANGES_ARG_TARGET}"
-                               PRIVATE $<BUILD_INTERFACE:Oranges::OrangesABIControlledLibrary>)
-    endif ()
 
     if (NOT ORANGES_ARG_SCOPE)
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)

@@ -44,16 +44,14 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if (TARGET Oranges::OrangesIPO)
-    return ()
-endif ()
-
 include (FeatureSummary)
 
 add_library (OrangesIPO INTERFACE)
 
-if (NOT (DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION OR DEFINED
-                                                       CACHE{CMAKE_INTERPROCEDURAL_OPTIMIZATION}))
+# cmake-format: off
+if (NOT (DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION
+         OR DEFINED CACHE{CMAKE_INTERPROCEDURAL_OPTIMIZATION}))
+# cmake-format: on
     include (CheckIPOSupported)
     check_ipo_supported (RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 endif ()
@@ -65,8 +63,9 @@ if (CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 
     add_feature_info (IPO ON "Enabling interprocedural optimization in OrangesIPO target")
 else ()
-    set_target_properties (OrangesIPO PROPERTIES $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION
-                                                 OFF>)
+    # cmake-format: off
+    set_target_properties (OrangesIPO PROPERTIES $<BUILD_INTERFACE:INTERPROCEDURAL_OPTIMIZATION OFF>)
+    # cmake-format: on
 
     message (VERBOSE " -- DISABLING IPO in OrangesIPO target")
 
