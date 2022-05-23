@@ -27,7 +27,7 @@ Targets
 
 ``Oranges::OrangesDefaultTarget``
 
-A default target with some basic boilerplate settings configured, that links against :module:`OrangesOptimizationFlags`, :module:`OrangesCcache`, and :module:`OrangesDebugTarget`.
+A default target with some basic boilerplate settings configured, that links against :doc:`OrangesOptimizationFlags`, :module:`OrangesCcache`, and :doc:`OrangesDebugTarget` (the latter, in debug configurations only).
 
 ``Oranges::OrangesDefaultCXXTarget``
 
@@ -41,7 +41,7 @@ Target properties
 ``ORANGES_USING_INSTALLED_PACKAGE``
 
 For any target that links against ``OrangesDefaultTarget``, this property will be defined to ``TRUE`` if it was linked to from an installed package, and ``FALSE`` if it is being built from source.
-This property will (probably) be undefined for any target that to not link against ``OrangesDefaultTarget``.
+This property will (probably) be undefined for any target that does not link against ``OrangesDefaultTarget``.
 
 ``ORANGES_MAC_UNIVERSAL_BINARY``
 
@@ -59,7 +59,7 @@ Cache variables
 
 .. cmake:variable:: ORANGES_MAINTAINER_BUILD
 
-When ``ON``, :module:`OrangesDefaultTarget` will link to :module:`OrangesDefaultWarnings` and :module:`OrangesStaticAnalysis`. ``OFF`` by default.
+When ``ON``, OrangesDefaultTarget will link to OrangesDefaultWarnings and OrangesStaticAnalysis. ``OFF`` by default.
 
 .. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
 
@@ -74,20 +74,20 @@ Environment variables
 
 .. cmake:envvar:: APPLE_DEV_ID
 
-The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the :variable:`ORANGES_IOS_DEV_TEAM_ID`.
+The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the :variable:`ORANGES_IOS_DEV_TEAM_ID` variable.
 
 .. seealso ::
 
-    Module :module:`OrangesDebugTarget`
+    Target :doc:`OrangesDebugTarget`
         A helper target that just enables debugging flags. OrangesDefaultTarget links to this by default in all debug configurations.
 
-    Module :module:`OrangesDefaultWarnings`
+    Target :doc:`OrangesDefaultWarnings`
         A helper target that enables default warning flags. OrangesDefaultTarget links to this if :variable:`ORANGES_MAINTAINER_BUILD` is ``ON``.
 
-    Module :module:`OrangesOptimizationFlags`
+    Target :doc:`OrangesOptimizationFlags`
         A helper target that enables various configuration-aware optimization flags.
 
-    Module :module:`OrangesAllIntegrations`
+    Module :module:`OrangesStaticAnalysis`
         A helper module that configures static analysis integrations and ccache. OrangesDefaultTarget links to this if :variable:`ORANGES_MAINTAINER_BUILD` is ``ON``.
 
 #]=======================================================================]

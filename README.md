@@ -95,6 +95,18 @@ Oranges modules define options of their own, which are only relevant if you incl
 
 These options are defined by the top-level Oranges project itself:
 
+* ``ORANGES_MAINTAINER_BUILD``
+
+When ``ON``, OrangesDefaultTarget will link to OrangesDefaultWarnings and OrangesStaticAnalysis. ``OFF`` by default.
+
+* ``ORANGES_IOS_DEV_TEAM_ID``
+
+10-character Apple developer ID used to set up code signing on iOS. Initialized by the value of the environment variable APPLE_DEV_ID, if set.
+
+* ``ORANGES_MAC_UNIVERSAL_BINARY``
+
+If true, and the Xcode generator is being used, and running on an M1 Mac, configures generation of universal binaries for both arm64 and x86_64 architectures.
+
 * ``ORANGES_BUILD_DOCS``
 
 Builds the Oranges documentation. Defaults to OFF if the Oranges project is not the top-level directory CMake was invoked in. Building the docs requires Python 3.9 and Sphinx.
@@ -103,6 +115,12 @@ Builds the Oranges documentation. Defaults to OFF if the Oranges project is not 
 
 When building the documentation, this can contain a space-separated list of flags that will be passed to the Sphinx executable while building each documentation format.
 Empty by default.
+
+### Environment variables
+
+* ``APPLE_DEV_ID``
+
+The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the variable ORANGES_IOS_DEV_TEAM_ID.
 
 ## CMake install components
 * oranges_modules

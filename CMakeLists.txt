@@ -17,8 +17,20 @@ Oranges
 
 The Oranges CMake library.
 
-Options
+Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:variable:: ORANGES_MAINTAINER_BUILD
+
+When ``ON``, OrangesDefaultTarget will link to OrangesDefaultWarnings and OrangesStaticAnalysis. ``OFF`` by default.
+
+.. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
+
+10-character Apple developer ID used to set up code signing on iOS. Initialized by the value of :envvar:`APPLE_DEV_ID`, if set.
+
+.. cmake:variable:: ORANGES_MAC_UNIVERSAL_BINARY
+
+If true, and the Xcode generator is being used, and running on an M1 Mac, configures generation of universal binaries for both arm64 and x86_64 architectures.
 
 .. cmake:variable:: ORANGES_BUILD_DOCS
 
@@ -30,6 +42,13 @@ Building the docs requires Python 3.9 and Sphinx.
 
 When building the documentation, this can contain a space-separated list of flags that will be passed to the Sphinx executable while building each documentation format.
 Empty by default.
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: APPLE_DEV_ID
+
+The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the :variable:`ORANGES_IOS_DEV_TEAM_ID`.
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

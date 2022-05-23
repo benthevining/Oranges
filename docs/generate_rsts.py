@@ -29,7 +29,7 @@ import sys
 sys.path.insert(0, "@CMAKE_CURRENT_LIST_DIR@")
 
 # pylint: disable=wrong-import-position
-from process_source_tree import process_directory
+from process_source_tree import process_directory, process_properties
 
 #
 
@@ -37,34 +37,28 @@ ORANGES_ROOT: Final[str] = "@Oranges_SOURCE_DIR@"
 
 MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
 
+TARGETS_DIR: Final[str] = os.path.join(ORANGES_ROOT, "targets")
+
 OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
 
 DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 
 #
 
-for subdir_name in "module", "find_modules", "command", "variable", "envvar", "prop_tgt", "prop_gbl":
+# editorconfig-checker-disable
+copytree(src=os.path.join(DOCS_DIR, "rst"),
+         dst=OUTPUT_TREE_ROOT,
+         dirs_exist_ok=True)
+# editorconfig-checker-enable
+
+for subdir_name in "module", "find_modules", "command", "variable", "envvar", "prop_tgt", "prop_gbl", "targets":
 	subdir_path = os.path.join(OUTPUT_TREE_ROOT, subdir_name)
 	if not os.path.isdir(subdir_path):
 		os.makedirs(subdir_path)
 
-# the .rst files in this directory are static, so just copy them into the output tree
-
-# editorconfig-checker-disable
-
-copytree(src=os.path.join(DOCS_DIR, "scripts"),
-         dst=os.path.join(OUTPUT_TREE_ROOT, "scripts"),
-         dirs_exist_ok=True)
-
-for filename in "modules", "scripts", "commands", "variables", "env_variables", "properties", "index":
-	copy2(os.path.join(DOCS_DIR, f"{filename}.rst"),
-	      os.path.join(OUTPUT_TREE_ROOT, f"{filename}.rst"))
-
-# editorconfig-checker-enable
-
 #
 
-# generate .rst files for each module & command
+# generate .rst files for each module
 
 for dirname in os.listdir(MODULES_ROOT):
 	if dirname == "internal":
@@ -76,6 +70,34 @@ for dirname in os.listdir(MODULES_ROOT):
 		continue
 
 	process_directory(dir_path=DIRPATH, output_base_dir=OUTPUT_TREE_ROOT)
+
+#
+
+# generate .rst files for each target
+
+TARGETS_OUTPUT_DIR: Final[str] = os.path.join(OUTPUT_TREE_ROOT, "targets")
+
+for entry in os.listdir(TARGETS_DIR):
+	ENTRY_PATH: Final[str] = os.path.join(TARGETS_DIR, entry)
+
+	if not os.path.isfile(ENTRY_PATH):
+		continue
+
+	if not entry.endswith(".cmake"):
+		continue
+
+	OUTPUT_FILE: Final[str] = os.path.join(
+	    TARGETS_OUTPUT_DIR, f"{entry.removesuffix('.cmake')}.rst")
+
+	with open(OUTPUT_FILE, "w", encoding="utf-8") as rst_out:
+		rst_out.write(
+		    f".. cmake-module:: {os.path.relpath(ENTRY_PATH, start=TARGETS_OUTPUT_DIR)}"
+		)
+
+	process_properties(ENTRY_PATH, os.path.join(OUTPUT_TREE_ROOT, "prop_tgt"),
+	                   "Target properties")
+	process_properties(ENTRY_PATH, os.path.join(OUTPUT_TREE_ROOT, "prop_gbl"),
+	                   "Global properties")
 
 #
 

@@ -30,4 +30,5 @@ Manuals
 	CMake variables <variables>
 	Environment variables <env_variables>
 	CMake properties <properties>
+	CMake targets <targets>
 	Standalone scripts <scripts>
