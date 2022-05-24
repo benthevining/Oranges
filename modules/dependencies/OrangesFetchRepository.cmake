@@ -131,8 +131,6 @@ include (FetchContent)
 
 function (oranges_fetch_repository)
 
-    oranges_add_function_message_context ()
-
     set (
         options
         DOWNLOAD_ONLY
