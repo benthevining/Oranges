@@ -123,7 +123,7 @@ repos:
           - id: yamllint
             #exclude: .clang-tidy
     - repo: https://github.com/sirosen/check-jsonschema
-      rev: 0.15.1 # last known stable version is 0.14.3
+      rev: 0.16.0 # last known stable version is 0.14.3
       hooks:
           - id: check-github-workflows
           - id: check-jsonschema
@@ -172,7 +172,7 @@ repos:
           - id: yapf
             args: [-i]
     - repo: https://github.com/PyCQA/pylint
-      rev: v2.14.0-b1 # last known stable version is v2.13.8
+      rev: v2.14.0 # last known stable version is v2.13.8
       hooks:
           - id: pylint
             args: [--disable=bad-indentation, --disable=line-too-long, --disable=duplicate-code, --check-quote-consistency=yes, --max-args=5, --max-branches=15, --max-statements=55, --good-names=f]
