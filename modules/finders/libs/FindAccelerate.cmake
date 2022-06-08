@@ -87,8 +87,6 @@ endforeach ()
 
 #
 
-# # target_link_libraries (Apple_${lib_name} INTERFACE "-framework ${lib_name}")
-
 if (NOT TARGET Accelerate::Accelerate)
     return ()
 endif ()

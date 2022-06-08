@@ -119,9 +119,11 @@ endif ()
 find_package_default_component_list (Client Master)
 
 # Client
-
-if (Client IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS AND MTSESP_CLIENT_DIR
+# cmake-format: off
+if (Client IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS
+    AND MTSESP_CLIENT_DIR
     AND NOT TARGET MTS-ESP::Client)
+# cmake-format: on
 
     add_library (MTS-ESP::Client STATIC)
 
@@ -135,9 +137,11 @@ if (Client IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS AND MTSESP_CLIENT_
 endif ()
 
 # Master
-
-if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS AND MTSESP_MASTER_DIR
+# cmake-format: off
+if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS
+    AND MTSESP_MASTER_DIR
     AND NOT TARGET MTS-ESP::Master)
+# cmake-format: on
 
     # locate the libMTS dynamic library
     if (NOT TARGET MTS-ESP::libMTS)
