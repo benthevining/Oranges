@@ -59,7 +59,7 @@ git config push.default simple
 git config user.name "Github Actions"
 git config user.email "actions@github.com"
 
-git add --all
+git add --all .
 
 git commit -am "Updating docs" --allow-empty
 

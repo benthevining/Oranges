@@ -94,6 +94,7 @@ unset (rst_files)
 
 set (conf_path "${CMAKE_CURRENT_LIST_DIR}")
 set (scripts_path "${Oranges_SOURCE_DIR}/scripts")
+set (templates_path "${Oranges_SOURCE_DIR}/templates")
 set (conf_version "${Oranges_VERSION_MAJOR}.${Oranges_VERSION_MINOR}.${Oranges_VERSION_PATCH}")
 
 configure_file (conf.py conf.py @ONLY NEWLINE_STYLE UNIX)
@@ -116,7 +117,7 @@ endif ()
 # cmake-format: off
 foreach (format IN ITEMS html singlehtml man text linkcheck ${info_flag} ${latex_flag})
 # cmake-format: on
-    set (doc_format_output "doc_format_${format}")
+    set (doc_format_output "oranges_doc_format_${format}")
     set (format_warnings_file "${logfiles_dir}/${format}")
 
     if ("${format}" STREQUAL info OR "${format}" STREQUAL latexpdf)

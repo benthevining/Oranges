@@ -14,7 +14,7 @@ Command-line usage
 
 .. argparse::
 	:module: update_cmakeformat_config
-	:func: _create_parser
+	:func: __create_parser
 	:prog: update_cmakeformat_config
 
 Module functions

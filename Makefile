@@ -63,9 +63,9 @@ help:  ## Print this message
 init:  ## Initializes the workspace and installs all dependencies
 	@cd $(ORANGES_ROOT) && \
 		$(PRECOMMIT) install --install-hooks --overwrite && \
-		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg && \
-		$(ASDF) install && \
-		$(PYTHON) -m pip install -r $(ORANGES_ROOT)/requirements.txt
+		$(PRECOMMIT) install --install-hooks --overwrite --hook-type commit-msg
+	@cd $(ORANGES_ROOT) && $(ASDF) install
+	$(PYTHON) -m pip install -r $(ORANGES_ROOT)/requirements.txt
 
 #
 

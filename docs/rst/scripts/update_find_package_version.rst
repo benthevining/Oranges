@@ -8,7 +8,7 @@ Command-line usage
 
 .. argparse::
 	:module: update_find_package_version
-	:func: _create_parser
+	:func: __create_parser
 	:prog: update_find_package_version
 
 Module functions

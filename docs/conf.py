@@ -15,6 +15,7 @@
 from sys import path as sys_path
 
 
+sys_path.insert(0, r'@templates_path@')
 sys_path.insert(0, r'@scripts_path@')
 sys_path.insert(0, r'@conf_path@')
 

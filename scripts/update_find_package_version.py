@@ -186,7 +186,7 @@ def update_find_package_version(package_name: str, new_version: str,
 #
 
 
-def _create_parser() -> ArgumentParser:
+def __create_parser() -> ArgumentParser:
 	"""
 	Creates the argument parser for this script.
 
@@ -232,7 +232,7 @@ def _create_parser() -> ArgumentParser:
 if __name__ == "__main__":
 	from sys import argv
 
-	my_parser = _create_parser()
+	my_parser = __create_parser()
 
 	if len(argv) < 2:
 		my_parser.print_help()

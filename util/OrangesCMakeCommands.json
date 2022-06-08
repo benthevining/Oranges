@@ -93,6 +93,7 @@
           "FILES": "+",
           "INSTALL_COMPONENT": 1,
           "INSTALL_DIR": 1,
+          "PUBLIC_HEADERS": "+",
           "TARGET": 1
         }
       },

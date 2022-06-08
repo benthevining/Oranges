@@ -8,7 +8,7 @@ Command-line usage
 
 .. argparse::
 	:module: update_cmake_min_req
-	:func: _create_parser
+	:func: __create_parser
 	:prog: update_cmake_min_req
 
 Module functions

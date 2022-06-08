@@ -24,6 +24,7 @@ Utility function for adding source files to a target, and generating install rul
     oranges_add_source_files (TARGET <target>
                               DIRECTORY_NAME <directory>
                               FILES <filenames...>
+                             [PUBLIC_HEADERS <headers...>]
                              [INSTALL_DIR <installBaseDir>]
                              [INSTALL_COMPONENT <component>])
 
@@ -48,20 +49,29 @@ include (OrangesFunctionArgumentHelpers)
 function (oranges_add_source_files)
 
     set (oneValueArgs DIRECTORY_NAME TARGET INSTALL_COMPONENT INSTALL_DIR)
+    set (multiValueArgs FILES PUBLIC_HEADERS)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "FILES" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     oranges_assert_target_argument_is_target (ORANGES_ARG)
     lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
 
-    foreach (filename IN LISTS ORANGES_ARG_FILES)
-        target_sources ("${ORANGES_ARG_TARGET}"
-                        PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/${filename}>)
-    endforeach ()
+    #
 
-    set (headers ${ORANGES_ARG_FILES})
+    macro (__oranges_add_header_set __headers __scope)
+        foreach (__filename IN LISTS __headers)
+            if (NOT IS_ABSOLUTE "${__filename}")
+                set (__filename "${CMAKE_CURRENT_LIST_DIR}/${__filename}")
+            endif ()
 
-    list (FILTER headers INCLUDE REGEX "\\.\\h|\\.\\hpp|\\.\\hxx")
+            target_sources ("${ORANGES_ARG_TARGET}" "${__scope}" "$<BUILD_INTERFACE:${__filename}>")
+        endforeach ()
+    endmacro ()
+
+    __oranges_add_header_set ("${ORANGES_ARG_FILES}" PRIVATE)
+    __oranges_add_header_set ("${ORANGES_ARG_PUBLIC_HEADERS}" PUBLIC)
+
+    #
 
     if (NOT ORANGES_ARG_INSTALL_DIR)
         set (ORANGES_ARG_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
@@ -71,19 +81,45 @@ function (oranges_add_source_files)
         set (install_component COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
     endif ()
 
-    install (FILES ${headers} DESTINATION "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}"
-             ${install_component})
+    #
 
-    foreach (header IN LISTS headers)
-        target_sources (
-            "${ORANGES_ARG_TARGET}"
-            PRIVATE
-                $<INSTALL_INTERFACE:${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}/${header}>
-            )
-    endforeach ()
+    macro (__oranges_make_abs_paths_relative __listVar)
+        foreach (__filename IN LISTS "${__listVar}")
+            cmake_path (GET __filename FILENAME __filename)
+            list (APPEND __temp_files "${__filename}")
+        endforeach ()
 
-    list (TRANSFORM ORANGES_ARG_FILES PREPEND "${ORANGES_ARG_DIRECTORY_NAME}/")
+        set ("${__listVar}" ${__temp_files} PARENT_SCOPE)
+    endmacro ()
 
-    set (${ORANGES_ARG_DIRECTORY_NAME}_files ${ORANGES_ARG_FILES} PARENT_SCOPE)
+    #
+
+    macro (__oranges_install_header_set __headers __scope)
+        list (FILTER __headers INCLUDE REGEX "\\.\\h|\\.\\hpp|\\.\\hxx")
+
+        __oranges_make_abs_paths_relative (__headers)
+
+        set (__dirpath "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}")
+
+        install (FILES ${__headers} DESTINATION "${__dirpath}" ${install_component})
+
+        foreach (__header IN LISTS __headers)
+            target_sources ("${ORANGES_ARG_TARGET}" "${__scope}"
+                                                    "$<INSTALL_INTERFACE:${__dirpath}/${__header}>")
+        endforeach ()
+    endmacro ()
+
+    __oranges_install_header_set ("${ORANGES_ARG_FILES}" PRIVATE)
+    __oranges_install_header_set ("${ORANGES_ARG_PUBLIC_HEADERS}" PUBLIC)
+
+    #
+
+    set (all_files ${ORANGES_ARG_FILES} ${ORANGES_ARG_PUBLIC_HEADERS})
+
+    __oranges_make_abs_paths_relative (all_files)
+
+    list (TRANSFORM all_files PREPEND "${ORANGES_ARG_DIRECTORY_NAME}/")
+
+    set (${ORANGES_ARG_DIRECTORY_NAME}_files ${all_files} PARENT_SCOPE)
 
 endfunction ()
