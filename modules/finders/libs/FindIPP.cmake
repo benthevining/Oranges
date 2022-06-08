@@ -138,7 +138,8 @@ if (DEFINED ENV{IPP_ROOT})
     set (IPP_ROOT "$ENV{IPP_ROOT}" CACHE PATH "Path to the root of the Intel IPP installation")
 endif ()
 
-if (NOT (DEFINED IPP_INCLUDE_DIR OR DEFINED CACHE{IPP_INCLUDE_DIR} OR DEFINED ENV{IPP_INCLUDE_DIR}))
+if (DEFINED CACHE{IPP_ROOT} AND NOT (DEFINED IPP_INCLUDE_DIR OR DEFINED CACHE{IPP_INCLUDE_DIR}
+                                     OR DEFINED ENV{IPP_INCLUDE_DIR}))
     set (IPP_INCLUDE_DIR "${IPP_ROOT}/include" CACHE PATH "Intel IPP include directory")
 endif ()
 

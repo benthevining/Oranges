@@ -59,7 +59,7 @@ function (oranges_add_source_files)
     #
 
     macro (__oranges_add_header_set __headers __scope)
-        foreach (__filename IN LISTS __headers)
+        foreach (__filename IN ITEMS ${__headers})
             if (NOT IS_ABSOLUTE "${__filename}")
                 set (__filename "${CMAKE_CURRENT_LIST_DIR}/${__filename}")
             endif ()
@@ -95,18 +95,23 @@ function (oranges_add_source_files)
     #
 
     macro (__oranges_install_header_set __headers __scope)
-        list (FILTER __headers INCLUDE REGEX "\\.\\h|\\.\\hpp|\\.\\hxx")
 
-        __oranges_make_abs_paths_relative (__headers)
+        set (__headers_list ${__headers})
+
+        list (FILTER __headers_list INCLUDE REGEX "\\.\\h|\\.\\hpp|\\.\\hxx")
+
+        __oranges_make_abs_paths_relative (__headers_list)
 
         set (__dirpath "${ORANGES_ARG_INSTALL_DIR}/${ORANGES_ARG_DIRECTORY_NAME}")
 
-        install (FILES ${__headers} DESTINATION "${__dirpath}" ${install_component})
+        install (FILES ${__headers_list} DESTINATION "${__dirpath}" ${install_component})
 
-        foreach (__header IN LISTS __headers)
+        foreach (__header IN LISTS __headers_list)
             target_sources ("${ORANGES_ARG_TARGET}" "${__scope}"
                                                     "$<INSTALL_INTERFACE:${__dirpath}/${__header}>")
         endforeach ()
+
+        unset (__headers_list)
     endmacro ()
 
     __oranges_install_header_set ("${ORANGES_ARG_FILES}" PRIVATE)

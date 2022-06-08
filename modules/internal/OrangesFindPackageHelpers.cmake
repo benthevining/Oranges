@@ -37,8 +37,10 @@ macro (find_package_default_component_list)
         set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
     endif ()
 
+    set (__all_find_components ${ARGN})
+
     foreach (__comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-        if (NOT "${__comp_name}" IN_LIST ARGN)
+        if (NOT "${__comp_name}" IN_LIST __all_find_components)
             if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
                 message (
                     WARNING
@@ -49,4 +51,6 @@ macro (find_package_default_component_list)
             list (REMOVE_ITEM ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS "${__comp_name}")
         endif ()
     endforeach ()
+
+    unset (__all_find_components)
 endmacro ()
