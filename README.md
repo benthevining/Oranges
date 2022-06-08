@@ -62,6 +62,7 @@ A library of CMake modules.
   * [OrangesWipeCacheTarget](modules/dependencies/OrangesWipeCacheTarget.cmake)
   * [OrangesWrapAutotoolsProject](modules/dependencies/OrangesWrapAutotoolsProject.cmake)
   * [UseFaust](modules/code_generation/UseFaust.cmake)
+  * [UseProtobuf](modules/code_generation/UseProtobuf.cmake)
   * [Usecodesign](modules/code_signing/Usecodesign.cmake)
   * [Usewraptool](modules/code_signing/Usewraptool.cmake)
   * [Usexcodebuild](modules/general/Usexcodebuild.cmake)
