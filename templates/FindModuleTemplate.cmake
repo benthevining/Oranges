@@ -55,6 +55,8 @@ endif ()
 
 #
 
+include (FindPackageHandleStandardArgs)
+
 # cmake-lint: disable=C0103
 macro(__find_<__package_name>_check_version_from_cmakelists __cmakelists_path __result_var)
 
@@ -64,34 +66,20 @@ macro(__find_<__package_name>_check_version_from_cmakelists __cmakelists_path __
         return ()
     endif ()
 
-    if(${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION)
-        file (READ "${pkg_cmakelists}" __cmakelists_text)
+    file (READ "${pkg_cmakelists}" __cmakelists_text)
 
-        string (FIND "${__cmakelists_text}" "project (" __project_cmd_pos)
+    string (FIND "${__cmakelists_text}" "project (" __project_cmd_pos)
 
-        string (SUBSTRING "${__cmakelists_text}" "${__project_cmd_pos}" 50 __project_cmd_string)
+    string (SUBSTRING "${__cmakelists_text}" "${__project_cmd_pos}" 50 __project_cmd_string)
 
-        string (FIND "${__project_cmd_string}" "VERSION" __version_kwd_pos)
+    string (FIND "${__project_cmd_string}" "VERSION" __version_kwd_pos)
 
-        math (EXPR __version_kwd_pos "${__version_kwd_pos} + 8" OUTPUT_FORMAT DECIMAL)
+    math (EXPR __version_kwd_pos "${__version_kwd_pos} + 8" OUTPUT_FORMAT DECIMAL)
 
-        string (SUBSTRING "${__project_cmd_string}" "${__version_kwd_pos}" 6 __project_version_string)
+    string (SUBSTRING "${__project_cmd_string}" "${__version_kwd_pos}" 6 __project_version_string)
 
-        if (${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION_EXACT)
-            if (NOT "${__project_version_string}" VERSION_EQUAL "${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION}")
-                set (${__result_var} FALSE)
-                return ()
-            endif ()
-        else ()
-            if ("${__project_version_string}" VERSION_LESS "${${CMAKE_FIND_PACKAGE_NAME}_FIND_VERSION}")
-                set (${__result_var} FALSE)
-                return ()
-            endif ()
-        endif ()
-    endif()
-
-    set (${__result_var} TRUE)
-
+    find_package_check_version ("${__project_version_string}" "${__result_var}"
+                                HANDLE_VERSION_RANGE)
 endmacro()
 
 #

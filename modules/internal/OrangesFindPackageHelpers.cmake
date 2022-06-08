@@ -25,26 +25,28 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (FeatureSummary)
 include (FindPackageMessage)
-include (GNUInstallDirs)
-
-#
-
-macro (find_package_warning_or_error message_text)
-    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
-        message (FATAL_ERROR "${message_text}")
-    endif ()
-
-    if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
-        message (WARNING "${message_text}")
-    endif ()
-endmacro ()
+include (FindPackageHandleStandardArgs)
 
 #
 
 macro (find_package_default_component_list)
     if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
-    elseif (All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    elseif (All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS
+            OR ALL IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
     endif ()
+
+    foreach (__comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+        if (NOT "${__comp_name}" IN_LIST ARGN)
+            if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+                message (
+                    WARNING
+                        "Package ${CMAKE_FIND_PACKAGE_NAME} - unknown component ${__comp_name} requested!"
+                    )
+            endif ()
+
+            list (REMOVE_ITEM ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS "${__comp_name}")
+        endif ()
+    endforeach ()
 endmacro ()

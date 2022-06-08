@@ -41,76 +41,77 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesFindPackageHelpers)
 
-set_package_properties (FFTW PROPERTIES URL "https://www.fftw.org" DESCRIPTION "FFT library")
+set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
+                        DESCRIPTION "FFT library")
 
-set (FFTW_FOUND FALSE)
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+set (${CMAKE_FIND_PACKAGE_NAME}_fftw3_FOUND FALSE)
+set (${CMAKE_FIND_PACKAGE_NAME}_fftw3f_FOUND FALSE)
 
 find_package_default_component_list (fftw3 fftw3f)
 
-if (FFTW_FIND_QUIETLY)
-    set (quiet_flag QUIET)
-endif ()
-
-if (fftw3 IN_LIST FFTW_FIND_COMPONENTS)
-    if (FFTW_FIND_REQUIRED_fftw3)
+if (fftw3 IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_fftw3)
         set (required_flag REQUIRED)
     endif ()
 
-    find_package (fftw3 ${quiet_flag} ${required_flag})
+    find_package (fftw3 QUIET ${required_flag})
 
     unset (required_flag)
+
+    set (${CMAKE_FIND_PACKAGE_NAME}_fftw3_FOUND "${fftw3_FOUND}")
 endif ()
 
-if (fftw3f IN_LIST FFTW_FIND_COMPONENTS)
-    if (FFTW_FIND_REQUIRED_fftw3f)
+if (fftw3f IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_fftw3f)
         set (required_flag REQUIRED)
     endif ()
 
-    find_package (fftw3f ${quiet_flag} ${required_flag})
+    find_package (fftw3f QUIET ${required_flag})
 
     unset (required_flag)
-endif ()
 
-unset (quiet_flag)
+    set (${CMAKE_FIND_PACKAGE_NAME}_fftw3f_FOUND "${fftw3f_FOUND}")
+endif ()
 
 if (NOT (TARGET FFTW3::fftw3 OR TARGET FFTW3::fftw3f))
-    find_package_warning_or_error ("FFTW could not be located!")
     return ()
 endif ()
 
-if (NOT TARGET FFTW)
-    add_library (FFTW INTERFACE)
-endif ()
-
-target_link_libraries (FFTW INTERFACE $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>
-                                      $<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>)
-
-set (float_lib_exists "$<TARGET_EXISTS:FFTW::fftw3f>")
-set (double_lib_exists "$<TARGET_EXISTS:FFTW::fftw3>")
-
-target_compile_definitions (
-    FFTW
-    INTERFACE
-        "FFTW_SINGLE_AVAILABLE=${float_lib_exists}"
-        "FFTW_DOUBLE_AVAILABLE=${double_lib_exists}"
-        "$<$<AND:${double_lib_exists},$<NOT:${float_lib_exists}>>:FFTW_DOUBLE_ONLY=1>"
-        "$<$<AND:${float_lib_exists},$<NOT:${double_lib_exists}>>:FFTW_SINGLE_ONLY=1>"
-        "$<$<AND:${float_lib_exists},${double_lib_exists}>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>")
-
-unset (float_lib_exists)
-unset (double_lib_exists)
-
-install (TARGETS FFTW EXPORT FFTWTargets)
-
-install (EXPORT FFTWTargets DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/FFTW" NAMESPACE FFTW::
-         COMPONENT FFTW)
-
-include (CPackComponent)
-
-cpack_add_component (FFTW DESCRIPTION "FFTW FFT library")
-
 if (NOT TARGET FFTW::FFTW)
-    add_library (FFTW::FFTW ALIAS FFTW)
+    add_library (FFTW::FFTW IMPORTED INTERFACE)
+
+    target_link_libraries (FFTW::FFTW INTERFACE "$<TARGET_NAME_IF_EXISTS:FFTW3::fftw3>"
+                                                "$<TARGET_NAME_IF_EXISTS:FFTW3::fftw3f>")
+
+    set (float_lib_exists "$<TARGET_EXISTS:FFTW::fftw3f>")
+    set (double_lib_exists "$<TARGET_EXISTS:FFTW::fftw3>")
+
+    target_compile_definitions (
+        FFTW::FFTW
+        INTERFACE
+            "FFTW_SINGLE_AVAILABLE=${float_lib_exists}"
+            "FFTW_DOUBLE_AVAILABLE=${double_lib_exists}"
+            "$<$<AND:${double_lib_exists},$<NOT:${float_lib_exists}>>:FFTW_DOUBLE_ONLY=1>"
+            "$<$<AND:${float_lib_exists},$<NOT:${double_lib_exists}>>:FFTW_SINGLE_ONLY=1>"
+            "$<$<AND:${float_lib_exists},${double_lib_exists}>:FFTW_DOUBLE_ONLY=0;FFTW_SINGLE_ONLY=0>"
+        )
+
+    unset (float_lib_exists)
+    unset (double_lib_exists)
 endif ()
 
-set (FFTW_FOUND TRUE)
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
+
+if (TARGET FFTW3::fftw3)
+    set (fftw_found_comps Double)
+endif ()
+
+if (TARGET FFTW3::fftw3f)
+    list (APPEND fftw_found_comps Float)
+endif ()
+
+find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "FFTW - found components ${fftw_found_comps}"
+                      "FFTW [${fftw_found_comps}]")
+
+unset (fftw_found_comps)

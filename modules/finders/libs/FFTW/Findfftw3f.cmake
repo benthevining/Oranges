@@ -22,7 +22,31 @@ Targets
 
 ``FFTW3::fftw3f``
 
-FFTW float precision library
+FFTW float precision library.
+
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:variable:: FFTW_F_INCLUDE_DIR
+
+Include directory path for the FFTW float precision library.
+When searching for this path, the environment variable :envvar:`FFTW_F_INCLUDE_DIR` is added to the search path.
+
+.. cmake:variable:: FFTW_F_LIBRARY
+
+Path to the prebuilt binary of the FFTW float precision library.
+When searching for this file, the environment variable :envvar:`FFTW_F_LIBRARY` is added to the search path.
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: FFTW_F_INCLUDE_DIR
+
+This environment variable, if set, is added to the search path when locating the :variable:`FFTW_F_INCLUDE_DIR` variable.
+
+.. cmake:envvar:: FFTW_F_LIBRARY
+
+This environment variable, if set, is added to the search path when locating the :variable:`FFTW_F_LIBRARY` variable.
 
 #]=======================================================================]
 
@@ -30,36 +54,40 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesFindPackageHelpers)
+include (FeatureSummary)
 
-set_package_properties (fftw3f PROPERTIES URL "https://www.fftw.org"
-                        DESCRIPTION "float precision FFT library")
+set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
+                        DESCRIPTION "Float precision FFT library")
 
 if (TARGET FFTW3::fftw3f)
-    set (fftw3f_FOUND TRUE)
+    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
     return ()
 endif ()
 
-set (fftw3f_FOUND FALSE)
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
-find_path (FFTW_F_INCLUDES NAMES fftw3f.h sfftw3.h DOC "FFTW [float] includes directory")
+find_path (FFTW_F_INCLUDE_DIR NAMES fftw3f.h sfftw3.h PATHS ENV FFTW_F_INCLUDE_DIR
+           DOC "FFTW [float] includes directory")
 
-find_library (FFTW_F_LIBRARIES NAMES fftw3f sfftw3 DOC "FFTW [float] library")
+find_library (FFTW_F_LIBRARY NAMES fftw3f sfftw3 PATHS ENV FFTW_F_LIBRARY
+              DOC "FFTW [float] library")
 
-mark_as_advanced (FORCE FFTW_F_INCLUDES FFTW_F_LIBRARIES)
+mark_as_advanced (FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
 
-if (FFTW_F_INCLUDES AND FFTW_F_LIBRARIES)
-    add_library (fftw3f IMPORTED UNKNOWN)
+include (FindPackageHandleStandardArgs)
 
-    set_target_properties (fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARIES}")
+find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS FFTW_F_INCLUDE_DIR
+                                                                              FFTW_F_LIBRARY)
 
-    target_include_directories (fftw3f INTERFACE "${FFTW_F_INCLUDES}")
-
-    add_library (FFTW3::fftw3f ALIAS fftw3f)
-
-    message (DEBUG "FFTW float precision library found")
-else ()
-    find_package_warning_or_error ("fftw3f could not be located!")
+if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
+    return ()
 endif ()
 
-set (fftw3f_FOUND TRUE)
+add_library (FFTW3::fftw3f IMPORTED UNKNOWN)
+
+set_target_properties (FFTW3::fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARY}")
+
+target_include_directories (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}")
+
+find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "FFTW3 [float] - found"
+                      "FFTW3 [float] [${FFTW_F_INCLUDE_DIR}] [${FFTW_F_LIBRARY}]")
