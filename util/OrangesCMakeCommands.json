@@ -107,7 +107,8 @@
           "INSTALL_COMPONENT": 1,
           "INSTALL_DIR": 1,
           "PROTO_FILES": "+",
-          "TARGET": 1
+          "TARGET": 1,
+          "TYPE": 1
         }
       },
       "oranges_add_source_files": {

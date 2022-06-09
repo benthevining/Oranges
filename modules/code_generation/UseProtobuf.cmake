@@ -38,13 +38,14 @@ Adds a command to generate C++ and Python code from a set of ``.proto`` files, a
   ::
 
     oranges_add_protobuf_library (TARGET <target>
+                                 [TYPE <SHARED|STATIC>]
                                  [PROTO_FILES <files...>]
                                  [INSTALL_DIR <dir>]
                                  [INSTALL_COMPONENT <component>])
 
 Creates a library target named ``<target>`` and calls :command:`oranges_add_protobuf_files` to add the given ``PROTO_FILES`` to the target.
 
-The type of library created is controlled by the :variable:`PROTOBUF_LIBRARY_TYPE` variable.
+The type of library created is controlled by the :variable:`PROTOBUF_LIBRARY_TYPE` variable, unless a ``TYPE`` is explicitly specified in the function call.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -61,6 +62,15 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 find_package (Protobuf REQUIRED)
+
+include (FeatureSummary)
+
+set_package_properties (
+    Protobuf PROPERTIES
+    URL "https://developers.google.com/protocol-buffers"
+    DESCRIPTION "Code generation for data serialization"
+    TYPE REQUIRED
+    PURPOSE "Data serialization")
 
 set (PROTOBUF_LIBRARY_TYPE STATIC CACHE STRING
                                         "Type of libraries to create for building Protobuf code")
@@ -137,13 +147,17 @@ endfunction ()
 
 function (oranges_add_protobuf_library)
 
-    set (oneValueArgs TARGET INSTALL_DIR INSTALL_COMPONENT)
+    set (oneValueArgs TARGET TYPE INSTALL_DIR INSTALL_COMPONENT)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "PROTO_FILES" "${ARGN}")
 
     # check target, PROTO_FILES. default for INSTALL_DIR, INSTALL_COMPONENT.
 
-    add_library ("${ORANGES_ARG_TARGET}" "${PROTOBUF_LIBRARY_TYPE}")
+    if (NOT ORANGES_ARG_TYPE)
+        set (ORANGES_ARG_TYPE "${PROTOBUF_LIBRARY_TYPE}")
+    endif ()
+
+    add_library ("${ORANGES_ARG_TARGET}" "${ORANGES_ARG_TYPE}")
 
     if (ORANGES_ARG_PROTO_FILES)
         oranges_add_protobuf_files (
