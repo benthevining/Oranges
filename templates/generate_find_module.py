@@ -53,8 +53,14 @@ def replace_tokens(orig_string: str, tokens: list[Tuple[str, str]]) -> str:
 
 # editorconfig-checker-disable
 # pylint: disable=too-many-arguments
-def generate(package_name: str, repo_url: str, git_repo: str, git_tag: str,
-             description: str, output_dir: str) -> None:
+def generate(package_name: str,
+             repo_url: str,
+             git_repo: str,
+             git_tag: str,
+             description: str,
+             output_dir: str,
+             post_include_script: str = None,
+             post_include_actions: str = None) -> None:
 	"""
 	Generates a find module for a CMake package.
 
@@ -64,6 +70,8 @@ def generate(package_name: str, repo_url: str, git_repo: str, git_tag: str,
 	:param git_tag: The git tag or branch to fetch from your project's git repository
 	:param description: A short description of your project
 	:param output_dir: Directory to write the generated find module to. The actual file generated will be `${Directory}/Find${package_name}.cmake`
+	:param post_include_script: Path to a script that will be executed after the package is found. Its contents will be pasted verbatim into the find module.
+	:param post_include_actions: Verbatim CMake commands that will be executed after the package is found. These commands will be executed after any post_include_script (if one is specified).
 	"""
 	# editorconfig-checker-enable
 
@@ -78,6 +86,18 @@ def generate(package_name: str, repo_url: str, git_repo: str, git_tag: str,
 	if os.path.isfile(output_file):
 		os.remove(output_file)
 
+	if post_include_script is not None:
+		if not os.path.isabs(post_include_script):
+			post_include_script = os.path.join(os.getcwd(),
+			                                   post_include_script)
+		with open(post_include_script, "r", encoding="utf-8") as f:
+			post_include_script_text = f.read()
+	else:
+		post_include_script_text = ""
+
+	if post_include_actions is None:
+		post_include_actions = ""
+
 	with open(INPUT_FILE, "r", encoding="utf-8") as f:
 		file_text = f.read()
 
@@ -88,7 +108,9 @@ def generate(package_name: str, repo_url: str, git_repo: str, git_tag: str,
 	                ("<__package_repo_url>", repo_url),
 	                ("<__package_git_repo>", git_repo),
 	                ("<__package_git_tag>", git_tag),
-	                ("<__package_description>", description)])
+	                ("<__package_description>", description),
+	                ("<__post_include_script_text>", post_include_script_text),
+	                ("<__post_include_actions>", post_include_actions)])
 
 	with open(output_file, "w", encoding="utf-8") as f:
 		f.write(file_text)
@@ -163,6 +185,26 @@ def __create_parser() -> ArgumentParser:
 	    "Directory to write the generated find module to. The actual file generated will be '$Directory/Find$package_name.cmake'. Defaults to the current working directory."
 	)
 
+	parser.add_argument(
+	    "--post-script",
+	    action="store",
+	    dest="post_script_path",
+	    required=False,
+	    default=None,
+	    help=
+	    "Path to a script that will be executed after the package is found. Its contents will be pasted verbatim into the find module."
+	)
+
+	parser.add_argument(
+	    "--post-commands",
+	    action="store",
+	    dest="post_actions",
+	    required=False,
+	    default=None,
+	    help=
+	    "Verbatim CMake commands that will be executed after the package is found. These commands will be executed after any post-script (if one is specified)."
+	)
+
 	return parser
 
 
@@ -189,4 +231,6 @@ if __name__ == "__main__":
 		         git_repo=args.git_repo,
 		         git_tag=args.git_tag,
 		         description=args.description,
-		         output_dir=args.output_dir)
+		         output_dir=args.output_dir,
+		         post_include_script=args.post_script_path,
+		         post_include_actions=args.post_actions)
