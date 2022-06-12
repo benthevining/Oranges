@@ -35,7 +35,7 @@ ifeq ($(OS),Windows_NT)
 	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(NUMBER_OF_PROCESSORS)
 else ifeq ($(shell uname -s),Darwin)
 	export CMAKE_GENERATOR ?= Xcode
-	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell sysctl hw.ncpu | awk '{print $$2}')
+	export CMAKE_BUILD_PARALLEL_LEVEL ?= $(shell sysctl hw.ncpu | sed -e "s/^hw.ncpu://")
 	SUDO ?= sudo
 else # Linux
 	export CMAKE_GENERATOR ?= Ninja

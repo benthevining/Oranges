@@ -1,0 +1,68 @@
+{
+  "anypkg_version": "1.0.0",
+  "project": {
+    "compatibility": "SameMajorVersion",
+    "description": "A library of CMake modules and scripts",
+    "find_module": "scripts/FindOranges.cmake",
+    "git_repo": "https://github.com/benthevining/Oranges.git",
+    "name": "Oranges",
+    "version": "2.24.0"
+  },
+  "workspace": {
+    "default_set": "Minimal",
+    "dev_set": "Development",
+    "package_sets": [
+      {
+        "description": "Minimal packages needed to compile and install the code",
+        "name": "Minimal",
+        "packages": {
+          "system": {
+            "cmake": "3.23.1",
+            "git": "2.36.1",
+            "python": "3.9.12"
+          }
+        }
+      },
+      {
+        "description": "Packages needed for building the documentation",
+        "name": "Docs",
+        "packages": {
+          "pip": {
+            "sphinx": "",
+            "sphinx-argparse": "",
+            "sphinxcontrib-moderncmakedomain": "",
+            "sphinxcontrib.domaintools": ""
+          }
+        }
+      },
+      {
+        "description": "Packages needed for the suggested development workflow",
+        "init_commands": [
+          "pre-commit install --install-hooks --overwrite",
+          "pre-commit install --install-hooks --overwrite --hook-type commit-msg"
+        ],
+        "name": "Development",
+        "packages": {
+          "pip": {
+            "pre-commit": "2.19.0"
+          }
+        },
+        "requires": [
+          "Minimal",
+          "Docs"
+        ]
+      },
+      {
+        "advanced": true,
+        "description": "Packages needed for bumping the version & publishing a release (used by CI machines)",
+        "name": "ci_release",
+        "packages": {
+          "npm": "package.json",
+          "pip": {
+            "bump2version": ""
+          }
+        }
+      }
+    ]
+  }
+}

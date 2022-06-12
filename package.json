@@ -129,7 +129,8 @@
             ".bumpversion.cfg",
             "CMakeLists.txt",
             "package.json",
-            "CITATION.cff"
+            "CITATION.cff",
+            "anypkg.json"
           ]
         }
       ],
