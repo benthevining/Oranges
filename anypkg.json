@@ -3,7 +3,6 @@
   "project": {
     "compatibility": "SameMajorVersion",
     "description": "A library of CMake modules and scripts",
-    "find_module": "scripts/FindOranges.cmake",
     "git_repo": "https://github.com/benthevining/Oranges.git",
     "name": "Oranges",
     "version": "2.24.0"

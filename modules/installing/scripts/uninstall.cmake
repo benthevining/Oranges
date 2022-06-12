@@ -46,6 +46,9 @@ foreach (manifest_file IN LISTS manifest_files
             message (WARNING "File ${file} does not exist.")
         endif ()
     endforeach ()
+
+    # remove the manifest file
+    file (REMOVE "${file_path}")
 endforeach ()
 
 if (NOT files_to_uninstall)

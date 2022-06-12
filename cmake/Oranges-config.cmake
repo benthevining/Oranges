@@ -34,12 +34,12 @@ include (FeatureSummary)
 include (FindPackageMessage)
 
 set_package_properties (
-    ${CMAKE_FIND_PACKAGE_NAME} PROPERTIES URL "https://github.com/benthevining/Oranges"
+    "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://github.com/benthevining/Oranges"
     DESCRIPTION "Library of CMake modules")
 
-find_package_message (${CMAKE_FIND_PACKAGE_NAME} "Oranges package found -- installed on system"
+find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "Oranges package found -- installed on system"
                       "Oranges (system install) [${CMAKE_CURRENT_LIST_DIR}]")
 
 #
 
-check_required_components (${CMAKE_FIND_PACKAGE_NAME})
+check_required_components ("${CMAKE_FIND_PACKAGE_NAME}")

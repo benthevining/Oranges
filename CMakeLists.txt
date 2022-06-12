@@ -109,6 +109,13 @@ if (PROJECT_IS_TOP_LEVEL)
 
     include (OrangesWipeCacheTarget)
     include (OrangesDefaultCPackSettings)
+else ()
+    # check if no languages are enabled (need at least one for GNUInstallDirs)
+    get_property (enabled_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
+
+    if (NOT enabled_languages OR "${enabled_languages}" STREQUAL NONE)
+        enable_language (CXX)
+    endif ()
 endif ()
 
 #

@@ -55,8 +55,16 @@ find_package_default_component_list (BNNS vImage vDSP vForce BLAS)
 #
 
 foreach (comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-    if (NOT TARGET Accelerate::${comp_name})
-        find_library (ACCELERATE_${comp_name}_PATH ${comp_name}
+    if (TARGET Accelerate::${comp_name})
+        continue ()
+    endif ()
+
+    if (IOS OR "${CMAKE_SYSTEM_NAME}" MATCHES iOS)
+        add_library (Accelerate::${comp_name} IMPORTED INTERFACE)
+
+        target_link_libraries (Accelerate::${comp_name} INTERFACE -framework "${comp_name}")
+    else ()
+        find_library (ACCELERATE_${comp_name}_PATH "${comp_name}"
                       DOC "Accelerate ${comp_name} library")
 
         if (ACCELERATE_${comp_name}_PATH)
@@ -64,25 +72,29 @@ foreach (comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
 
             set_target_properties (Accelerate::${comp_name}
                                    PROPERTIES IMPORTED_LOCATION "ACCELERATE_${${comp_name}_PATH}")
-
-            set (${CMAKE_FIND_PACKAGE_NAME}_${comp_name}_FOUND TRUE)
-
-            list (APPEND found_components "${comp_name}")
-
-            if ("${comp_name}" STREQUAL vDSP)
-                # fixes a bug present when compiling vDSP with GCC
-                target_compile_options (
-                    Accelerate::${comp_name}
-                    INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
-            endif ()
-
-            if (NOT TARGET Accelerate::Accelerate)
-                add_library (Accelerate::Accelerate INTERFACE IMPORTED)
-            endif ()
-
-            target_link_libraries (Accelerate::Accelerate INTERFACE Accelerate::${comp_name})
         endif ()
     endif ()
+
+    if (NOT TARGET Accelerate::${comp_name})
+        set (${CMAKE_FIND_PACKAGE_NAME}_${comp_name}_FOUND FALSE)
+        continue ()
+    endif ()
+
+    list (APPEND found_components "${comp_name}")
+
+    set (${CMAKE_FIND_PACKAGE_NAME}_${comp_name}_FOUND TRUE)
+
+    if ("${comp_name}" STREQUAL vDSP)
+        # fixes a bug present when compiling vDSP with GCC
+        target_compile_options (Accelerate::${comp_name}
+                                INTERFACE $<$<CXX_COMPILER_ID:GNU>:-flax-vector-conversions>)
+    endif ()
+
+    if (NOT TARGET Accelerate::Accelerate)
+        add_library (Accelerate::Accelerate INTERFACE IMPORTED)
+    endif ()
+
+    target_link_libraries (Accelerate::Accelerate INTERFACE Accelerate::${comp_name})
 endforeach ()
 
 #

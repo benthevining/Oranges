@@ -44,6 +44,10 @@ $(BUILDS):
 .PHONY: config
 config: $(BUILDS) ## configure CMake
 
+.PHONY: open
+open: config ## Opens the Oranges project in an IDE
+	$(CMAKE) --open $(BUILDS)
+
 #
 
 .PHONY: build
@@ -52,9 +56,11 @@ build: config ## runs CMake build
 
 #
 
+$(BUILDS)/install_manifest.txt:
+	$(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG)
+
 .PHONY: install
-install: build ## runs CMake install
-	$(SUDO) $(CMAKE) --install $(BUILD_DIR)
+install: $(BUILDS)/install_manifest.txt ## runs CMake install
 
 #
 
@@ -85,13 +91,9 @@ docs: config ## Builds the documentation
 #
 
 .PHONY: uninstall
-uninstall: ## Runs uninstall script
-	@if [ -d $(BUILD_DIR) ]; then \
-		echo "Uninstalling..."; \
-		$(SUDO) $(CMAKE) -P $(BUILD_DIR)/uninstall.cmake; \
-	else \
-		echo "Cannot uninstall, builds directory doesn't exist!"; \
-	fi
+uninstall: config ## Runs uninstall script
+	@echo "Uninstalling..."
+	$(SUDO) $(CMAKE) -P $(BUILD_DIR)/uninstall.cmake
 
 .PHONY: clean
 clean: ## Cleans the source tree

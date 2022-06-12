@@ -15,3 +15,7 @@
 # @formatter:on
 
 export ORANGES_PATH="${ORANGES_PATH:-$(cd "$(dirname "$0")" && pwd)}"
+
+go_oranges() {
+	cd "$ORANGES_PATH" || exit 1
+}
