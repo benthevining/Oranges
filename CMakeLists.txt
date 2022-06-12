@@ -156,6 +156,9 @@ install (
     EXPORT_LINK_INTERFACE_LIBRARIES
     COMPONENT oranges_base)
 
+export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake"
+        NAMESPACE Oranges::)
+
 include (CMakePackageConfigHelpers)
 
 write_basic_package_version_file (Oranges-config-version.cmake VERSION "${PROJECT_VERSION}"
