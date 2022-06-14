@@ -21,7 +21,7 @@ This module provides the function :command:`oranges_generate_standard_headers() 
 
   ::
 
-    oranges_generate_standard_headers (TARGET <targetName>
+    oranges_generate_standard_headers (<targetName>
                                       [BASE_NAME <baseName>]
                                       [HEADER <mainHeaderName>] | [NO_AGGREGATE_HEADER]
                                       [FEATURE_TEST_LANGUAGE <lang>]
@@ -38,11 +38,6 @@ then generates another header named ``<mainHeaderName>`` that includes the other
 This function will also call :command:`oranges_add_build_type_macros() <oranges_add_build_type_macros>`, unless the ``NO_BUILD_TYPE_MACROS`` option is given.
 
 Options:
-
-``TARGET``
- *Required*
-
- The name of the target to add the generated headers to. A target with this name must already exist prior to calling this function.
 
 ``BASE_NAME``
  Prefix used for all macros defined in generated header files, and the build type macros. Defaults to ``<targetName>``.
@@ -107,11 +102,17 @@ include (OrangesBuildTypeMacros)
 
 function (oranges_generate_standard_headers)
 
+    set (TARGET_NAME "${ARGV0}")
+
+    if (NOT TARGET "${TARGET_NAME}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+        return ()
+    endif ()
+
     set (options NO_AGGREGATE_HEADER)
 
     set (
         oneValueArgs
-        TARGET
         BASE_NAME
         HEADER
         EXPORT_HEADER
@@ -122,9 +123,8 @@ function (oranges_generate_standard_headers)
         SOURCE_GROUP_NAME
         SCOPE)
 
-    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "" ${ARGN})
+    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "${options}" "${oneValueArgs}" "")
 
-    oranges_assert_target_argument_is_target (ORANGES_ARG)
     lemons_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT ORANGES_ARG_FEATURE_TEST_LANGUAGE)
@@ -132,7 +132,7 @@ function (oranges_generate_standard_headers)
     endif ()
 
     if (NOT ORANGES_ARG_BASE_NAME)
-        set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
+        set (ORANGES_ARG_BASE_NAME "${TARGET_NAME}")
     endif ()
 
     if (NOT ORANGES_ARG_HEADER)
@@ -148,7 +148,7 @@ function (oranges_generate_standard_headers)
     endif ()
 
     if (NOT ORANGES_ARG_SCOPE)
-        get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+        get_target_property (target_type "${TARGET_NAME}" TYPE)
 
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
             set (ORANGES_ARG_SCOPE INTERFACE)
@@ -170,18 +170,16 @@ function (oranges_generate_standard_headers)
     endif ()
 
     if (NOT ORANGES_ARG_NO_BUILD_TYPE_MACROS)
-        oranges_add_build_type_macros (
-            TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-            SCOPE "${ORANGES_ARG_SCOPE}")
+        oranges_add_build_type_macros ("${TARGET_NAME}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
+                                       SCOPE "${ORANGES_ARG_SCOPE}")
     endif ()
 
     oranges_generate_export_header (
-        TARGET "${ORANGES_ARG_TARGET}" BASE_NAME "${ORANGES_ARG_BASE_NAME}"
-        HEADER "${ORANGES_ARG_EXPORT_HEADER}" SCOPE "${ORANGES_ARG_SCOPE}" ${install_component}
-                                                                           ${relative_path})
+        "${TARGET_NAME}" BASE_NAME "${ORANGES_ARG_BASE_NAME}" HEADER "${ORANGES_ARG_EXPORT_HEADER}"
+        SCOPE "${ORANGES_ARG_SCOPE}" ${install_component} ${relative_path})
 
     oranges_generate_platform_header (
-        TARGET "${ORANGES_ARG_TARGET}"
+        "${TARGET_NAME}"
         BASE_NAME "${ORANGES_ARG_BASE_NAME}"
         HEADER "${ORANGES_ARG_PLATFORM_HEADER}"
         LANGUAGE "${ORANGES_ARG_FEATURE_TEST_LANGUAGE}"
@@ -197,11 +195,11 @@ function (oranges_generate_standard_headers)
         set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND CMAKE_CONFIGURE_DEPENDS
                                                             "${input_file}")
 
-        set_source_files_properties ("${configured_file}" TARGET_DIRECTORY "${ORANGES_ARG_TARGET}"
+        set_source_files_properties ("${configured_file}" TARGET_DIRECTORY "${TARGET_NAME}"
                                      PROPERTIES GENERATED ON)
 
         target_sources (
-            "${ORANGES_ARG_TARGET}"
+            "${TARGET_NAME}"
             "${ORANGES_ARG_SCOPE}"
             $<BUILD_INTERFACE:${configured_file}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
@@ -218,8 +216,7 @@ function (oranges_generate_standard_headers)
                  ${install_component})
 
         target_include_directories (
-            "${ORANGES_ARG_TARGET}" "${ORANGES_ARG_SCOPE}"
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            "${TARGET_NAME}" "${ORANGES_ARG_SCOPE}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
     endif ()
 

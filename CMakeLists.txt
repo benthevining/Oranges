@@ -86,7 +86,7 @@ mark_as_advanced (CMAKE_FIND_PACKAGE_PREFER_CONFIG)
 
 enable_testing ()
 
-set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
+set (ORANGES_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
 
 include (cmake/OrangesMacros.cmake)
 
@@ -166,6 +166,14 @@ install (
 export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake"
         NAMESPACE Oranges::)
 
+set (Oranges_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "")
+
+export (PACKAGE Oranges)
+
+file (COPY_FILE cmake/OrangesMacros.cmake "${CMAKE_CURRENT_BINARY_DIR}/OrangesMacros.cmake")
+
+file (TOUCH "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake")
+
 include (CMakePackageConfigHelpers)
 
 write_basic_package_version_file (Oranges-config-version.cmake VERSION "${PROJECT_VERSION}"
@@ -224,5 +232,3 @@ if (PROJECT_IS_TOP_LEVEL)
 
     include (OrangesUninstallTarget)
 endif ()
-
-export (PACKAGE Oranges)

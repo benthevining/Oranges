@@ -21,7 +21,7 @@ This module provides the function :command:`oranges_create_pkgconfig_file() <ora
 
   ::
 
-    oranges_create_pkgconfig_file (TARGET <targetName>
+    oranges_create_pkgconfig_file (<targetName>
                                   [OUTPUT_DIR <outputDir>]
                                   [NAME <packageName>]
                                   [INCLUDE_REL_PATH <basePath>]
@@ -65,7 +65,6 @@ function (oranges_create_pkgconfig_file)
     set (options NO_INSTALL)
     set (
         oneValueArgs
-        TARGET
         OUTPUT_DIR
         NAME
         INCLUDE_REL_PATH
@@ -76,9 +75,16 @@ function (oranges_create_pkgconfig_file)
         INSTALL_COMPONENT)
     set (multiValueArgs REQUIRES)
 
-    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    set (TARGET_NAME "${ARGV0}")
 
-    lemons_require_function_arguments (ORANGES_ARG TARGET)
+    if (NOT TARGET "${TARGET_NAME}")
+        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+        return ()
+    endif ()
+
+    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "${options}" "${oneValueArgs}"
+                           "${multiValueArgs}")
+
     lemons_check_for_unparsed_args (ORANGES_ARG)
     oranges_assert_target_argument_is_target (ORANGES_ARG)
 
@@ -93,7 +99,7 @@ function (oranges_create_pkgconfig_file)
     endif ()
 
     if (NOT ORANGES_ARG_NAME)
-        set (ORANGES_ARG_NAME "${ORANGES_ARG_TARGET}")
+        set (ORANGES_ARG_NAME "${TARGET_NAME}")
     endif ()
 
     if (ORANGES_ARG_INCLUDE_REL_PATH)
@@ -130,16 +136,15 @@ function (oranges_create_pkgconfig_file)
 
     configure_file ("${pc_input}" "${pc_file_configured}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
-                                                                 "${pc_input}")
+    set_property (TARGET "${TARGET_NAME}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
 
-    set_property (TARGET "${ORANGES_ARG_TARGET}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                                 "${pc_file_configured}")
+    set_property (TARGET "${TARGET_NAME}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
+                                                          "${pc_file_configured}")
 
     set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
-    file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}"
-          TARGET "${ORANGES_ARG_TARGET}" NEWLINE_STYLE UNIX)
+    file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}" TARGET "${TARGET_NAME}"
+                                                                            NEWLINE_STYLE UNIX)
 
     if (NOT ORANGES_ARG_NO_INSTALL)
         if (ORANGES_ARG_INSTALL_COMPONENT)

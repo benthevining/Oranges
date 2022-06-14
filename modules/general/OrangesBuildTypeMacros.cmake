@@ -21,18 +21,13 @@ This module provides the function :command:`oranges_add_build_type_macros() <ora
 
   ::
 
-    oranges_add_build_type_macros (TARGET <targetName>
+    oranges_add_build_type_macros (<targetName>
                                   [BASE_NAME <baseName>]
                                   [SCOPE <PUBLIC|PRIVATE|INTERFACE>])
 
 Adds some preprocessor definitions to the specified target which describe the current build type being built.
 
 Options:
-
-``TARGET``
- *Required*
-
- The name of the target to add the compile definitions to. A target with this name must already exist prior to calling this function.
 
 ``BASE_NAME``
  Prefix used for each macro added to the target. Defaults to ``<targetName>``.
@@ -72,15 +67,21 @@ include (OrangesFunctionArgumentHelpers)
 
 function (oranges_add_build_type_macros)
 
-    set (oneValueArgs TARGET BASE_NAME SCOPE)
+    set (oneValueArgs BASE_NAME SCOPE)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
+    set (TARGET_NAME "${ARGV0}")
 
-    oranges_assert_target_argument_is_target (ORANGES_ARG)
+    if (NOT TARGET "${TARGET_NAME}")
+        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+        return ()
+    endif ()
+
+    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "")
+
     lemons_require_function_arguments (ORANGES_ARG SCOPE)
 
     if (NOT ORANGES_ARG_BASE_NAME)
-        set (ORANGES_ARG_BASE_NAME "${ORANGES_ARG_TARGET}")
+        set (ORANGES_ARG_BASE_NAME "${TARGET_NAME}")
     endif ()
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" base_name)
@@ -98,7 +99,7 @@ function (oranges_add_build_type_macros)
     set (config_is_release "$<NOT:${config_is_debug}>")
 
     if (NOT ORANGES_ARG_SCOPE)
-        get_target_property (target_type "${ORANGES_ARG_TARGET}" TYPE)
+        get_target_property (target_type "${TARGET_NAME}" TYPE)
 
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
             set (ORANGES_ARG_SCOPE INTERFACE)
@@ -113,7 +114,7 @@ function (oranges_add_build_type_macros)
 
     # cmake-format: off
     target_compile_definitions (
-    "${ORANGES_ARG_TARGET}"
+    "${TARGET_NAME}"
     "${ORANGES_ARG_SCOPE}"
         "$<${config_is_debug}:${base_name}_DEBUG=1>"
         "$<${config_is_debug}:${base_name}_RELEASE=0>"

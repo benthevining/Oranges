@@ -37,7 +37,7 @@ Adds a command to generate C++ and Python code from a set of ``.proto`` files, a
 
   ::
 
-    oranges_add_protobuf_library (TARGET <target>
+    oranges_add_protobuf_library (<target>
                                  [TYPE <SHARED|STATIC>]
                                  [PROTO_FILES <files...>]
                                  [INSTALL_DIR <dir>]
@@ -147,9 +147,11 @@ endfunction ()
 
 function (oranges_add_protobuf_library)
 
-    set (oneValueArgs TARGET TYPE INSTALL_DIR INSTALL_COMPONENT)
+    set (TARGET_NAME "${ARGV0}")
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "PROTO_FILES" "${ARGN}")
+    set (oneValueArgs TYPE INSTALL_DIR INSTALL_COMPONENT)
+
+    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "PROTO_FILES")
 
     # check target, PROTO_FILES. default for INSTALL_DIR, INSTALL_COMPONENT.
 
@@ -157,11 +159,11 @@ function (oranges_add_protobuf_library)
         set (ORANGES_ARG_TYPE "${PROTOBUF_LIBRARY_TYPE}")
     endif ()
 
-    add_library ("${ORANGES_ARG_TARGET}" "${ORANGES_ARG_TYPE}")
+    add_library ("${TARGET_NAME}" "${ORANGES_ARG_TYPE}")
 
     if (ORANGES_ARG_PROTO_FILES)
         oranges_add_protobuf_files (
-            TARGET "${ORANGES_ARG_TARGET}" INSTALL_DIR "${ORANGES_ARG_INSTALL_DIR}"
+            TARGET "${TARGET_NAME}" INSTALL_DIR "${ORANGES_ARG_INSTALL_DIR}"
             INSTALL_COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}"
             PROTO_FILES ${ORANGES_ARG_PROTO_FILES})
     endif ()

@@ -31,7 +31,7 @@ Adds a command to call the Faust compiler to generate the ``<generatedClassName>
 
   ::
 
-    faust_add_library (TARGET_NAME <targetName>
+    faust_add_library (<targetName>
                        INPUT_FILES <fileNames...>
                        CLASS_NAMES <classNames...>
                       [INSTALL_REL_PATH <relPath>]
@@ -104,12 +104,18 @@ function (faust_add_library)
         return ()
     endif ()
 
+    set (TARGET_NAME "${ARGV0}")
+
+    if (TARGET "${TARGET_NAME}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} already exists!")
+    endif ()
+
     set (oneValueArgs TARGET_NAME INSTALL_REL_PATH INSTALL_COMPONENT)
     set (multiValueArgs INPUT_FILES CLASS_NAMES)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}")
 
-    lemons_require_function_arguments (ORANGES_ARG TARGET_NAME INPUT_FILES CLASS_NAMES)
+    lemons_require_function_arguments (ORANGES_ARG INPUT_FILES CLASS_NAMES)
 
     list (LENGTH "${ORANGES_ARG_INPUT_FILES}" numInputFiles)
     list (LENGTH "${ORANGES_ARG_CLASS_NAMES}" numClassNames)
@@ -119,12 +125,6 @@ function (faust_add_library)
             FATAL_ERROR
                 "${CMAKE_CURRENT_FUNCTION} - the number of INPUT_FILES specified must match the number of CLASS_NAMES specified!"
             )
-    endif ()
-
-    if (TARGET "${ORANGES_ARG_TARGET_NAME}")
-        message (
-            FATAL_ERROR
-                "${CMAKE_CURRENT_FUNCTION} - target ${ORANGES_ARG_TARGET_NAME} already exists!")
     endif ()
 
     if (ORANGES_ARG_INSTALL_REL_PATH)
@@ -137,13 +137,12 @@ function (faust_add_library)
         set (ORANGES_ARG_INSTALL_COMPONENT faust_generated)
     endif ()
 
-    add_library ("${ORANGES_ARG_TARGET_NAME}" INTERFACE)
+    add_library ("${TARGET_NAME}" INTERFACE)
 
-    set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_TARGET_NAME}/Faust")
+    set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}/Faust")
 
-    target_include_directories (
-        "${ORANGES_ARG_TARGET_NAME}" INTERFACE $<BUILD_INTERFACE:${generated_dir}>
-                                               $<INSTALL_INTERFACE:${install_dir}>)
+    target_include_directories ("${TARGET_NAME}" INTERFACE $<BUILD_INTERFACE:${generated_dir}>
+                                                           $<INSTALL_INTERFACE:${install_dir}>)
 
     # target_include_directories(${target} PRIVATE ${Faust_SOURCE_DIR}/architecture)
 
@@ -158,9 +157,8 @@ function (faust_add_library)
                                       OUTPUT_FILE "${generated_file}")
 
         target_sources (
-            "${ORANGES_ARG_TARGET_NAME}"
-            INTERFACE $<BUILD_INTERFACE:${generated_file}>
-                      $<INSTALL_INTERFACE:${install_dir}/${class_name}.h>)
+            "${TARGET_NAME}" INTERFACE $<BUILD_INTERFACE:${generated_file}>
+                                       $<INSTALL_INTERFACE:${install_dir}/${class_name}.h>)
 
         install (FILES "${generated_file}" DESTINATION "${install_dir}"
                  COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
