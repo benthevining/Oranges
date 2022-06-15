@@ -1,6 +1,4 @@
-ccache 4.6.1 system
 cmake 3.23.1 system
 git 2.36.1 system
-ninja 1.11.0 system
 pre-commit 2.19.0 system
 python 3.9.12 system

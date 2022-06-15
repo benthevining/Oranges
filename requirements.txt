@@ -1,9 +1,2 @@
-# For development
 bump2version
 pre-commit
-
-# For docs
-sphinx
-sphinxcontrib.domaintools
-sphinxcontrib-moderncmakedomain
-sphinx-argparse

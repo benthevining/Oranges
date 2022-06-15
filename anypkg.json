@@ -26,12 +26,7 @@
         "description": "Packages needed for building the documentation",
         "name": "Docs",
         "packages": {
-          "pip": {
-            "sphinx": "",
-            "sphinx-argparse": "",
-            "sphinxcontrib-moderncmakedomain": "",
-            "sphinxcontrib.domaintools": ""
-          }
+          "pip": "docs/requirements.txt"
         }
       },
       {
@@ -42,9 +37,7 @@
         ],
         "name": "Development",
         "packages": {
-          "pip": {
-            "pre-commit": "2.19.0"
-          }
+          "pip": "requirements.txt"
         },
         "requires": [
           "Minimal",

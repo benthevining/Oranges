@@ -39,13 +39,11 @@ readonly docs_git_tree="$temp_dir/Oranges"
 
 readonly oranges_root="$script_dir/.."
 
-cd "$oranges_root"
+python3 -m pip install -r "$oranges_root/docs/requirements.txt"
 
-python3 -m pip install -r requirements.txt
+cmake -S "$oranges_root" -B "$oranges_root/Builds" -D ORANGES_BUILD_DOCS=ON
 
-cmake --preset default
-
-cmake --build --preset docs
+cmake --build "$oranges_root/Builds"
 
 cd "$docs_git_tree"
 

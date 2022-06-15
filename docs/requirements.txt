@@ -1,0 +1,4 @@
+sphinx
+sphinxcontrib.domaintools
+sphinxcontrib-moderncmakedomain
+sphinx-argparse
