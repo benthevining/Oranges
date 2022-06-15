@@ -3,6 +3,7 @@ version: 2
 
 python:
     install:
+        - requirements: requirements.txt
         - requirements: docs/requirements.txt
     system_packages: true
 
@@ -11,10 +12,6 @@ build:
     tools:
         python: "3.9"
     commands:
-        - apt-get install python3-pip
-        - python3 -m ensurepip --default-pip
-        - python3 -m pip install -r requirements.txt
-        - python3 -m pip install -r docs/requirements.txt
         - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
         - cmake --build Builds
         - mv doc/html/* _readthedocs/html/
