@@ -11,7 +11,8 @@ build:
     tools:
         python: "3.9"
     jobs:
-        pre_build: cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
+        pre_build:
+            - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
 
 sphinx:
     builder: html
