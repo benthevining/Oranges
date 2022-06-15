@@ -1,2 +1,3 @@
 bump2version
+cmake >=3.22
 pre-commit
