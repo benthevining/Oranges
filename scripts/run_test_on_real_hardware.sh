@@ -1,4 +1,7 @@
 #!/bin/sh
+# This script runs a test executable on some external hardware and reports the result.
+# This is meant for use with CMake's CROSSCOMPILING_EMULATOR functionality.
+# The environment variable CROSSCOMPILING_TARGET_IP may be set to the IP address that should be used to ssh into the target device.
 
 # @formatter:off
 # ======================================================================================
@@ -13,9 +16,6 @@
 #
 # ======================================================================================
 # @formatter:on
-
-# inputs:
-# CROSSCOMPILING_TARGET_IP
 
 readonly tester="$1"
 

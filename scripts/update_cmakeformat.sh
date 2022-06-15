@@ -1,4 +1,5 @@
 #!/usr/bin/sh
+# This script updates Oranges's .cmake-format.json file with all the command specifications in the OrangesCMakeCommands.json file.
 
 # @formatter:off
 # ======================================================================================
