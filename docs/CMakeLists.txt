@@ -72,9 +72,11 @@ set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
 
-# execute the python script during configuration and add it as a custom command
-
-execute_process (COMMAND "${Python3_EXECUTABLE}" "${configured_script}")
+if (ENV{READTHEDOCS})
+    # execute the configure script during config if running under ReadTheDocs, so that RTD can
+    # execute only CMake configure and then be ready to build
+    execute_process (COMMAND "${Python3_EXECUTABLE}" "${configured_script}")
+endif ()
 
 file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
       CONFIGURE_DEPENDS scripts/*.rst)
