@@ -1,17 +1,18 @@
 <!-- markdownlint-disable -->
 <!-- editorconfig-checker-disable -->
 ```
-   ____  _____            _   _  _____ ______  _____
-  / __ \|  __ \     /\   | \ | |/ ____|  ____|/ ____|
+	 ____  _____            _   _  _____ ______  _____
+	/ __ \|  __ \     /\   | \ | |/ ____|  ____|/ ____|
  | |  | | |__) |   /  \  |  \| | |  __| |__  | (___
  | |  | |  _  /   / /\ \ | . ` | | |_ |  __|  \___ \
  | |__| | | \ \  / ____ \| |\  | |__| | |____ ____) |
-  \____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
+	\____/|_|  \_\/_/    \_\_| \_|\_____|______|_____/
 ```
 
 ![GitHub top language](https://img.shields.io/github/languages/top/benthevining/Oranges)
 [![Create release](https://github.com/benthevining/Oranges/actions/workflows/release.yml/badge.svg)](https://github.com/benthevining/Oranges/actions/workflows/release.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/benthevining/Oranges/main.svg)](https://results.pre-commit.ci/latest/github/benthevining/Oranges/main)
+[![Documentation](https://readthedocs.org/projects/oranges/badge/?version=latest)](https://oranges.readthedocs.io/en/latest/?badge=latest)
 [![semantic-release: conventionalcommits](https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 ![License](https://img.shields.io/github/license/benthevining/Oranges)
 ![GitHub repo size](https://img.shields.io/github/repo-size/benthevining/Oranges)
@@ -28,57 +29,57 @@ A library of CMake modules.
 
 ### Oranges provides the following CMake modules:
 
-  * [CallForEachPluginFormat](modules/juce/plugins/CallForEachPluginFormat.cmake)
-  * [LinuxLSBInfo](modules/general/LinuxLSBInfo.cmake)
-  * [OrangesAAXUtils](modules/juce/plugins/OrangesAAXUtils.cmake)
-  * [OrangesAddPrivateSDKs](modules/juce/plugins/OrangesAddPrivateSDKs.cmake)
-  * [OrangesAppUtilities](modules/juce/OrangesAppUtilities.cmake)
-  * [OrangesAssetsHelpers](modules/juce/OrangesAssetsHelpers.cmake)
-  * [OrangesBuildTypeMacros](modules/general/OrangesBuildTypeMacros.cmake)
-  * [OrangesCcache](modules/helper_targets/OrangesCcache.cmake)
-  * [OrangesClangTidy](modules/helper_targets/static_analysis/OrangesClangTidy.cmake)
-  * [OrangesClapFormat](modules/juce/plugins/OrangesClapFormat.cmake)
-  * [OrangesCppcheck](modules/helper_targets/static_analysis/OrangesCppcheck.cmake)
-  * [OrangesCpplint](modules/helper_targets/static_analysis/OrangesCpplint.cmake)
-  * [OrangesCreateAAXSDKTarget](modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake)
-  * [OrangesDefaultCPackSettings](modules/installing/OrangesDefaultCPackSettings.cmake)
-  * [OrangesDoxygenConfig](modules/documentation/OrangesDoxygenConfig.cmake)
-  * [OrangesFetchRepository](modules/dependencies/OrangesFetchRepository.cmake)
-  * [OrangesGenerateExportHeader](modules/code_generation/OrangesGenerateExportHeader.cmake)
-  * [OrangesGeneratePkgConfig](modules/installing/OrangesGeneratePkgConfig.cmake)
-  * [OrangesGeneratePlatformHeader](modules/code_generation/OrangesGeneratePlatformHeader.cmake)
-  * [OrangesGenerateStandardHeaders](modules/code_generation/OrangesGenerateStandardHeaders.cmake)
-  * [OrangesGraphviz](modules/documentation/OrangesGraphviz.cmake)
-  * [OrangesIWYU](modules/helper_targets/static_analysis/OrangesIWYU.cmake)
-  * [OrangesInstallSystemLibs](modules/installing/OrangesInstallSystemLibs.cmake)
-  * [OrangesJuceUtilities](modules/juce/OrangesJuceUtilities.cmake)
-  * [OrangesPluginUtilities](modules/juce/plugins/OrangesPluginUtilities.cmake)
-  * [OrangesSWIG](modules/code_generation/OrangesSWIG.cmake)
-  * [OrangesSetDefaultCpackGenerator](modules/installing/OrangesSetDefaultCpackGenerator.cmake)
-  * [OrangesSourceFileUtils](modules/general/OrangesSourceFileUtils.cmake)
-  * [OrangesSphinx](modules/documentation/OrangesSphinx.cmake)
-  * [OrangesStaticAnalysis](modules/helper_targets/static_analysis/OrangesStaticAnalysis.cmake)
-  * [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
-  * [OrangesWipeCacheTarget](modules/dependencies/OrangesWipeCacheTarget.cmake)
-  * [OrangesWrapAutotoolsProject](modules/dependencies/OrangesWrapAutotoolsProject.cmake)
-  * [UseFaust](modules/code_generation/UseFaust.cmake)
-  * [UseProtobuf](modules/code_generation/UseProtobuf.cmake)
-  * [Usecodesign](modules/code_signing/Usecodesign.cmake)
-  * [Usewraptool](modules/code_signing/Usewraptool.cmake)
-  * [Usexcodebuild](modules/general/Usexcodebuild.cmake)
+	* [CallForEachPluginFormat](modules/juce/plugins/CallForEachPluginFormat.cmake)
+	* [LinuxLSBInfo](modules/general/LinuxLSBInfo.cmake)
+	* [OrangesAAXUtils](modules/juce/plugins/OrangesAAXUtils.cmake)
+	* [OrangesAddPrivateSDKs](modules/juce/plugins/OrangesAddPrivateSDKs.cmake)
+	* [OrangesAppUtilities](modules/juce/OrangesAppUtilities.cmake)
+	* [OrangesAssetsHelpers](modules/juce/OrangesAssetsHelpers.cmake)
+	* [OrangesBuildTypeMacros](modules/general/OrangesBuildTypeMacros.cmake)
+	* [OrangesCcache](modules/helper_targets/OrangesCcache.cmake)
+	* [OrangesClangTidy](modules/helper_targets/static_analysis/OrangesClangTidy.cmake)
+	* [OrangesClapFormat](modules/juce/plugins/OrangesClapFormat.cmake)
+	* [OrangesCppcheck](modules/helper_targets/static_analysis/OrangesCppcheck.cmake)
+	* [OrangesCpplint](modules/helper_targets/static_analysis/OrangesCpplint.cmake)
+	* [OrangesCreateAAXSDKTarget](modules/juce/plugins/OrangesCreateAAXSDKTarget.cmake)
+	* [OrangesDefaultCPackSettings](modules/installing/OrangesDefaultCPackSettings.cmake)
+	* [OrangesDoxygenConfig](modules/documentation/OrangesDoxygenConfig.cmake)
+	* [OrangesFetchRepository](modules/dependencies/OrangesFetchRepository.cmake)
+	* [OrangesGenerateExportHeader](modules/code_generation/OrangesGenerateExportHeader.cmake)
+	* [OrangesGeneratePkgConfig](modules/installing/OrangesGeneratePkgConfig.cmake)
+	* [OrangesGeneratePlatformHeader](modules/code_generation/OrangesGeneratePlatformHeader.cmake)
+	* [OrangesGenerateStandardHeaders](modules/code_generation/OrangesGenerateStandardHeaders.cmake)
+	* [OrangesGraphviz](modules/documentation/OrangesGraphviz.cmake)
+	* [OrangesIWYU](modules/helper_targets/static_analysis/OrangesIWYU.cmake)
+	* [OrangesInstallSystemLibs](modules/installing/OrangesInstallSystemLibs.cmake)
+	* [OrangesJuceUtilities](modules/juce/OrangesJuceUtilities.cmake)
+	* [OrangesPluginUtilities](modules/juce/plugins/OrangesPluginUtilities.cmake)
+	* [OrangesSWIG](modules/code_generation/OrangesSWIG.cmake)
+	* [OrangesSetDefaultCpackGenerator](modules/installing/OrangesSetDefaultCpackGenerator.cmake)
+	* [OrangesSourceFileUtils](modules/general/OrangesSourceFileUtils.cmake)
+	* [OrangesSphinx](modules/documentation/OrangesSphinx.cmake)
+	* [OrangesStaticAnalysis](modules/helper_targets/static_analysis/OrangesStaticAnalysis.cmake)
+	* [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
+	* [OrangesWipeCacheTarget](modules/dependencies/OrangesWipeCacheTarget.cmake)
+	* [OrangesWrapAutotoolsProject](modules/dependencies/OrangesWrapAutotoolsProject.cmake)
+	* [UseFaust](modules/code_generation/UseFaust.cmake)
+	* [UseProtobuf](modules/code_generation/UseProtobuf.cmake)
+	* [Usecodesign](modules/code_signing/Usecodesign.cmake)
+	* [Usewraptool](modules/code_signing/Usewraptool.cmake)
+	* [Usexcodebuild](modules/general/Usexcodebuild.cmake)
 
 ### Oranges provides the following find modules:
 
-  * [FindAbletonLink](modules/finders/libs/FindAbletonLink.cmake)
-  * [FindAccelerate](modules/finders/libs/FindAccelerate.cmake)
-  * [FindFFTW](modules/finders/libs/FFTW/FindFFTW.cmake)
-  * [FindIPP](modules/finders/libs/FindIPP.cmake)
-  * [FindJUCE](modules/finders/libs/FindJUCE.cmake)
-  * [FindMIPP](modules/finders/libs/FindMIPP.cmake)
-  * [FindMTS-ESP](modules/finders/libs/FindMTS-ESP.cmake)
-  * [Findfftw3](modules/finders/libs/FFTW/Findfftw3.cmake)
-  * [Findfftw3f](modules/finders/libs/FFTW/Findfftw3f.cmake)
-  * [Findpluginval](modules/finders/testing/Findpluginval.cmake)
+	* [FindAbletonLink](modules/finders/libs/FindAbletonLink.cmake)
+	* [FindAccelerate](modules/finders/libs/FindAccelerate.cmake)
+	* [FindFFTW](modules/finders/libs/FFTW/FindFFTW.cmake)
+	* [FindIPP](modules/finders/libs/FindIPP.cmake)
+	* [FindJUCE](modules/finders/libs/FindJUCE.cmake)
+	* [FindMIPP](modules/finders/libs/FindMIPP.cmake)
+	* [FindMTS-ESP](modules/finders/libs/FindMTS-ESP.cmake)
+	* [Findfftw3](modules/finders/libs/FFTW/Findfftw3.cmake)
+	* [Findfftw3f](modules/finders/libs/FFTW/Findfftw3f.cmake)
+	* [Findpluginval](modules/finders/testing/Findpluginval.cmake)
 
 ## Using Oranges
 
@@ -136,5 +137,5 @@ The 10-character Apple developer ID used to configure code signing on iOS. If se
 ## Dependency graph
 
 <p align="center">
-  <img src="https://github.com/benthevining/Oranges/blob/main/util/deps_graph.png" alt="Oranges dependency graph"/>
+	<img src="https://github.com/benthevining/Oranges/blob/main/util/deps_graph.png" alt="Oranges dependency graph"/>
 </p>
