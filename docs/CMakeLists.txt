@@ -72,7 +72,7 @@ set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
 
-if (ENV{READTHEDOCS})
+if (READTHEDOCS OR ENV{READTHEDOCS})
     # execute the configure script during config if running under ReadTheDocs, so that RTD can
     # execute only CMake configure and then be ready to build
     execute_process (COMMAND "${Python3_EXECUTABLE}" "${configured_script}")

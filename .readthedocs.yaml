@@ -19,4 +19,4 @@ build:
         python: "3.9"
     jobs:
         pre_build:
-            - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
+            - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON -D READTHEDOCS=ON
