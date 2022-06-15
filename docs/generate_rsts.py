@@ -39,7 +39,7 @@ MODULES_ROOT: Final[str] = os.path.join(ORANGES_ROOT, "modules")
 
 TARGETS_DIR: Final[str] = os.path.join(ORANGES_ROOT, "targets")
 
-OUTPUT_TREE_ROOT: Final[str] = "@ORANGES_DOCS_BUILD_TREE@"
+OUTPUT_TREE_ROOT: Final[str] = "@CMAKE_CURRENT_BINARY_DIR@"
 
 DOCS_DIR: Final[str] = "@CMAKE_CURRENT_LIST_DIR@"
 

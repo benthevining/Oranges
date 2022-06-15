@@ -68,11 +68,13 @@ endif ()
 
 #
 
-set (ORANGES_DOCS_BUILD_TREE "${Oranges_BINARY_DIR}/OrangesDocs")
-
 set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/generate_rsts.py")
 
 configure_file (generate_rsts.py "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
+
+# execute the python script during configuration and add it as a custom command
+
+execute_process (COMMAND "${Python3_EXECUTABLE}" "${configured_script}")
 
 file (GLOB scripts_rsts LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
       CONFIGURE_DEPENDS scripts/*.rst)
@@ -81,7 +83,7 @@ file (GLOB rst_files LIST_DIRECTORIES false RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
                                                                                  *.rst)
 
 add_custom_command (
-    OUTPUT "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/index.rst"
     COMMAND Python3::Interpreter "${configured_script}"
     DEPENDS generate_rsts.py process_source_tree.py ${scripts_rsts} ${rst_files}
     COMMENT "Oranges docs: preparing docs build tree..."
@@ -127,13 +129,13 @@ foreach (format IN ITEMS html singlehtml man text linkcheck ${info_flag} ${latex
             COMMAND
                 "${SPHINX_EXECUTABLE}"
                     -M "${format}"
-                    "${ORANGES_DOCS_BUILD_TREE}"
+                    "${CMAKE_CURRENT_BINARY_DIR}"
                     "${docs_output}/${format}"
                     -c "${CMAKE_CURRENT_BINARY_DIR}"
                     -d "${CMAKE_CURRENT_BINARY_DIR}/doctrees"
                     -w "${format_warnings_file}"
                     ${sphinx_flags}
-            DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+            DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/index.rst"
                     ${doc_format_last}
                     colors.py conf.py oranges.css
             COMMENT "Oranges docs - building format ${format}..."
@@ -150,9 +152,9 @@ foreach (format IN ITEMS html singlehtml man text linkcheck ${info_flag} ${latex
                     -b "${format}"
                     -w "${format_warnings_file}"
                     ${sphinx_flags}
-                    "${ORANGES_DOCS_BUILD_TREE}"
+                    "${CMAKE_CURRENT_BINARY_DIR}"
                     "${docs_output}/${format}"
-            DEPENDS "${ORANGES_DOCS_BUILD_TREE}/index.rst"
+            DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/index.rst"
                     ${doc_format_last}
                     colors.py conf.py oranges.css
             COMMENT "Oranges docs - building format ${format}..."
@@ -179,7 +181,7 @@ add_custom_target (OrangesDocs ${all_flag} DEPENDS "${doc_format_outputs}"
                    COMMENT "Building Oranges documentation...")
 
 set_property (TARGET OrangesDocs APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${logfiles_dir}"
-                                                 "${ORANGES_DOCS_BUILD_TREE}" "${docs_output}")
+                                                 "${docs_output}")
 
 unset (all_flag)
 

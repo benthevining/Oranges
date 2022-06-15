@@ -20,5 +20,3 @@ build:
     jobs:
         pre_build:
             - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
-        post_build:
-            - mv doc/html/* _readthedocs/html/
