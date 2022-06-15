@@ -10,9 +10,10 @@ build:
     os: "ubuntu-22.04"
     tools:
         python: "3.9"
-    jobs:
-        pre_build:
-            - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
+    commands:
+        - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
+        - cmake --build Builds
+        - mv doc/html/* _readthedocs/html/
 
 sphinx:
     builder: html
