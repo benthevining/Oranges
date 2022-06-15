@@ -1,0 +1,24 @@
+---
+version: 2
+
+python:
+    install:
+        - requirements: requirements.txt
+        - requirements: docs/requirements.txt
+    system_packages: true
+
+sphinx:
+    builder: html
+    configuration: Builds/docs/conf.py
+
+formats: all
+
+build:
+    os: "ubuntu-22.04"
+    tools:
+        python: "3.9"
+    jobs:
+        pre_build:
+            - cmake -B Builds -S . -D ORANGES_BUILD_DOCS=ON
+        post_build:
+            - mv doc/html/* _readthedocs/html/
