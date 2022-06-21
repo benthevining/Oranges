@@ -152,6 +152,6 @@
       ]
     ]
   },
-  "repository": "http://github.com/benthevining/Oranges.git",
+  "repository": "github:benthevining/Oranges",
   "version": "2.24.0"
 }
