@@ -60,7 +60,7 @@ $(BUILDS)/install_manifest.txt:
 	$(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG)
 
 .PHONY: install
-install: $(BUILDS)/install_manifest.txt ## runs CMake install
+install: build ## runs CMake install
 
 #
 
@@ -91,7 +91,7 @@ docs: config ## Builds the documentation
 #
 
 .PHONY: uninstall
-uninstall: config ## Runs uninstall script
+uninstall: $(BUILDS)/install_manifest.txt ## Runs uninstall script
 	@echo "Uninstalling..."
 	$(SUDO) $(CMAKE) -P $(BUILD_DIR)/uninstall.cmake
 
