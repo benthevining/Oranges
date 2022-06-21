@@ -1,5 +1,38 @@
 # Oranges changelog
 
+## [3.0.0](https://github.com/benthevining/Oranges/compare/v2.24.0...v3.0.0) (2022-06-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* static analysis module and target names have changed.
+
+Precommit-Verified: 1db1d1fcc681d0d961e183c43b40f8c13571ca74ca67ee43c828a2036cb3405b
+
+### Features
+
+* added a script to generate a standard find module for a package ([81e8982](https://github.com/benthevining/Oranges/commit/81e89829a98480eb5ddf6f4337b496d8146b9806))
+* added a script to update cmake format config with external commands ([d344200](https://github.com/benthevining/Oranges/commit/d344200721d7541d56860622a7e8e89973279376))
+* added a UseProtobuf module ([c0ada35](https://github.com/benthevining/Oranges/commit/c0ada3571b79afb776adcc99e8a6fb671a870905))
+* added Python script to update all instances of find_package for a certain package ([4e389d7](https://github.com/benthevining/Oranges/commit/4e389d7fd0fe597cf501eb7ca2032e47d5a9f3c4))
+
+
+### Bug Fixes
+
+* **deps:** update dependency semantic-release to v19.0.3 ([c0c0d53](https://github.com/benthevining/Oranges/commit/c0c0d53064e9b3449055d189308a4da65d2ad781))
+* fixing logic in find modules ([322396f](https://github.com/benthevining/Oranges/commit/322396f41e2aa92ac45aa5ca8ed5019f68208047))
+* fixing recursive dependencies in docs custom commands ([e0df366](https://github.com/benthevining/Oranges/commit/e0df366b869948b45a710181089c1f2a69931272))
+* fixing RTTI on MSVC and WindowsClang ([1af2be3](https://github.com/benthevining/Oranges/commit/1af2be3f42049cbd4424e0e881186d69d58974fb))
+* fixing some warning flags not recognized on all platforms ([ebcf0a8](https://github.com/benthevining/Oranges/commit/ebcf0a846e541426985629761d454935d5d95ce4))
+* getting rid of deprecated internal macros ([55519fa](https://github.com/benthevining/Oranges/commit/55519fa6914e03eebf5e5ee1586feb0e6736ddde))
+* properly encoding all cached bools as 1 or 0 in platform header ([7e8e4ea](https://github.com/benthevining/Oranges/commit/7e8e4ea8bacc5cafaf2d2f2ef539b2bc8c8840bd))
+* removing deprecated internal macros ([410abdd](https://github.com/benthevining/Oranges/commit/410abdd1ad6b19e8c4b4a2d5c9327ef7d50f7d61))
+* RTTI fix in MSVC ([d84c6eb](https://github.com/benthevining/Oranges/commit/d84c6eb4e0b9866682cb37d2d6cd884cb4c28364))
+* updaing OrangesGraphviz filename ([cb964ab](https://github.com/benthevining/Oranges/commit/cb964ab7967306ae69ef897efe54292a8a8eb1be))
+
+
+* renaming static analysis modules, separating ccache from their aggregate target ([08ed1aa](https://github.com/benthevining/Oranges/commit/08ed1aa41ee3e2199de5135cf7b244126db135bc))
+
 ## [2.24.0](http://github.com/benthevining/Oranges/compare/v2.23.4...v2.24.0) (2022-05-03)
 
 
