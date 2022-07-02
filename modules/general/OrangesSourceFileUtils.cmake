@@ -83,14 +83,14 @@ function (oranges_add_source_files)
 
     #
 
-    macro (__oranges_make_abs_paths_relative __listVar)
+    function (__oranges_make_abs_paths_relative __listVar)
         foreach (__filename IN LISTS "${__listVar}")
             cmake_path (GET __filename FILENAME __filename)
             list (APPEND __temp_files "${__filename}")
         endforeach ()
 
         set ("${__listVar}" ${__temp_files} PARENT_SCOPE)
-    endmacro ()
+    endfunction ()
 
     #
 

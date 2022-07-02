@@ -33,8 +33,9 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 add_library (OrangesDefaultWarnings INTERFACE)
 
-target_compile_options (OrangesDefaultWarnings
-                        INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0>")
+target_compile_options (
+    OrangesDefaultWarnings
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0;/wd4820;/wd5045>")
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
@@ -49,8 +50,12 @@ unset (debug_configs)
 set (
     gcclike_comp_opts
     # cmake-format: sortable
+    -pedantic
+    -pedantic-errors
     -Wall
     -Wcast-align
+    -Wconversion
+    -Wextra
     -Wno-ignored-qualifiers
     -Wno-missing-field-initializers
     -Woverloaded-virtual
@@ -67,7 +72,6 @@ set (
 set (
     gcc_comp_opts
     # cmake-format: sortable
-    -Wextra
     -Wno-implicit-fallthrough
     -Wno-maybe-uninitialized
     -Wno-strict-overflow
@@ -86,7 +90,6 @@ set (
     -Wbool-conversion
     -Wconditional-uninitialized
     -Wconstant-conversion
-    -Wconversion
     -Wextra-semi
     -Wint-conversion
     -Wnullable-to-nonnull-conversion
