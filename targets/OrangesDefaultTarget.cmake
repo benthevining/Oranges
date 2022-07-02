@@ -237,6 +237,14 @@ unset (intel_opts)
 set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
                                                        "MultiThreaded$<${config_is_debug}:Debug>")
 
+if (UNIX)
+    # add colors to clang output when using Ninja
+    if ("${CMAKE_GENERATOR}" MATCHES Ninja)
+        target_compile_options (OrangesDefaultTarget
+                                INTERFACE "$<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>")
+    endif ()
+endif ()
+
 #
 
 # cmake-lint: disable=W0106

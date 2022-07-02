@@ -27,27 +27,16 @@ project (
 
 #
 
+if (NOT TARGET Python3::Interpreter)
+    if (Oranges_IS_TOP_LEVEL)
+        message (WARNING "Python interpreter cannot be found, Oranges docs cannot be built!")
+    endif ()
+
+    return ()
+endif ()
+
 find_program (SPHINX_EXECUTABLE NAMES sphinx-build
               DOC "Sphinx Documentation Builder (sphinx-doc.org)")
-
-find_program (MAKEINFO_EXECUTABLE NAMES makeinfo DOC "makeinfo tool")
-
-#[[
-Note: on my Mac, the following commands were needed to get the Latex build working:
-
-brew install basictex
-sudo tlmgr install latexmk tex-gyre fncychap wrapfig capt-of framed needspace varwidth titlesec
-]]
-
-find_program (LATEX_EXECUTABLE NAMES pdflatex DOC "pdflatex tool")
-
-find_program (LATEXMK_EXECUTABLE NAMES latexmk DOC "latexmk tool")
-
-set (ORANGES_SPHINX_FLAGS "" CACHE STRING "Flags to pass to sphinx-build")
-
-mark_as_advanced (ORANGES_SPHINX_FLAGS)
-
-separate_arguments (sphinx_flags UNIX_COMMAND "${ORANGES_SPHINX_FLAGS}")
 
 if (NOT SPHINX_EXECUTABLE)
     if (Oranges_IS_TOP_LEVEL)
@@ -58,13 +47,11 @@ if (NOT SPHINX_EXECUTABLE)
     return ()
 endif ()
 
-if (NOT TARGET Python3::Interpreter)
-    if (Oranges_IS_TOP_LEVEL)
-        message (WARNING "Python interpreter cannot be found, Oranges docs cannot be built!")
-    endif ()
+find_program (MAKEINFO_EXECUTABLE NAMES makeinfo DOC "makeinfo tool")
 
-    return ()
-endif ()
+find_package (LATEX COMPONENTS BIBTEX PDFLATEX)
+
+find_program (LATEXMK_EXECUTABLE NAMES latexmk DOC "latexmk tool")
 
 #
 
@@ -114,7 +101,7 @@ if (MAKEINFO_EXECUTABLE)
     set (info_flag info)
 endif ()
 
-if (LATEX_EXECUTABLE AND LATEXMK_EXECUTABLE)
+if (LATEX_FOUND AND LATEXMK_EXECUTABLE)
     set (latex_flag latexpdf)
 endif ()
 
@@ -229,7 +216,7 @@ if (MAKEINFO_EXECUTABLE)
                          DESCRIPTION "Install the Oranges info pages" GROUP oranges_docs)
 endif ()
 
-if (LATEX_EXECUTABLE AND LATEXMK_EXECUTABLE)
+if (LATEX_FOUND AND LATEXMK_EXECUTABLE)
     install (FILES "${docs_output}/latexpdf/latex/oranges.pdf" COMPONENT oranges_doc_pdf
              DESTINATION "${CMAKE_INSTALL_DOCDIR}")
 
