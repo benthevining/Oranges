@@ -383,11 +383,14 @@ set (intel_opts "$<IF:$<PLATFORM_ID:Windows>,/GR;/EHsc,-fexceptions>")
 target_compile_options (
     OrangesDefaultCXXTarget
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/EHsc>"
-              "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fexceptions;-fstrict-enums;-frtti>"
               "$<$<CXX_COMPILER_ID:GNU>:-fconcepts>"
               "$<$<CXX_COMPILER_ID:Clang,AppleClang>:-fcxx-exceptions>"
               "$<${compiler_intel}:${intel_opts}>"
-              $<$<CXX_COMPILER_ID:Cray>:-h exceptions>)
+              $<$<CXX_COMPILER_ID:Cray>:-h exceptions>
+              "$<$<CXX_COMPILER_ID:GNU,AppleClang>:-frtti>"
+              # for some reason, RTTI is broken on Windows Clang
+              "$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<PLATFORM_ID:Windows>>>:-frtti>"
+              )
 # cmake-format: on
 
 unset (intel_opts)
