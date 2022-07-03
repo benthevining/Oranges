@@ -138,34 +138,33 @@ unset (compiler_clang)
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
-if (PLAT_WIN)
-    set (intel_debug_flags /0d)
-    set (intel_minsize_flags /Os)
-    set (intel_reldeb_flags /debug:all)
+set (intel_debug_flags "$<IF:$<PLATFORM_ID:Windows>,/0d,-O0>")
 
-    set (intel_release_flags # cmake-format: sortable
-                             /fast /fp:fast=2 /O3 /Ox /Quse-intel-optimized-headers /Qvec)
+set (intel_minsize_flags "$<IF:$<PLATFORM_ID:Windows>,/Os,-Os>")
 
-else ()
-    set (intel_debug_flags -O0)
-    set (intel_minsize_flags -Os)
-    set (intel_reldeb_flags -debug all)
+set (intel_reldeb_flags "$<IF:$<PLATFORM_ID:Windows>,/debug:all,-debug;all>")
 
-    set (
-        intel_release_flags
-        # cmake-format: sortable
-        -fast
-        -ffp-contract=fast
-        -finline
-        -finline-functions
-        -fno-math-errno
-        -fp-model=fast
-        -O3
-        -Ofast
-        -use-intel-optimized-headers
-        -vec)
+set (intel_rel_win # cmake-format: sortable
+                   /fast /fp:fast=2 /O3 /Ox /Quse-intel-optimized-headers /Qvec)
 
-endif ()
+set (
+    intel_rel_nonwin
+    # cmake-format: sortable
+    -fast
+    -ffp-contract=fast
+    -finline
+    -finline-functions
+    -fno-math-errno
+    -fp-model=fast
+    -O3
+    -Ofast
+    -use-intel-optimized-headers
+    -vec)
+
+set (intel_release_flags "$<IF:$<PLATFORM_ID:Windows>,${intel_rel_win},${intel_rel_nonwin}>")
+
+unset (intel_rel_win)
+unset (intel_rel_nonwin)
 
 target_compile_options (
     OrangesOptimizationFlags

@@ -191,15 +191,11 @@ if (ORANGES_MAINTAINER_BUILD)
     target_link_libraries (
         OrangesDefaultTarget INTERFACE "$<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>"
                                        "$<BUILD_INTERFACE:Oranges::OrangesStaticAnalysis>")
-
-    add_feature_info (
-        "Oranges maintainer build" ON
-        "OrangesDefaultTarget is linked to OrangesDefaultWarnings and OrangesStaticAnalysis")
-else ()
-    add_feature_info (
-        "Oranges maintainer build" OFF
-        "OrangesDefaultTarget is not linked to OrangesDefaultWarnings or OrangesStaticAnalysis")
 endif ()
+
+add_feature_info (
+    "Oranges maintainer build" "${ORANGES_MAINTAINER_BUILD}"
+    "OrangesDefaultTarget is linked to OrangesDefaultWarnings and OrangesStaticAnalysis")
 
 #
 
@@ -213,11 +209,7 @@ unset (windowsDefs)
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
-if (PLAT_WIN)
-    set (intel_opts /Gm)
-else ()
-    set (intel_opts -multiple-processes=4 -static-intel)
-endif ()
+set (intel_opts "$<IF:$<PLATFORM_ID:Windows>,/Gm,-multiple-processes=4;-static-intel>")
 
 target_compile_options (
     OrangesDefaultTarget
@@ -226,11 +218,8 @@ target_compile_options (
               "$<${compiler_intel}:${intel_opts}>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<NOT:$<CONFIG:MINSIZEREL>>>:-g>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fmessage-length=0>"
-              "$<$<CXX_COMPILER_ID:GNU>:-march=native>")
-
-if (PLAT_ANDROID)
-    target_compile_options (OrangesDefaultTarget INTERFACE "$<$<CXX_COMPILER_ID:GNU>:-mandroid>")
-endif ()
+              "$<$<CXX_COMPILER_ID:GNU>:-march=native>"
+              "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Android>>:-mandroid>")
 
 unset (intel_opts)
 
@@ -388,11 +377,7 @@ target_compile_features (
               cxx_variable_templates
               cxx_variadic_templates)
 
-if (PLAT_WIN)
-    set (intel_opts /GR /EHsc)
-else ()
-    set (intel_opts -fexceptions)
-endif ()
+set (intel_opts "$<IF:$<PLATFORM_ID:Windows>,/GR;/EHsc,-fexceptions>")
 
 # cmake-format: off
 target_compile_options (

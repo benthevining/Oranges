@@ -62,12 +62,6 @@ set (compiler_cray "$<CXX_COMPILER_ID:Cray>")
 
 #
 
-if (WIN32)
-    set (intel_cov_flags /Z7 /debug:all)
-else ()
-    set (intel_cov_flags -g3 -debug all)
-endif ()
-
 set (gcclike_flags -O0 -g --coverage)
 
 set (gcc_flags # cmake-format: sortable
@@ -79,17 +73,19 @@ set (clang_flags # cmake-format: sortable
 set (msvc_flags # cmake-format: sortable
                 /fsanitize-coverage=edge /Z7)
 
+set (intel_flags "$<IF:$<PLATFORM_ID:Windows>,/Z7;/debug:all,-g3;-debug;all>")
+
 target_compile_options (
     OrangesDebugTarget
     INTERFACE "$<$<AND:${config_is_debug},${compiler_msvc}>:${msvc_flags}>"
-              "$<$<AND:${config_is_debug},${compiler_intel}>:${intel_cov_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_intel}>:${intel_flags}>"
               "$<$<AND:${config_is_debug},${compiler_gcclike}>:${gcclike_flags}>"
               "$<$<AND:${config_is_debug},${compiler_gcc}>:${gcc_flags}>"
               "$<$<AND:${config_is_debug},${compiler_clang}>:${clang_flags}>"
               "$<$<AND:${config_is_debug},${compiler_arm}>:-g>"
               "$<$<AND:${config_is_debug},${compiler_cray}>:-G0>")
 
-unset (intel_cov_flags)
+unset (intel_flags)
 unset (gcclike_flags)
 unset (gcc_flags)
 unset (clang_flags)
@@ -98,12 +94,9 @@ unset (msvc_flags)
 target_link_options (OrangesDebugTarget INTERFACE
                      "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
 
-include (OrangesGeneratePlatformHeader)
-
-if (PLAT_APPLE)
-    target_compile_options (OrangesDebugTarget
-                            INTERFACE "$<$<AND:${config_is_debug},${compiler_gcc}>:-gfull>")
-endif ()
+target_compile_options (
+    OrangesDebugTarget
+    INTERFACE "$<$<AND:${config_is_debug},${compiler_gcc},$<PLATFORM_ID:Apple>>:-gfull>")
 
 #
 

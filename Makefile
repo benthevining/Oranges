@@ -56,11 +56,11 @@ build: config ## runs CMake build
 
 #
 
-$(BUILDS)/install_manifest.txt:
+$(BUILDS)/install_manifest.txt: build
 	$(SUDO) $(CMAKE) --install $(BUILDS) --config $(CONFIG)
 
 .PHONY: install
-install: build ## runs CMake install
+install: $(BUILDS)/install_manifest.txt ## runs CMake install
 
 #
 

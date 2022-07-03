@@ -110,26 +110,10 @@ set (clang_cxx_opts
 
 set (arm_compiler_opts -g)
 
-if (WIN32)
-    set (intel_flags /W5 /Wall)
-else ()
-    set (
-        intel_flags
-        # cmake-format: sortable
-        -w3
-        -Wall
-        -Wextra-tokens
-        -Wformat
-        -Wmain
-        -Wpointer-arith
-        -Wreorder
-        -Wreturn-type
-        -Wshadow
-        -Wsign-compare
-        -Wstrict-aliasing
-        -Wuninitialized
-        -Wwrite-strings)
-endif ()
+set (
+    intel_flags
+    "$<IF:$<PLATFORM_ID:Windows>,/W5;/Wall,-w3;-Wall;-Wextra-tokens;-Wformat;-Wmain;-Wpointer-arith;-Wreorder;-Wreturn-type;-Wshadow;-Wsign-compare;-Wstrict-aliasing;-Wuninitialized;-Wwrite-strings>"
+    )
 
 target_compile_options (
     OrangesDefaultWarnings
@@ -146,6 +130,7 @@ target_compile_options (
               "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${intel_flags}>"
               "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:${arm_compiler_opts}>")
 
+unset (intel_flags)
 unset (gcclike_comp_opts)
 unset (gcc_comp_opts)
 unset (clang_comp_opts)
