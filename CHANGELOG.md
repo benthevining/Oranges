@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [3.0.1](https://github.com/benthevining/Oranges/compare/v3.0.0...v3.0.1) (2022-07-03)
+
+
+### Bug Fixes
+
+* Fixing RTTI bug on Windows/Clang ([f29989c](https://github.com/benthevining/Oranges/commit/f29989cf7859854cde6c63b343b0d2625fb6f643))
+
 ## [3.0.0](https://github.com/benthevining/Oranges/compare/v2.24.0...v3.0.0) (2022-06-21)
 
 
