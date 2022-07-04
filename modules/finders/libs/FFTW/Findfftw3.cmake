@@ -55,14 +55,10 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (FeatureSummary)
+include (FindPackageMessage)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "Double precision FFT library")
-
-if (TARGET FFTW3::fftw3)
-    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
-    return ()
-endif ()
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
@@ -72,7 +68,7 @@ find_path (FFTW_D_INCLUDE_DIR NAMES fftw3.h dfftw3.h PATHS ENV FFTW_D_INCLUDE_DI
 find_library (FFTW_D_LIBRARY NAMES fftw3 dfftw3 PATHS ENV FFTW_D_LIBRARY
               DOC "FFTW [double] library")
 
-mark_as_advanced (FFTW_D_INCLUDE_DIR FFTW_D_LIBRARY)
+mark_as_advanced (FORCE FFTW_D_INCLUDE_DIR FFTW_D_LIBRARY)
 
 include (FindPackageHandleStandardArgs)
 

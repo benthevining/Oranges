@@ -32,3 +32,8 @@ Manuals
 	CMake properties <properties>
 	CMake targets <targets>
 	Standalone scripts <scripts>
+
+To-do list
+-------------------------------
+
+.. todolist::

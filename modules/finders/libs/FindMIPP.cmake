@@ -15,7 +15,8 @@
 FindMIPP
 -------------------------
 
-A find module for the MIPP library. This module fetches the sources from GitHub using :module:`OrangesFetchRepository`, if a local copy can't be found.
+A find module for the MIPP library.
+This module fetches the sources from GitHub using CMake's ``FetchContent`` module, if a local copy can't be found.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -37,7 +38,7 @@ Environment variables
 
 .. cmake:envvar:: MIPP_INCLUDE_DIR
 
-This environment variable, if set, is added to the search path when locating the :variable:`MIPP_INCLUDE_DIR` variable.
+This environment variable, if set, is added to the search path when locating the :variable:`MIPP_INCLUDE_DIR` path.
 
 #]=======================================================================]
 
@@ -45,15 +46,11 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesFindPackageHelpers)
+include (FeatureSummary)
+include (FindPackageMessage)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://github.com/aff3ct/MIPP"
                         DESCRIPTION "Wrapper for various platform-specific SIMD instruction sets")
-
-if (TARGET MIPP::MIPP)
-    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
-    return ()
-endif ()
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
@@ -65,20 +62,14 @@ find_path (MIPP_INCLUDE_DIR mipp.h PATHS ENV MIPP_INCLUDE_DIR PATH_SUFFIXES src
 if (MIPP_INCLUDE_DIR)
     set (mipp_find_location Local)
 else ()
-    include (OrangesFetchRepository)
+    include (FetchContent)
 
-    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
-        set (quiet_flag QUIET)
-    else ()
-        message (STATUS "Downloading MIPP sources from GitHub...")
-    endif ()
+    FetchContent_Declare (MIPP GIT_REPOSITORY "https://github.com/aff3ct/MIPP.git"
+                          GIT_TAG "origin/master")
 
-    oranges_fetch_repository (NAME MIPP GITHUB_REPOSITORY aff3ct/MIPP GIT_TAG origin/master
-                              DOWNLOAD_ONLY NEVER_LOCAL ${quiet_flag})
+    FetchContent_MakeAvailable (MIPP)
 
-    unset (quiet_flag)
-
-    set (MIPP_INCLUDE_DIR "${MIPP_SOURCE_DIR}/src"
+    set (MIPP_INCLUDE_DIR "${mipp_SOURCE_DIR}/src"
          CACHE PATH "Include directory for the MIPP library" FORCE)
 
     set (mipp_find_location Downloaded)
@@ -88,9 +79,9 @@ endif ()
 
 add_library (MIPP::MIPP IMPORTED INTERFACE)
 
-target_include_directories (MIPP::MIPP INTERFACE "$<BUILD_INTERFACE:${MIPP_INCLUDE_DIR}>")
+target_include_directories (MIPP::MIPP INTERFACE "${MIPP_INCLUDE_DIR}")
 
-target_sources (MIPP::MIPP INTERFACE "$<BUILD_INTERFACE:${MIPP_INCLUDE_DIR}/mipp.h>")
+target_sources (MIPP::MIPP INTERFACE "${MIPP_INCLUDE_DIR}/mipp.h")
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
 

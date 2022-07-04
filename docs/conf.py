@@ -44,17 +44,19 @@ numfig = False
 #
 # extensions
 
-autosectionlabel_prefix_document = True
-
-autodoc_typehints = 'both'
-
 # editorconfig-checker-disable
 extensions = [
     'sphinx.ext.autosectionlabel', 'sphinx.ext.githubpages',
     'sphinx.ext.intersphinx', 'sphinx.ext.autodoc', 'sphinxarg.ext',
-    'sphinxcontrib.moderncmakedomain'
+    'sphinxcontrib.moderncmakedomain', 'sphinx.ext.todo'
 ]
 # editorconfig-checker-enable
+
+autosectionlabel_prefix_document = True
+
+autodoc_typehints = 'both'
+
+todo_include_todos = True
 
 #
 # man pages

@@ -55,14 +55,10 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (FeatureSummary)
+include (FindPackageMessage)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "Float precision FFT library")
-
-if (TARGET FFTW3::fftw3f)
-    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
-    return ()
-endif ()
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
@@ -72,7 +68,7 @@ find_path (FFTW_F_INCLUDE_DIR NAMES fftw3f.h sfftw3.h PATHS ENV FFTW_F_INCLUDE_D
 find_library (FFTW_F_LIBRARY NAMES fftw3f sfftw3 PATHS ENV FFTW_F_LIBRARY
               DOC "FFTW [float] library")
 
-mark_as_advanced (FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
+mark_as_advanced (FORCE FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
 
 include (FindPackageHandleStandardArgs)
 

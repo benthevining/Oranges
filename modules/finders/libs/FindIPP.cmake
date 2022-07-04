@@ -17,6 +17,12 @@ FindIPP
 
 A find module for the Intel IPP libraries.
 
+IPP must be manually installed by the developer, it cannot be fetched by a script.
+
+.. todo::
+
+    Refactor this module to set IPP_NOT_FOUND_MESSAGE and clean up its syntax a bit.
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -134,8 +140,9 @@ set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 option (IPP_STATIC "Use static IPP libraries" ON)
 option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
 
-if (DEFINED ENV{IPP_ROOT})
-    set (IPP_ROOT "$ENV{IPP_ROOT}" CACHE PATH "Path to the root of the Intel IPP installation")
+if (DEFINED ENV{IPP_ROOT} AND NOT IPP_ROOT)
+    set (IPP_ROOT "$ENV{IPP_ROOT}" CACHE PATH "Path to the root of the Intel IPP installation"
+                                         FORCE)
 endif ()
 
 if (DEFINED CACHE{IPP_ROOT} AND NOT (DEFINED IPP_INCLUDE_DIR OR DEFINED CACHE{IPP_INCLUDE_DIR}
