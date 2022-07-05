@@ -35,7 +35,7 @@ add_library (OrangesDefaultWarnings INTERFACE)
 
 target_compile_options (
     OrangesDefaultWarnings
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0;/wd4820;/wd5045;/wd4068>")
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0;/wd4820;/wd5045>")
 
 get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
 
