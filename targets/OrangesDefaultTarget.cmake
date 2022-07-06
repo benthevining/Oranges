@@ -213,7 +213,7 @@ set (intel_opts "$<IF:$<PLATFORM_ID:Windows>,/Gm,-multiple-processes=4;-static-i
 
 target_compile_options (
     OrangesDefaultTarget
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/MP;/wd4068;/wd4464;/wd4514;/wd4626;/wd5027>"
+    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/MP;/wd4068;/wd4464;/wd4514;/wd4626;/wd4625;/wd5027>"
               "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
               "$<${compiler_intel}:${intel_opts}>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<NOT:$<CONFIG:MINSIZEREL>>>:-g>"
