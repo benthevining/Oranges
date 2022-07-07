@@ -1,5 +1,13 @@
 # Oranges changelog
 
+## [3.1.1](https://github.com/benthevining/Oranges/compare/v3.1.0...v3.1.1) (2022-07-07)
+
+
+### Bug Fixes
+
+* fixing fetch of libsamplerate from GitHub ([70a2d95](https://github.com/benthevining/Oranges/commit/70a2d9572a41f3773455d3eebff460031dd162f2))
+* fixing fetch of libsamplerate from GitHub ([6ef687f](https://github.com/benthevining/Oranges/commit/6ef687f73b5a8fe30cf56deea043fe2a72a3b299))
+
 ## [3.1.0](https://github.com/benthevining/Oranges/compare/v3.0.1...v3.1.0) (2022-07-07)
 
 
