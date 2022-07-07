@@ -16,7 +16,6 @@ FindSampleRate
 -------------------------
 
 A find module for libsamplerate.
-This module first tries to locate a local copy, and if one cannot be found, downloads the sources from GitHub.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,28 +70,16 @@ mark_as_advanced (FORCE LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
                                    REQUIRED_VARS LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
 
-if (${CMAKE_FIND_PACKAGE_NAME}_FOUND)
-    add_library (SampleRate::samplerate IMPORTED UNKNOWN)
-
-    set_target_properties (SampleRate::samplerate PROPERTIES IMPORTED_LOCATION
-                                                             "${LIBSAMPLERATE_LIBRARY}")
-
-    target_include_directories (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}")
-
-    find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libsamplerate - found (local)"
-                          "[${LIBSAMPLERATE_INCLUDE_DIR}] [${LIBSAMPLERATE_LIBRARY}]")
-
+if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()
 endif ()
 
-include (FetchContent)
+add_library (SampleRate::samplerate IMPORTED UNKNOWN)
 
-FetchContent_Declare (libsamplerate GIT_REPOSITORY "https://github.com/libsndfile/libsamplerate.git"
-                      GIT_TAG "origin/master")
+set_target_properties (SampleRate::samplerate PROPERTIES IMPORTED_LOCATION
+                                                         "${LIBSAMPLERATE_LIBRARY}")
 
-FetchContent_MakeAvailable (libsamplerate)
+target_include_directories (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}")
 
-set (${CMAKE_FIND_PACKAGE_NAME}_FOUND ON)
-
-find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libsamplerate - found (sources downloaded)"
-                      "downloaded")
+find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libsamplerate - found (local)"
+                      "[${LIBSAMPLERATE_INCLUDE_DIR}] [${LIBSAMPLERATE_LIBRARY}]")

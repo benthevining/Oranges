@@ -84,7 +84,7 @@ function (oranges_add_source_files)
     #
 
     function (__oranges_make_abs_paths_relative __listVar)
-        foreach (__filename IN LISTS "${__listVar}")
+        foreach (__filename IN ITEMS ${${__listVar}})
             cmake_path (GET __filename FILENAME __filename)
             list (APPEND __temp_files "${__filename}")
         endforeach ()
@@ -94,7 +94,7 @@ function (oranges_add_source_files)
 
     #
 
-    macro (__oranges_install_header_set __headers __scope)
+    function (__oranges_install_header_set __headers __scope)
 
         set (__headers_list ${__headers})
 
@@ -112,7 +112,7 @@ function (oranges_add_source_files)
         endforeach ()
 
         unset (__headers_list)
-    endmacro ()
+    endfunction ()
 
     __oranges_install_header_set ("${ORANGES_ARG_FILES}" PRIVATE)
     __oranges_install_header_set ("${ORANGES_ARG_PUBLIC_HEADERS}" PUBLIC)
