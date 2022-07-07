@@ -42,11 +42,11 @@ Environment variables
 
 .. cmake:envvar:: FFTW_D_INCLUDE_DIR
 
-This environment variable, if set, is added to the search path when locating the :variable:`FFTW_D_INCLUDE_DIR` variable.
+This environment variable, if set, is added to the search path when locating the :variable:`FFTW_D_INCLUDE_DIR` path.
 
 .. cmake:envvar:: FFTW_D_LIBRARY
 
-This environment variable, if set, is added to the search path when locating the :variable:`FFTW_D_LIBRARY` variable.
+This environment variable, if set, is added to the search path when locating the :variable:`FFTW_D_LIBRARY` path.
 
 #]=======================================================================]
 

@@ -77,6 +77,7 @@ A library of CMake modules.
   * [FindJUCE](modules/finders/libs/FindJUCE.cmake)
   * [FindMIPP](modules/finders/libs/FindMIPP.cmake)
   * [FindMTS-ESP](modules/finders/libs/FindMTS-ESP.cmake)
+  * [FindSampleRate](modules/finders/libs/FindSampleRate.cmake)
   * [Findfftw3](modules/finders/libs/FFTW/Findfftw3.cmake)
   * [Findfftw3f](modules/finders/libs/FFTW/Findfftw3f.cmake)
   * [Findpluginval](modules/finders/testing/Findpluginval.cmake)
