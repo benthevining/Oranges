@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [3.1.0](https://github.com/benthevining/Oranges/compare/v3.0.1...v3.1.0) (2022-07-07)
+
+
+### Features
+
+* added a find module for libsamplerate ([4bf269f](https://github.com/benthevining/Oranges/commit/4bf269f397a156c9502761e33955f4df39d9d7ad))
+
 ## [3.0.1](https://github.com/benthevining/Oranges/compare/v3.0.0...v3.0.1) (2022-07-03)
 
 
