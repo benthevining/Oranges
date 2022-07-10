@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [3.2.0](https://github.com/benthevining/Oranges/compare/v3.1.1...v3.2.0) (2022-07-10)
+
+
+### Features
+
+* added a find module for NE10 ([09b4957](https://github.com/benthevining/Oranges/commit/09b4957a49fc2668b87b166e58d55384b80c8d27))
+
 ## [3.1.1](https://github.com/benthevining/Oranges/compare/v3.1.0...v3.1.1) (2022-07-07)
 
 
