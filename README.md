@@ -81,6 +81,7 @@ A library of CMake modules.
   * [FindSampleRate](modules/finders/libs/FindSampleRate.cmake)
   * [Findfftw3](modules/finders/libs/FFTW/Findfftw3.cmake)
   * [Findfftw3f](modules/finders/libs/FFTW/Findfftw3f.cmake)
+  * [Findpffft](modules/finders/libs/Findpffft.cmake)
   * [Findpluginval](modules/finders/testing/Findpluginval.cmake)
 
 ## Using Oranges
