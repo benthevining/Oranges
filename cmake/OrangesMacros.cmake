@@ -21,7 +21,7 @@ endif ()
 
 #
 
-function (_oranges_add_cmake_module_dir directory parent)
+function (__oranges_add_cmake_module_dir directory parent)
     set (full_path "${parent}/${directory}")
 
     if (NOT IS_DIRECTORY "${full_path}")
@@ -37,7 +37,7 @@ function (_oranges_add_cmake_module_dir directory parent)
     list (REMOVE_ITEM dirChildren scripts)
 
     foreach (child IN LISTS dirChildren)
-        _oranges_add_cmake_module_dir ("${child}" "${_abs_path}")
+        __oranges_add_cmake_module_dir ("${child}" "${_abs_path}")
     endforeach ()
 
     set (orangesModulePaths "${orangesModulePaths}" PARENT_SCOPE)
@@ -48,7 +48,7 @@ endfunction ()
 file (GLOB children RELATIVE "${ORANGES_ROOT_DIR}" "${ORANGES_ROOT_DIR}/modules/*")
 
 foreach (child IN LISTS children)
-    _oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
+    __oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
 endforeach ()
 
 #
