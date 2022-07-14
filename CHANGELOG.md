@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [3.3.0](https://github.com/benthevining/Oranges/compare/v3.2.0...v3.3.0) (2022-07-14)
+
+
+### Features
+
+* added a find module for pffft ([031fa48](https://github.com/benthevining/Oranges/commit/031fa48e59493ec85f113ec9266a8b4a6c6df715))
+
 ## [3.2.0](https://github.com/benthevining/Oranges/compare/v3.1.1...v3.2.0) (2022-07-10)
 
 
