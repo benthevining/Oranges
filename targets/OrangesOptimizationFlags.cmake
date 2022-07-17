@@ -38,20 +38,12 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesGeneratePlatformHeader)
+include (OrangesGeneratorExpressions)
 
 add_library (OrangesOptimizationFlags INTERFACE)
 
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
+oranges_make_config_generator_expressions (DEBUG config_is_debug RELEASE config_is_release)
 
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
-
-set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
-
-unset (debug_configs)
-
-set (config_is_release "$<NOT:${config_is_debug}>")
 set (config_minsizerel "$<CONFIG:MINSIZEREL>")
 set (config_relwdeb "$<CONFIG:RELWITHDEBINFO>")
 
@@ -60,11 +52,14 @@ set (config_relwdeb "$<CONFIG:RELWITHDEBINFO>")
 
 set (compiler_msvc "$<CXX_COMPILER_ID:MSVC>")
 
+# cmake-format: off
 target_compile_options (
     OrangesOptimizationFlags
-    INTERFACE "$<${compiler_msvc}:/Oi>" "$<$<AND:${compiler_msvc},${config_is_debug}>:/Od;/Zi>"
+    INTERFACE "$<${compiler_msvc}:/Oi>"
+              "$<$<AND:${compiler_msvc},${config_is_debug}>:/Od;/Zi>"
               "$<$<AND:${compiler_msvc},${config_is_release}>:/fp:fast;/GL;/Gw;/Qpar;/Ox;/Ot>"
               "$<$<AND:${compiler_msvc},${config_minsizerel}>:/O1;/Os>")
+# cmake-format: on
 
 target_link_options (
     OrangesOptimizationFlags
@@ -88,6 +83,8 @@ if (PLAT_SSE)
 elseif (PLAT_AVX)
     target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mavx>")
 elseif (PLAT_ARM_NEON)
+    # the -mfpu=neon option only works when building for ARM, so we can't use it if building a MacOS
+    # universal binary
     target_compile_options (
         OrangesOptimizationFlags
         INTERFACE
@@ -95,19 +92,17 @@ elseif (PLAT_ARM_NEON)
         )
 endif ()
 
-target_compile_options (
-    OrangesOptimizationFlags
-    INTERFACE "$<$<AND:${config_is_debug},${compiler_clang}>:-O0>"
-              "$<$<AND:${config_is_debug},${compiler_gcc}>:-Og>"
-              "$<$<AND:${compiler_gcclike},${config_is_release}>:-O3;-Ofast>"
-              "$<$<AND:${config_minsizerel},${compiler_clang}>:-Os>"
-              "$<$<AND:${config_minsizerel},${compiler_gcc}>:-Oz;-fconserve-stack>")
-
 set (
     gcclike_opts
     # cmake-format: sortable
-    -ffast-math -ffinite-math-only -ffp-contract=fast -fno-math-errno -funroll-loops
-    -funsafe-math-optimizations)
+    -ffast-math
+    -ffinite-math-only
+    -ffp-contract=fast
+    -fno-math-errno
+    -funroll-loops
+    -funsafe-math-optimizations
+    -O3
+    -Ofast)
 
 set (
     gcc_optimization_flags
@@ -126,6 +121,10 @@ target_compile_options (
     INTERFACE "$<$<AND:${config_is_release},${compiler_gcclike}>:${gcclike_opts}>"
               "$<$<AND:${config_is_release},${compiler_gcc}>:${gcc_optimization_flags}>"
               "$<$<AND:${config_is_release},${compiler_clang}>:-fvectorize>"
+              "$<$<AND:${config_is_debug},${compiler_clang}>:-O0>"
+              "$<$<AND:${config_is_debug},${compiler_gcc}>:-Og>"
+              "$<$<AND:${config_minsizerel},${compiler_clang}>:-Os>"
+              "$<$<AND:${config_minsizerel},${compiler_gcc}>:-Oz;-fconserve-stack>"
               "$<$<CXX_COMPILER_ID:AppleClang,GNU>:-ffinite-loops>")
 
 unset (gcclike_opts)
@@ -164,9 +163,6 @@ set (
 
 set (intel_release_flags "$<IF:$<PLATFORM_ID:Windows>,${intel_rel_win},${intel_rel_nonwin}>")
 
-unset (intel_rel_win)
-unset (intel_rel_nonwin)
-
 target_compile_options (
     OrangesOptimizationFlags
     INTERFACE "$<$<AND:${compiler_intel},${config_is_debug}>:${intel_debug_flags}>"
@@ -174,6 +170,8 @@ target_compile_options (
               "$<$<AND:${compiler_intel},${config_minsizerel}>:${intel_minsize_flags}>"
               "$<$<AND:${compiler_intel},${config_relwdeb}>:${intel_reldeb_flags}>")
 
+unset (intel_rel_win)
+unset (intel_rel_nonwin)
 unset (intel_reldeb_flags)
 unset (intel_debug_flags)
 unset (intel_release_flags)
@@ -215,7 +213,6 @@ target_compile_options (
 unset (compiler_cray)
 unset (cray_debug_opts)
 unset (cray_release_opts)
-
 unset (config_is_debug)
 unset (config_is_release)
 unset (config_minsizerel)

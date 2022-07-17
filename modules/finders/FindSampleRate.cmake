@@ -65,7 +65,7 @@ find_path (LIBSAMPLERATE_INCLUDE_DIR NAMES samplerate.h PATHS ENV LIBSAMPLERATE_
 find_library (LIBSAMPLERATE_LIBRARY NAMES samplerate libsamplerate PATHS ENV LIBSAMPLERATE_LIBRARY
               DOC "libsamplerate library")
 
-mark_as_advanced (FORCE LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
+mark_as_advanced (LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
                                    REQUIRED_VARS LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
@@ -80,6 +80,8 @@ set_target_properties (SampleRate::samplerate PROPERTIES IMPORTED_LOCATION
                                                          "${LIBSAMPLERATE_LIBRARY}")
 
 target_include_directories (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}")
+
+target_sources (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}/samplerate.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libsamplerate - found (local)"
                       "[${LIBSAMPLERATE_INCLUDE_DIR}] [${LIBSAMPLERATE_LIBRARY}]")

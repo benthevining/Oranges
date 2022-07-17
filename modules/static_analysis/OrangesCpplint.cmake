@@ -86,8 +86,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 find_program (CPPLINT_PROGRAM cpplint PATHS ENV CPPLINT_PROGRAM
               DOC "Path to the cpplint executable")
 
-set (CPPLINT_IGNORE
-     "-whitespace -legal -build -runtime/references -readability/braces -readability/todo"
+set (CPPLINT_IGNORE "whitespace legal build runtime/references readability/braces readability/todo"
      CACHE STRING "Space-separated list of checks to be ignored by cpplint")
 
 set (CPPLINT_VERBOSITY 0 CACHE STRING "Default cpplint verbosity (0 to 5)")
@@ -140,9 +139,25 @@ function (oranges_enable_cpplint)
         separate_arguments (ORANGES_ARG_IGNORE UNIX_COMMAND "${CPPLINT_IGNORE}")
     endif ()
 
-    list (JOIN ORANGES_ARG_IGNORE "," ORANGES_ARG_IGNORE)
+    set (cpplint_ignores "")
 
-    set (cpplint_cmd "${cpplint_cmd};--filter=${ORANGES_ARG_IGNORE}")
+    foreach (ignore IN LISTS ORANGES_ARG_IGNORE)
+        # check if the string starts with '-'
+        string (SUBSTRING "${ignore}" 0 1 first_char)
+
+        if ("${first_char}" STREQUAL "-")
+            list (APPEND cpplint_ignores "${ignore}")
+        else ()
+            list (APPEND cpplint_ignores "-${ignore}")
+        endif ()
+    endforeach ()
+
+    if (cpplint_ignores)
+        list (REMOVE_DUPLICATES cpplint_ignores)
+        list (JOIN cpplint_ignores "," cpplint_ignores)
+
+        set (cpplint_cmd "${cpplint_cmd};--filter=${cpplint_ignores}")
+    endif ()
 
     #
 
@@ -151,6 +166,7 @@ function (oranges_enable_cpplint)
     endif ()
 
     if (ORANGES_ARG_EXTRA_ARGS)
+        list (REMOVE_DUPLICATES ORANGES_ARG_EXTRA_ARGS)
         list (APPEND cpplint_cmd ${ORANGES_ARG_EXTRA_ARGS})
     endif ()
 

@@ -30,14 +30,21 @@ include (FindPackageHandleStandardArgs)
 #
 
 macro (find_package_default_component_list)
+    set (__all_find_components ${ARGN})
+
     if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-        set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
+        set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${__all_find_components})
     elseif (All IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS
             OR ALL IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-        set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${ARGN})
-    endif ()
+        set (${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS ${__all_find_components})
 
-    set (__all_find_components ${ARGN})
+        if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_All
+            OR ${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_ALL)
+            foreach (__comp_name IN LISTS __all_find_components)
+                set (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${__comp_name} ON)
+            endforeach ()
+        endif ()
+    endif ()
 
     foreach (__comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         if (NOT "${__comp_name}" IN_LIST __all_find_components)
@@ -53,4 +60,5 @@ macro (find_package_default_component_list)
     endforeach ()
 
     unset (__all_find_components)
+    unset (__comp_name)
 endmacro ()

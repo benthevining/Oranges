@@ -93,47 +93,21 @@ set (${CMAKE_FIND_PACKAGE_NAME}_All_FOUND FALSE)
 
 #
 
-if (DEFINED ENV{MTSESP_SOURCE_DIR} AND NOT MTSESP_SOURCE_DIR)
-    set (MTSESP_SOURCE_DIR "$ENV{MTSESP_SOURCE_DIR}" CACHE PATH "Path to the MTS-ESP repository"
-                                                           FORCE)
+find_path (
+    MTSESP_CLIENT_DIR libMTSClient.h PATHS "${MTSESP_SOURCE_DIR}/Client" ENV MTSESP_CLIENT_DIR
+    DOC "MTS-ESP client sources directory")
+
+find_path (
+    MTSESP_MASTER_DIR libMTSMaster.h PATHS "${MTSESP_SOURCE_DIR}/Master" ENV MTSESP_MASTER_DIR
+    DOC "MTS-ESP master sources directory")
+
+if (MTSESP_CLIENT_DIR)
+    set (MTSESP_SOURCE_DIR "${MTSESP_CLIENT_DIR}/.." CACHE PATH "Path to the MTS-ESP repository")
+elseif (MTSESP_MASTER_DIR)
+    set (MTSESP_SOURCE_DIR "${MTSESP_MASTER_DIR}/.." CACHE PATH "Path to the MTS-ESP repository")
 endif ()
 
-if (MTSESP_SOURCE_DIR)
-    set (mtsesp_find_location Local)
-else ()
-    find_path (MTSESP_CLIENT_DIR libMTSClient.h PATHS ENV MTSESP_CLIENT_DIR
-               DOC "MTS-ESP client sources directory")
-
-    find_path (MTSESP_MASTER_DIR libMTSMaster.h PATHS ENV MTSESP_MASTER_DIR
-               DOC "MTS-ESP master sources directory")
-
-    mark_as_advanced (FORCE MTSESP_CLIENT_DIR MTSESP_MASTER_DIR)
-
-    if (MTSESP_CLIENT_DIR AND MTSESP_MASTER_DIR)
-        set (mtsesp_find_location Local)
-
-        set (MTSESP_SOURCE_DIR "${MTSESP_CLIENT_DIR}/.."
-             CACHE PATH "Path to the MTS-ESP repository" FORCE)
-    else ()
-        include (FetchContent)
-
-        FetchContent_Declare (MTS-ESP GIT_REPOSITORY "https://github.com/ODDSound/MTS-ESP.git"
-                              GIT_TAG "origin/master")
-
-        FetchContent_MakeAvailable (MTS-ESP)
-
-        set (MTSESP_SOURCE_DIR "${mts-esp_SOURCE_DIR}" CACHE PATH "Path to the MTS-ESP repository"
-                                                             FORCE)
-
-        set (MTSESP_CLIENT_DIR "${MTSESP_SOURCE_DIR}/Client"
-             CACHE PATH "MTS-ESP client sources directory" FORCE)
-
-        set (MTSESP_MASTER_DIR "${MTSESP_SOURCE_DIR}/Master"
-             CACHE PATH "MTS-ESP client sources directory" FORCE)
-
-        set (mtsesp_find_location Downloaded)
-    endif ()
-endif ()
+mark_as_advanced (MTSESP_CLIENT_DIR MTSESP_MASTER_DIR MTSESP_SOURCE_DIR)
 
 #
 
@@ -175,9 +149,6 @@ if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
                 elseif (CMAKE_SIZEOF_VOID_P EQUAL 8) # 64-bit
                     set (libMTS_paths "Program Files\\Common Files\\MTS-ESP"
                                       "${MTSESP_SOURCE_DIR}/libMTS/Win/64bit")
-                else ()
-                    message (
-                        FATAL_ERROR "Neither 32-bit nor 64-bit architecture could be detected!")
                 endif ()
             elseif (APPLE)
                 set (libMTS_name libMTS.dylib)
@@ -193,15 +164,15 @@ if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
 
             find_library (
                 MTSESP_LIB_MTS
-                NAMES "${libMTS_name}"
+                NAMES libMTS "${libMTS_name}"
                 PATHS "${libMTS_paths}"
                 DOC "MTS-ESP master dynamic library"
                 NO_DEFAULT_PATH)
 
-            mark_as_advanced (FORCE MTSESP_LIB_MTS)
+            mark_as_advanced (MTSESP_LIB_MTS)
 
-            unset (libMTS_name)
             unset (libMTS_paths)
+            unset (libMTS_name)
 
             if (MTSESP_LIB_MTS)
                 add_library (MTS-ESP::libMTS IMPORTED UNKNOWN)
@@ -223,15 +194,18 @@ if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
 
             set (${CMAKE_FIND_PACKAGE_NAME}_Master_FOUND TRUE)
         else ()
+            set (${CMAKE_FIND_PACKAGE_NAME}_Master_FOUND FALSE)
+
             if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_Master)
-                set (${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "libMTS library not found")
+                list (APPEND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+                      "libMTS library not found")
             endif ()
         endif ()
     else ()
         set (${CMAKE_FIND_PACKAGE_NAME}_Master_FOUND FALSE)
 
         if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_Master)
-            set (${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "Master component not found")
+            list (APPEND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "Master component not found")
         endif ()
     endif ()
 endif ()
@@ -249,6 +223,15 @@ endif ()
 target_link_libraries (MTS-ESP::MTS-ESP INTERFACE "$<TARGET_NAME_IF_EXISTS:MTS-ESP::Client>"
                                                   "$<TARGET_NAME_IF_EXISTS:MTS-ESP::Master>")
 
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
+
+foreach (comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${comp_name}
+        AND NOT ${CMAKE_FIND_PACKAGE_NAME}_${comp_name}_FOUND)
+        set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+    endif ()
+endforeach ()
+
 if (TARGET MTS-ESP::Client)
     set (found_components Client)
 endif ()
@@ -257,14 +240,10 @@ if (TARGET MTS-ESP::Master)
     list (APPEND found_components Master)
 endif ()
 
-if ("${found_components}" STREQUAL "${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS}")
-    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
-endif ()
-
 find_package_message (
     "${CMAKE_FIND_PACKAGE_NAME}"
-    "MTS-ESP - found (${mtsesp_find_location}) - found components ${found_components}"
-    "MTS-ESP [${found_components}] [${mtsesp_find_location}] [${MTSESP_CLIENT_DIR}] [${MTSESP_MASTER_DIR}] [${MTSESP_LIB_MTS}]"
+    "MTS-ESP - found components ${found_components}"
+    "MTS-ESP [${found_components}] [${MTSESP_CLIENT_DIR}] [${MTSESP_MASTER_DIR}] [${MTSESP_LIB_MTS}]"
     )
 
 unset (found_components)

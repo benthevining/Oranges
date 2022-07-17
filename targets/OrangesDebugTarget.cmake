@@ -34,17 +34,13 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesGeneratorExpressions)
+
+#
+
 add_library (OrangesDebugTarget INTERFACE)
 
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
-
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
-
-set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
-
-unset (debug_configs)
+oranges_make_config_generator_expressions (DEBUG config_is_debug)
 
 set (compiler_intel "$<CXX_COMPILER_ID:Intel,IntelLLVM>")
 
@@ -81,25 +77,23 @@ target_compile_options (
               "$<$<AND:${config_is_debug},${compiler_intel}>:${intel_flags}>"
               "$<$<AND:${config_is_debug},${compiler_gcclike}>:${gcclike_flags}>"
               "$<$<AND:${config_is_debug},${compiler_gcc}>:${gcc_flags}>"
+              "$<$<AND:${config_is_debug},${compiler_gcc},$<PLATFORM_ID:Apple>>:-gfull>"
               "$<$<AND:${config_is_debug},${compiler_clang}>:${clang_flags}>"
               "$<$<AND:${config_is_debug},${compiler_arm}>:-g>"
               "$<$<AND:${config_is_debug},${compiler_cray}>:-G0>")
+
+target_link_options (OrangesDebugTarget INTERFACE
+                     "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
+
+install (TARGETS OrangesDebugTarget EXPORT OrangesTargets)
+
+add_library (Oranges::OrangesDebugTarget ALIAS OrangesDebugTarget)
 
 unset (intel_flags)
 unset (gcclike_flags)
 unset (gcc_flags)
 unset (clang_flags)
 unset (msvc_flags)
-
-target_link_options (OrangesDebugTarget INTERFACE
-                     "$<$<AND:${compiler_gcclike},${config_is_debug}>:--coverage>")
-
-target_compile_options (
-    OrangesDebugTarget
-    INTERFACE "$<$<AND:${config_is_debug},${compiler_gcc},$<PLATFORM_ID:Apple>>:-gfull>")
-
-#
-
 unset (config_is_debug)
 unset (compiler_intel)
 unset (compiler_gcclike)
@@ -107,9 +101,3 @@ unset (compiler_gcc)
 unset (compiler_msvc)
 unset (compiler_arm)
 unset (compiler_cray)
-
-#
-
-install (TARGETS OrangesDebugTarget EXPORT OrangesTargets)
-
-add_library (Oranges::OrangesDebugTarget ALIAS OrangesDebugTarget)

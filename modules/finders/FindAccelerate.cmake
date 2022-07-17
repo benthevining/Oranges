@@ -21,6 +21,13 @@ Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Accelerate::Accelerate
 
+Cache variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:variable:: ACCELERATE_HEADER
+
+The path to Accelerate.h. This is only used to add the file to IDE source browsers for convenience.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
@@ -44,6 +51,14 @@ add_library (Accelerate::Accelerate IMPORTED INTERFACE)
 
 set_target_properties (Accelerate::Accelerate PROPERTIES INTERFACE_LINK_LIBRARIES
                                                          "-framework Accelerate")
+
+find_file (ACCELERATE_HEADER Accelerate.h DOC "Main header for the Accelerate framework")
+
+mark_as_advanced (ACCELERATE_HEADER)
+
+if (ACCELERATE_HEADER)
+    target_sources (Accelerate::Accelerate INTERFACE "${ACCELERATE_HEADER}")
+endif ()
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
 

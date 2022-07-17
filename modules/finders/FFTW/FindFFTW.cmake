@@ -51,6 +51,12 @@ set (${CMAKE_FIND_PACKAGE_NAME}_Float_FOUND FALSE)
 
 find_package_default_component_list (Double Float)
 
+if (${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    set (quiet_flag QUIET)
+else ()
+    unset (quiet_flag)
+endif ()
+
 if (Double IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
     if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_Double)
         set (required_flag REQUIRED)
@@ -58,9 +64,7 @@ if (Double IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         unset (required_flag)
     endif ()
 
-    find_package (fftw3 QUIET ${required_flag})
-
-    unset (required_flag)
+    find_package (fftw3 ${quiet_flag} ${required_flag})
 
     set (${CMAKE_FIND_PACKAGE_NAME}_Double_FOUND "${fftw3_FOUND}")
 
@@ -76,14 +80,13 @@ if (Float IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         unset (required_flag)
     endif ()
 
-    find_package (fftw3f QUIET ${required_flag})
-
-    unset (required_flag)
+    find_package (fftw3f ${quiet_flag} ${required_flag})
 
     set (${CMAKE_FIND_PACKAGE_NAME}_Float_FOUND "${fftw3f_FOUND}")
 
     if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_Float AND NOT fftw3f_FOUND)
-        set (${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "Float precision library not found")
+        list (APPEND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+              "Float precision library not found")
     endif ()
 endif ()
 
@@ -113,16 +116,21 @@ target_compile_definitions (
 unset (float_lib_exists)
 unset (double_lib_exists)
 
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
+
+foreach (comp_name IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${comp_name}
+        AND NOT ${CMAKE_FIND_PACKAGE_NAME}_${comp_name}_FOUND)
+        set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+    endif ()
+endforeach ()
+
 if (TARGET FFTW3::fftw3)
     set (fftw_found_comps Double)
 endif ()
 
 if (TARGET FFTW3::fftw3f)
     list (APPEND fftw_found_comps Float)
-endif ()
-
-if ("${fftw_found_comps}" STREQUAL "${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS}")
-    set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
 endif ()
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "FFTW - found components ${fftw_found_comps}"

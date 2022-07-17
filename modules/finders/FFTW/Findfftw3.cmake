@@ -56,6 +56,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (FeatureSummary)
 include (FindPackageMessage)
+include (FindPackageHandleStandardArgs)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "Double precision FFT library")
@@ -68,9 +69,7 @@ find_path (FFTW_D_INCLUDE_DIR NAMES fftw3.h dfftw3.h PATHS ENV FFTW_D_INCLUDE_DI
 find_library (FFTW_D_LIBRARY NAMES fftw3 dfftw3 PATHS ENV FFTW_D_LIBRARY
               DOC "FFTW [double] library")
 
-mark_as_advanced (FORCE FFTW_D_INCLUDE_DIR FFTW_D_LIBRARY)
-
-include (FindPackageHandleStandardArgs)
+mark_as_advanced (FFTW_D_INCLUDE_DIR FFTW_D_LIBRARY)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS FFTW_D_INCLUDE_DIR
                                                                               FFTW_D_LIBRARY)
@@ -84,6 +83,12 @@ add_library (FFTW3::fftw3 IMPORTED UNKNOWN)
 set_target_properties (FFTW3::fftw3 PROPERTIES IMPORTED_LOCATION "${FFTW_D_LIBRARY}")
 
 target_include_directories (FFTW3::fftw3 INTERFACE "${FFTW_D_INCLUDE_DIR}")
+
+if (EXISTS "${FFTW_D_INCLUDE_DIR}/fftw3.h")
+    target_sources (FFTW3::fftw3 INTERFACE "${FFTW_D_INCLUDE_DIR}/fftw3.h")
+else ()
+    target_sources (FFTW3::fftw3 INTERFACE "${FFTW_D_INCLUDE_DIR}/dfftw3.h")
+endif ()
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "FFTW3 [double] - found"
                       "FFTW3 [double] [${FFTW_D_INCLUDE_DIR}] [${FFTW_D_LIBRARY}]")

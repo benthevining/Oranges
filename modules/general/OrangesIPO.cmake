@@ -48,6 +48,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesGeneratorExpressions)
+
 # cmake-format: off
 if (NOT (DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION
          OR DEFINED CACHE{CMAKE_INTERPROCEDURAL_OPTIMIZATION}))
@@ -93,11 +95,7 @@ function (oranges_enable_ipo)
         return ()
     endif ()
 
-    get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
-
-    if (NOT debug_configs)
-        set (debug_configs Debug)
-    endif ()
+    oranges_get_debug_config_list (debug_configs)
 
     foreach (config IN LISTS debug_configs)
 

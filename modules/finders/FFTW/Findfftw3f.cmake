@@ -56,6 +56,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (FeatureSummary)
 include (FindPackageMessage)
+include (FindPackageHandleStandardArgs)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "Float precision FFT library")
@@ -68,9 +69,7 @@ find_path (FFTW_F_INCLUDE_DIR NAMES fftw3f.h sfftw3.h PATHS ENV FFTW_F_INCLUDE_D
 find_library (FFTW_F_LIBRARY NAMES fftw3f sfftw3 PATHS ENV FFTW_F_LIBRARY
               DOC "FFTW [float] library")
 
-mark_as_advanced (FORCE FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
-
-include (FindPackageHandleStandardArgs)
+mark_as_advanced (FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS FFTW_F_INCLUDE_DIR
                                                                               FFTW_F_LIBRARY)
@@ -84,6 +83,12 @@ add_library (FFTW3::fftw3f IMPORTED UNKNOWN)
 set_target_properties (FFTW3::fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARY}")
 
 target_include_directories (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}")
+
+if (EXISTS "${FFTW_F_INCLUDE_DIR}/fftw3f.h")
+    target_sources (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}/fftw3f.h")
+else ()
+    target_sources (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}/sfftw3.h")
+endif ()
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "FFTW3 [float] - found"
                       "FFTW3 [float] [${FFTW_F_INCLUDE_DIR}] [${FFTW_F_LIBRARY}]")

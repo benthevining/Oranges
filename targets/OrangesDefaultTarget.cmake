@@ -64,6 +64,7 @@ include (OrangesGeneratePlatformHeader)
 include (OrangesDebugTarget)
 include (OrangesOptimizationFlags)
 include (OrangesDefaultWarnings)
+include (OrangesGeneratorExpressions)
 
 #
 
@@ -89,6 +90,12 @@ define_property (
 
 add_library (OrangesDefaultTarget INTERFACE)
 
+oranges_make_config_generator_expressions (DEBUG config_is_debug RELEASE config_is_release)
+
+set (ios_like "$<PLATFORM_ID:iOS,tvOS,watchOS>")
+
+set (ios_sign_id "\"iPhone Developer\"")
+
 set_target_properties (
     OrangesDefaultTarget
     PROPERTIES C_EXTENSIONS OFF
@@ -102,28 +109,29 @@ set_target_properties (
                MINSIZEREL_POSTFIX -rm
                RELEASE_POSTFIX -r
                RELWITHDEBINFO_POSTFIX -rd
+               MSVC_RUNTIME_LIBRARY "MultiThreaded$<${config_is_debug}:Debug>"
+               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
                $<BUILD_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE FALSE>
-               $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>)
+               $<INSTALL_INTERFACE:ORANGES_USING_INSTALLED_PACKAGE TRUE>
+               $<$<NOT:$<OR:$<PLATFORM_ID:Darwin>,${ios_like}>>:INSTALL_RPATH $ORIGIN>
+               $<${ios_like}:ARCHIVE_OUTPUT_DIRECTORY ./>
+               $<${ios_like}:XCODE_ATTRIBUTE_INSTALL_PATH $(LOCAL_APPS_DIR)>
+               $<${ios_like}:XCODE_ATTRIBUTE_SKIP_INSTALL NO>
+               $<${ios_like}:XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>
+               $<${ios_like}:IOS_INSTALL_COMBINED ON>
+               $<${ios_like}:XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${ios_sign_id}>)
+
+unset (ios_like)
+unset (ios_sign_id)
 
 set_property (TARGET OrangesDefaultTarget APPEND PROPERTY EXPORT_PROPERTIES
                                                           ORANGES_USING_INSTALLED_PACKAGE)
 
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
-
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
-
-set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
-
-unset (debug_configs)
-
-set (config_is_release "$<NOT:${config_is_debug}>")
-
 target_link_libraries (
     OrangesDefaultTarget
     INTERFACE "$<BUILD_INTERFACE:$<${config_is_debug}:Oranges::OrangesDebugTarget>>"
-              Oranges::OrangesOptimizationFlags Oranges::OrangesDefaultWarnings)
+              "$<BUILD_INTERFACE:Oranges::OrangesDefaultWarnings>"
+              Oranges::OrangesOptimizationFlags)
 
 #
 
@@ -144,42 +152,17 @@ target_compile_options (
     INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/MP;/wd4068;/wd4464;/wd4514;/wd4626;/wd4625;/wd5027>"
               "$<$<AND:$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-municode;-mwin32>"
               "$<${compiler_intel}:${intel_opts}>"
-              "$<$<AND:$<CXX_COMPILER_ID:GNU,Clang,AppleClang>,$<NOT:$<CONFIG:MINSIZEREL>>>:-g>"
               "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-fmessage-length=0>"
               "$<$<CXX_COMPILER_ID:GNU>:-march=native>"
               "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Android>>:-mandroid>")
 
 unset (intel_opts)
 
-set_target_properties (OrangesDefaultTarget PROPERTIES MSVC_RUNTIME_LIBRARY
-                                                       "MultiThreaded$<${config_is_debug}:Debug>")
-
 # add colors to clang output when using Ninja
 if (UNIX AND "${CMAKE_GENERATOR}" MATCHES "Ninja")
     target_compile_options (OrangesDefaultTarget
                             INTERFACE "$<$<CXX_COMPILER_ID:Clang>:-fcolor-diagnostics>")
 endif ()
-
-#
-
-set (ios_like "$<IN_LIST:$<PLATFORM_ID>,iOS;tvOS;watchOS>")
-
-set (sign_id "\"iPhone Developer\"")
-
-set_target_properties (
-    OrangesDefaultTarget
-    PROPERTIES $<$<NOT:$<OR:$<PLATFORM_ID:Darwin>,${ios_like}>>:INSTALL_RPATH $ORIGIN>
-               XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES
-               XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}"
-               $<${ios_like}:ARCHIVE_OUTPUT_DIRECTORY ./>
-               $<${ios_like}:XCODE_ATTRIBUTE_INSTALL_PATH $(LOCAL_APPS_DIR)>
-               $<${ios_like}:XCODE_ATTRIBUTE_SKIP_INSTALL NO>
-               $<${ios_like}:XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH NO>
-               $<${ios_like}:IOS_INSTALL_COMBINED ON>
-               $<${ios_like}:XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${sign_id}>)
-
-unset (sign_id)
-unset (ios_like)
 
 #
 
@@ -220,7 +203,6 @@ target_compile_options (
 
 unset (intel_opts)
 unset (compiler_intel)
-
 unset (config_is_debug)
 unset (config_is_release)
 

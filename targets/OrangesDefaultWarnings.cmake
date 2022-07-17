@@ -31,21 +31,13 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesGeneratorExpressions)
+
+#
+
 add_library (OrangesDefaultWarnings INTERFACE)
 
-target_compile_options (
-    OrangesDefaultWarnings
-    INTERFACE "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0;/wd4820;/wd5045>")
-
-get_property (debug_configs GLOBAL PROPERTY DEBUG_CONFIGURATIONS)
-
-if (NOT debug_configs)
-    set (debug_configs Debug)
-endif ()
-
-set (config_is_debug "$<IN_LIST:$<CONFIG>,${debug_configs}>")
-
-unset (debug_configs)
+oranges_make_config_generator_expressions (DEBUG config_is_debug)
 
 set (
     gcclike_comp_opts
@@ -128,24 +120,22 @@ set (
 
 set (intel_flags "$<IF:$<PLATFORM_ID:Windows>,/W5;/Wall,${intel_nonwin}>")
 
-unset (intel_nonwin)
-
 target_compile_options (
     OrangesDefaultWarnings
-    INTERFACE # cmake-format: sortable
-              "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>"
-              "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>"
-              "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_comp_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang,GNU>:${gcclike_cxx_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang,GNU>:${gcclike_cxx_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:${gcc_cxx_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:OBJCXX,GNU>:${gcc_cxx_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:${clang_cxx_opts}>"
-              "$<$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>:${clang_cxx_opts}>"
-              "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${intel_flags}>"
-              "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:-g>")
+    INTERFACE
+        # cmake-format: sortable
+        "$<$<CXX_COMPILER_ID:MSVC>:/W4;/Wall;/WL;/external:W0;/wd4820;/wd5045>"
+        "$<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:${gcclike_comp_opts}>"
+        "$<$<CXX_COMPILER_ID:GNU>:${gcc_comp_opts}>"
+        "$<$<CXX_COMPILER_ID:Clang,AppleClang>:${clang_comp_opts}>"
+        "$<$<OR:$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang,GNU>,$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang,GNU>>:${gcclike_cxx_opts}>"
+        "$<$<OR:$<COMPILE_LANG_AND_ID:CXX,GNU>,$<COMPILE_LANG_AND_ID:OBJCXX,GNU>>:${gcc_cxx_opts}>"
+        "$<$<OR:$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:OBJCXX,Clang,AppleClang>>:${clang_cxx_opts}>"
+        "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${intel_flags}>"
+        "$<$<AND:$<CXX_COMPILER_ID:ARMCC,ARMClang>,${config_is_debug}>:-g>")
 
 unset (intel_flags)
+unset (intel_nonwin)
 unset (gcclike_comp_opts)
 unset (gcc_comp_opts)
 unset (clang_comp_opts)

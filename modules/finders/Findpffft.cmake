@@ -63,7 +63,7 @@ find_path (PFFFT_INCLUDE_DIR NAMES pffft.h PATHS ENV PFFFT_INCLUDE_DIR
 
 find_library (PFFFT_LIBRARY NAMES pffft PFFFT PATHS ENV PFFFT_LIBRARY DOC "pffft library")
 
-mark_as_advanced (FORCE PFFFT_INCLUDE_DIR PFFFT_LIBRARY)
+mark_as_advanced (PFFFT_INCLUDE_DIR PFFFT_LIBRARY)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS PFFFT_INCLUDE_DIR
                                                                               PFFFT_LIBRARY)
@@ -77,6 +77,8 @@ add_library (pffft::pffft IMPORTED UNKNOWN)
 set_target_properties (pffft::pffft PROPERTIES IMPORTED_LOCATION "${PFFFT_LIBRARY}")
 
 target_include_directories (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}")
+
+target_sources (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}/pffft.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "pffft - found (local)"
                       "[${PFFFT_INCLUDE_DIR}] [${PFFFT_LIBRARY}]")

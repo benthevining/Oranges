@@ -126,6 +126,7 @@ function (oranges_enable_cppcheck)
     endif ()
 
     if (ORANGES_ARG_EXTRA_ARGS)
+        list (REMOVE_DUPLICATES ORANGES_ARG_EXTRA_ARGS)
         list (APPEND cppcheck_cmd ${ORANGES_ARG_EXTRA_ARGS})
     endif ()
 
@@ -134,6 +135,8 @@ function (oranges_enable_cppcheck)
     if (NOT ORANGES_ARG_ENABLE)
         separate_arguments (ORANGES_ARG_ENABLE UNIX_COMMAND "${CPPCHECK_ENABLE}")
     endif ()
+
+    list (REMOVE_DUPLICATES ORANGES_ARG_ENABLE)
 
     foreach (enable_check IN LISTS ORANGES_ARG_ENABLE)
         list (APPEND cppcheck_cmd "--enable=${enable_check}")
@@ -144,6 +147,8 @@ function (oranges_enable_cppcheck)
     if (NOT ORANGES_ARG_DISABLE)
         separate_arguments (ORANGES_ARG_DISABLE UNIX_COMMAND "${CPPCHECK_DISABLE}")
     endif ()
+
+    list (REMOVE_DUPLICATES ORANGES_ARG_DISABLE)
 
     foreach (disable_check IN LISTS ORANGES_ARG_DISABLE)
         list (APPEND cppcheck_cmd "--suppress=${disable_check}")

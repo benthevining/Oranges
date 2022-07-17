@@ -59,55 +59,52 @@ include (FindPackageMessage)
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://juce.com/"
                         DESCRIPTION "Cross platform framework for plugin and app development")
 
+set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+
 #
 
-set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+find_path (JUCE_CORE_DIR juce_core.h PATHS "${JUCE_PATH}/modules/juce_core" ENV JUCE_CORE_DIR
+           DOC "Directory of the juce_core module")
+
+set (JUCE_PATH "${JUCE_CORE_DIR}/../.." CACHE PATH "Path to the JUCE repository")
+
+set (JUCE_BRANCH "master" CACHE STRING "The branch of the JUCE GitHub repository to use")
+
+set_property (CACHE JUCE_BRANCH PROPERTY STRINGS develop master)
+
+mark_as_advanced (JUCE_CORE_DIR JUCE_PATH JUCE_BRANCH)
+
+#
 
 set (JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 set (JUCE_BUILD_EXAMPLES OFF)
 set (JUCE_BUILD_EXTRAS OFF)
 
-if (DEFINED ENV{JUCE_PATH} AND NOT JUCE_PATH)
-    set (JUCE_PATH "$ENV{JUCE_PATH}" CACHE PATH "Path to the JUCE repository" FORCE)
-endif ()
-
-if (JUCE_PATH)
+if (IS_DIRECTORY "${JUCE_PATH}")
     set (juce_find_location Local)
 
     add_subdirectory ("${JUCE_PATH}" "${CMAKE_CURRENT_BINARY_DIR}/JUCE")
 else ()
-    find_path (JUCE_CORE_DIR juce_core.h PATHS ENV JUCE_CORE_DIR
-               DOC "Directory of the juce_core module")
+    include (FetchContent)
 
-    if (JUCE_CORE_DIR)
-        set (juce_find_location Local)
+    FetchContent_Declare (JUCE GIT_REPOSITORY "https://github.com/juce-framework/JUCE.git"
+                          GIT_TAG "origin/${JUCE_BRANCH}")
 
-        add_subdirectory ("${JUCE_CORE_DIR}/../.." "${CMAKE_CURRENT_BINARY_DIR}/JUCE")
-    else ()
-        include (FetchContent)
+    FetchContent_MakeAvailable (JUCE)
 
-        set (JUCE_BRANCH "master" CACHE STRING "The branch of the JUCE GitHub repository to use")
+    set (JUCE_PATH "${juce_SOURCE_DIR}" CACHE PATH "Path to the JUCE repository" FORCE)
+    set (JUCE_CORE_DIR "${JUCE_PATH}/modules/juce_core"
+         CACHE PATH "Directory of the juce_core module" FORCE)
 
-        set_property (CACHE JUCE_BRANCH PROPERTY STRINGS "develop;master")
-
-        mark_as_advanced (JUCE_BRANCH)
-
-        FetchContent_Declare (JUCE GIT_REPOSITORY "https://github.com/juce-framework/JUCE.git"
-                              GIT_TAG "origin/${JUCE_BRANCH}")
-
-        FetchContent_MakeAvailable (JUCE)
-
-        set (JUCE_PATH "${juce_SOURCE_DIR}" CACHE PATH "Path to the JUCE repository" FORCE)
-
-        set (juce_find_location Downloaded)
-    endif ()
+    set (juce_find_location Downloaded)
 endif ()
 
 #
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
 
-find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "JUCE - found (${juce_find_location})"
-                      "JUCE [${juce_find_location}] [${JUCE_CORE_DIR}] [${JUCE_PATH}]")
+find_package_message (
+    "${CMAKE_FIND_PACKAGE_NAME}" "JUCE - found (${juce_find_location})"
+    "JUCE [${juce_find_location}] [${JUCE_CORE_DIR}] [${JUCE_PATH}] [${JUCE_BRANCH}]")
 
 unset (juce_find_location)

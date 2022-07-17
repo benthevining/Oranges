@@ -19,20 +19,9 @@ A find module for the Intel IPP libraries.
 
 IPP must be manually installed by the developer, it cannot be fetched by a script.
 
-.. todo::
-
-    Refactor this module to set IPP_NOT_FOUND_MESSAGE and clean up its syntax a bit.
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. cmake:variable:: IPP_STATIC
-
-True if static libraries should be found; if false, finds shared libraries. Defaults to ``ON``.
-
-.. cmake:variable:: IPP_MULTI_THREADED
-
-True if multithreaded versions of the libraries should be found. Defaults to ``OFF``.
 
 .. cmake:variable:: IPP_ROOT
 
@@ -43,6 +32,7 @@ This variable will be initialized by the :envvar:`IPP_ROOT` environment variable
 
 The path to the include directory for IPP.
 This variable will be initialized by the :envvar:`IPP_INCLUDE_DIR` environment variable.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -55,27 +45,28 @@ If set, this environment variable will initialize the :variable:`IPP_ROOT` varia
 
 If set, this environment variable will initialize the :variable:`IPP_INCLUDE_DIR` variable.
 
+
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- All
-- CORE
-- AC : audio coding
-- CC : color conversion
-- CH : string processing
-- CP : cryptography
-- CV : computer vision
-- DC : data compression
-- DI : data integrity
-- GEN : generated functions
-- I : image processing
-- J : image compression
-- R : rendering and 3D data processing
-- M : small matrix operations
-- S : signal processing
-- SC : speech coding
-- SR : speech recognition
-- VC : video coding
-- VM : vector math
+- All  : Imports all components
+- CORE : IPP core library
+- AC   : audio coding
+- CC   : color conversion
+- CH   : string processing
+- CP   : cryptography
+- CV   : computer vision
+- DC   : data compression
+- DI   : data integrity
+- GEN  : generated functions
+- I    : image processing
+- J    : image compression
+- R    : rendering and 3D data processing
+- M    : small matrix operations
+- S    : signal processing
+- SC   : speech coding
+- SR   : speech recognition
+- VC   : video coding
+- VM   : vector math
 
 Each one produces an imported target named ``IPP::<Component>``.
 Each one's path can be set using the cache variable ``IPP_LIB_<Component>``.
@@ -102,6 +93,7 @@ Each component imports its dependencies as well:
     | Vector Math         | VM           | Core            |
     +---------------------+--------------+-----------------+
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -120,49 +112,18 @@ set_package_properties (
     URL "https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html#gs.sd4x9g"
     DESCRIPTION "Hardware-accelerated functions for signal and image processing provided by Intel")
 
-#
-
-macro (__ipp_unset_vars)
-    unset (IPP_LIBNAME_SUFFIX)
-    unset (IPP_LIB_TYPE)
-    unset (IPP_LIBTYPE_PREFIX)
-    unset (IPP_LIBTYPE_SUFFIX)
-endmacro ()
-
-cmake_language (DEFER CALL __ipp_unset_vars)
-
-#
-
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
 #
 
-option (IPP_STATIC "Use static IPP libraries" ON)
-option (IPP_MULTI_THREADED "Use multithreaded IPP libraries" OFF)
+find_path (
+    IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
+                                /opt/intel/oneapi/ipp/include ENV IPP_INCLUDE_DIR
+    DOC "Intel IPP include directory")
 
-if (DEFINED ENV{IPP_ROOT} AND NOT IPP_ROOT)
-    set (IPP_ROOT "$ENV{IPP_ROOT}" CACHE PATH "Path to the root of the Intel IPP installation"
-                                         FORCE)
-endif ()
+set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel IPP installation")
 
-if (DEFINED CACHE{IPP_ROOT} AND NOT (DEFINED IPP_INCLUDE_DIR OR DEFINED CACHE{IPP_INCLUDE_DIR}
-                                     OR DEFINED ENV{IPP_INCLUDE_DIR}))
-    set (IPP_INCLUDE_DIR "${IPP_ROOT}/include" CACHE PATH "Intel IPP include directory")
-endif ()
-
-if (NOT DEFINED CACHE{IPP_INCLUDE_DIR})
-    find_path (
-        IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
-                                    /opt/intel/oneapi/ipp/include ENV IPP_INCLUDE_DIR
-        DOC "Intel IPP include directory")
-
-    if (IPP_INCLUDE_DIR)
-        set (IPP_ROOT "${IPP_INCLUDE_DIR}/.."
-             CACHE PATH "Path to the root of the Intel IPP installation")
-    endif ()
-endif ()
-
-mark_as_advanced (IPP_STATIC IPP_MULTI_THREADED IPP_INCLUDE_DIR IPP_ROOT)
+mark_as_advanced (IPP_INCLUDE_DIR IPP_ROOT)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS IPP_INCLUDE_DIR
                                                                               IPP_ROOT)
@@ -171,43 +132,13 @@ if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()
 endif ()
 
-set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
-
-#
-
-if (IPP_STATIC)
-    if (IPP_MULTI_THREADED)
-        set (IPP_LIBNAME_SUFFIX _t)
-    else ()
-        set (IPP_LIBNAME_SUFFIX _l)
-    endif ()
-
-    set (IPP_LIB_TYPE STATIC)
-    set (ipp_type static)
-else ()
-    set (IPP_LIBNAME_SUFFIX "")
-    set (IPP_LIB_TYPE SHARED)
-    set (ipp_type dynamic)
-endif ()
-
-set (IPP_LIBTYPE_PREFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_PREFIX}")
-set (IPP_LIBTYPE_SUFFIX "${CMAKE_${IPP_LIB_TYPE}_LIBRARY_SUFFIX}")
-
-if (WIN32)
-    set (ipp_type_flag "/Qipp-link:${ipp_type}")
-else ()
-    set (ipp_type_flag "-ipp-link=${ipp_type}")
-endif ()
-
-unset (ipp_type)
-
-set (ipp_linker_flags "$<$<CXX_COMPILER_ID:Intel,IntelLLVM>:${ipp_type_flag}>")
-
-unset (ipp_type_flag)
-
 #
 
 function (__oranges_find_ipp_component lib_name comp_required)
+
+    if (TARGET IPP::${lib_name})
+        return ()
+    endif ()
 
     if ("${lib_name}" STREQUAL CC)
         set (comp_dependencies CORE VM S I)
@@ -237,89 +168,84 @@ function (__oranges_find_ipp_component lib_name comp_required)
         endif ()
     endforeach ()
 
-    if (NOT TARGET IPP::${lib_name})
-        string (TOLOWER "${lib_name}" lower_comp_name)
+    string (TOLOWER "${lib_name}" lower_comp_name)
 
-        set (baseName "ipp${lower_comp_name}")
+    set (baseName "ipp${lower_comp_name}")
 
-        unset (lower_comp_name)
+    find_library (IPP_LIB_${lib_name} "${baseName}" PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
+                  NO_DEFAULT_PATH DOC "Intel IPP ${lib_name} library")
 
-        find_library (
-            IPP_LIB_${lib_name}
-            NAMES "${baseName}" "${IPP_LIBTYPE_PREFIX}${baseName}"
-                  "${IPP_LIBTYPE_PREFIX}${baseName}${IPP_LIBTYPE_SUFFIX}"
-                  "${baseName}${IPP_LIBTYPE_SUFFIX}"
-            PATHS "${IPP_ROOT}/lib" "${IPP_ROOT}/lib/ia32"
-            NO_DEFAULT_PATH
-            DOC "Intel IPP ${lib_name} library")
+    find_path (IPP_LIB_${lib_name}_INCLUDEDIR "${baseName}.h" PATHS "${IPP_ROOT}/include"
+               NO_DEFAULT_PATH DOC "Header for Intel IPP ${lib_name} library")
 
-        mark_as_advanced (IPP_LIB_${lib_name})
+    mark_as_advanced (IPP_LIB_${lib_name} IPP_LIB_${lib_name}_INCLUDEDIR)
 
-        if (IPP_LIB_${lib_name})
-            add_library (IPP::${lib_name} IMPORTED ${IPP_LIB_TYPE})
-
-            set_target_properties (IPP::${lib_name} PROPERTIES IMPORTED_LOCATION
-                                                               "${IPP_LIB_${lib_name}}")
-
-            foreach (dep_component IN LISTS comp_dependencies)
-                target_link_libraries (IPP::${lib_name} INTERFACE IPP::${dep_component})
-            endforeach ()
-
-            set (${CMAKE_FIND_PACKAGE_NAME}_${lib_name}_FOUND TRUE)
-
-            if (NOT TARGET IPP::IPP)
-                add_library (IPP::IPP IMPORTED INTERFACE)
-            endif ()
-
-            target_link_libraries (IPP::IPP INTERFACE IPP::${lib_name})
-        endif ()
+    if (NOT (IPP_LIB_${lib_name} AND IPP_LIB_${lib_name}_INCLUDEDIR))
+        return ()
     endif ()
+
+    add_library (IPP::${lib_name} IMPORTED UNKNOWN)
+
+    set_target_properties (IPP::${lib_name} PROPERTIES IMPORTED_LOCATION "${IPP_LIB_${lib_name}}")
+
+    target_include_directories (IPP::${lib_name} INTERFACE "${IPP_LIB_${lib_name}_INCLUDEDIR}")
+
+    target_sources (IPP::${lib_name} INTERFACE "${IPP_LIB_${lib_name}_INCLUDEDIR}/${baseName}.h")
+
+    foreach (dep_component IN LISTS comp_dependencies)
+        target_link_libraries (IPP::${lib_name} INTERFACE IPP::${dep_component})
+    endforeach ()
 
 endfunction ()
 
 #
 
-find_package_default_component_list (
-    CORE
-    AC
-    CC
-    CH
-    CP
-    CV
-    DC
-    DI
-    GEN
-    I
-    J
-    R
-    M
-    S
-    SC
-    SR
-    VC
-    VM)
+# cmake-format: off
+set (valid_components
+     AC CC CH CORE CP CV DC DI GEN I J M R S SC SR VC VM)
+# cmake-format: on
+
+find_package_default_component_list (${valid_components})
+
+set (found_comps "")
 
 foreach (ipp_component IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
     __oranges_find_ipp_component ("${ipp_component}"
                                   "${${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${ipp_component}}")
+
+    if (TARGET IPP::${ipp_component})
+        set (${CMAKE_FIND_PACKAGE_NAME}_${ipp_component}_FOUND TRUE)
+        list (APPEND found_comps "${ipp_component}")
+    else ()
+        set (${CMAKE_FIND_PACKAGE_NAME}_${ipp_component}_FOUND FALSE)
+
+        if (${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED_${ipp_component})
+            list (APPEND ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+                  "Component ${ipp_component} not found")
+            set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+            break ()
+        endif ()
+    endif ()
 endforeach ()
 
-#
-
-if (NOT TARGET IPP::IPP)
+if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()
 endif ()
 
-target_compile_options (IPP::IPP INTERFACE "${ipp_linker_flags}")
+#
 
-unset (ipp_linker_flags)
+add_library (IPP::IPP IMPORTED INTERFACE)
 
-target_include_directories (IPP::IPP INTERFACE "$<BUILD_INTERFACE:${IPP_INCLUDE_DIR}>")
+foreach (comp_name IN LISTS valid_components)
+    target_link_libraries (IPP::IPP INTERFACE "$<TARGET_NAME_IF_EXISTS:IPP::${comp_name}>")
+endforeach ()
 
-set (${CMAKE_FIND_PACKAGE_NAME}_FOUND TRUE)
+target_include_directories (IPP::IPP INTERFACE "${IPP_INCLUDE_DIR}")
+
+target_sources (IPP::IPP INTERFACE "${IPP_INCLUDE_DIR}/ipp.h")
 
 find_package_message (
     "${CMAKE_FIND_PACKAGE_NAME}"
-    "IPP - found (found components ${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS})"
-    "IPP [${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS}] [${IPP_STATIC}] [${IPP_MULTI_THREADED}] [${IPP_INCLUDE_DIR}]"
+    "IPP - found (found components ${found_comps})"
+    "IPP [${${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS}] [${found_comps}] [${IPP_INCLUDE_DIR}] [${IPP_ROOT}]"
     )

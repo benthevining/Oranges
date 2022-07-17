@@ -31,12 +31,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 add_library (OrangesUnityBuild INTERFACE)
 
-# cmake-format: off
-set_target_properties (OrangesUnityBuild
-                        PROPERTIES
-                            UNITY_BUILD_MODE BATCH
-                            UNITY_BUILD ON)
-# cmake-format: on
+set_target_properties (OrangesUnityBuild PROPERTIES UNITY_BUILD_MODE BATCH UNITY_BUILD ON)
 
 install (TARGETS OrangesUnityBuild EXPORT OrangesTargets)
 

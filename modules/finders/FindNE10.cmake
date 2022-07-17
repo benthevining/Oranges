@@ -61,9 +61,9 @@ set_package_properties (
 
 find_path (NE10_INCLUDE_DIR NAMES NE10.h PATHS ENV NE10_INCLUDE_DIR DOC "NE10 includes directory")
 
-find_library (NE10_LIBRARY NAMES NE10 PATHS ENV NE10_LIBRARY DOC "NE10 library")
+find_library (NE10_LIBRARY NAMES NE10 ne10 PATHS ENV NE10_LIBRARY DOC "NE10 library")
 
-mark_as_advanced (FORCE NE10_INCLUDE_DIR NE10_LIBRARY)
+mark_as_advanced (NE10_INCLUDE_DIR NE10_LIBRARY)
 
 find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS NE10_INCLUDE_DIR
                                                                               NE10_LIBRARY)
@@ -77,6 +77,8 @@ add_library (NE10::NE10 IMPORTED UNKNOWN)
 set_target_properties (NE10::NE10 PROPERTIES IMPORTED_LOCATION "${NE10_LIBRARY}")
 
 target_include_directories (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}")
+
+target_sources (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}/NE10.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "NE10 - found (local)"
                       "[${NE10_INCLUDE_DIR}] [${NE10_LIBRARY}]")

@@ -130,6 +130,7 @@ function (oranges_enable_clang_tidy)
     endif ()
 
     if (ORANGES_ARG_EXTRA_ARGS)
+        list (REMOVE_DUPLICATES ORANGES_ARG_EXTRA_ARGS)
         list (APPEND clangtidy_cmd ${ORANGES_ARG_EXTRA_ARGS})
     endif ()
 
