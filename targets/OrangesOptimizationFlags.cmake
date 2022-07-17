@@ -22,7 +22,8 @@ If the configuration being built is in the :prop_gbl:`DEBUG_CONFIGURATIONS` prop
 Otherwise, this target adds optimization flags that are designed to be as performant as possible, even at the expense of accuracy.
 For example, in compilers that support various floating point modes or options, the fastest option available is chosen.
 
-If the configuration being built is ``MINSIZEREL``, then all optimization flags that don't affect binary size are still added, and any extra flags available to tell the compiler to optimize for size are also added.
+If the configuration being built is ``MINSIZEREL``, then all optimization flags that don't affect binary size are still added,
+and any extra flags available to tell the compiler to optimize for size are also added.
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -82,17 +83,17 @@ set (compiler_gcclike "$<CXX_COMPILER_ID:Clang,AppleClang,GNU>")
 set (compiler_gcc "$<CXX_COMPILER_ID:GNU>")
 set (compiler_clang "$<CXX_COMPILER_ID:Clang,AppleClang>")
 
-# TODO: the -mfpu=neon option works on GCC building for ARM, but not for x86_64. Only enable it if
-# not building a universal binary?
-#[[
 if (PLAT_SSE)
     target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-msse>")
 elseif (PLAT_AVX)
     target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mavx>")
 elseif (PLAT_ARM_NEON)
-    target_compile_options (OrangesOptimizationFlags INTERFACE "$<${compiler_gcc}:-mfpu=neon>")
+    target_compile_options (
+        OrangesOptimizationFlags
+        INTERFACE
+            "$<$<AND:${compiler_gcc},$<STREQUAL:$<TARGET_PROPERTY:OSX_ARCHITECTURES>,arm64>>:-mfpu=neon>"
+        )
 endif ()
-]]
 
 target_compile_options (
     OrangesOptimizationFlags
@@ -214,8 +215,6 @@ target_compile_options (
 unset (compiler_cray)
 unset (cray_debug_opts)
 unset (cray_release_opts)
-
-#
 
 unset (config_is_debug)
 unset (config_is_release)

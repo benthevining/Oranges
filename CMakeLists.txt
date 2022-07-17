@@ -107,15 +107,10 @@ if (PROJECT_IS_TOP_LEVEL)
     set (CMAKE_INSTALL_MESSAGE LAZY)
     set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
 
-    include (OrangesWipeCacheTarget)
     include (OrangesDefaultCPackSettings)
 else ()
-    # check if no languages are enabled (need at least one for GNUInstallDirs)
-    get_property (enabled_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
-
-    if (NOT enabled_languages OR "${enabled_languages}" STREQUAL NONE)
-        enable_language (CXX)
-    endif ()
+    # Need to enable at least 1 language for GNUInstallDirs
+    enable_language (CXX)
 endif ()
 
 #
@@ -130,8 +125,6 @@ mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
 #
 
 add_subdirectory (targets)
-
-add_subdirectory (modules/helper_targets)
 
 #
 

@@ -244,6 +244,65 @@
           "nargs": 1
         }
       },
+      "oranges_enable_ccache": {
+        "kwargs": {
+          "OPTIONS": "+",
+          "TARGET": 1
+        }
+      },
+      "oranges_enable_clang_tidy": {
+        "kwargs": {
+          "CONFIG_FILE": 1,
+          "EXTRA_ARGS": "+",
+          "LANGS": "+",
+          "TARGET": 1
+        }
+      },
+      "oranges_enable_cppcheck": {
+        "kwargs": {
+          "DISABLE": "+",
+          "ENABLE": "+",
+          "EXTRA_ARGS": "+",
+          "LANGS": "+",
+          "TARGET": 1
+        }
+      },
+      "oranges_enable_cpplint": {
+        "kwargs": {
+          "EXTRA_ARGS": "+",
+          "IGNORE": "+",
+          "LANGS": "+",
+          "TARGET": 1,
+          "VERBOSITY": 1
+        }
+      },
+      "oranges_enable_ipo": {
+        "kwargs": {
+          "TARGET": 1
+        },
+        "pargs": {
+          "flags": [
+            "INCLUDE_DEBUG"
+          ]
+        }
+      },
+      "oranges_enable_iwyu": {
+        "kwargs": {
+          "EXTRA_ARGS": "+",
+          "LANGS": "+",
+          "TARGET": 1
+        }
+      },
+      "oranges_enable_static_analysis": {
+        "pargs": {
+          "nargs": 1
+        }
+      },
+      "oranges_enable_universal_binary": {
+        "pargs": {
+          "nargs": 1
+        }
+      },
       "oranges_fetch_repository": {
         "kwargs": {
           "BITBUCKET_REPOSITORY": 1,

@@ -99,13 +99,12 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesFunctionArgumentHelpers)
-include (OrangesSetUpCache)
 
 find_program (
-    PROGRAM_DOT dot
+    PROGRAM_DOT dot PATHS ENV PROGRAM_DOT
     DOC "graphviz dot tool, used to generate dependency graph images by the OrangesGraphviz module")
 
-mark_as_advanced (FORCE PROGRAM_DOT)
+mark_as_advanced (PROGRAM_DOT)
 
 #
 

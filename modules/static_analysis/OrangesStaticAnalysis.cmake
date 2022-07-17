@@ -17,20 +17,24 @@ OrangesStaticAnalysis
 
 Searches for all static analysis integration tools and enables the ones that are available.
 
-This module searches for the following programs:
+This module provides the following command:
+
+.. command:: oranges_enable_static_analysis
+
+    ::
+
+        oranges_enable_static_analysis (<target>)
+
+This command searches for the following programs:
 
 - :module:`clang-tidy <OrangesClangTidy>`
 - :module:`cppcheck <OrangesCppcheck>`
 - :module:`cpplint <OrangesCpplint>`
 - :module:`include-what-you-use <OrangesIWYU>`
 
-and enables build-time integrations for any of the tools that are found. No errors are emitted for unfound integration tools.
+and enables build-time integrations for any of the tools that are found.
+No errors are emitted for unfound tools.
 
-Targets
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-``Oranges::OrangesStaticAnalysis``
-
-Interface target that links to all the static analysis tools' interface targets.
 
 .. seealso ::
 
@@ -52,23 +56,16 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-if (TARGET Oranges::OrangesStaticAnalysis)
-    return ()
-endif ()
-
-include (FeatureSummary)
 include (OrangesClangTidy)
 include (OrangesCppcheck)
 include (OrangesCpplint)
 include (OrangesIWYU)
 
-add_library (OrangesStaticAnalysis INTERFACE)
+function (oranges_enable_static_analysis target)
 
-target_link_libraries (
-    OrangesStaticAnalysis
-    INTERFACE "$<BUILD_INTERFACE:ClangTidy::interface>" "$<BUILD_INTERFACE:cppcheck::interface>"
-              "$<BUILD_INTERFACE:cpplint::interface>" "$<BUILD_INTERFACE:IWYU::interface>")
+    oranges_enable_clang_tidy (TARGET "${target}")
+    oranges_enable_cppcheck (TARGET "${target}")
+    oranges_enable_cpplint (TARGET "${target}")
+    oranges_enable_iwyu (TARGET "${target}")
 
-install (TARGETS OrangesStaticAnalysis EXPORT OrangesTargets)
-
-add_library (Oranges::OrangesStaticAnalysis ALIAS OrangesStaticAnalysis)
+endfunction ()
