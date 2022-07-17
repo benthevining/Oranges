@@ -1,5 +1,16 @@
 # Oranges changelog
 
+## [4.0.0](https://github.com/benthevining/Oranges/compare/v3.3.0...v4.0.0) (2022-07-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* static analysis tools are no longer represented using targets
+
+Precommit-Verified: 4c1cb29fefde724c2cd09a35dd0bc6ac4cf5f6281186df905e164d47c3e4070d
+
+* using functions instead of targets for static analysis ([4257e29](https://github.com/benthevining/Oranges/commit/4257e293d8db321039c1d98d676f77e664c9bec7))
+
 ## [3.3.0](https://github.com/benthevining/Oranges/compare/v3.2.0...v3.3.0) (2022-07-14)
 
 
