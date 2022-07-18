@@ -113,10 +113,16 @@ find_path (
     DOC "MTS-ESP master sources directory")
 
 if (MTSESP_CLIENT_DIR)
-    set (MTSESP_SOURCE_DIR "${MTSESP_CLIENT_DIR}/.." CACHE PATH "Path to the MTS-ESP repository")
+    set (mtsesp_source_init "${MTSESP_CLIENT_DIR}")
 elseif (MTSESP_MASTER_DIR)
-    set (MTSESP_SOURCE_DIR "${MTSESP_MASTER_DIR}/.." CACHE PATH "Path to the MTS-ESP repository")
+    set (mtsesp_source_init "${MTSESP_MASTER_DIR}")
+else ()
+    set (mtsesp_source_init "$ENV{MTSESP_SOURCE_DIR}")
 endif ()
+
+set (MTSESP_SOURCE_DIR "${mtsesp_source_init}" CACHE PATH "Path to the MTS-ESP repository")
+
+unset (mtsesp_source_init)
 
 mark_as_advanced (MTSESP_CLIENT_DIR MTSESP_MASTER_DIR MTSESP_SOURCE_DIR)
 

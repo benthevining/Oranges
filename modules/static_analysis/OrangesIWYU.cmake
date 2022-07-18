@@ -57,12 +57,14 @@ An environment variable with this name may also be set.
 .. cmake:variable:: IWYU_EXTRA_ARGS
 
 Space-separated arguments that will be passed verbatim to include-what-you-use in calls to
-:command:`oranges_enable_iwyu` that do not explicitly override this option.
+:command:`oranges_enable_iwyu` that do not explicitly override this option. The environment variable with this
+name, if set, will initialize this variable; otherwise, defaults to ``--update_comments --cxx17ns``.
 
 
 .. cmake:variable:: IWYU_OFF
 
-When this variable is set to ``ON``, calls to :command:`oranges_enable_iwyu` do nothing. Defaults to ``OFF``.
+When this variable is set to ``ON``, calls to :command:`oranges_enable_iwyu` do nothing. The environment variable
+with this name, if set, will initialize this variable; otherwise, defaults to ``OFF``.
 
 
 Environment variables
@@ -71,6 +73,16 @@ Environment variables
 .. cmake:envvar:: IWYU_PROGRAM
 
 Initializes the value of the :variable:`IWYU_PROGRAM` variable.
+
+
+.. cmake:envvar:: IWYU_EXTRA_ARGS
+
+Initializes the :variable:`IWYU_EXTRA_ARGS` variable.
+
+
+.. cmake:envvar:: IWYU_OFF
+
+Initializes the :variable:`IWYU_OFF` variable.
 
 
 .. seealso ::
@@ -98,10 +110,26 @@ include (OrangesFunctionArgumentHelpers)
 find_program (IWYU_PROGRAM NAMES include-what-you-use iwyu PATHS ENV IWYU_PROGRAM
               DOC "Path to the include-what-you-use executable")
 
-set (IWYU_EXTRA_ARGS "--update_comments --cxx17ns"
+if (DEFINED ENV{IWYU_EXTRA_ARGS})
+    set (iwyu_extra_init "$ENV{IWYU_EXTRA_ARGS}")
+else ()
+    set (iwyu_extra_init "--update_comments --cxx17ns")
+endif ()
+
+set (IWYU_EXTRA_ARGS "${iwyu_extra_init}"
      CACHE STRING "Space-separated arguments to be passed to include-what-you-use verbatim")
 
-option (IWYU_OFF "Disable include-what-you-use for the entire build" OFF)
+unset (iwyu_extra_init)
+
+if (DEFINED ENV{IWYU_OFF})
+    set (iwyu_off_init "$ENV{IWYU_OFF}")
+else ()
+    set (iwyu_off_init OFF)
+endif ()
+
+option (IWYU_OFF "Disable include-what-you-use for the entire build" "${iwyu_off_init}")
+
+unset (iwyu_off_init)
 
 #
 

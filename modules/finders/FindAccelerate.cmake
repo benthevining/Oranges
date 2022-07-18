@@ -57,7 +57,8 @@ add_library (Accelerate::Accelerate IMPORTED INTERFACE)
 set_target_properties (Accelerate::Accelerate PROPERTIES INTERFACE_LINK_LIBRARIES
                                                          "-framework Accelerate")
 
-find_file (ACCELERATE_HEADER Accelerate.h DOC "Main header for the Accelerate framework")
+find_file (ACCELERATE_HEADER Accelerate.h PATHS ENV ACCELERATE_HEADER
+           DOC "Main header for the Accelerate framework")
 
 mark_as_advanced (ACCELERATE_HEADER)
 

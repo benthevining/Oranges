@@ -47,13 +47,28 @@ Path to the ccache executable used for :command:`oranges_enable_ccache`.
 .. cmake:variable:: CCACHE_DISABLE
 
 When ``ON``, ccache is disabled for the entire build and calling :command:`oranges_enable_ccache`
-does nothing. Defaults to ``OFF``.
+does nothing. The environment variable with this name, if set, initializes this variable;
+otherwise, defaults to ``OFF``.
 
 
 .. cmake:variable:: CCACHE_OPTIONS
 
 A space-separated list of command line flags to pass to ccache. Used for :command:`oranges_enable_ccache`
-when custom options are not explicitly specified.
+when custom options are not explicitly specified. The environment variable with this name, if set,
+initializes this variable; otherwise, defaults to some sensible default options.
+
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: CCACHE_DISABLE
+
+Initializes the :variable:`CCACHE_DISABLE` variable.
+
+
+.. cmake:envvar:: CCACHE_OPTIONS
+
+Initializes the :variable:`CCACHE_OPTIONS` variable.
 
 #]=======================================================================]
 
@@ -66,12 +81,29 @@ enable_language (C)
 
 find_program (CCACHE_PROGRAM ccache PATHS ENV CCACHE_PROGRAM DOC "Path to the ccache executable")
 
-option (CCACHE_DISABLE "When ON, ccache is disabled for the entire build" OFF)
+if (DEFINED ENV{CCACHE_DISABLE})
+    set (ccache_disable_init "$ENV{CCACHE_DISABLE}")
+else ()
+    set (ccache_disable_init OFF)
+endif ()
 
-set (
-    CCACHE_OPTIONS
-    "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M CCACHE_BASEDIR=${CMAKE_SOURCE_DIR} CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache"
-    CACHE STRING "Space-separated command line options that will be passed to ccache")
+option (CCACHE_DISABLE "When ON, ccache is disabled for the entire build" "${ccache_disable_init}")
+
+unset (ccache_disable_init)
+
+if (DEFINED ENV{CCACHE_OPTIONS})
+    set (ccache_options_init "$ENV{CCACHE_OPTIONS}")
+else ()
+    set (
+        ccache_options_init
+        "CCACHE_COMPRESS=true CCACHE_COMPRESSLEVEL=6 CCACHE_MAXSIZE=800M CCACHE_BASEDIR=${CMAKE_SOURCE_DIR} CCACHE_DIR=${CMAKE_SOURCE_DIR}/Cache/ccache/cache"
+        )
+endif ()
+
+set (CCACHE_OPTIONS "${ccache_options_init}"
+     CACHE STRING "Space-separated command line options that will be passed to ccache")
+
+unset (ccache_options_init)
 
 #
 

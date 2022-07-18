@@ -31,7 +31,16 @@ Cache variables
 
 .. cmake:variable:: ORANGES_DISABLE_UNIVERSAL_BINARY
 
-If true, this disables MacOS universal binaries, and calling :command:`oranges_enable_universal_binary` does nothing.
+If true, this disables MacOS universal binaries, and calling :command:`oranges_enable_universal_binary` does nothing. The environment
+variable with this name, if set, initializes this variable; otherwise, defaults to ``OFF``.
+
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: ORANGES_DISABLE_UNIVERSAL_BINARY
+
+Initializes the :variable:`ORANGES_DISABLE_UNIVERSAL_BINARY` variable.
 
 
 Target properties
@@ -61,7 +70,16 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesGeneratePlatformHeader)
 
-option (ORANGES_DISABLE_UNIVERSAL_BINARY "Disables building MacOS universal binaries" OFF)
+if (DEFINED ENV{ORANGES_DISABLE_UNIVERSAL_BINARY})
+    set (univ_bin_init "$ENV{ORANGES_DISABLE_UNIVERSAL_BINARY}")
+else ()
+    set (univ_bin_init OFF)
+endif ()
+
+option (ORANGES_DISABLE_UNIVERSAL_BINARY "Disables building MacOS universal binaries"
+        "${univ_bin_init}")
+
+unset (univ_bin_init)
 
 define_property (
     TARGET INHERITED

@@ -66,24 +66,28 @@ An environment variable with this name may also be set.
 .. cmake:variable:: CPPLINT_IGNORE
 
 Space-separated list of cpplint checks to be ignored by default in calls to :command:`oranges_enable_cpplint` that do not
-explicitly override this option.
+explicitly override this option. The environment variable with this name, if set, will initialize this variable; otherwise,
+a default set of checks will be ignored.
 
 
 .. cmake:variable:: CPPLINT_VERBOSITY
 
 Default cpplint verbosity level to be used by calls to :command:`oranges_enable_cpplint` that do not explicitly
-specify a verbosity level.
+specify a verbosity level. The environment variable with this name, if set, will initialize this variable; otherwise, this
+variable defaults to ``0``.
 
 
 .. cmake:variable:: CPPLINT_EXTRA_ARGS
 
 Space-separated arguments that will be passed to cpplint verbatim in calls to :command:`oranges_enable_cpplint`
-that do not explicitly override this option.
+that do not explicitly override this option. The environment variable with this name, if set, will initialize this
+cache variable.
 
 
 .. cmake:variable:: CPPLINT_OFF
 
-When this variable is set to ``ON``, calls to :command:`oranges_enable_cpplint` do nothing. Defaults to ``OFF``.
+When this variable is set to ``ON``, calls to :command:`oranges_enable_cpplint` do nothing. The environment variable with
+this name, if set, will initialize this variable; otherwise, this variable defaults to ``OFF``.
 
 
 Environment variables
@@ -92,6 +96,26 @@ Environment variables
 .. cmake:envvar:: CPPLINT_PROGRAM
 
 Initializes the value of the :variable:`CPPLINT_PROGRAM` variable.
+
+
+.. cmake:envvar:: CPPLINT_IGNORE
+
+Initializes the :variable:`CPPLINT_IGNORE` variable.
+
+
+.. cmake:envvar:: CPPLINT_VERBOSITY
+
+Initializes the :variable:`CPPLINT_VERBOSITY` variable.
+
+
+.. cmake:envvar:: CPPLINT_EXTRA_ARGS
+
+Initializes the :variable:`CPPLINT_EXTRA_ARGS` variable.
+
+
+.. cmake:envvar:: CPPLINT_OFF
+
+Initializes the :variable:`CPPLINT_OFF` variable.
 
 
 .. seealso ::
@@ -119,10 +143,27 @@ include (OrangesFunctionArgumentHelpers)
 find_program (CPPLINT_PROGRAM cpplint PATHS ENV CPPLINT_PROGRAM
               DOC "Path to the cpplint executable")
 
-set (CPPLINT_IGNORE "whitespace legal build runtime/references readability/braces readability/todo"
+if (DEFINED ENV{CPPLINT_IGNORE})
+    set (cpplint_ignore_init "$ENV{CPPLINT_IGNORE}")
+else ()
+    set (cpplint_ignore_init
+         "whitespace legal build runtime/references readability/braces readability/todo")
+endif ()
+
+set (CPPLINT_IGNORE "${cpplint_ignore_init}"
      CACHE STRING "Space-separated list of checks to be ignored by cpplint")
 
-set (CPPLINT_VERBOSITY 0 CACHE STRING "Default cpplint verbosity (0 to 5)")
+unset (cpplint_ignore_init)
+
+if (DEFINED ENV{CPPLINT_VERBOSITY})
+    set (cpplint_verb_init "$ENV{CPPLINT_VERBOSITY}")
+else ()
+    set (cpplint_verb_init 0)
+endif ()
+
+set (CPPLINT_VERBOSITY "${cpplint_verb_init}" CACHE STRING "Default cpplint verbosity (0 to 5)")
+
+unset (cpplint_verb_init)
 
 # cmake-format: off
 set_property (CACHE CPPLINT_VERBOSITY
@@ -130,10 +171,18 @@ set_property (CACHE CPPLINT_VERBOSITY
               0 1 2 3 4 5)
 # cmake-format: on
 
-set (CPPLINT_EXTRA_ARGS "" CACHE STRING
-                                 "Space-separated extra arguments to be passed to cpplint verbatim")
+set (CPPLINT_EXTRA_ARGS "$ENV{CPPLINT_EXTRA_ARGS}"
+     CACHE STRING "Space-separated extra arguments to be passed to cpplint verbatim")
 
-option (CPPLINT_OFF "Disable cpplint for the entire build" OFF)
+if (DEFINED ENV{CPPLINT_OFF})
+    set (cpplint_off_init "$ENV{CPPLINT_OFF}")
+else ()
+    set (cpplint_off_init OFF)
+endif ()
+
+option (CPPLINT_OFF "Disable cpplint for the entire build" "${cpplint_off_init}")
+
+unset (cpplint_off_init)
 
 #
 

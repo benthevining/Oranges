@@ -66,23 +66,27 @@ An environment variable with this name may also be set.
 .. cmake:variable:: CPPCHECK_ENABLE
 
 A space-separated list of default cppcheck checks to be enabled with calls to :command:`oranges_enable_cppcheck` that do not
-explicitly list their own desired checks.
+explicitly list their own desired checks. The environment variable with this name, if set, will initialize this variable's value;
+otherwise, a default set of checks will be enabled.
 
 
 .. cmake:variable:: CPPCHECK_DISABLE
 
 A space-separated list of default cppchecks checks to be disabled with calls to :command:`oranges_enable_cppcheck` that do not
-explicitly list their own desired disabled checks.
+explicitly list their own desired disabled checks. The environment variable with this name, if set, will initialize this variable's value;
+otherwise, a default set of checks will be disabled.
 
 
 .. cmake:variable:: CPPCHECK_EXTRA_ARGS
 
 A list of space-separated arguments that will be passed to cppcheck verbatim in calls to :command:`oranges_enable_cppcheck`.
+The environment variable with this name, if set, will initialize this variable's value; otherwise, defaults to ``--inline-suppr``.
 
 
 .. cmake:variable:: CPPCHECK_OFF
 
-When this variable is set to ``ON``, calls to :command:`oranges_enable_cppcheck` do nothing. Defaults to ``OFF``.
+When this variable is set to ``ON``, calls to :command:`oranges_enable_cppcheck` do nothing. The environment variable with this name,
+if set, will initialize this variable; otherwise, defaults to ``OFF``.
 
 
 Environment variables
@@ -91,6 +95,26 @@ Environment variables
 .. cmake:envvar:: CPPCHECK_PROGRAM
 
 Initializes the value of the :variable:`CPPCHECK_PROGRAM` variable.
+
+
+.. cmake:envvar:: CPPCHECK_ENABLE
+
+Initializes the :variable:`CPPCHECK_ENABLE` variable.
+
+
+.. cmake:envvar:: CPPCHECK_DISABLE
+
+Initializes the :variable:`CPPCHECK_DISABLE` variable.
+
+
+.. cmake:envvar:: CPPCHECK_EXTRA_ARGS
+
+Initializes the :variable:`CPPCHECK_EXTRA_ARGS` variable.
+
+
+.. cmake:envvar:: CPPCHECK_OFF
+
+Initializes the :variable:`CPPCHECK_OFF` variable.
 
 
 .. seealso ::
@@ -118,18 +142,51 @@ include (OrangesFunctionArgumentHelpers)
 find_program (CPPCHECK_PROGRAM cppcheck PATHS ENV CPPCHECK_PROGRAM
               DOC "Path to the cppcheck executable")
 
-set (CPPCHECK_ENABLE "warning style performance portability"
+if (DEFINED ENV{CPPCHECK_ENABLE})
+    set (cppcheck_enable_init "$ENV{CPPCHECK_ENABLE}")
+else ()
+    set (cppcheck_enable_init "warning style performance portability")
+endif ()
+
+set (CPPCHECK_ENABLE "${cppcheck_enable_init}"
      CACHE STRING "Space-separated list of cppcheck checks to enable")
 
-set (
-    CPPCHECK_DISABLE
-    "unmatchedSuppression missingIncludeSystem unusedStructMember unreadVariable preprocessorErrorDirective unknownMacro"
-    CACHE STRING "Space-separated list of cppcheck checks to disable")
+unset (cppcheck_enable_init)
 
-set (CPPCHECK_EXTRA_ARGS "--inline-suppr"
+if (DEFINED ENV{CPPCHECK_DISABLE})
+    set (cppcheck_disable_init "$ENV{CPPCHECK_DISABLE}")
+else ()
+    set (
+        cppcheck_disable_init
+        "unmatchedSuppression missingIncludeSystem unusedStructMember unreadVariable preprocessorErrorDirective unknownMacro"
+        )
+endif ()
+
+set (CPPCHECK_DISABLE "${cppcheck_disable_init}"
+     CACHE STRING "Space-separated list of cppcheck checks to disable")
+
+unset (cppcheck_disable_init)
+
+if (DEFINED ENV{CPPCHECK_EXTRA_ARGS})
+    set (cppcheck_extra_init "$ENV{CPPCHECK_EXTRA_ARGS}")
+else ()
+    set (cppcheck_extra_init "--inline-suppr")
+endif ()
+
+set (CPPCHECK_EXTRA_ARGS "${cppcheck_extra_init}"
      CACHE STRING "Space-separated arguments that will be passed to cppcheck verbatim")
 
-option (CPPCHECK_OFF "Disable cppcheck for the entire build" OFF)
+unset (cppcheck_extra_init)
+
+if (DEFINED ENV{CPPCHECK_OFF})
+    set (cppcheck_off_init "$ENV{CPPCHECK_OFF}")
+else ()
+    set (cppcheck_off_init OFF)
+endif ()
+
+option (CPPCHECK_OFF "Disable cppcheck for the entire build" "${cppcheck_off_init}")
+
+unset (cppcheck_off_init)
 
 #
 

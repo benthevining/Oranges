@@ -63,18 +63,21 @@ An environment variable with this name may also be set.
 .. cmake:variable:: CLANGTIDY_CONFIG_FILE
 
 This variable may be set to a ``.clang-tidy`` file that will be used for all calls to :command:`oranges_enable_clang_tidy`
-that do not explicitly provide their own config file.
+that do not explicitly provide their own config file. The environment variable with this name, if set, will initialize
+this cache variable.
 
 
 .. cmake:variable:: CLANGTIDY_EXTRA_ARGS
 
 This variable may be set to a list of space-separated arguments that will be passed to clang-tidy verbatim for the
-:command:`oranges_enable_clang_tidy` command.
+:command:`oranges_enable_clang_tidy` command. The environment variable with this name, if set, will initialize
+this cache variable.
 
 
 .. cmake:variable:: CLANGTIDY_OFF
 
-When this variable is set to ``ON``, calls to :command:`oranges_enable_clang_tidy` do nothing. Defaults to ``OFF``.
+When this variable is set to ``ON``, calls to :command:`oranges_enable_clang_tidy` do nothing. If an environment variable
+with this name is set, it will initialize this cache variable's value; otherwise, this variable will default to ``OFF``.
 
 
 Environment variables
@@ -83,6 +86,21 @@ Environment variables
 .. cmake:envvar:: CLANGTIDY_PROGRAM
 
 Initializes the value of the :variable:`CLANGTIDY_PROGRAM` variable.
+
+
+.. cmake:envvar:: CLANGTIDY_CONFIG_FILE
+
+Initializes the :variable:`CLANGTIDY_CONFIG_FILE` variable.
+
+
+.. cmake:envvar:: CLANGTIDY_EXTRA_ARGS
+
+Initializes the :variable:`CLANGTIDY_EXTRA_ARGS` variable.
+
+
+.. cmake:envvar:: CLANGTIDY_OFF
+
+Initializes the :variable:`CLANGTIDY_OFF` variable.
 
 
 .. seealso ::
@@ -110,12 +128,21 @@ include (OrangesFunctionArgumentHelpers)
 find_program (CLANGTIDY_PROGRAM clang-tidy PATHS ENV CLANGTIDY_PROGRAM
               DOC "Path to the clang-tidy executable")
 
-set (CLANGTIDY_CONFIG_FILE "" CACHE FILEPATH "Default .clang-tidy file to be used")
+set (CLANGTIDY_CONFIG_FILE "$ENV{CLANGTIDY_CONFIG_FILE}"
+     CACHE FILEPATH "Default .clang-tidy file to be used")
 
-set (CLANGTIDY_EXTRA_ARGS ""
+set (CLANGTIDY_EXTRA_ARGS "$ENV{CLANGTIDY_EXTRA_ARGS}"
      CACHE STRING "Space-separated extra arguments to be passed to clang-tidy verbatim")
 
-option (CLANGTIDY_OFF "Disable clang-tidy for the entire build" OFF)
+if (DEFINED ENV{CLANGTIDY_OFF})
+    set (ct_off_init "$ENV{CLANGTIDY_OFF}")
+else ()
+    set (ct_off_init OFF)
+endif ()
+
+option (CLANGTIDY_OFF "Disable clang-tidy for the entire build" "${ct_off_init}")
+
+unset (ct_off_init)
 
 #
 

@@ -44,14 +44,6 @@ LSB codename for your Linux distribution. Initialized with the output of running
 
 include_guard (GLOBAL)
 
-# cmake-format: off
-if ((DEFINED LSB_DISTRIBUTOR_ID OR DEFINED CACHE{LSB_DISTRIBUTOR_ID})
-    AND (DEFINED LSB_RELEASE OR DEFINED CACHE{LSB_RELEASE})
-    AND (DEFINED LSB_CODENAME OR DEFINED CACHE{LSB_CODENAME}))
-    return ()
-endif ()
-# cmake-format: on
-
 find_program (PROGRAM_LSB_RELEASE lsb_release PATHS ENV PROGRAM_LSB_RELEASE
               DOC "LSB release executable for your Linux distro")
 
