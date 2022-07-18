@@ -124,6 +124,11 @@
           "nargs": 1
         }
       },
+      "find_package_detect_macos_arch": {
+        "pargs": {
+          "nargs": 2
+        }
+      },
       "include_external_xcode_project": {
         "kwargs": {
           "COMMENT": 1,
@@ -207,6 +212,16 @@
         },
         "pargs": {
           "flags": "NO_AGGREGATE_TARGET"
+        }
+      },
+      "oranges_assert_target_argument_is_target": {
+        "pargs": {
+          "nargs": 1
+        }
+      },
+      "oranges_check_for_unparsed_args": {
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_create_doxygen_target": {
@@ -378,6 +393,17 @@
             "NO_AGGREGATE_HEADER"
           ],
           "nargs": 1
+        }
+      },
+      "oranges_get_debug_config_list": {
+        "pargs": {
+          "nargs": 1
+        }
+      },
+      "oranges_make_config_generator_expressions": {
+        "kwargs": {
+          "DEBUG": 1,
+          "RELEASE": 1
         }
       },
       "pluginval_add_all_plugin_tests": {

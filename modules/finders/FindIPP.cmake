@@ -198,6 +198,8 @@ function (__oranges_find_ipp_component lib_name comp_required)
         target_link_libraries (IPP::${lib_name} INTERFACE IPP::${dep_component})
     endforeach ()
 
+    find_package_detect_macos_arch (IPP::${lib_name} "${IPP_LIB_${lib_name}}")
+
 endfunction ()
 
 #

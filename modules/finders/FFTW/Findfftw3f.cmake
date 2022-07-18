@@ -68,9 +68,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (FeatureSummary)
-include (FindPackageMessage)
-include (FindPackageHandleStandardArgs)
+include (OrangesFindPackageHelpers)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www.fftw.org"
                         DESCRIPTION "Float precision FFT library")
@@ -97,6 +95,8 @@ add_library (FFTW3::fftw3f IMPORTED UNKNOWN)
 set_target_properties (FFTW3::fftw3f PROPERTIES IMPORTED_LOCATION "${FFTW_F_LIBRARY}")
 
 target_include_directories (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}")
+
+find_package_detect_macos_arch (FFTW3::fftw3f "${FFTW_F_INCLUDE_DIR}")
 
 if (EXISTS "${FFTW_F_INCLUDE_DIR}/fftw3f.h")
     target_sources (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}/fftw3f.h")

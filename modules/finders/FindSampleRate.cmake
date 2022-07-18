@@ -59,9 +59,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (FeatureSummary)
-include (FindPackageMessage)
-include (FindPackageHandleStandardArgs)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (
     "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "http://libsndfile.github.io/libsamplerate/"
@@ -88,6 +86,8 @@ set_target_properties (SampleRate::samplerate PROPERTIES IMPORTED_LOCATION
                                                          "${LIBSAMPLERATE_LIBRARY}")
 
 target_include_directories (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}")
+
+find_package_detect_macos_arch (SampleRate::samplerate "${LIBSAMPLERATE_LIBRARY}")
 
 target_sources (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}/samplerate.h")
 

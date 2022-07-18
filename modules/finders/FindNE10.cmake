@@ -59,9 +59,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (FeatureSummary)
-include (FindPackageMessage)
-include (FindPackageHandleStandardArgs)
+include (OrangesFindPackageHelpers)
 
 set_package_properties (
     "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://github.com/projectNe10/Ne10"
@@ -85,6 +83,8 @@ add_library (NE10::NE10 IMPORTED UNKNOWN)
 set_target_properties (NE10::NE10 PROPERTIES IMPORTED_LOCATION "${NE10_LIBRARY}")
 
 target_include_directories (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}")
+
+find_package_detect_macos_arch (NE10::NE10 "${NE10_LIBRARY}")
 
 target_sources (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}/NE10.h")
 

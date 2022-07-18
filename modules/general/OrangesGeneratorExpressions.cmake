@@ -10,6 +10,54 @@
 #
 # ======================================================================================
 
+#[=======================================================================[.rst:
+
+OrangesGeneratorExpressions
+-----------------------------
+
+Functions providing generator expression utilities.
+
+
+Get the list of debug configurations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: oranges_get_debug_config_list
+
+  ::
+
+    oranges_get_debug_config_list (<outVar>)
+
+Sets a variable named ``<outVar>`` in the calling scope with the list of debug configurations.
+
+This function queries the global property ``DEBUG_CONFIGURATIONS``, and if it is not set, provides
+the value ``Debug``.
+
+
+Create generator expressions for querying the configuration type
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. command:: oranges_make_config_generator_expressions
+
+  ::
+
+    oranges_make_config_generator_expressions ([DEBUG <debugVar>] [RELEASE <releaseVar>])
+
+Creates generator expressions to evaluate if the active configuration is debug or release,
+and populates the variables ``<debugVar>`` and ``<releaseVar>`` in the calling scope.
+
+The created generator expressions can be composed like so:
+
+.. code-block:: cmake
+
+    oranges_make_config_generator_expressions (DEBUG config_is_debug
+                                               RELEASE config_is_release)
+
+    target_compile_options (myTarget PUBLIC
+                            $<${config_is_debug}:-O0>
+                            $<${config_is_release}:-O3>)
+
+#]=======================================================================]
+
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)

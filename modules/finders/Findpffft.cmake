@@ -59,9 +59,7 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (FeatureSummary)
-include (FindPackageMessage)
-include (FindPackageHandleStandardArgs)
+include (OrangesFindPackageHelpers)
 
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES
                         URL "https://github.com/marton78/pffft" DESCRIPTION "Optimized FFT library")
@@ -85,6 +83,8 @@ add_library (pffft::pffft IMPORTED UNKNOWN)
 set_target_properties (pffft::pffft PROPERTIES IMPORTED_LOCATION "${PFFFT_LIBRARY}")
 
 target_include_directories (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}")
+
+find_package_detect_macos_arch (pffft::pffft "${PFFFT_LIBRARY}")
 
 target_sources (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}/pffft.h")
 

@@ -190,6 +190,8 @@ if (Master IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
 
                 set_target_properties (MTS-ESP::libMTS PROPERTIES IMPORTED_LOCATION
                                                                   "${MTSESP_LIB_MTS}")
+
+                find_package_detect_macos_arch (MTS-ESP::libMTS "${MTSESP_LIB_MTS}")
             endif ()
         endif ()
 
