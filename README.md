@@ -59,6 +59,7 @@ A library of CMake modules.
 ### Oranges provides the following find modules:
 
   * [FindAccelerate](modules/finders/FindAccelerate.cmake)
+  * [FindCatch2](modules/finders/FindCatch2.cmake)
   * [FindFFTW](modules/finders/FFTW/FindFFTW.cmake)
   * [FindIPP](modules/finders/FindIPP.cmake)
   * [FindJUCE](modules/finders/FindJUCE.cmake)
