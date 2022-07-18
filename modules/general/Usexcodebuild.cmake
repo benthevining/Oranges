@@ -17,8 +17,7 @@ Usexcodebuild
 
 Include external Xcode projects in your build.
 
-Include an external XCode project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This module provides the following command:
 
 .. command:: include_external_xcode_project
 
@@ -31,6 +30,7 @@ Include an external XCode project
                                    [COMMENT <buildComment>])
 
 Adds an external Xcode project to the build, similar to the CMake-native :command:`include_external_msproject() <include_external_msproject>` command.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,10 +46,8 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 find_program (
-    PROGRAM_XCODEBUILD xcodebuild
+    PROGRAM_XCODEBUILD xcodebuild PATHS ENV PROGRAM_XCODEBUILD
     DOC "xcodebuild executable (used by the Oranges include_external_xcode_project function)")
-
-mark_as_advanced (FORCE PROGRAM_XCODEBUILD)
 
 include (OrangesFunctionArgumentHelpers)
 
@@ -69,8 +67,8 @@ function (include_external_xcode_project)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
-    lemons_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
-    lemons_check_for_unparsed_args (ORANGES_ARG)
+    oranges_require_function_arguments (ORANGES_ARG TARGET DIRECTORY SCHEME)
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT TARGET Apple::xcodebuild)
         message (FATAL_ERROR "xcodebuild cannot be found, xcode project target cannot be created!")

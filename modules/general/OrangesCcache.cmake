@@ -17,11 +17,15 @@ OrangesCcache
 
 Provides a function to set up the ccache compiler cache.
 
+.. note::
+
+    Inclusion of this mododule enables the ``C`` and ``CXX`` languages, if they haven't already been enabled.
+
 .. command:: oranges_enable_ccache
 
     ::
 
-        oranges_enable_ccache (TARGET <target>
+        oranges_enable_ccache (<target>
                               [OPTIONS <args...>])
 
 Enables the ccache compiler cache for the specified ``<target>``.
@@ -39,10 +43,12 @@ Cache variables
 
 Path to the ccache executable used for :command:`oranges_enable_ccache`.
 
+
 .. cmake:variable:: CCACHE_DISABLE
 
 When ``ON``, ccache is disabled for the entire build and calling :command:`oranges_enable_ccache`
 does nothing. Defaults to ``OFF``.
+
 
 .. cmake:variable:: CCACHE_OPTIONS
 
@@ -69,7 +75,7 @@ set (
 
 #
 
-function (oranges_enable_ccache)
+function (oranges_enable_ccache target)
 
     if (NOT CCACHE_PROGRAM)
         message (
@@ -85,12 +91,10 @@ function (oranges_enable_ccache)
         return ()
     endif ()
 
-    cmake_parse_arguments (ORANGES_ARG "" "TARGET" "OPTIONS" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "" "OPTIONS" ${ARGN})
 
-    if (NOT TARGET "${ORANGES_ARG_TARGET}")
-        message (
-            FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${ORANGES_ARG_TARGET}' does not exist!"
-            )
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")
     endif ()
 
     #
@@ -115,8 +119,7 @@ function (oranges_enable_ccache)
 
         set (CCACHE_COMPILER_BEING_CONFIGURED "${CMAKE_${lang_upper}_COMPILER}")
 
-        set (configured_script
-             "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_TARGET}/launch-${language}")
+        set (configured_script "${CMAKE_CURRENT_BINARY_DIR}/${target}/launch-${language}")
 
         configure_file ("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/scripts/launcher.in"
                         "${configured_script}" @ONLY NEWLINE_STYLE UNIX)
@@ -140,13 +143,12 @@ function (oranges_enable_ccache)
 
     if (XCODE)
         set_target_properties (
-            "${ORANGES_ARG_TARGET}"
+            "${target}"
             PROPERTIES XCODE_ATTRIBUTE_CC "${c_script}" XCODE_ATTRIBUTE_CXX "${cxx_script}"
                        XCODE_ATTRIBUTE_LD "${c_script}" XCODE_ATTRIBUTE_LDPLUSPLUS "${cxx_script}")
     else ()
-        set_target_properties (
-            "${ORANGES_ARG_TARGET}" PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
-                                               CXX_COMPILER_LAUNCHER "${cxx_script}")
+        set_target_properties ("${target}" PROPERTIES C_COMPILER_LAUNCHER "${c_script}"
+                                                      CXX_COMPILER_LAUNCHER "${cxx_script}")
     endif ()
 
 endfunction ()

@@ -63,9 +63,9 @@ include (OrangesIWYU)
 
 function (oranges_enable_static_analysis target)
 
-    oranges_enable_clang_tidy (TARGET "${target}")
-    oranges_enable_cppcheck (TARGET "${target}")
-    oranges_enable_cpplint (TARGET "${target}")
-    oranges_enable_iwyu (TARGET "${target}")
+    oranges_enable_clang_tidy ("${target}")
+    oranges_enable_cppcheck ("${target}")
+    oranges_enable_cpplint ("${target}")
+    oranges_enable_iwyu ("${target}")
 
 endfunction ()

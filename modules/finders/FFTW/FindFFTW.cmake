@@ -16,13 +16,17 @@ FindFFTW
 -------------------------
 
 A find module for the FFTW FFT library.
+
 FFTW produces two separate CMake packages, fftw3 (double precision) and fftw3f (float precision);
 this find module searches for both and creates an interface target that links to whichever is found (or both).
+
 
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Double - double precision FFTW library
 - Float - single precision FFTW library
+- All - searches for both
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -35,6 +39,15 @@ Interface library that links to both the single and/or double precision librarie
 - ``FFTW_DOUBLE_AVAILABLE`` - 1 if the double-precision library was found, 0 otherwise
 - ``FFTW_SINGLE_ONLY`` - 1 if float precision is available, but not double precision. 0 if both precisions are available.
 - ``FFTW_DOUBLE_ONLY`` - 1 if double precision is available, but not single precision. 0 if both precisions are available.
+
+
+.. seealso ::
+
+    Module :module:`Findfftw3f`
+        A find module for the FFTW float-precision library.
+
+    Module :module:`Findfftw3`
+        A find module for the FFTW double-precision library.
 
 #]=======================================================================]
 

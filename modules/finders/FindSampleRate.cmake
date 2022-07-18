@@ -17,9 +17,14 @@ FindSampleRate
 
 A find module for libsamplerate.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- SampleRate::samplerate
+
+``SampleRate::samplerate``
+
+The libsamplerate library.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -29,10 +34,12 @@ Cache variables
 Include directory path for libsamplerate.
 When searching for this path, the environment variable :envvar:`LIBSAMPLERATE_INCLUDE_DIR` is added to the search path.
 
+
 .. cmake:variable:: LIBSAMPLERATE_LIBRARY
 
 Path to the prebuilt binary of the libsamplerate library.
 When searching for this file, the environment variable :envvar:`LIBSAMPLERATE_LIBRARY` is added to the search path.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -40,6 +47,7 @@ Environment variables
 .. cmake:envvar:: LIBSAMPLERATE_INCLUDE_DIR
 
 This environment variable, if set, is added to the search path when locating the :variable:`LIBSAMPLERATE_INCLUDE_DIR` path.
+
 
 .. cmake:envvar:: LIBSAMPLERATE_LIBRARY
 

@@ -17,6 +17,7 @@ Oranges
 
 The Oranges CMake library.
 
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -24,13 +25,16 @@ Cache variables
 
 When ``ON``, OrangesDefaultTarget will link to OrangesDefaultWarnings and OrangesStaticAnalysis. ``OFF`` by default.
 
+
 .. cmake:variable:: ORANGES_IOS_DEV_TEAM_ID
 
 10-character Apple developer ID used to set up code signing on iOS. Initialized by the value of :envvar:`APPLE_DEV_ID`, if set.
 
+
 .. cmake:variable:: ORANGES_MAC_UNIVERSAL_BINARY
 
 If true, and the Xcode generator is being used, and running on an M1 Mac, configures generation of universal binaries for both arm64 and x86_64 architectures.
+
 
 .. cmake:variable:: ORANGES_BUILD_DOCS
 
@@ -38,10 +42,12 @@ When on, builds the HTML and man page documentation. Defaults to on if Oranges i
 
 Building the docs requires Python 3.9 and Sphinx.
 
+
 .. cmake:variable:: ORANGES_SPHINX_FLAGS
 
 When building the documentation, this can contain a space-separated list of flags that will be passed to the Sphinx executable while building each documentation format.
 Empty by default.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -49,6 +55,7 @@ Environment variables
 .. cmake:envvar:: APPLE_DEV_ID
 
 The 10-character Apple developer ID used to configure code signing on iOS. If set, this initializes the value of the :variable:`ORANGES_IOS_DEV_TEAM_ID`.
+
 
 Install components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -58,6 +65,7 @@ Install components
 - oranges_doc_man
 - oranges_doc_info
 - oranges_doc_pdf
+
 
 Install component groups
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -93,7 +101,7 @@ include (cmake/OrangesMacros.cmake)
 #
 
 if (PROJECT_IS_TOP_LEVEL)
-    enable_language (CXX)
+    enable_language (CXX) # need to enable at least one language for GNUInstallDirs
 
     # cmake-format: off
 	set_property (
@@ -108,9 +116,6 @@ if (PROJECT_IS_TOP_LEVEL)
     set (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON)
 
     include (OrangesDefaultCPackSettings)
-else ()
-    # Need to enable at least 1 language for GNUInstallDirs
-    enable_language (CXX)
 endif ()
 
 #
@@ -120,7 +125,7 @@ include (GNUInstallDirs)
 set (ORANGES_INSTALL_DEST "${CMAKE_INSTALL_LIBDIR}/cmake/Oranges"
      CACHE STRING "Directory below INSTALL_PREFIX where Oranges will be installed to")
 
-mark_as_advanced (FORCE ORANGES_INSTALL_DEST)
+mark_as_advanced (ORANGES_INSTALL_DEST)
 
 #
 
@@ -156,16 +161,10 @@ install (
     EXPORT_LINK_INTERFACE_LIBRARIES
     COMPONENT oranges_base)
 
-export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake"
+export (EXPORT OrangesTargets FILE "${CMAKE_CURRENT_BINARY_DIR}/export/OrangesTargets.cmake"
         NAMESPACE Oranges::)
 
-set (Oranges_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "")
-
-export (PACKAGE Oranges)
-
 file (COPY_FILE cmake/OrangesMacros.cmake "${CMAKE_CURRENT_BINARY_DIR}/OrangesMacros.cmake")
-
-file (TOUCH "${CMAKE_CURRENT_BINARY_DIR}/OrangesTargets.cmake")
 
 include (CMakePackageConfigHelpers)
 
@@ -225,3 +224,5 @@ if (PROJECT_IS_TOP_LEVEL)
 
     include (OrangesUninstallTarget)
 endif ()
+
+export (PACKAGE Oranges)

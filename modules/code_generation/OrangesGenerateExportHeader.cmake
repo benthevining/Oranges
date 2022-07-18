@@ -43,6 +43,7 @@ Options:
 ``REL_PATH``
  A path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated header will be installed to. Defaults to ``<targetName>``.
 
+
 .. seealso ::
 
     Module :external:module:`GenerateExportHeader`
@@ -61,37 +62,35 @@ include (OrangesFunctionArgumentHelpers)
 
 #
 
-function (oranges_generate_export_header)
+function (oranges_generate_export_header target)
 
     # NB. this include must be in this function's scope, to prevent bugs with this module's
     # variables!
     include (GenerateExportHeader)
 
-    set (TARGET_NAME "${ARGV0}")
-
-    if (NOT TARGET "${TARGET_NAME}")
-        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
         return ()
     endif ()
 
     set (oneValueArgs BASE_NAME HEADER REL_PATH INSTALL_COMPONENT SCOPE)
 
-    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "")
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
-    lemons_check_for_unparsed_args (ORANGES_ARG)
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
-    set_target_properties ("${TARGET_NAME}" PROPERTIES CXX_VISIBILITY_PRESET hidden
-                                                       VISIBILITY_INLINES_HIDDEN TRUE)
+    set_target_properties ("${target}" PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                                  VISIBILITY_INLINES_HIDDEN TRUE)
 
     if (NOT ORANGES_ARG_BASE_NAME)
-        set (ORANGES_ARG_BASE_NAME "${TARGET_NAME}")
+        set (ORANGES_ARG_BASE_NAME "${target}")
     endif ()
 
     if (NOT ORANGES_ARG_HEADER)
         set (ORANGES_ARG_HEADER "${ORANGES_ARG_BASE_NAME}_export.h")
     endif ()
 
-    get_target_property (target_type "${TARGET_NAME}" TYPE)
+    get_target_property (target_type "${target}" TYPE)
 
     if (NOT ORANGES_ARG_SCOPE)
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
@@ -105,20 +104,20 @@ function (oranges_generate_export_header)
 
     unset (target_type)
 
-    generate_export_header ("${TARGET_NAME}" BASE_NAME "${ORANGES_ARG_BASE_NAME}" EXPORT_FILE_NAME
+    generate_export_header ("${target}" BASE_NAME "${ORANGES_ARG_BASE_NAME}" EXPORT_FILE_NAME
                             "${ORANGES_ARG_HEADER}" ${no_build_deprecated})
 
     if (NOT ORANGES_ARG_REL_PATH)
-        set (ORANGES_ARG_REL_PATH "${TARGET_NAME}")
+        set (ORANGES_ARG_REL_PATH "${target}")
     endif ()
 
     set (generated_file "${CMAKE_CURRENT_BINARY_DIR}/${ORANGES_ARG_HEADER}")
 
-    set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${TARGET_NAME}"
+    set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${target}"
                                  PROPERTIES GENERATED ON)
 
     target_sources (
-        "${TARGET_NAME}"
+        "${target}"
         "${ORANGES_ARG_SCOPE}"
         "$<BUILD_INTERFACE:${generated_file}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>"
@@ -132,15 +131,15 @@ function (oranges_generate_export_header)
              DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${TARGET_NAME}" "${ORANGES_ARG_SCOPE}" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+        "${target}" "${ORANGES_ARG_SCOPE}" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>")
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" upperBaseName)
 
     target_compile_definitions (
-        "${TARGET_NAME}"
+        "${target}"
         "${ORANGES_ARG_SCOPE}"
-        "$<$<STREQUAL:$<TARGET_PROPERTY:${TARGET_NAME},TYPE>,STATIC_LIBRARY>:${upperBaseName}_STATIC_DEFINE=1>"
+        "$<$<STREQUAL:$<TARGET_PROPERTY:${target},TYPE>,STATIC_LIBRARY>:${upperBaseName}_STATIC_DEFINE=1>"
         )
 
 endfunction ()

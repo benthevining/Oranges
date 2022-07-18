@@ -25,7 +25,7 @@ Configure cpplint
 
     ::
 
-        oranges_enable_cpplint (TARGET <target>
+        oranges_enable_cpplint (<target>
                                [IGNORE <checks...>]
                                [VERBOSITY <level>]
                                [EXTRA_ARGS <args...>]
@@ -33,17 +33,25 @@ Configure cpplint
 
 Configures cpplint for the given ``<target>`` by manipulating the target's ``<LANG>_CPPLINT`` properties.
 
-Any specified ``EXTRA_ARGS`` will be passed to the cpplint executable verbatim. If not specified, the
-value of the :variable:`CPPLINT_EXTRA_ARGS` variable will be used.
+If the :variable:`CPPLINT_OFF` variable is set to ``ON``, this function does nothing.
 
-The ``IGNORE`` option is provided as a convenient way to specify lists of checks to ignore. If not specified,
-the value of the :variable:`CPPLINT_IGNORE` variable will be used.
+Options:
 
-The ``VERBOSITY`` option may specify an integer verbosity level between 0 and 5 (inclusive). If not specified,
-the value of the :variable:`CPPLINT_VERBOSITY` variable will be used.
+``IGNORE``
+ A list of cpplint checks to ignore for this target. Each one may optionally begin with a '-' character, though
+ this is not required. f not specified, the value of the :variable:`CPPLINT_IGNORE` variable will be used.
 
-Languages may be specified; valid values are ``C`` or ``CXX``. If no languages are specified, this function
-will configure cpplint for both valid languages.
+``VERBOSITY``
+ An integer verbosity level between 0 and 5 (inclusive). If not specified, the value of the
+ :variable:`CPPLINT_VERBOSITY` variable will be used.
+
+``EXTRA_ARGS``
+ Extra arguments to pass to cpplint verbatim. If not specified, the value of the :variable:`CPPLINT_EXTRA_ARGS`
+ variable will be used.
+
+``LANGS``
+ Languages for which to enable cpplint. Valid values are ``C`` or ``CXX``. If no languages are specified, this function
+ will configure cpplint for both valid languages.
 
 
 Cache variables
@@ -54,20 +62,28 @@ Cache variables
 Path to the cpplint executable, used by :command:`oranges_enable_cpplint`.
 An environment variable with this name may also be set.
 
+
 .. cmake:variable:: CPPLINT_IGNORE
 
 Space-separated list of cpplint checks to be ignored by default in calls to :command:`oranges_enable_cpplint` that do not
 explicitly override this option.
+
 
 .. cmake:variable:: CPPLINT_VERBOSITY
 
 Default cpplint verbosity level to be used by calls to :command:`oranges_enable_cpplint` that do not explicitly
 specify a verbosity level.
 
+
 .. cmake:variable:: CPPLINT_EXTRA_ARGS
 
 Space-separated arguments that will be passed to cpplint verbatim in calls to :command:`oranges_enable_cpplint`
 that do not explicitly override this option.
+
+
+.. cmake:variable:: CPPLINT_OFF
+
+When this variable is set to ``ON``, calls to :command:`oranges_enable_cpplint` do nothing. Defaults to ``OFF``.
 
 
 Environment variables
@@ -77,11 +93,28 @@ Environment variables
 
 Initializes the value of the :variable:`CPPLINT_PROGRAM` variable.
 
+
+.. seealso ::
+
+    Module :module:`OrangesClangTidy`
+        Module for clang-tidy
+
+    Module :module:`OrangesCppcheck`
+        Module for cppcheck
+
+    Module :module:`OrangesIWYU`
+        Module for include-what-you-use
+
+    Module :module:`OrangesStaticAnalysis`
+        Aggregate module for enabling all static analysis tools
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+include (OrangesFunctionArgumentHelpers)
 
 find_program (CPPLINT_PROGRAM cpplint PATHS ENV CPPLINT_PROGRAM
               DOC "Path to the cpplint executable")
@@ -100,9 +133,11 @@ set_property (CACHE CPPLINT_VERBOSITY
 set (CPPLINT_EXTRA_ARGS "" CACHE STRING
                                  "Space-separated extra arguments to be passed to cpplint verbatim")
 
+option (CPPLINT_OFF "Disable cpplint for the entire build" OFF)
+
 #
 
-function (oranges_enable_cpplint)
+function (oranges_enable_cpplint target)
 
     if (NOT CPPLINT_PROGRAM)
         message (
@@ -112,15 +147,21 @@ function (oranges_enable_cpplint)
         return ()
     endif ()
 
-    set (oneVal TARGET VERBOSITY)
+    if (CPPLINT_OFF)
+        message (VERBOSE
+                 "${CMAKE_CURRENT_FUNCTION} - not enabling cpplint, because CPPLINT_OFF is ON.")
+        return ()
+    endif ()
+
+    set (oneVal VERBOSITY)
     set (multiVal IGNORE EXTRA_ARGS LANGS)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneVal}" "${multiVal}" ${ARGN})
 
-    if (NOT TARGET "${ORANGES_ARG_TARGET}")
-        message (
-            FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${ORANGES_ARG_TARGET}' does not exist!"
-            )
+    oranges_check_for_unparsed_args (ORANGES_ARG)
+
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")
     endif ()
 
     set (cpplint_cmd "${CPPLINT_PROGRAM}")
@@ -174,7 +215,7 @@ function (oranges_enable_cpplint)
 
     list (REMOVE_DUPLICATES cpplint_cmd)
 
-    message (DEBUG "cpplint command for target ${ORANGES_ARG_TARGET}: ${cpplint_cmd}")
+    message (DEBUG "cpplint command for target ${target}: ${cpplint_cmd}")
 
     set (valid_languages C CXX)
 
@@ -191,13 +232,12 @@ function (oranges_enable_cpplint)
             continue ()
         endif ()
 
-        set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES "${lang}_CPPLINT"
-                                                                  "${cpplint_cmd}")
+        set_target_properties ("${target}" PROPERTIES "${lang}_CPPLINT" "${cpplint_cmd}")
 
     endforeach ()
 
-    set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+    set_target_properties ("${target}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-    message (VERBOSE "Enabled cpplint for target ${ORANGES_ARG_TARGET}")
+    message (VERBOSE "Enabled cpplint for target ${target}")
 
 endfunction ()

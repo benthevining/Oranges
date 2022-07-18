@@ -28,6 +28,7 @@ Cache variables
 This can be manually overridden to provide the path to the root of the IPP installation.
 This variable will be initialized by the :envvar:`IPP_ROOT` environment variable.
 
+
 .. cmake:variable:: IPP_INCLUDE_DIR
 
 The path to the include directory for IPP.
@@ -40,6 +41,7 @@ Environment variables
 .. cmake:envvar:: IPP_ROOT
 
 If set, this environment variable will initialize the :variable:`IPP_ROOT` variable.
+
 
 .. cmake:envvar:: IPP_INCLUDE_DIR
 

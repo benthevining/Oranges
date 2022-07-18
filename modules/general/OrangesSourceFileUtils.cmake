@@ -15,7 +15,7 @@
 OrangesSourceFileUtils
 -------------------------
 
-Utility function for adding source files to a target, and generating install rules for any header files.
+This module provides the following command:
 
 .. command:: oranges_add_source_files
 
@@ -54,7 +54,8 @@ function (oranges_add_source_files)
     cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     oranges_assert_target_argument_is_target (ORANGES_ARG)
-    lemons_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
+    oranges_require_function_arguments (ORANGES_ARG DIRECTORY_NAME FILES)
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     #
 

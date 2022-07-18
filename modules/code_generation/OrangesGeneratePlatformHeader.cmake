@@ -22,6 +22,7 @@ This module provides the function :command:`oranges_generate_platform_header() <
     :local:
     :backlinks: top
 
+
 The header generation command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -63,6 +64,7 @@ Options:
 
 ``REL_PATH``
  Path below ``CMAKE_INSTALL_INCLUDEDIR`` where the generated file will be installed to. Defaults to ``<targetName>``.
+
 
 Macros
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -167,9 +169,11 @@ The generated file will contain the following macros, where ``<baseName>`` and `
     | <baseName>_SSE      | PLAT_SSE       | 0 or 1 |
     +---------------------+----------------+--------+
 
+
 .. note::
 
     Each macro used by this header file will always be defined to a value, so you should use ``#if`` to check their values, and not ``#ifdef``.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -178,9 +182,11 @@ Cache variables
 
 If on, all SIMD-related macros are initialized to 0, instead of attempting to detect features present with the current toolchain and target platform. Defaults to ``OFF``.
 
+
 .. cmake:variable:: PLAT_DEFAULT_TESTING_LANGUAGE
 
 The language that will be used to initialize the values of language- or compiler-specific variables the first time this module is included. Defaults to ``CXX``.
+
 
 .. seealso ::
 
@@ -206,7 +212,15 @@ set (
         "Language that will be used for platform detection tests that require referencing a specific compiler or language configuration, when another language isn't explicitly specified"
     )
 
-set_property (CACHE PLAT_DEFAULT_TESTING_LANGUAGE PROPERTY STRINGS "CXX;C;OBJCXX;OBJC;Fortran;ASM")
+set_property (
+    CACHE PLAT_DEFAULT_TESTING_LANGUAGE
+    PROPERTY STRINGS
+             CXX
+             C
+             OBJCXX
+             OBJC
+             Fortran
+             ASM)
 
 include (scripts/plat_header_set_options)
 
@@ -214,23 +228,21 @@ _oranges_plat_header_set_opts_for_language ("${PLAT_DEFAULT_TESTING_LANGUAGE}")
 
 #
 
-function (oranges_generate_platform_header)
+function (oranges_generate_platform_header target)
 
-    set (TARGET_NAME "${ARGV0}")
-
-    if (NOT TARGET "${TARGET_NAME}")
-        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
         return ()
     endif ()
 
     set (oneValueArgs BASE_NAME HEADER REL_PATH LANGUAGE INSTALL_COMPONENT SCOPE)
 
-    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "")
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
-    lemons_check_for_unparsed_args (ORANGES_ARG)
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT ORANGES_ARG_BASE_NAME)
-        set (ORANGES_ARG_BASE_NAME "${TARGET_NAME}")
+        set (ORANGES_ARG_BASE_NAME "${target}")
     endif ()
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" ORANGES_ARG_BASE_NAME)
@@ -240,7 +252,7 @@ function (oranges_generate_platform_header)
     endif ()
 
     if (NOT ORANGES_ARG_REL_PATH)
-        set (ORANGES_ARG_REL_PATH "${TARGET_NAME}")
+        set (ORANGES_ARG_REL_PATH "${target}")
     endif ()
 
     if (NOT ORANGES_ARG_LANGUAGE)
@@ -248,7 +260,7 @@ function (oranges_generate_platform_header)
     endif ()
 
     if (NOT ORANGES_ARG_SCOPE)
-        get_target_property (target_type "${TARGET_NAME}" TYPE)
+        get_target_property (target_type "${target}" TYPE)
 
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
             set (ORANGES_ARG_SCOPE INTERFACE)
@@ -324,11 +336,11 @@ function (oranges_generate_platform_header)
     set_property (DIRECTORY "${CMAKE_CURRENT_LIST_DIR}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
                                                                         "${input_file}")
 
-    set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${TARGET_NAME}"
+    set_source_files_properties ("${generated_file}" TARGET_DIRECTORY "${target}"
                                  PROPERTIES GENERATED ON)
 
     target_sources (
-        "${TARGET_NAME}"
+        "${target}"
         "${ORANGES_ARG_SCOPE}"
         $<BUILD_INTERFACE:${generated_file}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}/${ORANGES_ARG_HEADER}>
@@ -342,7 +354,7 @@ function (oranges_generate_platform_header)
              DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}" ${install_component})
 
     target_include_directories (
-        "${TARGET_NAME}" "${ORANGES_ARG_SCOPE}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        "${target}" "${ORANGES_ARG_SCOPE}" $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${ORANGES_ARG_REL_PATH}>)
 
 endfunction ()

@@ -37,10 +37,13 @@ A library of CMake modules.
   * [OrangesCpplint](modules/static_analysis/OrangesCpplint.cmake)
   * [OrangesDefaultCPackSettings](modules/installing/OrangesDefaultCPackSettings.cmake)
   * [OrangesDoxygenConfig](modules/documentation/OrangesDoxygenConfig.cmake)
+  * [OrangesFindPackageHelpers](modules/general/OrangesFindPackageHelpers.cmake)
+  * [OrangesFunctionArgumentHelpers](modules/general/OrangesFunctionArgumentHelpers.cmake)
   * [OrangesGenerateExportHeader](modules/code_generation/OrangesGenerateExportHeader.cmake)
   * [OrangesGeneratePkgConfig](modules/installing/OrangesGeneratePkgConfig.cmake)
   * [OrangesGeneratePlatformHeader](modules/code_generation/OrangesGeneratePlatformHeader.cmake)
   * [OrangesGenerateStandardHeaders](modules/code_generation/OrangesGenerateStandardHeaders.cmake)
+  * [OrangesGeneratorExpressions](modules/general/OrangesGeneratorExpressions.cmake)
   * [OrangesGraphviz](modules/documentation/OrangesGraphviz.cmake)
   * [OrangesIPO](modules/general/OrangesIPO.cmake)
   * [OrangesIWYU](modules/static_analysis/OrangesIWYU.cmake)
@@ -51,8 +54,6 @@ A library of CMake modules.
   * [OrangesStaticAnalysis](modules/static_analysis/OrangesStaticAnalysis.cmake)
   * [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
   * [OrangesUniversalBinary](modules/general/OrangesUniversalBinary.cmake)
-  * [Usecodesign](modules/code_signing/Usecodesign.cmake)
-  * [Usewraptool](modules/code_signing/Usewraptool.cmake)
   * [Usexcodebuild](modules/general/Usexcodebuild.cmake)
 
 ### Oranges provides the following find modules:

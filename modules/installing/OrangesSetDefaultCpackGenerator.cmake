@@ -19,13 +19,16 @@ When this modules is included, if :variable:`CPACK_GENERATOR` is not set, it wil
 
 On Windows, the default generator is NSIS. On Mac, it's PackageMaker. On Ubuntu, the DEB generator is used. On RPM, the RPM generator is used. On any other system, TGZ will be used.
 
+
 .. cmake:variable:: ORANGES_DEB_EXE
 
 Path to the ``debuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is Debian.
 
+
 .. cmake:variable:: ORANGES_RPM_EXE
 
 Path to the ``rpmbuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is RPM.
+
 
 .. seealso::
 

@@ -21,7 +21,7 @@ Provides a function to enable IPO, if supported.
 
     ::
 
-        oranges_enable_ipo (TARGET <target>
+        oranges_enable_ipo (<target>
                            [INCLUDE_DEBUG])
 
 Enables interprocedural optimization for the given ``<target>`` if the :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION` is
@@ -36,6 +36,7 @@ Variables
 :variable:`CMAKE_INTERPROCEDURAL_OPTIMIZATION`
 
 If this variable is set to OFF, then calling :command:`oranges_enable_ipo` does nothing.
+
 
 .. seealso ::
 
@@ -64,32 +65,30 @@ endif ()
 
 #
 
-function (oranges_enable_ipo)
+function (oranges_enable_ipo target)
 
-    cmake_parse_arguments (ORANGES_ARG "INCLUDE_DEBUG" "TARGET" "" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "INCLUDE_DEBUG" "" "" ${ARGN})
 
-    if (NOT TARGET "${ORANGES_ARG_TARGET}")
-        message (
-            FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${ORANGES_ARG_TARGET}' does not exist!"
-            )
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")
     endif ()
 
     if (NOT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 
         message (
             VERBOSE
-            "${CMAKE_CURRENT_FUNCTION} - disabling IPO for target ${ORANGES_ARG_TARGET} because CMAKE_INTERPROCEDURAL_OPTIMIZATION is OFF"
+            "${CMAKE_CURRENT_FUNCTION} - disabling IPO for target ${target} because CMAKE_INTERPROCEDURAL_OPTIMIZATION is OFF"
             )
 
-        set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
+        set_target_properties ("${target}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION OFF)
 
         return ()
 
     endif ()
 
-    message (VERBOSE "${CMAKE_CURRENT_FUNCTION} - enabling IPO for target ${ORANGES_ARG_TARGET}")
+    message (VERBOSE "${CMAKE_CURRENT_FUNCTION} - enabling IPO for target ${target}")
 
-    set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
+    set_target_properties ("${target}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION ON)
 
     if (ORANGES_ARG_INCLUDE_DEBUG)
         return ()
@@ -101,8 +100,7 @@ function (oranges_enable_ipo)
 
         string (TOUPPER "${config}" config)
 
-        set_target_properties ("${ORANGES_ARG_TARGET}"
-                               PROPERTIES INTERPROCEDURAL_OPTIMIZATION_${config} OFF)
+        set_target_properties ("${target}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION_${config} OFF)
     endforeach ()
 
 endfunction ()

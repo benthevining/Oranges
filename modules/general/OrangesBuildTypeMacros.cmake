@@ -33,7 +33,8 @@ Options:
  Prefix used for each macro added to the target. Defaults to ``<targetName>``.
 
 ``SCOPE``
- Scope with which the compile definitions will be added to the target. Defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
+ Scope with which the compile definitions will be added to the target.
+ Defaults to ``INTERFACE`` for interface library targets, ``PRIVATE`` for executables, and ``PUBLIC`` for all other target types.
 
 
 This function adds the following preprocessor definitions, where ``<baseName>`` is all uppercase:
@@ -61,27 +62,21 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
-include (OrangesFunctionArgumentHelpers)
-
 #
 
-function (oranges_add_build_type_macros)
+function (oranges_add_build_type_macros target)
 
-    set (oneValueArgs BASE_NAME SCOPE)
-
-    set (TARGET_NAME "${ARGV0}")
-
-    if (NOT TARGET "${TARGET_NAME}")
-        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+    if (NOT TARGET "${target}")
+        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
         return ()
     endif ()
 
-    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "" "${oneValueArgs}" "")
+    set (oneValueArgs BASE_NAME SCOPE)
 
-    lemons_require_function_arguments (ORANGES_ARG SCOPE)
+    cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
 
     if (NOT ORANGES_ARG_BASE_NAME)
-        set (ORANGES_ARG_BASE_NAME "${TARGET_NAME}")
+        set (ORANGES_ARG_BASE_NAME "${target}")
     endif ()
 
     string (TOUPPER "${ORANGES_ARG_BASE_NAME}" base_name)
@@ -99,7 +94,7 @@ function (oranges_add_build_type_macros)
     set (config_is_release "$<NOT:${config_is_debug}>")
 
     if (NOT ORANGES_ARG_SCOPE)
-        get_target_property (target_type "${TARGET_NAME}" TYPE)
+        get_target_property (target_type "${target}" TYPE)
 
         if ("${target_type}" STREQUAL INTERFACE_LIBRARY)
             set (ORANGES_ARG_SCOPE INTERFACE)
@@ -114,7 +109,7 @@ function (oranges_add_build_type_macros)
 
     # cmake-format: off
     target_compile_definitions (
-    "${TARGET_NAME}"
+    "${target}"
     "${ORANGES_ARG_SCOPE}"
         "$<${config_is_debug}:${base_name}_DEBUG=1>"
         "$<${config_is_debug}:${base_name}_RELEASE=0>"

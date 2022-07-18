@@ -17,9 +17,14 @@ FindNE10
 
 A find module for NE10.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- NE10::NE10
+
+``NE10::NE10``
+
+The NE10 library.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -29,10 +34,12 @@ Cache variables
 Include directory path for NE10.
 When searching for this path, the environment variable :envvar:`NE10_INCLUDE_DIR` is added to the search path.
 
+
 .. cmake:variable:: NE10_LIBRARY
 
 Path to the prebuilt binary of the NE10 library.
 When searching for this file, the environment variable :envvar:`NE10_LIBRARY` is added to the search path.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -40,6 +47,7 @@ Environment variables
 .. cmake:envvar:: NE10_INCLUDE_DIR
 
 This environment variable, if set, is added to the search path when locating the :variable:`NE10_INCLUDE_DIR` path.
+
 
 .. cmake:envvar:: NE10_LIBRARY
 

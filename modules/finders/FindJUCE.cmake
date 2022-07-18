@@ -18,6 +18,7 @@ FindJUCE
 A find module for the JUCE library.
 This module attempts to locate a local copy of JUCE, and if this fails, fetches the JUCE sources from GitHub using CMake's ``FetchContent`` module.
 
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -26,9 +27,11 @@ Cache variables
 This variable can be set to the path to the root of the JUCE repository.
 If this variable is defined, this path will be added using ``add_subdirectory()``.
 
+
 .. cmake:variable:: JUCE_BRANCH
 
 The branch of JUCE's GitHub repository to use when fetching the sources from GitHub; either ``develop`` or ``master``. Defaults to ``master``.
+
 
 .. cmake:variable:: JUCE_CORE_DIR
 
@@ -36,12 +39,14 @@ The path to the ``juce_core`` JUCE module.
 If ``JUCE_PATH`` is not defined, this module will attempt to locate a local copy of JUCE by finding the ``juce_core.h`` file.
 When searching for this path, the environment variable :envvar:`JUCE_CORE_DIR` is added to the search path.
 
+
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:envvar:: JUCE_PATH
 
 This environment variable initializes the value of the :variable:`JUCE_PATH` variable.
+
 
 .. cmake:envvar:: JUCE_CORE_DIR
 

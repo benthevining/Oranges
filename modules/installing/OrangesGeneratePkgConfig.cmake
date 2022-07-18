@@ -60,7 +60,7 @@ include (GNUInstallDirs)
 
 #
 
-function (oranges_create_pkgconfig_file)
+function (oranges_create_pkgconfig_file target)
 
     set (options NO_INSTALL)
     set (
@@ -75,17 +75,14 @@ function (oranges_create_pkgconfig_file)
         INSTALL_COMPONENT)
     set (multiValueArgs REQUIRES)
 
-    set (TARGET_NAME "${ARGV0}")
-
-    if (NOT TARGET "${TARGET_NAME}")
-        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${TARGET_NAME} does not exist!")
+    if (NOT TARGET "${target}")
+        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
         return ()
     endif ()
 
-    cmake_parse_arguments (PARSE_ARGV 1 ORANGES_ARG "${options}" "${oneValueArgs}"
-                           "${multiValueArgs}")
+    cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    lemons_check_for_unparsed_args (ORANGES_ARG)
+    oranges_check_for_unparsed_args (ORANGES_ARG)
     oranges_assert_target_argument_is_target (ORANGES_ARG)
 
     if (ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_DEST)
@@ -99,7 +96,7 @@ function (oranges_create_pkgconfig_file)
     endif ()
 
     if (NOT ORANGES_ARG_NAME)
-        set (ORANGES_ARG_NAME "${TARGET_NAME}")
+        set (ORANGES_ARG_NAME "${target}")
     endif ()
 
     if (ORANGES_ARG_INCLUDE_REL_PATH)
@@ -136,14 +133,13 @@ function (oranges_create_pkgconfig_file)
 
     configure_file ("${pc_input}" "${pc_file_configured}" @ONLY NEWLINE_STYLE UNIX ESCAPE_QUOTES)
 
-    set_property (TARGET "${TARGET_NAME}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
+    set_property (TARGET "${target}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
 
-    set_property (TARGET "${TARGET_NAME}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES
-                                                          "${pc_file_configured}")
+    set_property (TARGET "${target}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")
 
     set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
-    file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}" TARGET "${TARGET_NAME}"
+    file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}" TARGET "${target}"
                                                                             NEWLINE_STYLE UNIX)
 
     if (NOT ORANGES_ARG_NO_INSTALL)

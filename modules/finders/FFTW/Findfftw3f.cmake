@@ -17,12 +17,14 @@ Findfftw3f
 
 A find module for the FFTW float-precision FFT library.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``FFTW3::fftw3f``
 
 FFTW float precision library.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -32,10 +34,12 @@ Cache variables
 Include directory path for the FFTW float precision library.
 When searching for this path, the environment variable :envvar:`FFTW_F_INCLUDE_DIR` is added to the search path.
 
+
 .. cmake:variable:: FFTW_F_LIBRARY
 
 Path to the prebuilt binary of the FFTW float precision library.
 When searching for this file, the environment variable :envvar:`FFTW_F_LIBRARY` is added to the search path.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,9 +48,19 @@ Environment variables
 
 This environment variable, if set, is added to the search path when locating the :variable:`FFTW_F_INCLUDE_DIR` path.
 
+
 .. cmake:envvar:: FFTW_F_LIBRARY
 
 This environment variable, if set, is added to the search path when locating the :variable:`FFTW_F_LIBRARY` path.
+
+
+.. seealso ::
+
+    Module :module:`Findfftw3`
+        A find module for the FFTW double-precision library.
+
+    Module :module:`FindFFTW`
+        An aggregate find module for both precisions of FFTW
 
 #]=======================================================================]
 

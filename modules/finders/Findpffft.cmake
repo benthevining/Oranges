@@ -17,9 +17,14 @@ Findpffft
 
 A find module for pffft.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- pffft::pffft
+
+``pffft::pffft``
+
+The pffft library.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -29,10 +34,12 @@ Cache variables
 Include directory path for pffft.
 When searching for this path, the environment variable :envvar:`PFFFT_INCLUDE_DIR` is added to the search path.
 
+
 .. cmake:variable:: PFFFT_LIBRARY
 
 Path to the prebuilt binary of the pffft library.
 When searching for this file, the environment variable :envvar:`PFFFT_LIBRARY` is added to the search path.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -40,6 +47,7 @@ Environment variables
 .. cmake:envvar:: PFFFT_INCLUDE_DIR
 
 This environment variable, if set, is added to the search path when locating the :variable:`PFFFT_INCLUDE_DIR` path.
+
 
 .. cmake:envvar:: PFFFT_LIBRARY
 

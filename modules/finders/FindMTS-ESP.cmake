@@ -18,11 +18,13 @@ FindMTS-ESP
 A find module for the MTS-ESP MIDI tuning library.
 If a local copy can't be found, the sources will be fetched from GitHub using CMake's ``FetchContent`` module.
 
+
 Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Client
 - Master
 - All
+
 
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -31,13 +33,16 @@ Targets
 
 Static library build of the MTS-ESP client library
 
+
 ``MTS-ESP::Master``
 
 Static library build of the MTS-ESP master library
 
+
 ``MTS-ESP::MTS-ESP``
 
 Interface library that links to both the client and master libraries (or only one of them, if the other could not be created for some reason)
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,19 +51,23 @@ Cache variables
 
 This can be set to the root of a local copy of the MTS-ESP repository.
 
+
 .. cmake:variable:: MTSESP_CLIENT_DIR
 
 The path to the sources for the MTS-ESP client library.
 When searching for this path, the environment variable :envvar:`MTSESP_CLIENT_DIR` is added to the search path.
+
 
 .. cmake:variable:: MTSESP_MASTER_DIR
 
 The path to the sources for the MTS-ESP client library.
 When searching for this path, the environment variable :envvar:`MTSESP_MASTER_DIR` is added to the search path.
 
+
 .. cmake:variable:: MTSESP_LIB_MTS
 
 The path to the MTS-ESP prebuilt shared library used by the Master API to connect to its clients.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -67,9 +76,11 @@ Environment variables
 
 This environment variable initializes the value of the :variable:`MTSESP_SOURCE_DIR` variable.
 
+
 .. cmake:envvar:: MTSESP_CLIENT_DIR
 
 This environment variable, if set, is added to the search path when locating the :variable:`MTSESP_CLIENT_DIR` variable.
+
 
 .. cmake:envvar:: MTSESP_MASTER_DIR
 

@@ -17,9 +17,14 @@ FindAccelerate
 
 A find module for Apple's Accelerate framework.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Accelerate::Accelerate
+
+``Accelerate::Accelerate``
+
+The Accelerate library.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

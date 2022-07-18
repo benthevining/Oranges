@@ -246,16 +246,20 @@
       },
       "oranges_enable_ccache": {
         "kwargs": {
-          "OPTIONS": "+",
-          "TARGET": 1
+          "OPTIONS": "+"
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_enable_clang_tidy": {
         "kwargs": {
           "CONFIG_FILE": 1,
           "EXTRA_ARGS": "+",
-          "LANGS": "+",
-          "TARGET": 1
+          "LANGS": "+"
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_enable_cppcheck": {
@@ -263,8 +267,10 @@
           "DISABLE": "+",
           "ENABLE": "+",
           "EXTRA_ARGS": "+",
-          "LANGS": "+",
-          "TARGET": 1
+          "LANGS": "+"
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_enable_cpplint": {
@@ -272,25 +278,27 @@
           "EXTRA_ARGS": "+",
           "IGNORE": "+",
           "LANGS": "+",
-          "TARGET": 1,
           "VERBOSITY": 1
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_enable_ipo": {
-        "kwargs": {
-          "TARGET": 1
-        },
         "pargs": {
           "flags": [
             "INCLUDE_DEBUG"
-          ]
+          ],
+          "nargs": 1
         }
       },
       "oranges_enable_iwyu": {
         "kwargs": {
           "EXTRA_ARGS": "+",
-          "LANGS": "+",
-          "TARGET": 1
+          "LANGS": "+"
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "oranges_enable_static_analysis": {
@@ -367,8 +375,7 @@
         },
         "pargs": {
           "flags": [
-            "NO_AGGREGATE_HEADER",
-            "NO_BUILD_TYPE_MACROS"
+            "NO_AGGREGATE_HEADER"
           ],
           "nargs": 1
         }

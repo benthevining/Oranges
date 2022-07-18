@@ -17,20 +17,24 @@ LinuxLSBInfo
 
 This module sets some cache variables identifying the Linux distribution of the host computer.
 
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cmake:variable:: PROGRAM_LSB_RELEASE
 
-The path to the ``lsb_release`` program.
+The path to the ``lsb_release`` program. An environment variable with this name may also be set.
+
 
 .. cmake:variable:: LSB_DISTRIBUTOR_ID
 
 LSB distributor ID for your Linux distribution. Initialized with the output of executing ``<PROGRAM_LSB_RELEASE> -si``.
 
+
 .. cmake:variable:: LSB_RELEASE
 
 LSB release for your Linux distribution. Initialized with the output of executing ``<PROGRAM_LSB_RELEASE> -sr``.
+
 
 .. cmake:variable:: LSB_CODENAME
 
@@ -48,9 +52,10 @@ if ((DEFINED LSB_DISTRIBUTOR_ID OR DEFINED CACHE{LSB_DISTRIBUTOR_ID})
 endif ()
 # cmake-format: on
 
-find_program (PROGRAM_LSB_RELEASE lsb_release DOC "LSB release executable for your Linux distro")
+find_program (PROGRAM_LSB_RELEASE lsb_release PATHS ENV PROGRAM_LSB_RELEASE
+              DOC "LSB release executable for your Linux distro")
 
-mark_as_advanced (FORCE PROGRAM_LSB_RELEASE)
+mark_as_advanced (PROGRAM_LSB_RELEASE)
 
 if (NOT PROGRAM_LSB_RELEASE)
 
@@ -82,8 +87,8 @@ set (LSB_CODENAME "${LSB_CODENAME}" CACHE STRING "LSB codename for your Linux di
 unset (lsb_distrib_id)
 unset (lsb_rel)
 
-message (DEBUG "Linux ditributor ID: ${LSB_DISTRIBUTOR_ID}")
-message (DEBUG "Linux release ID: ${LSB_RELEASE}")
-message (DEBUG "Linux release codename: ${LSB_CODENAME}")
+message (VERBOSE "Linux ditributor ID: ${LSB_DISTRIBUTOR_ID}")
+message (VERBOSE "Linux release ID: ${LSB_RELEASE}")
+message (VERBOSE "Linux release codename: ${LSB_CODENAME}")
 
-mark_as_advanced (FORCE LSB_DISTRIBUTOR_ID LSB_RELEASE LSB_CODENAME)
+mark_as_advanced (LSB_DISTRIBUTOR_ID LSB_RELEASE LSB_CODENAME)

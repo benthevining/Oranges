@@ -25,10 +25,12 @@ This module includes :module:`OrangesSetDefaultCpackGenerator`.
 
     Inclusion style: once globally, ideally from the top-level project.
 
+
 .. cmake:variable:: CPACK_LICENSE_FILE
 
 The path to the license file for this project. This module searches under ``${PROJECT_SOURCE_DIR}`` for files with the following names: LICENSE.txt, LICENSE.md, LICENSE, COPYRIGHT.txt, COPYRIGHT.md, or COPYRIGHT.
 If none is found, a warning will be issued.
+
 
 .. cmake:variable:: CPACK_README_FILE
 

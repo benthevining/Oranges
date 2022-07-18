@@ -18,12 +18,14 @@ FindMIPP
 A find module for the MIPP library.
 This module fetches the sources from GitHub using CMake's ``FetchContent`` module, if a local copy can't be found.
 
+
 Targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``MIPP::MIPP``
 
 Interface library with MIPP's include directories and sources.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -32,6 +34,7 @@ Cache variables
 
 Include directory for the MIPP library.
 When searching for this path, the environment variable :envvar:`MIPP_INCLUDE_DIR` is added to the search path.
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

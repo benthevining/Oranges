@@ -25,7 +25,7 @@ Configure cppcheck
 
     ::
 
-        oranges_enable_cppcheck (TARGET <target>
+        oranges_enable_cppcheck (<target>
                                 [ENABLE <checks...>]
                                 [DISABLE <checks...>]
                                 [EXTRA_ARGS <args...>]
@@ -33,15 +33,25 @@ Configure cppcheck
 
 Configures cppcheck for the given ``<target>`` by manipulating the target's ``<LANG>_CPPCHECK`` properties.
 
-Any specified ``EXTRA_ARGS`` will be passed to the cppcheck executable verbatim. If not specified, the value
-of the :variable:`CPPCHECK_EXTRA_ARGS` variable will be used.
+If the :variable:`CPPCHECK_OFF` variable is set to ``ON``, this function does nothing.
 
-The ``ENABLE`` and ``DISABLE`` options are provided as a convenient way to specify lists of checks to enable
-or disable. If not specified, the values of the variables :variable:`CPPCHECK_ENABLE` and
-:variable:`CPPCHECK_DISABLE` will be used, respectively.
+Options:
 
-Languages may be specified; valid values are ``C`` or ``CXX``. If no languages are specified, this function
-will configure cppcheck for both valid languages.
+``ENABLE``
+ A list of checks to enable for this target. If not specified, the value of the :variable:`CPPCHECK_ENABLE`
+ variable will be used.
+
+``DISABLE``
+ A list of checks to disable for this target. If not specified, the value of the :variable:`CPPCHECK_DISABLE`
+ variable will be used.
+
+``EXTRA_ARGS``
+ A list of extra arguments to pass to cppcheck verbatim. If not specified, the value of the
+ :variable:`CPPCHECK_EXTRA_ARGS` variable will be used.
+
+``LANGS``
+ Languages for which to enable cppcheck. Valid values are ``C`` or ``CXX``. If no languages are specified, this
+ function will configure cppcheck for both valid languages.
 
 
 Cache variables
@@ -52,19 +62,27 @@ Cache variables
 Path to the cppcheck executable, used by :command:`oranges_enable_cppcheck`.
 An environment variable with this name may also be set.
 
+
 .. cmake:variable:: CPPCHECK_ENABLE
 
 A space-separated list of default cppcheck checks to be enabled with calls to :command:`oranges_enable_cppcheck` that do not
 explicitly list their own desired checks.
+
 
 .. cmake:variable:: CPPCHECK_DISABLE
 
 A space-separated list of default cppchecks checks to be disabled with calls to :command:`oranges_enable_cppcheck` that do not
 explicitly list their own desired disabled checks.
 
+
 .. cmake:variable:: CPPCHECK_EXTRA_ARGS
 
 A list of space-separated arguments that will be passed to cppcheck verbatim in calls to :command:`oranges_enable_cppcheck`.
+
+
+.. cmake:variable:: CPPCHECK_OFF
+
+When this variable is set to ``ON``, calls to :command:`oranges_enable_cppcheck` do nothing. Defaults to ``OFF``.
 
 
 Environment variables
@@ -74,11 +92,28 @@ Environment variables
 
 Initializes the value of the :variable:`CPPCHECK_PROGRAM` variable.
 
+
+.. seealso ::
+
+    Module :module:`OrangesClangTidy`
+        Module for clang-tidy
+
+    Module :module:`OrangesCpplint`
+        Module for cpplint
+
+    Module :module:`OrangesIWYU`
+        Module for include-what-you-use
+
+    Module :module:`OrangesStaticAnalysis`
+        Aggregate module for enabling all static analysis tools
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+include (OrangesFunctionArgumentHelpers)
 
 find_program (CPPCHECK_PROGRAM cppcheck PATHS ENV CPPCHECK_PROGRAM
               DOC "Path to the cppcheck executable")
@@ -94,9 +129,11 @@ set (
 set (CPPCHECK_EXTRA_ARGS "--inline-suppr"
      CACHE STRING "Space-separated arguments that will be passed to cppcheck verbatim")
 
+option (CPPCHECK_OFF "Disable cppcheck for the entire build" OFF)
+
 #
 
-function (oranges_enable_cppcheck)
+function (oranges_enable_cppcheck target)
 
     if (NOT CPPCHECK_PROGRAM)
         message (
@@ -106,15 +143,20 @@ function (oranges_enable_cppcheck)
         return ()
     endif ()
 
-    set (oneVal TARGET)
+    if (CPPCHECK_OFF)
+        message (VERBOSE
+                 "${CMAKE_CURRENT_FUNCTION} - not enabling cppcheck, because CPPCHECK_OFF is ON.")
+        return ()
+    endif ()
+
     set (multiVal ENABLE DISABLE LANGS EXTRA_ARGS)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneVal}" "${multiVal}" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "" "" "${multiVal}" ${ARGN})
 
-    if (NOT TARGET "${ORANGES_ARG_TARGET}")
-        message (
-            FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${ORANGES_ARG_TARGET}' does not exist!"
-            )
+    oranges_check_for_unparsed_args (ORANGES_ARG)
+
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")
     endif ()
 
     set (cppcheck_cmd "${CPPCHECK_PROGRAM}")
@@ -158,7 +200,7 @@ function (oranges_enable_cppcheck)
 
     list (REMOVE_DUPLICATES cppcheck_cmd)
 
-    message (DEBUG "cppcheck command for target ${ORANGES_ARG_TARGET}: ${cppcheck_cmd}")
+    message (DEBUG "cppcheck command for target ${target}: ${cppcheck_cmd}")
 
     set (valid_languages C CXX)
 
@@ -175,13 +217,12 @@ function (oranges_enable_cppcheck)
             continue ()
         endif ()
 
-        set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES "${lang}_CPPCHECK"
-                                                                  "${cppcheck_cmd}")
+        set_target_properties ("${target}" PROPERTIES "${lang}_CPPCHECK" "${cppcheck_cmd}")
 
     endforeach ()
 
-    set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+    set_target_properties ("${target}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-    message (VERBOSE "Enabled cppcheck for target ${ORANGES_ARG_TARGET}")
+    message (VERBOSE "Enabled cppcheck for target ${target}")
 
 endfunction ()

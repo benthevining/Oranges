@@ -25,23 +25,30 @@ Configure clang-tidy
 
     ::
 
-        oranges_enable_clang_tidy (TARGET <target>
+        oranges_enable_clang_tidy (<target>
                                   [CONFIG_FILE <file>]
                                   [EXTRA_ARGS <args...>]
                                   [LANGS <C|CXX|OBJC|OBJCXX>...])
 
 Configures clang-tidy for the given ``<target>`` by manipulating the target's ``<LANG>_CLANG_TIDY`` properties.
 
-A custom configuration file may optionally be specified; if a relative path is given, it will be evaluated relative to
-the value of ``CMAKE_CURRENT_LIST_DIR`` when this function is called. If this argument is not specified, the value of
-the :variable:`CLANGTIDY_CONFIG_FILE` variable will be used. Providing this argument is equivalent to passing
-``EXTRA_ARGS --config-file=<file>``.
+If the :variable:`CLANGTIDY_OFF` variable is set to ``ON``, this function does nothing.
 
-Any specified ``EXTRA_ARGS`` will be passed to the clang-tidy executable verbatim. If not specified, the value of the
-:variable:`CLANGTIDY_EXTRA_ARGS` variable will be used.
+Options:
 
-Languages may be specified; valid values are ``C``, ``CXX``, ``OBJC``, or ``OBJCXX``. If no languages are specified, this
-function will configure clang-tidy for all four valid languages.
+``CONFIG_FILE``
+ May be specified to provide a custom ``.clang-tidy`` file to be used for running clang-tidy on this target.
+ If a relative path is given, it will be evaluated relative to the value of ``CMAKE_CURRENT_LIST_DIR`` when this function
+ is called. If this argument is not specified, the value of the :variable:`CLANGTIDY_CONFIG_FILE` variable will be used.
+ Providing this argument is equivalent to passing ``EXTRA_ARGS --config-file=<file>``.
+
+``EXTRA_ARGS``
+ Extra arguments that will be passed verbatim to the clang-tidy executable. If not specified, the value of the
+ :variable:`CLANGTIDY_EXTRA_ARGS` variable will be used.
+
+``LANGS``
+ Languages for which to enable clang-tidy. Valid values are ``C``, ``CXX``, ``OBJC``, or ``OBJCXX``.
+ If no languages are specified, this function will configure clang-tidy for all four valid languages.
 
 
 Cache variables
@@ -52,15 +59,22 @@ Cache variables
 Path to the clang-tidy executable, used by :command:`oranges_enable_clang_tidy`.
 An environment variable with this name may also be set.
 
+
 .. cmake:variable:: CLANGTIDY_CONFIG_FILE
 
 This variable may be set to a ``.clang-tidy`` file that will be used for all calls to :command:`oranges_enable_clang_tidy`
 that do not explicitly provide their own config file.
 
+
 .. cmake:variable:: CLANGTIDY_EXTRA_ARGS
 
 This variable may be set to a list of space-separated arguments that will be passed to clang-tidy verbatim for the
 :command:`oranges_enable_clang_tidy` command.
+
+
+.. cmake:variable:: CLANGTIDY_OFF
+
+When this variable is set to ``ON``, calls to :command:`oranges_enable_clang_tidy` do nothing. Defaults to ``OFF``.
 
 
 Environment variables
@@ -70,11 +84,28 @@ Environment variables
 
 Initializes the value of the :variable:`CLANGTIDY_PROGRAM` variable.
 
+
+.. seealso ::
+
+    Module :module:`OrangesCppcheck`
+        Module for cppcheck
+
+    Module :module:`OrangesCpplint`
+        Module for cpplint
+
+    Module :module:`OrangesIWYU`
+        Module for include-what-you-use
+
+    Module :module:`OrangesStaticAnalysis`
+        Aggregate module for enabling all static analysis tools
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
+
+include (OrangesFunctionArgumentHelpers)
 
 find_program (CLANGTIDY_PROGRAM clang-tidy PATHS ENV CLANGTIDY_PROGRAM
               DOC "Path to the clang-tidy executable")
@@ -84,9 +115,11 @@ set (CLANGTIDY_CONFIG_FILE "" CACHE FILEPATH "Default .clang-tidy file to be use
 set (CLANGTIDY_EXTRA_ARGS ""
      CACHE STRING "Space-separated extra arguments to be passed to clang-tidy verbatim")
 
+option (CLANGTIDY_OFF "Disable clang-tidy for the entire build" OFF)
+
 #
 
-function (oranges_enable_clang_tidy)
+function (oranges_enable_clang_tidy target)
 
     if (NOT CLANGTIDY_PROGRAM)
         message (
@@ -96,15 +129,22 @@ function (oranges_enable_clang_tidy)
         return ()
     endif ()
 
-    set (oneVal TARGET CONFIG_FILE)
+    if (CLANGTIDY_OFF)
+        message (
+            VERBOSE
+            "${CMAKE_CURRENT_FUNCTION} - not enabling clang-tidy, because CLANGTIDY_OFF is ON.")
+        return ()
+    endif ()
+
+    set (oneVal CONFIG_FILE)
     set (multiVal LANGS EXTRA_ARGS)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneVal}" "${multiVal}" ${ARGN})
 
-    if (NOT TARGET "${ORANGES_ARG_TARGET}")
-        message (
-            FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${ORANGES_ARG_TARGET}' does not exist!"
-            )
+    oranges_check_for_unparsed_args (ORANGES_ARG)
+
+    if (NOT TARGET "${target}")
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")
     endif ()
 
     set (clangtidy_cmd "${CLANGTIDY_PROGRAM}")
@@ -138,7 +178,7 @@ function (oranges_enable_clang_tidy)
 
     list (REMOVE_DUPLICATES clangtidy_cmd)
 
-    message (DEBUG "clang-tidy command for target ${ORANGES_ARG_TARGET}: ${clangtidy_cmd}")
+    message (DEBUG "clang-tidy command for target ${target}: ${clangtidy_cmd}")
 
     set (valid_languages C CXX OBJC OBJCXX)
 
@@ -155,13 +195,12 @@ function (oranges_enable_clang_tidy)
             continue ()
         endif ()
 
-        set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES "${lang}_CLANG_TIDY"
-                                                                  "${clangtidy_cmd}")
+        set_target_properties ("${target}" PROPERTIES "${lang}_CLANG_TIDY" "${clangtidy_cmd}")
 
     endforeach ()
 
-    set_target_properties ("${ORANGES_ARG_TARGET}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
+    set_target_properties ("${target}" PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
-    message (VERBOSE "Enabled clang-tidy for target ${ORANGES_ARG_TARGET}")
+    message (VERBOSE "Enabled clang-tidy for target ${target}")
 
 endfunction ()

@@ -76,6 +76,7 @@ Options:
 ``COPY_GRAPH_TO``
  An absolute filepath where the generated image will be copied to once built. The use case for this is to add the generated graph to your source tree, or to documentation, etc.
 
+
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -83,9 +84,11 @@ Cache variables
 
 Set to the absolute path of the ``dot`` executable that will be used to generate the graph images for :command:`oranges_add_graphviz_target()`.
 
+
 .. cmake:variable:: ORANGES_IN_GRAPHVIZ_CONFIG
 
 Set to ``ON`` in the child invocations of CMake launched by :command:`oranges_add_graphviz_target()`. Otherwise, undefined.
+
 
 .. seealso ::
 
