@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [4.1.0](https://github.com/benthevining/Oranges/compare/v4.0.0...v4.1.0) (2022-07-18)
+
+
+### Features
+
+* added a find module for Catch2 ([56bc491](https://github.com/benthevining/Oranges/commit/56bc491cb5385d519566eac1045bf457634e0190))
+
 ## [4.0.0](https://github.com/benthevining/Oranges/compare/v3.3.0...v4.0.0) (2022-07-17)
 
 
