@@ -64,15 +64,28 @@ include (OrangesFindPackageHelpers)
 set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES
                         URL "https://github.com/marton78/pffft" DESCRIPTION "Optimized FFT library")
 
-find_path (PFFFT_INCLUDE_DIR NAMES pffft.h PATHS ENV PFFFT_INCLUDE_DIR
+find_package (PkgConfig QUIET)
+
+if (PKG_CONFIG_FOUND)
+    pkg_check_modules (PKGPFFFT QUIET pffft)
+endif ()
+
+find_path (PFFFT_INCLUDE_DIR NAMES pffft.h PATHS ${PKGPFFFT_INCLUDE_DIRS} ENV PFFFT_INCLUDE_DIR
            DOC "pffft includes directory")
 
-find_library (PFFFT_LIBRARY NAMES pffft PFFFT PATHS ENV PFFFT_LIBRARY DOC "pffft library")
+find_library (PFFFT_LIBRARY NAMES pffft PFFFT PATHS ${PKGPFFFT_LIBRARY_DIRS} ENV PFFFT_LIBRARY
+              DOC "pffft library")
 
 mark_as_advanced (PFFFT_INCLUDE_DIR PFFFT_LIBRARY)
 
-find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS PFFFT_INCLUDE_DIR
-                                                                              PFFFT_LIBRARY)
+if (PKGPFFFT_VERSION)
+    set (version_flag VERSION_VAR PKGPFFFT_VERSION HANDLE_VERSION_RANGE)
+else ()
+    unset (version_flag)
+endif ()
+
+find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
+                                   REQUIRED_VARS PFFFT_INCLUDE_DIR PFFFT_LIBRARY ${version_flag})
 
 if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()

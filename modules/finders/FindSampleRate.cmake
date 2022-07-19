@@ -65,16 +65,33 @@ set_package_properties (
     "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "http://libsndfile.github.io/libsamplerate/"
     DESCRIPTION "Resampling library")
 
-find_path (LIBSAMPLERATE_INCLUDE_DIR NAMES samplerate.h PATHS ENV LIBSAMPLERATE_INCLUDE_DIR
-           DOC "libsamplerate includes directory")
+find_package (PkgConfig QUIET)
 
-find_library (LIBSAMPLERATE_LIBRARY NAMES samplerate libsamplerate PATHS ENV LIBSAMPLERATE_LIBRARY
-              DOC "libsamplerate library")
+if (PKG_CONFIG_FOUND)
+    pkg_search_module (PKGSAMPLERATE QUIET samplerate libsamplerate)
+endif ()
+
+find_path (
+    LIBSAMPLERATE_INCLUDE_DIR NAMES samplerate.h PATHS ${PKGSAMPLERATE_INCLUDE_DIRS} ENV
+                                                       LIBSAMPLERATE_INCLUDE_DIR
+    DOC "libsamplerate includes directory")
+
+find_library (
+    LIBSAMPLERATE_LIBRARY NAMES samplerate libsamplerate PATHS ${PKGSAMPLERATE_LIBRARY_DIRS} ENV
+                                                               LIBSAMPLERATE_LIBRARY
+    DOC "libsamplerate library")
 
 mark_as_advanced (LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
 
-find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
-                                   REQUIRED_VARS LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY)
+if (PKGSAMPLERATE_VERSION)
+    set (version_flag VERSION_VAR PKGSAMPLERATE_VERSION HANDLE_VERSION_RANGE)
+else ()
+    unset (version_flag)
+endif ()
+
+find_package_handle_standard_args (
+    "${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS LIBSAMPLERATE_INCLUDE_DIR LIBSAMPLERATE_LIBRARY
+                                               ${version_flag})
 
 if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()

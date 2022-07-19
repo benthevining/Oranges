@@ -75,16 +75,29 @@ set_package_properties ("${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://www
 
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
-find_path (FFTW_F_INCLUDE_DIR NAMES fftw3f.h sfftw3.h PATHS ENV FFTW_F_INCLUDE_DIR
-           DOC "FFTW [float] includes directory")
+find_package (PkgConfig QUIET)
 
-find_library (FFTW_F_LIBRARY NAMES fftw3f sfftw3 PATHS ENV FFTW_F_LIBRARY
+if (PKG_CONFIG_FOUND)
+    pkg_check_modules (PKGFFTWF QUIET fftw3f)
+endif ()
+
+find_path (
+    FFTW_F_INCLUDE_DIR NAMES fftw3f.h sfftw3.h PATHS ${PKGFFTWF_INCLUDE_DIRS} ENV FFTW_F_INCLUDE_DIR
+    DOC "FFTW [float] includes directory")
+
+find_library (FFTW_F_LIBRARY NAMES fftw3f sfftw3 PATHS ${PKGFFTWF_LIBRARY_DIRS} ENV FFTW_F_LIBRARY
               DOC "FFTW [float] library")
 
 mark_as_advanced (FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY)
 
-find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS FFTW_F_INCLUDE_DIR
-                                                                              FFTW_F_LIBRARY)
+if (PKGFFTWF_VERSION)
+    set (version_flag VERSION_VAR PKGFFTWF_VERSION HANDLE_VERSION_RANGE)
+else ()
+    unset (version_flag)
+endif ()
+
+find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
+                                   REQUIRED_VARS FFTW_F_INCLUDE_DIR FFTW_F_LIBRARY ${version_flag})
 
 if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()

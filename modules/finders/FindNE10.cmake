@@ -65,14 +65,28 @@ set_package_properties (
     "${CMAKE_FIND_PACKAGE_NAME}" PROPERTIES URL "https://github.com/projectNe10/Ne10"
     DESCRIPTION "ARM NEON math library")
 
-find_path (NE10_INCLUDE_DIR NAMES NE10.h PATHS ENV NE10_INCLUDE_DIR DOC "NE10 includes directory")
+find_package (PkgConfig QUIET)
 
-find_library (NE10_LIBRARY NAMES NE10 ne10 PATHS ENV NE10_LIBRARY DOC "NE10 library")
+if (PKG_CONFIG_FOUND)
+    pkg_search_module (PKGNE10 QUIET ne10 NE10)
+endif ()
+
+find_path (NE10_INCLUDE_DIR NAMES NE10.h PATHS ${PKGNE10_INCLUDE_DIRS} ENV NE10_INCLUDE_DIR
+           DOC "NE10 includes directory")
+
+find_library (NE10_LIBRARY NAMES NE10 ne10 PATHS ${PKGNE10_LIBRARY_DIRS} ENV NE10_LIBRARY
+              DOC "NE10 library")
 
 mark_as_advanced (NE10_INCLUDE_DIR NE10_LIBRARY)
 
-find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS NE10_INCLUDE_DIR
-                                                                              NE10_LIBRARY)
+if (PKGNE10_VERSION)
+    set (version_flag VERSION_VAR PKGNE10_VERSION HANDLE_VERSION_RANGE)
+else ()
+    unset (version_flag)
+endif ()
+
+find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}"
+                                   REQUIRED_VARS NE10_INCLUDE_DIR NE10_LIBRARY ${version_flag})
 
 if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()
