@@ -18,6 +18,8 @@ FindJUCE
 A find module for the JUCE library.
 This module attempts to locate a local copy of JUCE, and if this fails, fetches the JUCE sources from GitHub using CMake's ``FetchContent`` module.
 
+Versions 6 and 7 are supported.
+
 #]=======================================================================]
 
 include_guard (GLOBAL)
@@ -38,10 +40,13 @@ set (JUCE_ENABLE_MODULE_SOURCE_GROUPS ON)
 set (JUCE_BUILD_EXAMPLES OFF)
 set (JUCE_BUILD_EXTRAS OFF)
 
-include (FetchContent)
-
 if (${CMAKE_FIND_PACKAGE_NAME}_VERSION)
-    if ("${${CMAKE_FIND_PACKAGE_NAME}_VERSION}" EQUAL 6)
+    if ("${${CMAKE_FIND_PACKAGE_NAME}_VERSION}" VERSION_LESS 6.0.0)
+        set (${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+             "JUCE versions older than 6 are not supported by this find module")
+        return ()
+    elseif ("${${CMAKE_FIND_PACKAGE_NAME}_VERSION}" VERSION_LESS 7.0.0)
+        # the commit hash for the last JUCE 6 commit
         set (juce_git_tag 37d6161da2aa94d1530cef860b1642e1e4d9e08d)
     endif ()
 endif ()
@@ -49,6 +54,8 @@ endif ()
 if (NOT DEFINED juce_git_tag)
     set (juce_git_tag origin/master)
 endif ()
+
+include (FetchContent)
 
 FetchContent_Declare (JUCE GIT_REPOSITORY "https://github.com/juce-framework/JUCE.git"
                       GIT_TAG "${juce_git_tag}")

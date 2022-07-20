@@ -100,6 +100,10 @@ target_include_directories (haru::haru INTERFACE "${HARU_INCLUDE_DIR}")
 
 find_package_detect_macos_arch (haru::haru "${HARU_LIBRARY}")
 
+target_link_options (haru::haru INTERFACE ${PKGHARU_LDFLAGS} ${PKGHARU_LDFLAGS_OTHER})
+
+target_compile_options (haru::haru INTERFACE ${PKGHARU_CFLAGS} ${PKGHARU_CFLAGS_OTHER})
+
 target_sources (haru::haru INTERFACE "${HARU_INCLUDE_DIR}/hpdf.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libharu - found (local)"

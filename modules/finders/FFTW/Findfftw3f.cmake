@@ -111,6 +111,10 @@ target_include_directories (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}")
 
 find_package_detect_macos_arch (FFTW3::fftw3f "${FFTW_F_INCLUDE_DIR}")
 
+target_link_options (FFTW3::fftw3f INTERFACE ${PKGFFTWF_LDFLAGS} ${PKGFFTWF_LDFLAGS_OTHER})
+
+target_compile_options (FFTW3::fftw3f INTERFACE ${PKGFFTWF_CFLAGS} ${PKGFFTWF_CFLAGS_OTHER})
+
 if (EXISTS "${FFTW_F_INCLUDE_DIR}/fftw3f.h")
     target_sources (FFTW3::fftw3f INTERFACE "${FFTW_F_INCLUDE_DIR}/fftw3f.h")
 else ()

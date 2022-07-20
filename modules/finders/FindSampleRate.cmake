@@ -106,6 +106,12 @@ target_include_directories (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_IN
 
 find_package_detect_macos_arch (SampleRate::samplerate "${LIBSAMPLERATE_LIBRARY}")
 
+target_link_options (SampleRate::samplerate INTERFACE ${PKGSAMPLERATE_LDFLAGS}
+                     ${PKGSAMPLERATE_LDFLAGS_OTHER})
+
+target_compile_options (SampleRate::samplerate INTERFACE ${PKGSAMPLERATE_CFLAGS}
+                                                         ${PKGSAMPLERATE_CFLAGS_OTHER})
+
 target_sources (SampleRate::samplerate INTERFACE "${LIBSAMPLERATE_INCLUDE_DIR}/samplerate.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libsamplerate - found (local)"

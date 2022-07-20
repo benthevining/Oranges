@@ -99,6 +99,10 @@ target_include_directories (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}")
 
 find_package_detect_macos_arch (pffft::pffft "${PFFFT_LIBRARY}")
 
+target_link_options (pffft::pffft INTERFACE ${PKGPFFFT_LDFLAGS} ${PKGPFFFT_LDFLAGS_OTHER})
+
+target_compile_options (pffft::pffft INTERFACE ${PKGPFFFT_CFLAGS} ${PKGPFFFT_CFLAGS_OTHER})
+
 target_sources (pffft::pffft INTERFACE "${PFFFT_INCLUDE_DIR}/pffft.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "pffft - found (local)"

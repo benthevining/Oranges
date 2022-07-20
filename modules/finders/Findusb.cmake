@@ -100,6 +100,10 @@ target_include_directories (usb::usb INTERFACE "${USB_INCLUDE_DIR}")
 
 find_package_detect_macos_arch (usb::usb "${USB_LIBRARY}")
 
+target_link_options (usb::usb INTERFACE ${PKGUSB_LDFLAGS} ${PKGUSB_LDFLAGS_OTHER})
+
+target_compile_options (usb::usb INTERFACE ${PKGUSB_CFLAGS} ${PKGUSB_CFLAGS_OTHER})
+
 target_sources (usb::usb INTERFACE "${USB_INCLUDE_DIR}/libusb.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "libusb - found (local)"

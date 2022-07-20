@@ -100,6 +100,10 @@ target_include_directories (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}")
 
 find_package_detect_macos_arch (NE10::NE10 "${NE10_LIBRARY}")
 
+target_link_options (NE10::NE10 INTERFACE ${PKGNE10_LDFLAGS} ${PKGNE10_LDFLAGS_OTHER})
+
+target_compile_options (NE10::NE10 INTERFACE ${PKGNE10_CFLAGS} ${PKGNE10_CFLAGS_OTHER})
+
 target_sources (NE10::NE10 INTERFACE "${NE10_INCLUDE_DIR}/NE10.h")
 
 find_package_message ("${CMAKE_FIND_PACKAGE_NAME}" "NE10 - found (local)"
