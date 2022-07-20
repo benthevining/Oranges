@@ -20,12 +20,12 @@ When this modules is included, if :variable:`CPACK_GENERATOR` is not set, it wil
 On Windows, the default generator is NSIS. On Mac, it's PackageMaker. On Ubuntu, the DEB generator is used. On RPM, the RPM generator is used. On any other system, TGZ will be used.
 
 
-.. cmake:variable:: ORANGES_DEB_EXE
+.. cmake:variable:: PROGRAM_DEBUILD
 
 Path to the ``debuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is Debian.
 
 
-.. cmake:variable:: ORANGES_RPM_EXE
+.. cmake:variable:: PROGRAM_RPMBUILD
 
 Path to the ``rpmbuild`` executable. This program is not actually used by this module, but simply checked for existence to determine if the Linux distribution is RPM.
 
@@ -79,22 +79,22 @@ if (LSB_DISTRIBUTOR_ID MATCHES "RedHatEnterpriseServer")
 endif ()
 
 find_program (
-    ORANGES_DEB_EXE debuild
+    PROGRAM_DEBUILD debuild
     DOC "Not actually used, just checked for existence to determine if platform is Debian")
 
-mark_as_advanced (FORCE ORANGES_DEB_EXE)
+mark_as_advanced (FORCE PROGRAM_DEBUILD)
 
-if (ORANGES_DEB_EXE)
+if (PROGRAM_DEBUILD)
     set (CPACK_GENERATOR "DEB" CACHE STRING "CPack generator")
     return ()
 endif ()
 
-find_program (ORANGES_RPM_EXE rpmbuild
+find_program (PROGRAM_RPMBUILD rpmbuild
               DOC "Not actually used, just checked for existence to determine if platform is RPM.")
 
-mark_as_advanced (FORCE ORANGES_RPM_EXE)
+mark_as_advanced (FORCE PROGRAM_RPMBUILD)
 
-if (ORANGES_RPM_EXE)
+if (PROGRAM_RPMBUILD)
     set (CPACK_GENERATOR "RPM" CACHE STRING "CPack generator")
     return ()
 endif ()

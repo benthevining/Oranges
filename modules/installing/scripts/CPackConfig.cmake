@@ -22,12 +22,12 @@ if ("${CPACK_GENERATOR}" STREQUAL "RPM")
 
 elseif ("${CPACK_GENERATOR}" STREQUAL "DEB")
 
-    find_program (DPKG dpkg)
+    find_program (PROGRAM_DPKG dpkg DOC "dpkg executable")
 
-    mark_as_advanced (FORCE DPKG)
+    mark_as_advanced (FORCE PROGRAM_DPKG)
 
-    if (DPKG)
-        execute_process (COMMAND "${DPKG}" --print-architecture OUTPUT_VARIABLE deb_arch
+    if (PROGRAM_DPKG)
+        execute_process (COMMAND "${PROGRAM_DPKG}" --print-architecture OUTPUT_VARIABLE deb_arch
                          OUTPUT_STRIP_TRAILING_WHITESPACE)
 
         set (CPACK_PACKAGE_FILE_NAME

@@ -32,22 +32,45 @@ This module provides the function :command:`oranges_create_pkgconfig_file() <ora
                                   [REQUIRES <requiredPackages...>])
 
 Generates pkgconfig files for each build configuration of the specified target.
-For each configuration, a file named ``<packageName>-<config>.pc`` will be generated.
+For each build configuration, a file named ``<packageName>-<config>.pc`` will be generated.
 
 The pkgconfig files are populated with flags automatically based on the target ``<targetName>``'s flags.
 
-``OUTPUT_DIR`` specifies where the pkgconfig files will be written. If not specified, it defaults to ``${CMAKE_CURRENT_BINARY_DIR}/pkgconfig``.
+Options:
 
-``NAME`` specifies the name of the package. If not specified, defaults to ``<targetName>``.
+``OUTPUT_DIR``
+ Specifies where the pkgconfig files will be written. If not specified, it defaults to ``${CMAKE_CURRENT_BINARY_DIR}/pkgconfig``.
 
-``DESCRIPTION``, ``URL``, and ``VERSION`` will all default to the values of the relevant ``PROJECT_`` variables if not explicitly specified.
+``NAME``
+ Specifies the name of the package. If not specified, defaults to ``<targetName>``.
 
-If ``INSTALL_DEST`` is not specified, it defaults to ``${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig``.
+``INCLUDE_REL_PATH``
+ Specifies the path below ``CMAKE_INSTALL_INCLUDEDIR`` in which to look for includes. If it is empty or not specified,
+ the pkgconfig file will specify ``CMAKE_INSTALL_INCLUDEDIR`` as the include directory.
 
-The pkgconfig file will be automatically populated with names/paths of libraries linked to by ``<targetName>``, but you can optionally manually specify names of required packages using ``REQUIRES``.
+``DESCRIPTION``
+ The description of the package. Defaults to the value of ``PROJECT_DESCRIPTION`` when this function is called.
 
-``INCLUDE_REL_PATH`` is the path below ``CMAKE_INSTALL_INCLUDEDIR`` in which to look for includes.
-If it is empty or not specified, the pkgconfig file will specify ``CMAKE_INSTALL_INCLUDEDIR`` as the include directory.
+``URL``
+ The website for the package. Defaults to the value of ``PROJECT_HOMEPAGE_URL`` when this function is called.
+
+``VERSION``
+ The version of the package. Defaults to the value of ``PROJECT_VERSION`` when this function is called.
+
+``NO_INSTALL``
+ If specified, the generated pkgconfig files will not be installed.
+ Mutually exclusive with ``INSTALL_DEST`` and ``INSTALL_COMPONENT``.
+
+``INSTALL_DEST``
+ The path where the pkgconfig files will be installed to. Defaults to ``${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig``.
+ Mutually exclusive with ``NO_INSTALL``.
+
+``INSTALL_COMPONENT``
+ The install component for the pkgconfig files. Mutually exclusive with ``NO_INSTALL``.
+
+``REQUIRES``
+ Names of other pkgconfig packages or libraries required by this package.
+ This will automatically be populated with the names of libraries linked to by ``<targetName>``.
 
 #]=======================================================================]
 
@@ -76,8 +99,7 @@ function (oranges_create_pkgconfig_file target)
     set (multiValueArgs REQUIRES)
 
     if (NOT TARGET "${target}")
-        message (WARNING "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
-        return ()
+        message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target ${target} does not exist!")
     endif ()
 
     cmake_parse_arguments (ORANGES_ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -87,7 +109,15 @@ function (oranges_create_pkgconfig_file target)
 
     if (ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_DEST)
         message (
-            "NO_INSTALL and INSTALL_DEST cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
+            AUTHOR_WARNING
+                "NO_INSTALL and INSTALL_DEST cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
+            )
+    endif ()
+
+    if (ORANGES_ARG_NO_INSTALL AND ORANGES_ARG_INSTALL_COMPONENT)
+        message (
+            AUTHOR_WARNING
+                "NO_INSTALL and INSTALL_COMPONENT cannot both be specified in call to ${CMAKE_CURRENT_FUNCTION}!"
             )
     endif ()
 
@@ -135,20 +165,19 @@ function (oranges_create_pkgconfig_file target)
 
     set_property (TARGET "${target}" APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${pc_input}")
 
-    set_property (TARGET "${target}" APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${pc_file_configured}")
-
     set (pc_file_output "${ORANGES_ARG_OUTPUT_DIR}/${ORANGES_ARG_NAME}-$<CONFIG>.pc")
 
     file (GENERATE OUTPUT "${pc_file_output}" INPUT "${pc_file_configured}" TARGET "${target}"
                                                                             NEWLINE_STYLE UNIX)
 
-    if (NOT ORANGES_ARG_NO_INSTALL)
-        if (ORANGES_ARG_INSTALL_COMPONENT)
-            set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
-        endif ()
-
-        install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}"
-                 ${component_flag})
+    if (ORANGES_ARG_NO_INSTALL)
+        return ()
     endif ()
+
+    if (ORANGES_ARG_INSTALL_COMPONENT)
+        set (component_flag COMPONENT "${ORANGES_ARG_INSTALL_COMPONENT}")
+    endif ()
+
+    install (FILES "${pc_file_output}" DESTINATION "${ORANGES_ARG_INSTALL_DEST}" ${component_flag})
 
 endfunction ()

@@ -91,7 +91,7 @@ set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}" CACHE STRING
 find_file (
     CPACK_LICENSE_FILE
     NAMES LICENSE.txt LICENSE.md LICENSE COPYRIGHT.txt COPYRIGHT.md COPYRIGHT
-    PATHS "${PROJECT_SOURCE_DIR}"
+    PATHS "${PROJECT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}"
     DOC "Path to project license file"
     NO_DEFAULT_PATH)
 
@@ -112,7 +112,7 @@ endif ()
 find_file (
     CPACK_README_FILE
     NAMES README README.txt README.md readme readme.txt readme.md
-    PATHS "${PROJECT_SOURCE_DIR}"
+    PATHS "${PROJECT_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}"
     DOC "Path to project Readme/description file"
     NO_DEFAULT_PATH)
 

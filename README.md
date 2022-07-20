@@ -63,13 +63,16 @@ A library of CMake modules.
   * [FindFFTW](modules/finders/FFTW/FindFFTW.cmake)
   * [FindIPP](modules/finders/FindIPP.cmake)
   * [FindJUCE](modules/finders/FindJUCE.cmake)
+  * [FindLink](modules/finders/FindLink.cmake)
   * [FindMIPP](modules/finders/FindMIPP.cmake)
   * [FindMTS-ESP](modules/finders/FindMTS-ESP.cmake)
   * [FindNE10](modules/finders/FindNE10.cmake)
   * [FindSampleRate](modules/finders/FindSampleRate.cmake)
   * [Findfftw3](modules/finders/FFTW/Findfftw3.cmake)
   * [Findfftw3f](modules/finders/FFTW/Findfftw3f.cmake)
+  * [Findharu](modules/finders/Findharu.cmake)
   * [Findpffft](modules/finders/Findpffft.cmake)
+  * [Findusb](modules/finders/Findusb.cmake)
 
 ## Using Oranges
 
