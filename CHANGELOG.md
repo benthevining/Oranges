@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [4.2.0](https://github.com/benthevining/Oranges/compare/v4.1.0...v4.2.0) (2022-07-20)
+
+
+### Features
+
+* added more find modules ([41ae6d1](https://github.com/benthevining/Oranges/commit/41ae6d1259e213b068c45879f1d9fc4bd11c0b91))
+
 ## [4.1.0](https://github.com/benthevining/Oranges/compare/v4.0.0...v4.1.0) (2022-07-18)
 
 
