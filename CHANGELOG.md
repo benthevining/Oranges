@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [4.4.0](https://github.com/benthevining/Oranges/compare/v4.3.0...v4.4.0) (2022-07-21)
+
+
+### Features
+
+* added a clang-format module ([05f2f9d](https://github.com/benthevining/Oranges/commit/05f2f9da7c1667bb59cc2e2dbd56f830056af6fb))
+
 ## [4.3.0](https://github.com/benthevining/Oranges/compare/v4.2.0...v4.3.0) (2022-07-21)
 
 
