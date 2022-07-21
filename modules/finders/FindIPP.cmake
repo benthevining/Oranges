@@ -19,6 +19,8 @@ A find module for the Intel IPP libraries.
 
 IPP must be manually installed by the developer, it cannot be fetched by a script.
 
+This module supports version requirements by parsing the ippversion.h header.
+
 
 Cache variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,18 +119,56 @@ set_package_properties (
 set (${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
 
 #
+# locate include path
 
 find_path (
-    IPP_INCLUDE_DIR ipp.h PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include
-                                /opt/intel/oneapi/ipp/include ENV IPP_INCLUDE_DIR
-    DOC "Intel IPP include directory")
+    IPP_INCLUDE_DIR ipp.h
+    PATHS /opt/intel/ipp/include /opt/intel/oneapi/ipp/latest/include /opt/intel/oneapi/ipp/include
+          "${IPP_ROOT}/include" ENV IPP_INCLUDE_DIR DOC "Intel IPP include directory")
 
 set (IPP_ROOT "${IPP_INCLUDE_DIR}/.." CACHE PATH "Path to the root of the Intel IPP installation")
 
 mark_as_advanced (IPP_INCLUDE_DIR IPP_ROOT)
 
-find_package_handle_standard_args ("${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS IPP_INCLUDE_DIR
-                                                                              IPP_ROOT)
+#
+# Parse version header
+
+if (EXISTS "${IPP_INCLUDE_DIR}/ippversion.h")
+    file (STRINGS "${IPP_INCLUDE_DIR}/ippversion.h" ipp_version_contents)
+
+    foreach (version_line IN LISTS ipp_version_contents)
+        foreach (version_delim IN ITEMS IPP_VERSION_MAJOR IPP_VERSION_MINOR IPP_VERSION_UPDATE)
+            string (FIND "${version_line}" "${version_delim}" delim_idx)
+
+            if ("${delim_idx}" EQUAL -1)
+                continue ()
+            endif ()
+
+            string (LENGTH "${version_delim}" delim_len)
+            math (EXPR delim_idx "${delim_idx} + ${delim_len}" OUTPUT_FORMAT DECIMAL)
+
+            string (SUBSTRING "${version_line}" "${delim_idx}" -1 version_line)
+            string (STRIP "${version_line}" version_line)
+
+            set ("${version_delim}" "${version_line}")
+        endforeach ()
+    endforeach ()
+
+    set (ipp_version_string "${IPP_VERSION_MAJOR}.${IPP_VERSION_MINOR}.${IPP_VERSION_UPDATE}")
+
+    unset (ipp_version_contents)
+    unset (IPP_VERSION_MAJOR)
+    unset (IPP_VERSION_MINOR)
+    unset (IPP_VERSION_UPDATE)
+else ()
+    set (ipp_version_string "")
+endif ()
+
+#
+
+find_package_handle_standard_args (
+    "${CMAKE_FIND_PACKAGE_NAME}" REQUIRED_VARS IPP_INCLUDE_DIR IPP_ROOT
+    VERSION_VAR ipp_version_string HANDLE_VERSION_RANGE)
 
 if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FOUND)
     return ()
@@ -246,7 +286,7 @@ endforeach ()
 
 target_include_directories (IPP::IPP INTERFACE "${IPP_INCLUDE_DIR}")
 
-target_sources (IPP::IPP INTERFACE "${IPP_INCLUDE_DIR}/ipp.h")
+target_sources (IPP::IPP INTERFACE "${IPP_INCLUDE_DIR}/ipp.h" "${IPP_INCLUDE_DIR}/ippversion.h")
 
 find_package_message (
     "${CMAKE_FIND_PACKAGE_NAME}"
