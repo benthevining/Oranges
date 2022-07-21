@@ -50,6 +50,7 @@ include_guard (GLOBAL)
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 include (OrangesGeneratorExpressions)
+include (OrangesFunctionArgumentHelpers)
 
 # cmake-format: off
 if (NOT (DEFINED CMAKE_INTERPROCEDURAL_OPTIMIZATION
@@ -68,6 +69,8 @@ endif ()
 function (oranges_enable_ipo target)
 
     cmake_parse_arguments (ORANGES_ARG "INCLUDE_DEBUG" "" "" ${ARGN})
+
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT TARGET "${target}")
         message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")

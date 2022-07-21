@@ -54,6 +54,8 @@ A library of CMake modules.
   * [OrangesStaticAnalysis](modules/static_analysis/OrangesStaticAnalysis.cmake)
   * [OrangesUninstallTarget](modules/installing/OrangesUninstallTarget.cmake)
   * [OrangesUniversalBinary](modules/general/OrangesUniversalBinary.cmake)
+  * [Usecodesign](modules/code_signing/Usecodesign.cmake)
+  * [Usewraptool](modules/code_signing/Usewraptool.cmake)
   * [Usexcodebuild](modules/general/Usexcodebuild.cmake)
 
 ### Oranges provides the following find modules:

@@ -62,6 +62,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesFunctionArgumentHelpers)
+
 #
 
 function (oranges_add_build_type_macros target)
@@ -74,6 +76,8 @@ function (oranges_add_build_type_macros target)
     set (oneValueArgs BASE_NAME SCOPE)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneValueArgs}" "" ${ARGN})
+
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT ORANGES_ARG_BASE_NAME)
         set (ORANGES_ARG_BASE_NAME "${target}")

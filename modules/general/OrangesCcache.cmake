@@ -76,6 +76,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesFunctionArgumentHelpers)
+
 enable_language (CXX)
 enable_language (C)
 
@@ -124,6 +126,8 @@ function (oranges_enable_ccache target)
     endif ()
 
     cmake_parse_arguments (ORANGES_ARG "" "" "OPTIONS" ${ARGN})
+
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     if (NOT TARGET "${target}")
         message (FATAL_ERROR "${CMAKE_CURRENT_FUNCTION} - target '${target}' does not exist!")

@@ -62,6 +62,8 @@ include_guard (GLOBAL)
 
 cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
+include (OrangesFunctionArgumentHelpers)
+
 #
 
 function (oranges_get_debug_config_list outVar)
@@ -83,6 +85,8 @@ function (oranges_make_config_generator_expressions)
     set (oneVal DEBUG RELEASE)
 
     cmake_parse_arguments (ORANGES_ARG "" "${oneVal}" "" ${ARGN})
+
+    oranges_check_for_unparsed_args (ORANGES_ARG)
 
     oranges_get_debug_config_list (debug_configs)
 
