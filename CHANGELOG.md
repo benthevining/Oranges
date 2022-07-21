@@ -1,5 +1,12 @@
 # Oranges changelog
 
+## [4.3.0](https://github.com/benthevining/Oranges/compare/v4.2.0...v4.3.0) (2022-07-21)
+
+
+### Features
+
+* added code signing modules ([3ca48b9](https://github.com/benthevining/Oranges/commit/3ca48b96eb0bae5d483cffd51db61b64726544a4))
+
 ## [4.2.0](https://github.com/benthevining/Oranges/compare/v4.1.0...v4.2.0) (2022-07-20)
 
 

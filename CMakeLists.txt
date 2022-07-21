@@ -80,7 +80,7 @@ cmake_minimum_required (VERSION 3.22 FATAL_ERROR)
 
 project (
     Oranges
-    VERSION 4.2.0
+    VERSION 4.3.0
     DESCRIPTION "CMake modules, scripts, and utilities"
     HOMEPAGE_URL "www.github.com/benthevining/Oranges"
     LANGUAGES NONE)
