@@ -40,7 +40,16 @@ Path to the codesign executable.
 .. cmake:variable:: CODESIGN_ID
 
 Default sign identity used in calls to :command:`codesign_sign_target` that do not
-explicitly override this option.
+explicitly override this option. An environment variable with this name, if set, initializes this
+cache variable.
+
+
+Environment variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. cmake:envvar:: CODESIGN_ID
+
+Initializes the :variable:`CODESIGN_ID` variable.
 
 #]=======================================================================]
 
@@ -52,7 +61,7 @@ include (OrangesFunctionArgumentHelpers)
 
 find_program (CODESIGN_PROGRAM codesign PATHS ENV CODESIGN_PROGRAM DOC "Apple's codesign program")
 
-set (CODESIGN_ID "" CACHE STRING "Default codesign identity")
+set (CODESIGN_ID "$ENV{CODESIGN_ID}" CACHE STRING "Default codesign identity")
 
 mark_as_advanced (CODESIGN_PROGRAM CODESIGN_ID)
 

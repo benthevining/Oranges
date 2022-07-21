@@ -103,7 +103,10 @@
       },
       "codesign_sign_target": {
         "kwargs": {
-          "TARGET": 1
+          "IDENTITY": 1
+        },
+        "pargs": {
+          "nargs": 1
         }
       },
       "faust_add_generation_command": {
@@ -274,6 +277,22 @@
           "LANGS": "+"
         },
         "pargs": {
+          "flags": [
+            "NO_DEFAULT_CONFIG"
+          ],
+          "nargs": 1
+        }
+      },
+      "oranges_enable_clangformat": {
+        "kwargs": {
+          "STYLE": 1,
+          "TARGET_NAME": 1
+        },
+        "pargs": {
+          "flags": [
+            "USE_FILE",
+            "POST_BUILD"
+          ],
           "nargs": 1
         }
       },
@@ -449,6 +468,18 @@
           "KEYPASSWORD": 1,
           "SIGNID": 1,
           "TARGET": 1
+        }
+      },
+      "wraptool_sign_target": {
+        "kwargs": {
+          "ACCOUNT": 1,
+          "GUID": 1,
+          "KEYFILE": 1,
+          "KEYPASSWORD": 1,
+          "SIGNID": 1
+        },
+        "pargs": {
+          "nargs": 1
         }
       }
     }

@@ -20,21 +20,38 @@ Configure AAX plugin signing using PACE's wraptool program.
 Configure AAX signing with wraptool
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. command:: wraptool_configure_aax_plugin_signing
+.. command:: wraptool_sign_target
 
   ::
 
-    wraptool_configure_aax_plugin_signing (<targetName>
-                                           GUID <guid>
-                                          [ACCOUNT <accountID>]
-                                          [SIGNID <signID>]
-                                          [KEYFILE <keyfilePath>]
-                                          [KEYPASSWORD <password>])
+    wraptool_sign_target (<targetName>
+                          GUID <guid>
+                         [ACCOUNT <accountID>]
+                         [SIGNID <signID>]
+                         [KEYFILE <keyfilePath>]
+                         [KEYPASSWORD <password>])
 
-Configures signing of an AAX plugin target. Does nothing on Linux.
+Configures signing of a target using PACE's wraptool program. Does nothing on Linux.
 
-The ``ACCOUNT``, ``SIGNID``, ``KEYFILE``, and ``KEYPASSWORD`` options set the cache variables ``WRAPTOOL_ACCOUNT``, ``WRAPTOOL_SIGNID``, ``WRAPTOOL_KEYFILE``, and ``WRAPTOOL_KEYPASSWORD``, respectively.
-When this module is included, each of these cache variables is also initialized with the value of the corresponding environment variable with the same name, if it is defined.
+Options:
+
+``GUID``
+ The GUID for the target being signed.
+
+``ACCOUNT``
+ The account ID to use for signing. If not specified, the value of the :variable:`WRAPTOOL_ACCOUNT`
+ variable will be used.
+
+``SIGNID``
+ The signing ID. If not specified, the value of the :variable:`WRAPTOOL_SIGNID` variable will be used.
+
+``KEYFILE``
+ Path to the keyfile to use for signing. If not specified, the value of the :variable:`WRAPTOOL_KEYFILE`
+ variable will be used.
+
+``KEYPASSWORD``
+ Key password to use for signing. If not specified, the value of the :variable:`WRAPTOOL_KEYPASSWORD`
+ variable will be used.
 
 
 Cache variables
@@ -42,20 +59,31 @@ Cache variables
 
 .. cmake:variable:: PROGRAM_WRAPTOOL
 
-Path to the wraptool executable
+Path to the wraptool executable.
 
 
 .. cmake:variable:: WRAPTOOL_ACCOUNT
 
+Default account ID to use for calls to :command:`wraptool_sign_target` that do not explicitly override this option.
+The environment variable with this name, if set, will initialize this cache variable.
+
 
 .. cmake:variable:: WRAPTOOL_SIGNID
+
+Default signing ID to use for calls to :command:`wraptool_sign_target` that do not explicitly override this option.
+The environment variable with this name, if set, will initialize this cache variable.
 
 
 .. cmake:variable:: WRAPTOOL_KEYFILE
 
+Default keyfile to use for calls to :command:`wraptool_sign_target` that do not explicitly override this option.
+The environment variable with this name, if set, will initialize this cache variable.
+
 
 .. cmake:variable:: WRAPTOOL_KEYPASSWORD
 
+Default signing keypassword to use for calls to :command:`wraptool_sign_target` that do not explicitly override
+this option. The environment variable with this name, if set, will initialize this cache variable.
 
 #]=======================================================================]
 
@@ -69,20 +97,20 @@ include (OrangesFunctionArgumentHelpers)
 
 find_program (WRAPTOOL_PROGRAM wraptool PATHS ENV WRAPTOOL_PROGRAM DOC "PACE wraptool program")
 
-set (WRAPTOOL_ACCOUNT "" CACHE STRING "Default wraptool account ID")
+set (WRAPTOOL_ACCOUNT "$ENV{WRAPTOOL_ACCOUNT}" CACHE STRING "Default wraptool account ID")
 
-set (WRAPTOOL_SIGNID "" CACHE STRING "Default wraptool sign ID")
+set (WRAPTOOL_SIGNID "$ENV{WRAPTOOL_SIGNID}" CACHE STRING "Default wraptool sign ID")
 
-set (WRAPTOOL_KEYFILE "" CACHE FILEPATH "Default wraptool keyfile path")
+set (WRAPTOOL_KEYFILE "$ENV{WRAPTOOL_KEYFILE}" CACHE FILEPATH "Default wraptool keyfile path")
 
-set (WRAPTOOL_KEYPASSWORD "" CACHE STRING "Default wraptool key password")
+set (WRAPTOOL_KEYPASSWORD "$ENV{WRAPTOOL_KEYPASSWORD}" CACHE STRING "Default wraptool key password")
 
 mark_as_advanced (WRAPTOOL_PROGRAM WRAPTOOL_ACCOUNT WRAPTOOL_SIGNID WRAPTOOL_KEYFILE
                   WRAPTOOL_KEYPASSWORD)
 
 #
 
-function (wraptool_configure_aax_plugin_signing target)
+function (wraptool_sign_target target)
 
     if (NOT WRAPTOOL_PROGRAM)
         message (

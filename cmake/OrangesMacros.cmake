@@ -51,6 +51,8 @@ foreach (child IN LISTS children)
     __oranges_add_cmake_module_dir ("${child}" "${ORANGES_ROOT_DIR}")
 endforeach ()
 
+unset (children)
+
 #
 
 list (REMOVE_DUPLICATES orangesModulePaths)

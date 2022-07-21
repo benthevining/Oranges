@@ -33,7 +33,7 @@ The header generation command
     oranges_generate_platform_header (<targetName>
                                      [BASE_NAME <baseName>]
                                      [HEADER <headerName>]
-                                     [LANGUAGE <languageToUseForFeatureTests>]
+                                     [LANGUAGE <CXX|C|OBJCXX|OBJC|Fortran|ASM>]
                                      [SCOPE <PUBLIC|PRIVATE|INTERFACE>]
                                      [INSTALL_COMPONENT <componentName>] [REL_PATH <installRelPath>])
 

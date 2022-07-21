@@ -26,7 +26,7 @@ Configure clang-tidy
     ::
 
         oranges_enable_clang_tidy (<target>
-                                  [CONFIG_FILE <file>]
+                                  [CONFIG_FILE <file>] | [NO_DEFAULT_CONFIG]
                                   [EXTRA_ARGS <args...>]
                                   [LANGS <C|CXX|OBJC|OBJCXX>...])
 
@@ -39,8 +39,14 @@ Options:
 ``CONFIG_FILE``
  May be specified to provide a custom ``.clang-tidy`` file to be used for running clang-tidy on this target.
  If a relative path is given, it will be evaluated relative to the value of ``CMAKE_CURRENT_LIST_DIR`` when this function
- is called. If this argument is not specified, the value of the :variable:`CLANGTIDY_CONFIG_FILE` variable will be used.
- Providing this argument is equivalent to passing ``EXTRA_ARGS --config-file=<file>``.
+ is called. If this argument is not specified, the value of the :variable:`CLANGTIDY_CONFIG_FILE` variable will be used,
+ unless the ``NO_DEFAULT_CONFIG`` option is given. Providing this argument is equivalent to passing
+ ``EXTRA_ARGS --config-file=<file>``.
+
+``NO_DEFAULT_CONFIG``
+ If this option is given, then the value of the :variable:`CLANGTIDY_CONFIG_FILE` variable will not be used as this target's
+ ``.clang-tidy`` file; instead, clang-tidy's default behavior of searching for a ``.clang-tidy`` in a parent directory of
+ the current source file will be used.
 
 ``EXTRA_ARGS``
  Extra arguments that will be passed verbatim to the clang-tidy executable. If not specified, the value of the
@@ -166,7 +172,7 @@ function (oranges_enable_clang_tidy target)
     set (oneVal CONFIG_FILE)
     set (multiVal LANGS EXTRA_ARGS)
 
-    cmake_parse_arguments (ORANGES_ARG "" "${oneVal}" "${multiVal}" ${ARGN})
+    cmake_parse_arguments (ORANGES_ARG "NO_DEFAULT_CONFIG" "${oneVal}" "${multiVal}" ${ARGN})
 
     oranges_check_for_unparsed_args (ORANGES_ARG)
 
@@ -178,7 +184,7 @@ function (oranges_enable_clang_tidy target)
 
     #
 
-    if (NOT ORANGES_ARG_CONFIG_FILE)
+    if (NOT (ORANGES_ARG_CONFIG_FILE OR ORANGES_ARG_NO_DEFAULT_CONFIG))
         set (ORANGES_ARG_CONFIG_FILE "${CLANGTIDY_CONFIG_FILE}")
     endif ()
 

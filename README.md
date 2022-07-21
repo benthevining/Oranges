@@ -32,6 +32,7 @@ A library of CMake modules.
   * [LinuxLSBInfo](modules/general/LinuxLSBInfo.cmake)
   * [OrangesBuildTypeMacros](modules/general/OrangesBuildTypeMacros.cmake)
   * [OrangesCcache](modules/general/OrangesCcache.cmake)
+  * [OrangesClangFormat](modules/general/OrangesClangFormat.cmake)
   * [OrangesClangTidy](modules/static_analysis/OrangesClangTidy.cmake)
   * [OrangesCppcheck](modules/static_analysis/OrangesCppcheck.cmake)
   * [OrangesCpplint](modules/static_analysis/OrangesCpplint.cmake)

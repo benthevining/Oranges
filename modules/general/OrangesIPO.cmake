@@ -104,6 +104,7 @@ function (oranges_enable_ipo target)
         string (TOUPPER "${config}" config)
 
         set_target_properties ("${target}" PROPERTIES INTERPROCEDURAL_OPTIMIZATION_${config} OFF)
+
     endforeach ()
 
 endfunction ()
