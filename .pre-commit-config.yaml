@@ -98,7 +98,7 @@ repos:
           - id: fix-smartquotes
           - id: forbid-bidi-controls
     - repo: https://github.com/crate-ci/typos
-      rev: v1.10.2
+      rev: typos-dict-v0.8.4
       hooks:
           - id: typos
             args: [--write-changes]
@@ -135,7 +135,7 @@ repos:
 
   # Markdown
     - repo: https://github.com/igorshubovych/markdownlint-cli
-      rev: v0.32.0
+      rev: v0.32.1
       hooks:
           - id: markdownlint-fix
             exclude: CHANGELOG.md
@@ -160,7 +160,7 @@ repos:
 
   # Python
     - repo: https://github.com/asottile/pyupgrade
-      rev: v2.37.1
+      rev: v2.37.2
       hooks:
           - id: pyupgrade
     - repo: https://github.com/myint/autoflake
